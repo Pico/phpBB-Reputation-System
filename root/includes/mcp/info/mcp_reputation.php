@@ -1,0 +1,39 @@
+<?php
+/**
+*
+* @package	Reputation System
+* @author	Pico88 (Pico) (http://www.modsteam.tk)
+* @copyright (c) 2011
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+
+/**
+* @package module_install
+*/
+class mcp_reputation_info
+{
+	function module()
+	{
+		return array(
+			'filename'	=> 'mcp_reputation',
+			'title'		=> 'MCP_REPUTATION',
+			'version'	=> '0.4.2',
+			'modes'		=> array(
+				'front'				=> array('title' => 'MCP_REPUTATION_FRONT', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),
+				'list'				=> array('title' => 'MCP_REPUTATION_LIST', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),
+				'give_point'		=> array('title' => 'MCP_REPUTATION_GIVE', 'auth' => 'acl_m_rs_give', 'cat' => array('MCP_REPUTATION')),
+			),
+		);
+	}
+
+	function install()
+	{
+	}
+
+	function uninstall()
+	{
+	}
+}
+
+?>

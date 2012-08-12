@@ -1,0 +1,100 @@
+<!-- IF not AJAX -->
+	<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<form method="post" action="{S_CONFIRM_ACTION}">
+
+<!-- IF not AJAX -->
+	<h2>{HEADER_POINT}</h2>
+
+	<!-- IF POST_DETAIL -->
+	<div class="panel">
+		<div class="inner"><span class="corners-top"><span></span></span>
+
+			<div class="column1"><h3><!-- IF USER_COLOR --><span style="color: #{USER_COLOR}">{USERNAME}</span><!-- ELSE -->{USERNAME}<!-- ENDIF --></h3></div>
+			<div class="column12"><h3>{L_POST_DETAILS}</h3></div>
+			<div>
+				<div class="column1">
+					<div class="column1">
+						<dl class="details">
+							<!-- IF RANK_TITLE --><dt>{L_RANK}:</dt><dd>{RANK_TITLE}</dd><!-- ENDIF -->
+							<!-- IF RANK_IMG --><dt><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt><dd>{RANK_IMG}</dd><!-- ENDIF -->
+							<dt>{L_JOINED}:</dt><dd>{JOINED}</dd>
+							<dt>{L_TOTAL_POSTS}:</dt><dd>{POSTS}</dd>
+							<dt>{L_WARNINGS}: </dt><dd>{WARNINGS}</dd>
+							<dt>{L_REPUTATION}: </dt><dd>{REPUTATIONS}</dd>
+							<!-- IF RS_RANK_TITLE --><dt>{L_RS_RANK}: </dt><dd>{RS_RANK_TITLE}</dd><!-- ENDIF -->
+						</dl>
+					</div>
+					<div class="column2">
+						<!-- IF AVATAR_IMG --><div>{AVATAR_IMG}</div><!-- ENDIF -->
+					</div>
+				</div>
+
+				<div class="column2">
+					<div class="postbody">
+						<div class="content">
+							{POST}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<span class="corners-bottom"><span></span></span></div>
+	</div>
+	<!-- ENDIF -->
+<!-- ENDIF -->
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<fieldset>
+		<!-- IF REP_POWER_ENABLE -->
+		<!-- IF RS_VOTE_POWER_LEFT_OF_MAX -->
+        <div style="margin-bottom:10px ;text-align: center">
+            {RS_VOTE_POWER_LEFT_OF_MAX}<br/>
+        </div>
+		<!-- ENDIF -->
+		<dl>
+			<dt><label>{L_RS_POINTS}</label></dt>
+			<dd><select name="rep_power" id="rep_power">
+				<!-- BEGIN reputation -->
+					{reputation.REPUTATION_POWER}
+				<!-- END reputation -->
+				</select></dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF REP_COMMENT_ENABLE or REP_PM_NOTIFY -->
+		<!-- IF REP_COMMENT_ENABLE -->
+		<dl>
+			<dt><label>{L_RS_COMMENT}</label></dt>
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{USER_COMMENT}</textarea><!-- IF ERROR and not AJAX --><p class="error">{ERROR}</p><!-- ENDIF -->
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF REP_PM_NOTIFY -->
+		<dl>
+			<label><input type="checkbox" name="notify_user" /> {L_NOTIFY_USER_REP}</label>
+		</dl>
+		<!-- ENDIF -->
+		<!-- ENDIF -->
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+	{S_HIDDEN_FIELDS}
+	<!-- IF AJAX -->
+		<input type="hidden" name="ajax" value="1" />
+		<input type="submit" name="confirm" value="{L_RS_RATE_BUTTON}" class="button2" onclick="submit_vote();return false;" />&nbsp;
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="$('#repo-popup').fadeOut();return false;" />
+	<!-- ELSE -->
+		<input type="submit" name="confirm" value="{L_YES}" class="button2" />&nbsp;
+		<input type="submit" name="cancel" value="{L_NO}" class="button2" />
+	<!-- ENDIF -->
+	{S_FORM_TOKEN}
+	</fieldset>
+<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+
+<!-- IF not AJAX -->
+	<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

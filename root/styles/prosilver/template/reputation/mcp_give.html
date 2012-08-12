@@ -1,0 +1,47 @@
+<!-- INCLUDE mcp_header.html -->
+
+<form id="mcp_reputation" method="post" action="{S_MCP_ACTION}">
+
+<h2>{L_RS_GIVE_POINT}</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<p>{L_RS_GIVE_POINT_EXPLAIN}</p>
+
+	<fieldset>
+		<dl>
+			<dt><label for="username">{L_ENTER_USERNAME}:</label></dt>
+			<dd><input class="text medium" type="text" id="username" name="username" /></dd>
+			<dd>[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_RS_POINTS}<label></dt>
+			<dd><select name="rep_power" id="rep_power">
+				<!-- BEGIN reputation -->
+				{reputation.REPUTATION_POWER}
+				<!-- END reputation -->
+			</select></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_RS_COMMENT}<label></dt>
+			<dd><textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;"></textarea></dd>
+		</dl>
+		<dl>
+			<dt>&nbsp;</dt>
+			<dd><label><input type="checkbox" name="notify_user" /> {L_NOTIFY_USER_REP}</label></dd>
+		</dl>
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<fieldset class="submit-buttons">
+	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp;
+	<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- INCLUDE mcp_footer.html -->

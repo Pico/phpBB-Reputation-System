@@ -1,0 +1,51 @@
+<!-- INCLUDE overall_header.html -->
+
+<form method="post" action="{S_CONFIRM_ACTION}">
+
+<h2>{USER_RATING_CONFIRM}</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_RS_USER_RATING}</h3>
+	
+	<p>{L_RS_USER_POINT_EXPLAIN}</p>
+	
+	<fieldset>
+		<dl>
+			<dt><label>{L_RS_POINTS}<label></dt>
+			<dd><select name="rep_power" id="rep_power">
+				<!-- BEGIN reputation -->
+					{reputation.REPUTATION_POWER}
+				<!-- END reputation -->
+				</select></dd>
+		</dl>
+		<!-- IF REP_COMMENT_ENABLE or REP_PM_NOTIFY -->
+		<!-- IF REP_COMMENT_ENABLE -->
+		<dl>
+			<dt><label>{L_RS_COMMENT}<label></dt>
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;"></textarea><!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF REP_PM_NOTIFY -->
+		<dl>
+			<dt>&nbsp;</dt>
+			<dd><label><input type="checkbox" name="notify_user" /> {L_NOTIFY_USER_REP}</label></dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- ENDIF -->
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<fieldset class="submit-buttons">
+	{S_HIDDEN_FIELDS}
+	<input type="submit" name="confirm" value="{L_YES}" class="button2" />&nbsp; 
+	<input type="submit" name="cancel" value="{L_NO}" class="button2" />
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,55 @@
+<!-- INCLUDE ucp_header.html -->
+
+<form id="ucp" method="post" action="{S_UCP_ACTION}"{S_FORM_ENCTYPE}>
+
+<h2>{L_RS_REPUTATION_SETTINGS_UCP}</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<fieldset>
+	<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+	<!-- IF S_NOTIFICATION -->
+	<dl>
+		<dt><label for="notification1">{L_RS_NOTIFICATION}:</label><br /><span>{L_RS_NOTIFICATION_EXPLAIN}</span></dt>
+		<dd>
+			<label for="notification1"><input type="radio" name="notification" id="notification1" value="1"<!-- IF NOTIFICATION --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<label for="notification0"><input type="radio" name="notification" id="notification0" value="0"<!-- IF not NOTIFICATION --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>
+		</dd>
+	</dl>
+	<!-- ENDIF -->
+	<!-- IF S_POWER_ENABLE -->
+	<dl>
+		<dt><label for="default_power">{L_RS_DEFAULT_POWER}:</label><br /><span>{L_RS_DEFAULT_POWER_EXPLAIN}</span></dt>
+		<dd><select name="default_power" id="default_power">
+			<!-- BEGIN reputation -->
+			{reputation.REPUTATION_POWER}
+			<!-- END reputation -->
+		</select></dd>
+	</dl>
+	<!-- ENDIF -->
+	<!-- IF S_COMMENT -->
+	<dl>
+		<dt><label for="comment_pos">{L_RS_DEFAULT_COMMENT_POS}:</label><br /><span>{L_RS_DEFAULT_COMMENT_POS_EXPLAIN}</span></dt>
+		<dd><textarea name="comment_pos" id="comment_pos" class="inputbox" rows="3" cols="30">{COMMENT_POS}</textarea></dd>
+	</dl>
+	<!-- IF S_NEGATIVE_ENABLE -->
+	<dl>
+		<dt><label for="comment_neg">{L_RS_DEFAULT_COMMENT_NEG}:</label><br /><span>{L_RS_DEFAULT_COMMENT_NEG_EXPLAIN}</span></dt>
+		<dd><textarea name="comment_neg" id="comment_neg" class="inputbox" rows="3" cols="30">{COMMENT_NEG}</textarea></dd>
+	</dl>
+	<!-- ENDIF -->
+	<!-- ENDIF -->
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<fieldset class="submit-buttons">
+	<input type="reset" value="{L_RESET}" name="reset" class="button2" />&nbsp; 
+	<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE ucp_footer.html -->

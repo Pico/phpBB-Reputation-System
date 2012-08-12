@@ -1,0 +1,77 @@
+<!-- INCLUDE mcp_header.html -->
+
+<form id="ucp" method="post" action="{S_UCP_ACTION}">
+
+<h2>{L_UCP_REPUTATION_GIVEN}</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<p>{L_RS_REPUTATION_GIVEN_LISTS_UCP}</p>
+
+	<!-- IF .reputation -->
+	<ul class="linklist">
+		<li class="rightside pagination">
+			<!-- IF TOTAL -->{TOTAL_REPS}<!-- ENDIF -->
+			<!-- IF PAGE_NUMBER --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+		</li>
+	</ul>
+		
+	<table class="table1" cellspacing="1">
+		<thead>
+		<tr>
+			<th class="name">{L_RS_TO}</th>
+			<th class="name">{L_RS_ACTION}</th>
+			<th class="name">{L_RS_DATE}</th>
+			<!-- IF COMMENT --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
+			<th class="name">{L_RS_POINTS}</th>
+			<!-- IF DELETE_LINK --><th class="name">{L_MARK}</th><!-- ENDIF -->
+		</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN reputation -->
+		<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+			<td class="name">{reputation.USERNAME_TO}</td>
+			<td class="name">{reputation.ACTION}</td>
+			<td class="name">{reputation.TIME}</td>
+			<!-- IF reputation.COMMENT and COMMENT --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+			<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
+			<!-- IF DELETE_LINK --><td style="text-align: center;"><input type="checkbox" name="rep_id_list[]" value="{reputation.REP_ID}" /></td><!-- ENDIF -->
+		</tr>
+		<!-- END reputation -->
+		</tbody>
+	</table>
+
+	<fieldset class="display-options">
+		<!-- IF NEXT_PAGE --><a href="{NEXT_PAGE}" class="right-box {S_CONTENT_FLOW_END}">{L_NEXT}</a><!-- ENDIF -->
+		<!-- IF PREVIOUS_PAGE --><a href="{PREVIOUS_PAGE}" class="left-box {S_CONTENT_FLOW_BEGIN}">{L_PREVIOUS}</a><!-- ENDIF -->
+		<label>{L_RS_DISPLAY_REPUTATIONS}: {S_SELECT_SORT_DAYS}</label>
+		<label>{L_SORT_BY} {S_SELECT_SORT_KEY}</label><label>{S_SELECT_SORT_DIR}</label>
+		<input type="submit" name="sort" value="{L_GO}" class="button2" />
+	</fieldset>
+	
+	<hr />
+	<ul class="linklist">
+		<li class="rightside pagination">
+			<!-- IF TOTAL -->{TOTAL_REPS}<!-- ENDIF -->
+			<!-- IF PAGE_NUMBER --><!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --><!-- ENDIF -->
+		</li>
+	</ul>
+
+	<!-- ELSE -->
+		<p><strong>{L_RS_EMPTY_DATA}</strong></p>
+	<!-- ENDIF -->		
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- IF .reputation and DELETE_LINK -->
+<fieldset class="display-actions">
+	<input class="button2" type="submit" value="{L_RS_DELETE_POINTS}" name="action[delete]" />
+	<div><a href="#" onclick="marklist('ucp', 'rep_id_list', true); return false;">{L_MARK_ALL}</a> :: <a href="#" onclick="marklist('ucp', 'rep_id_list', false); return false;">{L_UNMARK_ALL}</a></div>
+</fieldset>
+<!-- ENDIF -->
+
+</form>
+
+<!-- INCLUDE mcp_footer.html -->

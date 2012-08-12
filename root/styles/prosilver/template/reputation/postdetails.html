@@ -1,0 +1,66 @@
+<!-- IF not AJAX -->
+<!-- INCLUDE simple_header.html -->
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+		<h2>{POST_SUBJECT}</h2>
+		<dl class="left-box details" style="width: 80%;">
+			<dt>{L_AUTHOR}:</dt>
+			<dd>{USERNAME}</dd>
+			<dt>{L_RS_POST_REPUTATION}:</dt>
+			<dd>{POST_REPUTATION}</dd>
+		</dl>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<!-- ENDIF -->
+
+
+<div class="forabg">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<table class="table1" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name"><a href="{U_SORT_USERNAME}">{L_RS_FROM}</a></th>
+		<th class="name"><a href="{U_SORT_TIME}">{L_RS_DATE}</a></th>
+		<!-- IF COMMENT and not AJAX --><th class="info">{L_RS_COMMENT}</th><!-- ENDIF -->
+		<th class="name">{L_RS_POINTS}</th>
+		<!-- IF DELETE_LINK and not AJAX --><th class="name">{L_RS_DELETE_POINT}</th><!-- ENDIF -->
+	</tr>
+	</thead>
+	<tbody>
+	<!-- IF .reputation -->
+	<!-- BEGIN reputation -->
+	<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<!-- IF reputation.USERNAME --><td class="name">{reputation.USERNAME}</td><!-- ENDIF -->
+		<td class="name">{reputation.TIME}</td>
+		<!-- IF reputation.COMMENT and COMMENT and AJAX == 0 --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
+		<!-- IF DELETE_LINK and not AJAX --><td class="name"><!-- IF reputation.DELETE -->{reputation.DELETE}<!-- ENDIF --></td><!-- ENDIF -->
+	</tr>
+	<!-- END reputation -->
+	<!-- ELSE -->
+		<tr class="bg1" align="center">
+			<td colspan="<!-- IF AJAX -->3<!-- ELSEIF DELETE_LINK -->5<!-- ELSE -->4<!-- ENDIF -->">{L_RS_EMPTY_DATA}</td>
+		</tr>
+	<!-- ENDIF -->
+	</tbody>
+	</table>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- IF AJAX and .reputation -->
+		<div class="rs_more_details"><a href="{MORE_DETAILS}" onclick="popup(this.href, 780, 550); $('#repo-popup').fadeOut(); return false;">{L_RS_POPUP_MORE_DETAILS}</a></div>
+<!-- ENDIF -->
+
+<!-- IF not AJAX -->
+
+<ul class="linklist">
+	<li class="rightside pagination"><!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+</ul>
+
+<p class="small" style="text-align: center"><a href="#" onclick="window.close(); return false;">{L_CLOSE_WINDOW}</a></p>
+
+<!-- INCLUDE simple_footer.html -->
+
+<!-- ENDIF -->

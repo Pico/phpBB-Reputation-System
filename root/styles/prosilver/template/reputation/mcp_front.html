@@ -1,0 +1,101 @@
+<!-- INCLUDE mcp_header.html -->
+
+<h2>{L_MCP_REPUTATION_FRONT}</h2>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<div class="column1"></div>
+	<div class="column1"><h3>{L_RS_BEST_REPUTATION}</h3>
+	<!-- IF .best -->
+		<table class="table1" cellspacing="0">
+		<thead>
+			<tr>
+				<th class="name">{L_USERNAME}</th>
+				<th class="name">{L_REPUTATION}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+
+		<!-- BEGIN best -->
+			<tr class="<!-- IF best.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+				<td>{best.USERNAME_FULL}</td>
+				<td>{best.REPUTATION}</td>
+				<td><a href="{best.U_DETAILS}">{L_RS_VIEW_DETAILS}</a></td>
+			</tr>
+		<!-- END best -->
+		</tbody>
+		</table>
+	<!-- ELSE -->
+		<p><strong>{L_RS_EMPTY_DATA}</strong></p>
+	<!-- ENDIF -->
+	</div>
+	<div class="column2"><h3>{L_RS_WORST_REPUTATION}</h3>
+	<!-- IF .worst -->
+		<table class="table1" cellspacing="0">
+		<thead>
+			<tr>
+				<th class="name">{L_USERNAME}</th>
+				<th class="name">{L_REPUTATION}</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+
+		<!-- BEGIN worst -->
+			<tr class="<!-- IF worst.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+				<td>{worst.USERNAME_FULL}</td>
+				<td>{worst.REPUTATION}</td>
+				<td><a href="{worst.U_DETAILS}">{L_RS_VIEW_DETAILS}</a></td>
+			</tr>
+		<!-- END worst -->
+		</tbody>
+		</table>
+	<!-- ELSE -->
+		<p><strong>{L_RS_EMPTY_DATA}</strong></p>
+	<!-- ENDIF -->
+	</div>
+		
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_RS_LATEST_REPUTATIONS}</h3>
+	
+	<table class="table1" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name">{L_RS_FROM}</th>
+		<th class="name">{L_RS_TO}</th>
+		<th class="name">{L_RS_ACTION}</th>
+		<th class="name">{L_RS_DATE}</th>
+		<!-- IF COMMENT --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
+		<th class="name">{L_RS_POINTS}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- IF .reputation -->
+	<!-- BEGIN reputation -->
+	<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<!-- IF reputation.USERNAME_FROM --><td class="name">{reputation.USERNAME_FROM}</td><!-- ENDIF -->
+		<!-- IF reputation.USERNAME_TO --><td class="name">{reputation.USERNAME_TO}</td><!-- ENDIF -->
+		<td class="name">{reputation.ACTION}</td>
+		<td class="name">{reputation.TIME}</td>
+		<!-- IF reputation.COMMENT and COMMENT --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
+	</tr>
+	<!-- END reputation -->
+	<!-- ELSE -->
+		<tr class="bg1" align="center">
+			<td colspan="6">{L_RS_EMPTY_DATA}</td>
+		</tr>
+	<!-- ENDIF -->
+	</tbody>
+	</table>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- INCLUDE mcp_footer.html -->

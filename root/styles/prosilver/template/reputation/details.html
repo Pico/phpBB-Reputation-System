@@ -1,0 +1,135 @@
+<!-- IF POPUP -->
+<!-- INCLUDE simple_header.html -->
+<!-- ELSEIF not AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<!-- IF not AJAX -->
+<h2>{L_RS_DETAILS} - {USERNAME}</h2>
+
+<div style="float: left; width: 32%;">
+
+<div class="panel bg1">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	
+	<h3>{USERNAME_FULL} <!-- IF U_RATE_USER --><span style="float: right;">[ <a href="{U_RATE_USER}">{L_RS_RATE_USER}</a> ]</span><!-- ENDIF --></h3>
+	
+	<!-- IF AVATAR_IMG -->
+	<dl class="left-box">
+		<dt>{AVATAR_IMG}</dt>
+		<!-- IF RANK_TITLE --><dd style="text-align: center;">{RANK_TITLE}</dd><!-- ENDIF -->
+		<!-- IF RANK_IMG --><dd style="text-align: center;">{RANK_IMG}</dd><!-- ENDIF -->
+	</dl>
+	<!-- ENDIF -->
+
+	<dl class="left-box details" style="width: 100%;">
+		<!-- IF not AVATAR_IMG -->
+			<!-- IF RANK_TITLE --><dt style="width: 50%;">{L_RANK}:</dt> <dd style="width: 45%;">{RANK_TITLE}</dd><!-- ENDIF -->
+			<!-- IF RANK_IMG --><dt style="width: 50%;"><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt> <dd style="width: 45%;">{RANK_IMG}</dd><!-- ENDIF -->
+		<!-- ENDIF -->
+		<dt style="width: 50%;">{L_REPUTATION}:</dt> <dd style="width: 45%;"><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+		<!-- IF REP_POWER_ENABLE -->
+			<dt style="width: 50%;">{L_RS_POWER}:</dt> <dd style="width: 45%;">{RS_POWER}</dd>
+			<!-- IF RS_POWER_LEFT --><dt style="width: 50%;">{L_RS_VOTING_POWER}:</dt> <dd style="width: 45%;">{RS_POWER_LEFT}</dd><!-- ENDIF -->
+		<!-- ENDIF -->
+		<dt style="width: 50%;">{L_RS_POSITIVE_COUNT}:</dt> <dd style="width: 45%;">{POSITIVE_COUNT}</dd>
+		<dt style="width: 50%;">{L_RS_NEGATIVE_COUNT}:</dt> <dd style="width: 45%;">{NEGATIVE_COUNT}</dd>
+	</dl>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+
+
+<div class="panel bg2">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	
+	<h3>{L_RS_STATS}</h3>
+
+
+
+	<table cellspacing="1" width="100%">
+		<tr>
+			<th>&nbsp;</th>
+			<th align="center"><span class="positive">{L_RS_POSITIVE}</span></th>
+			<th align="center"><span class="negative">{L_RS_NEGATIVE}</span></th>
+		</tr>
+		<tr>
+			<td>{L_RS_WEEK}</td>
+			<td align="center">{POSITIVE_WEEK}</td>
+			<td align="center">{NEGATIVE_WEEK}</td>
+		</tr>
+		<tr>
+			<td>{L_RS_MONTH}</td>
+			<td align="center">{POSITIVE_MONTH}</td>
+			<td align="center">{NEGATIVE_MONTH}</td>
+		</tr>
+		<tr>
+			<td>{L_RS_6MONTHS}</td>
+			<td align="center">{POSITIVE_6MONTHS}</td>
+			<td align="center">{NEGATIVE_6MONTHS}</td>
+		</tr>
+	</table>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+</div>
+
+<div style="float: right; width: 67%;">
+
+<!-- ENDIF -->
+
+<div class="forabg">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<table class="table1" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name"><a href="{U_SORT_USERNAME}">{L_RS_FROM}</a></th>
+		<th class="name">{L_RS_ACTION}</th>
+		<th class="name"><a href="{U_SORT_TIME}">{L_RS_DATE}</a></th>
+		<!-- IF COMMENT and not AJAX --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
+		<th class="name">{L_RS_POINTS}</th>
+		<!-- IF DELETE_LINK and not AJAX --><th>{L_RS_DELETE_POINT}</th><!-- ENDIF -->
+	</tr>
+	</thead>
+	<tbody>
+	<!-- IF .reputation -->
+	<!-- BEGIN reputation -->
+	<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<!-- IF reputation.USERNAME --><td class="name">{reputation.USERNAME}</td><!-- ENDIF -->
+		<td class="name">{reputation.ACTION}</td>
+		<td class="name">{reputation.TIME}</td>
+		<!-- IF reputation.COMMENT and COMMENT and not AJAX --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
+		<!-- IF DELETE_LINK and not AJAX --><td><!-- IF reputation.DELETE -->{reputation.DELETE}<!-- ENDIF --></td><!-- ENDIF -->
+	</tr>
+	<!-- END reputation -->
+	<!-- ELSE -->
+		<tr class="bg1" align="center">
+			<td colspan="<!-- IF AJAX -->4<!-- ELSEIF DELETE_LINK -->6<!-- ELSE -->5<!-- ENDIF -->">{L_RS_EMPTY_DATA}</td>
+		</tr>
+	<!-- ENDIF -->
+	</tbody>
+	</table>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- IF AJAX and .reputation -->
+    <div class="rs_more_details"><a href="{MORE_DETAILS}" onclick="popup(this.href, 780, 550); $('#repo-popup').fadeOut(); return false;">{L_RS_POPUP_MORE_DETAILS}</a></div>
+<!-- ELSEIF not AJAX -->
+<ul class="linklist">
+	<li class="rightside pagination"><!-- IF PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
+</ul>
+
+</div>
+
+<br class="clear">
+<!-- ENDIF -->
+<!-- IF POPUP -->
+<p class="small" style="text-align: center"><a href="#" onclick="window.close(); return false;">{L_CLOSE_WINDOW}</a></p>
+
+<!-- INCLUDE simple_footer.html -->
+<!-- ELSEIF not AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->
