@@ -12,7 +12,7 @@ Features
 * resynchronise function
 * lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disbale comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)
 * permissions system - you can adjust it to your board
-* built converter from other similar system
+* built-in converter from other similar system
 
 Requirements
 ------------
