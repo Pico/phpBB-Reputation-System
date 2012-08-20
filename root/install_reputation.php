@@ -80,6 +80,7 @@ if (!isset($config['rs_version']))
 			$error[] = $rate_bad;
 		}
 	}
+	$db->sql_freeresult($result);
 
 	if ($error)
 	{
@@ -400,24 +401,60 @@ $versions = array(
 			'theme',
 		),
 	),
+
+	'0.4.3' => array(
+		'custom' => 'update_rs_table',
+
+		'cache_purge' => array(
+			'template',
+		),
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
 
+function update_rs_table($action)
+{
+	global $db, $table_prefix;
+
+	if ($action == 'update')
+	{
+		$sql = 'ALTER TABLE ' . $table_prefix . "reputations ADD action TINYINT( 2 ) UNSIGNED NOT NULL DEFAULT '0' AFTER time";
+		$db->sql_query($sql);
+
+		$sql = 'UPDATE  ' . $table_prefix . "reputations SET action = 1 WHERE post_id IS NOT NULL";
+		$db->sql_query($sql);
+
+		$sql = 'UPDATE  ' . $table_prefix . "reputations SET action = 2 WHERE user = 1";
+		$db->sql_query($sql);
+
+		$sql = 'UPDATE  ' . $table_prefix . "reputations SET action = 3 WHERE warning = 1";
+		$db->sql_query($sql);
+
+		$sql = 'UPDATE  ' . $table_prefix . "reputations SET action = 4 WHERE warning = 2";
+		$db->sql_query($sql);
+
+		$sql = 'ALTER TABLE ' . $table_prefix . "reputations DROP user, DROP warning";
+		$db->sql_query($sql);
+	}
+
+	return $user->lang['UPDATE_RS_TABLE'];
+}
+
 function convert($action)
 {
 	global $db, $table_prefix;
-	
+
 	if ($action == 'install')
 	{
 		$convert_data = '';
-		
+
 		if (request_var('thanks', false))
 		{
 			$sql = 'SELECT * FROM ' . $table_prefix . 'thanks';
 			$result = $db->sql_query($sql);
-			
+
 			while ($row = $db->sql_fetchrow($result))
 			{
 				$text = '';
@@ -429,9 +466,8 @@ function convert($action)
 					'rep_from'			=> $row['user_id'],
 					'rep_to'			=> $row['poster_id'],
 					'time'				=> $row['thanks_time'],
+					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'user'				=> 0,
-					'warning'			=> 0,
 					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
@@ -443,15 +479,15 @@ function convert($action)
 
 				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
 			}
-			
+
 			$convert_data .= ($convert_data == '') ? 'Thanks for posts' : ', Thanks for posts';
 		}
-		
+
 		if (request_var('karma', false))
 		{
 			$sql = 'SELECT * FROM ' . $table_prefix . 'karma';
 			$result = $db->sql_query($sql);
-			
+
 			while ($row = $db->sql_fetchrow($result))
 			{
 				$text = utf8_normalize_nfc($row['comment_text']);
@@ -463,9 +499,8 @@ function convert($action)
 					'rep_from'			=> $row['user_id'],
 					'rep_to'			=> $row['poster_id'],
 					'time'				=> $row['karma_time'],
+					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'user'				=> 0,
-					'warning'			=> 0,
 					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
@@ -480,12 +515,12 @@ function convert($action)
 			
 			$convert_data .= ($convert_data == '') ? 'Karma MOD' : ', Karma MOD';
 		}
-		
+
 		if (request_var('helpmod', false))
 		{
 			$sql = 'SELECT * FROM ' . $table_prefix . 'helpmod';
 			$result = $db->sql_query($sql);
-			
+
 			while ($row = $db->sql_fetchrow($result))
 			{
 				$text = utf8_normalize_nfc($row['help_reason']);
@@ -497,9 +532,8 @@ function convert($action)
 					'rep_from'			=> $row['help_from'],
 					'rep_to'			=> $row['help_to'],
 					'time'				=> $row['help_time'],
+					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'user'				=> 0,
-					'warning'			=> 0,
 					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
@@ -511,10 +545,10 @@ function convert($action)
 
 				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
 			}
-			
+
 			$convert_data .= ($convert_data == '') ? 'HelpMod' : ', HelpMod';
 		}
-		
+
 		if (!empty($convert_data))
 		{
 			return array(

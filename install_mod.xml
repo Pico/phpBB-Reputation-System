@@ -19,7 +19,7 @@
 				<username><![CDATA[Versusnja]]></username>
 			</author>
 		</author-group>
-		<mod-version>0.4.2</mod-version>
+		<mod-version>0.4.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>900</time>
@@ -87,17 +87,17 @@
 				<date>2012-05-18</date>
 				<rev-version>0.4.0</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[Add AJAX voting]]></change>
-					<change><![CDATA[Add new functions: hide post, antispam]]></change>
+					<change><![CDATA[ADD AJAX voting]]></change>
+					<change><![CDATA[ADD new functions: hide post, antispam]]></change>
 					<change><![CDATA[FIX small bugs in UCP and MCP]]></change>
-					<change><![CDATA[Add converters into install file]]></change>
+					<change><![CDATA[ADD converters into install file]]></change>
 				</changelog>
 			</entry>
 			<entry>
 				<date>2012-05-24</date>
 				<rev-version>0.4.1</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[Improve AJAX - add refreshibg user reputation]]></change>
+					<change><![CDATA[IMPROVE AJAX - add refreshibg user reputation]]></change>
 					<change><![CDATA[FIX template for UCP Reputation Setting]]></change>
 					<change><![CDATA[FIX bug with reputation power]]></change>
 				</changelog>
@@ -106,10 +106,19 @@
 				<date>2012-06-14</date>
 				<rev-version>0.4.2</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[Add bans for low reputation]]></change>
-					<change><![CDATA[Improve post rating]]></change>
-					<change><![CDATA[Fix problem when moderator warn a user and add reputation points for warning]]></change>
-					<change><![CDATA[Add new function, which count how much points we spend and how left we have]]></change>
+					<change><![CDATA[ADD bans for low reputation]]></change>
+					<change><![CDATA[IMPROVE post rating]]></change>
+					<change><![CDATA[FIX problem when moderator warn a user and add reputation points for warning]]></change>
+					<change><![CDATA[ADD new function, which count how much points we spend and how left we have]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-08-20</date>
+				<rev-version>0.4.3</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[FIX enable post rating in ACP, which hasn't any effect on viewing posts]]></change>
+					<change><![CDATA[FIX warings with postive points insteed of negative ones]]></change>
+					<change><![CDATA[ADD remaining points bar]]></change>
 				</changelog>
 			</entry>
 		</history>
@@ -124,6 +133,7 @@
 			<link type="contrib" href="./contrib/update_0.2.7_to_0.4.0.xml" lang="en">Update from 0.2.7 to 0.4.0</link>
 			<link type="contrib" href="./contrib/update_0.4.0_to_0.4.1.xml" lang="en">Update from 0.4.0 to 0.4.1</link>
 			<link type="contrib" href="./contrib/update_0.4.1_to_0.4.2.xml" lang="en">Update from 0.4.1 to 0.4.2</link>
+			<link type="contrib" href="./contrib/update_0.4.2_to_0.4.3.xml" lang="en">Update from 0.4.2 to 0.4.3</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -227,7 +237,7 @@ $user->add_lang('mods/reputation_system');
 				<find><![CDATA[	'S_ENABLE_FEEDS_TOPIC'	=> ($config['feed_topic'] && !phpbb_optionget(FORUM_OPTION_FEED_EXCLUDE, $topic_data['forum_options'])) ? true : false,]]></find>
 				<action type="after-add"><![CDATA[	
 	//Reputation System
-	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation']) ? true : false,
+	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation'] && $config['rs_post_rating']) ? true : false,
 	//Reputation System]]></action>
 			</edit>
 			<edit>
@@ -462,7 +472,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		$rp_power = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
-			$rp_power = '<option value="' . $i . '"> (-' . $i . ') </option>';
+			$rp_power = '<option value="-' . $i . '"> (-' . $i . ') </option>';
 			$template->assign_block_vars('reputation', array(
 				'REPUTATION_POWER'	=> $rp_power)
 			);]]></action>
@@ -489,7 +499,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		$rp_power = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
-			$rp_power = '<option value="' . $i . '"> (-' . $i . ') </option>';
+			$rp_power = '<option value="-' . $i . '"> (-' . $i . ') </option>';
 			$template->assign_block_vars('reputation', array(
 				'REPUTATION_POWER'	=> $rp_power)
 			);]]></action>
