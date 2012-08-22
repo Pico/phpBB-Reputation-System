@@ -513,9 +513,9 @@ switch ($mode)
 			}
 		}
 
-		$user_reputation_stats = $reputation->get_reputation_stats($user_row['user_id']);
 		if ($config['rs_enable_power'])
 		{
+			$user_reputation_stats = $reputation->get_reputation_stats($user_row['user_id']);
 			$user_max_voting_power = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts']);
 			$user_power_explain = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts'], true);
 			$voting_power_left = '';
@@ -527,7 +527,7 @@ switch ($mode)
 
 			$template->assign_vars(array(
 				'RS_POWER'					=> $user_max_voting_power,
-				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
+				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
 				'RS_CFG_TOTAL_POSTS'		=> ($config['rs_total_posts'] ? 1 : 0),
 				'RS_CFG_MEMBERSHIP_DAYS'	=> ($config['rs_membership_days'] ? 1 : 0),
 				'RS_CFG_REP_POINT'			=> ($config['rs_power_rep_point'] ? 1 : 0),
