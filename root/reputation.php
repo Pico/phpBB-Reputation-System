@@ -285,7 +285,8 @@ switch ($mode)
 	break;
 
 	case 'details':
-		$popup = request_var('popup',0);
+
+		$popup = request_var('popup', 0);
 
 		if (!$auth->acl_get('u_rs_view'))
 		{
@@ -431,7 +432,8 @@ switch ($mode)
 			}
 
 			$delete_link = false;
-			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) $delete_link = '<a href="reputation.' . $phpEx . '?mode=delete&amp;id=' . $row['rep_id'] . '">' . $user->lang['DELETE'] . '</a>';
+			$popup_link = ($popup) ? '&amp;popup=1' : '';
+			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) $delete_link = '<a href="reputation.' . $phpEx . '?mode=delete' . $popup_link . '&amp;id=' . $row['rep_id'] . '">' . $user->lang['DELETE'] . '</a>';
 
 			$template->assign_block_vars('reputation', array(
 				'USERNAME'			=> $user_from,
@@ -576,7 +578,7 @@ switch ($mode)
 		);
 
 		page_footer();
-		
+
 	break;
 
 	case 'ratepost':
@@ -1284,6 +1286,8 @@ switch ($mode)
 
 	case 'delete':
 
+		$popup = request_var('popup', 0);
+
 		if (empty($id))
 		{
 			$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");
@@ -1299,7 +1303,7 @@ switch ($mode)
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		$redirect = append_sid("{$phpbb_root_path}reputation.$phpEx?mode=details", "u={$row['rep_to']}");
+		$redirect = ($popup) ? append_sid("{$phpbb_root_path}reputation.$phpEx?mode=details&amp;popup=1", "u={$row['rep_to']}") : append_sid("{$phpbb_root_path}reputation.$phpEx?mode=details", "u={$row['rep_to']}");
 
 		if (isset($_POST['cancel']))
 		{
@@ -1325,11 +1329,10 @@ switch ($mode)
 					$user_row = $db->sql_fetchrow($result);
 					$db->sql_freeresult($result);
 
-					$meta_info = append_sid("{$phpbb_root_path}reputation.$phpEx", "mode=details&amp;u={$row['rep_to']}");
-					$message = $user->lang['RS_POINT_DELETED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_DETAILS'], '<a href="' . append_sid("{$phpbb_root_path}reputation.$phpEx", "mode=details&amp;u={$row['rep_to']}") . '">', '</a>');
+					$message = $user->lang['RS_POINT_DELETED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_DETAILS'], '<a href="' . $redirect . '">', '</a>');
 
 					add_log('mod', '', '', 'LOG_USER_REP_DELETE', $user_row['username']);
-					meta_refresh(3, $meta_info);
+					meta_refresh(3, $redirect);
 					trigger_error($message);
 				}
 			}
