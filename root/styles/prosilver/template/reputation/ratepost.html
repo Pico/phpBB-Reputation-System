@@ -51,10 +51,14 @@
 	<fieldset>
 		<!-- IF REP_POWER_ENABLE -->
 		<!-- IF RS_VOTE_POWER_LEFT_OF_MAX -->
-        <div style="margin-bottom:10px ;text-align: center">
-            {RS_VOTE_POWER_LEFT_OF_MAX}<br/>
-        </div>
+		<div style="margin-bottom:10px ;text-align: center">
+			<div class="progress-bar">
+				<div class="empty-progress" style="width:{RS_POWER_PROGRESS_EMPTY}%"></div>
+			</div>
+			<span>{RS_VOTE_POWER_LEFT_OF_MAX}</span><br/>
+		</div>
 		<!-- ENDIF -->
+		<!-- IF .reputation > 0 -->
 		<dl>
 			<dt><label>{L_RS_POINTS}</label></dt>
 			<dd><select name="rep_power" id="rep_power">
@@ -63,6 +67,7 @@
 				<!-- END reputation -->
 				</select></dd>
 		</dl>
+		<!-- ENDIF -->
 		<!-- ENDIF -->
 		<!-- IF REP_COMMENT_ENABLE or REP_PM_NOTIFY -->
 		<!-- IF REP_COMMENT_ENABLE -->
@@ -96,5 +101,5 @@
 </form>
 
 <!-- IF not AJAX -->
-	<!-- INCLUDE overall_footer.html -->
+<!-- INCLUDE overall_footer.html -->
 <!-- ENDIF -->

@@ -8,6 +8,12 @@
 *
 */
 
+.reputation.zero a {
+	color: #6E6E6E;
+	text-decoration: none;
+	cursor: pointer;
+}
+
 .reputation.positive a, .reputation.negative a {
 	color: white;
 	text-decoration: none;
@@ -38,12 +44,13 @@
 
 .reputation {
 	font-weight: bold;
-	padding: 3px 8px;
+	padding: 1px 6px;
 	display: inline-block;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
-	font-size: 10px;
+	font-size: 15px;
+	line-height: normal;
 }
 
 .positive {
@@ -93,12 +100,12 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 	padding: 5px;
 }
 #repo-popup .panel {
-	margin-bottom: 0px
+	margin-bottom: 0px;
 }
 
 #repo-popup .error {
 	text-align: center;
-	font-size:140%
+	font-size:140%;
 }
 
 .vote_status_positive, .vote_status_negative {
@@ -107,11 +114,11 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 }
 
 .vote_status_positive {
-	background: #d4f0cc
+	background: #d4f0cc;
 }
 
 .vote_status_negative {
-	background: #ffe6e6
+	background: #ffe6e6;
 }
 
 .rs_more_details {
@@ -131,4 +138,44 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 
 div.online.too_low_rating {
 	background-image: none;
+}
+
+.info .profile-icons {
+	margin-right: 15px;
+	float: right;
+}
+
+.info ul.profile-icons {
+	padding-top:0px;
+}
+
+.info ul.profile-icons li {
+	margin-bottom:0px;
+	line-height: 20px;
+}
+
+.hidden {
+	float: left;
+	margin-left: 15px;
+}
+
+.progress-bar {
+	width: 100%;
+	height: 10px;
+	border-radius: 3px;
+	border: 1px solid #a4bdcb;
+	background: #a4bdcb;
+	background: -moz-linear-gradient(left,  #dc4a5b 0%, #ffb489 8%, #fcfaba 18%, #54d077 70%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#dc4a5b), color-stop(8%,#ffb489), color-stop(18%,#fcfaba), color-stop(70%,#54d077));
+	background: -webkit-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: -o-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: -ms-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: linear-gradient(to right,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dc4a5b', endColorstr='#54d077',GradientType=1 );
+}
+
+.empty-progress {
+	background: white;
+	height: 10px;
+	float: right;
 }

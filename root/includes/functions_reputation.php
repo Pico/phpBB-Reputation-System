@@ -19,17 +19,15 @@ if (!defined('IN_PHPBB'))
 
 class reputation
 {
-	var $user_vote_power_current;
-	var $user_vote_power_remaining;
-	var $user_reputation;
-
 	/**Function returns maximum voting power of one user
 	* @param int $user_posts
 	* @param $user_regdate
 	* @param int $user_reputation
 	* @param int $user_group_id
-	* @param bool $explain Set to true if you want function to return string explaining structure of the user power
-	* @return $user_max_power Value of maximum voting power
+	* @param int $number_of_active_warnings
+	* @param int $number_of_ban_days_in_1year
+	* @param bool $explain_structure Set to true if you want function to return an array explaining structure of the user power
+	* @return array|int Current voting power or array explaining voting power
 	*/
 	function get_rep_power($user_posts, $user_regdate, $user_reputation, $user_group_id, $number_of_active_warnings, $number_of_ban_days_in_1year = 0, $explain_structure = false)
 	{
@@ -37,49 +35,49 @@ class reputation
 		$now = time();
 		$user_power = array();
 
-        //Increasing power for number of posts
-        if ($config['rs_total_posts'])
-        {
-            $user_power['for_number_of_posts'] = intval($user_posts / $config['rs_total_posts']);
-        }
+		//Increasing power for number of posts
+		if ($config['rs_total_posts'])
+		{
+			$user_power['FOR_NUMBER_OF_POSTS'] = intval($user_posts / $config['rs_total_posts']);
+		}
 
-        //Increasing power for the age of the user
-        if ($config['rs_membership_days'])
-        {
-            $user_power['for_user_age'] = intval(intval(($now - $user_regdate) / 86400) / $config['rs_membership_days']);
-        }
+		//Increasing power for the age of the user
+		if ($config['rs_membership_days'])
+		{
+			$user_power['FOR_USER_AGE'] = intval(intval(($now - $user_regdate) / 86400) / $config['rs_membership_days']);
+		}
 
-        //Increasing power for total reputation
-        if ($config['rs_power_rep_point'])
-        {
-            $user_power['for_reputation'] = intval($user_reputation / $config['rs_power_rep_point']);
-        }
+		//Increasing power for total reputation
+		if ($config['rs_power_rep_point'])
+		{
+			$user_power['FOR_REPUTATION'] = intval($user_reputation / $config['rs_power_rep_point']);
+		}
 
 		//Decreasing for warnings
 		if ($config['rs_power_loose_warn'] > 0)
 		{
-			$user_power['for_warnings'] = -$number_of_active_warnings * $config['rs_power_loose_warn'];
-		};
+			$user_power['FOR_WARNINGS'] = -$number_of_active_warnings * $config['rs_power_loose_warn'];
+		}
 
 		//Decreasing for bans
 		if ($config['rs_power_loose_ban'] > 0)
 		{
-			$user_power['for_bans'] = -$number_of_ban_days_in_1year * $config['rs_power_loose_ban'];
-		};
+			$user_power['FOR_BANS'] = -$number_of_ban_days_in_1year * $config['rs_power_loose_ban'];
+		}
 
 		$user_max_power = array_sum($user_power);
 
 		//Checking that user min power is not lower than minimum power set in ACP
 		if ($user_max_power < $config['rs_min_power'])
 		{
-			$user_power['minimum_voting_power'] = $config['rs_min_power'];
+			$user_power['MINIMUM_VOTING_POWER'] = $config['rs_min_power'];
 			$user_max_power = max($config['rs_min_power'], $user_max_power);
 		}
 
 		//Checking that user max power is not higher than maximum power set in ACP
 		if ($user_max_power > $config['rs_max_power'])
 		{
-			$user_power['maximum_voting_power'] = $config['rs_max_power'];
+			$user_power['MAXIMUM_VOTING_POWER'] = $config['rs_max_power'];
 			$user_max_power = min($config['rs_max_power'], $user_max_power);
 		}
 
@@ -103,23 +101,16 @@ class reputation
 		//If you want to get explained structure of user power as a string
 		if ($explain_structure)
 		{
-			$output = '';
-			foreach($user_power as $reason => $value)
-			{
-				if ($value <> 0)
-				{
-					$output .= "$reason: $value";
-				}
-			}
-			return $output;
+			return $user_power;
 		}
 
 		return $user_max_power;
 	}
 
 	/**Function analyzes voting of a user and returns an array with statistics
-	 *
-	 */
+	* @param $user_id
+	* @return array
+	*/
 	function get_reputation_stats($user_id)
 	{
 		global $db, $config;
@@ -160,7 +151,7 @@ class reputation
 			$sql = 'SELECT COUNT(rep_id) AS total_bans
 				FROM ' . REPUTATIONS_TABLE . "
 				WHERE rep_to = $user_id
-					AND warning = 2
+					AND action = 4
 					AND time > $bans_timeout";
 			$result = $db->sql_query($sql);
 			$row = $db->sql_fetchrow($result);
@@ -239,6 +230,23 @@ class reputation
 			submit_pm('post', $user->lang['RS_PM_SUBJECT'], $pm_data, false);
 		}
 
+		if ($mode == 'post')
+		{
+			$action = 1;
+		}
+		else if ($mode == 'user')
+		{
+			$action = 2;
+		}
+		else if ($mode == 'warning')
+		{
+			$action = 3;
+		}
+		else if ($mode == 'ban')
+		{
+			$action = 4;
+		}
+
 		//Prepare comment text for storage
 		$text = utf8_normalize_nfc($comment);
 		$uid = $bitfield = $options = '';
@@ -250,9 +258,8 @@ class reputation
 			'rep_from'			=> $user->data['user_id'],
 			'rep_to'			=> $to,
 			'time'				=> time(),
+			'action'			=> $action,
 			'post_id'			=> $post_id,
-			'user'				=> ($mode == 'user') ? 1 : 0,
-			'warning'			=> ($mode == 'ban') ? 2 : (($mode == 'warning') ? 1 : 0),
 			'point'				=> $point,
 			'comment'			=> $text,
 			'bbcode_bitfield'	=> $bitfield,

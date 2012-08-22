@@ -63,7 +63,9 @@ switch ($mode)
 			{
 				echo json_encode(array('error_msg' => $user->lang['RS_VIEW_DISALLOWED']));
 				return;
-			} else {
+			}
+			else
+			{
 				meta_refresh(3, $meta_info);
 				trigger_error($message);
 			}
@@ -401,18 +403,19 @@ switch ($mode)
 			if ($row['action'] == 1)
 			{
 				$action = $user->lang['RS_POST_RATING'] . '' . $post_link;
+				$short_action = $user->lang['RS_POST_RATING'];
 			}
 			else if ($row['action'] == 2)
 			{
-				$action = $user->lang['RS_USER_RATING'];
+				$action = $short_action = $user->lang['RS_USER_RATING'];
 			}
 			else if ($row['action'] == 3)
 			{
-				$action = $user->lang['RS_WARNING'];
+				$action = $short_action = $user->lang['RS_WARNING'];
 			}
 			else if ($row['action'] == 4)
 			{
-				$action = $user->lang['RS_BAN'];
+				$action = $short_action = $user->lang['RS_BAN'];
 			}
 
 			if ($row['point'] < 0)
@@ -433,6 +436,7 @@ switch ($mode)
 			$template->assign_block_vars('reputation', array(
 				'USERNAME'			=> $user_from,
 				'ACTION'			=> $action,
+				'SHORT_ACTION'		=> $short_action,
 				'TIME'				=> $time,
 				'COMMENT' 			=> $comment,
 				'DELETE' 			=> $delete_link,
@@ -510,12 +514,28 @@ switch ($mode)
 		}
 
 		$user_reputation_stats = $reputation->get_reputation_stats($user_row['user_id']);
-		$user_max_voting_power = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts']);
-		$voting_power_left = '';
-		if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+		if ($config['rs_enable_power'])
 		{
-			$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
-			if ($voting_power_left <= 0) $voting_power_left = 0; 
+			$user_max_voting_power = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts']);
+			$user_power_explain = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts'], true);
+			$voting_power_left = '';
+			if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+			{
+				$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
+				if ($voting_power_left <= 0) $voting_power_left = 0; 
+			}
+
+			$template->assign_vars(array(
+				'RS_POWER'					=> $user_max_voting_power,
+				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
+				'RS_CFG_TOTAL_POSTS'		=> ($config['rs_total_posts'] ? 1 : 0),
+				'RS_CFG_MEMBERSHIP_DAYS'	=> ($config['rs_membership_days'] ? 1 : 0),
+				'RS_CFG_REP_POINT'			=> ($config['rs_power_rep_point'] ? 1 : 0),
+				'RS_CFG_LOOSE_WARN'			=> ($config['rs_power_loose_warn'] ? 1 : 0),
+				'RS_CFG_LOOSE_BAN'			=> ($config['rs_power_loose_ban'] ? 1 : 0),
+			));
+
+			$template->assign_vars($user_power_explain);
 		}
 
 		page_header($user->lang['RS_DETAILS']);
@@ -530,8 +550,6 @@ switch ($mode)
 			'RANK_IMG'			=> $rank_img,
 			'RS_RANK_TITLE'		=> $config['rs_ranks'] ? $rs_rank_title : false,
 			'REPUTATION_BOX'	=> $reputation_box,
-			'RS_POWER'			=> $user_max_voting_power,
-			'RS_POWER_LEFT'		=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
 			'PAGINATION'		=> generate_pagination($pagination_url, $total_reps, $config['rs_per_page'], $start),
 			'PAGE_NUMBER'		=> on_page($total_reps, $config['rs_per_page'], $start),
 			'U_SORT_USERNAME'	=> $sort_url . '&amp;sk=a&amp;sd=' . (($sort_key == 'a' && $sort_dir == 'd') ? 'a' : 'd'),
@@ -600,7 +618,7 @@ switch ($mode)
 		$notify = request_var('notify_user', '');
 		$comment = utf8_normalize_nfc(request_var('comment', '', true));
 		$rep_power = request_var('rep_power', '');
-		
+
 		$error = '';
 		$redirect = append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $post_id) . '#p' . $post_id;
 
@@ -812,11 +830,6 @@ switch ($mode)
 
 			//Calculate how much maximum power a user has
 			$max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
-			
-			//Get text explanation of power structure - TODO
-			/*$structure_of_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], null, true);
-			$structure_of_power = nl2br($structure_of_power);
-			*/
 
 			$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
 
@@ -984,10 +997,13 @@ switch ($mode)
 		}
 
 		$rank_title = $rank_img = $rank_img_src = '';
-		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
-		$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
+		if ($config['rs_post_detail'])
+		{
+			get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, 	$rank_img_src);
+			$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
 
-		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+			$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+		}
 
 		$s_hidden_fields = build_hidden_fields(array(
 			'user_id'	=> $user->data['user_id'],
@@ -1019,6 +1035,7 @@ switch ($mode)
 			'REPUTATION_BOX'		=> ($point == 'negative') ? 'negative' : 'positive',
 			'REP_POWER_ENABLE' 		=> $config['rs_enable_power'] ? true : false,
 			'RS_VOTE_POWER_LEFT_OF_MAX'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $config['rs_power_limit_value'], $max_voting_allowed) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? round((($config['rs_power_limit_value'] - $voting_power_left) / $config['rs_power_limit_value']) * 100,0) : '',
 			'REP_POWER_MAX1VOTE'	=> $config['rs_max_power'],
 			'REP_COMMENT_ENABLE'	=> $config['rs_enable_comment'] ? true : false,
 			'POST_DETAIL' 			=> $config['rs_post_detail'] ? true : false,

@@ -140,6 +140,15 @@ $lang = array_merge($lang, array(
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d voting power points left of %2$d. Maximum per vote: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d of %2$d',
+
+	'RS_POWER_DETAILS'				=> 'How we calculate voting power',
+	'RS_POWER_DETAIL_AGE'			=> 'For registration date',
+	'RS_POWER_DETAIL_POSTS'			=> 'For number of posts',
+	'RS_POWER_DETAIL_REPUTAION'		=> 'For reputation',
+	'RS_POWER_DETAIL_WARNINGS'		=> 'For warnings',
+	'RS_POWER_DETAIL_BANS'			=> 'For bans for the last year',
+	'RS_POWER_DETAIL_MIN'			=> 'Minimum voting power for everybody',
+	'RS_POWER_DETAIL_MAX'			=> 'Voting power capped to maximum allowed',
 ));
 
 ?>

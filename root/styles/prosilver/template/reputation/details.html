@@ -11,9 +11,9 @@
 
 <div class="panel bg1">
 	<div class="inner"><span class="corners-top"><span></span></span>
-	
+
 	<h3>{USERNAME_FULL} <!-- IF U_RATE_USER --><span style="float: right;">[ <a href="{U_RATE_USER}">{L_RS_RATE_USER}</a> ]</span><!-- ENDIF --></h3>
-	
+
 	<!-- IF AVATAR_IMG -->
 	<dl class="left-box">
 		<dt>{AVATAR_IMG}</dt>
@@ -39,14 +39,10 @@
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 
-
-
 <div class="panel bg2">
 	<div class="inner"><span class="corners-top"><span></span></span>
-	
+
 	<h3>{L_RS_STATS}</h3>
-
-
 
 	<table cellspacing="1" width="100%">
 		<tr>
@@ -70,8 +66,30 @@
 			<td align="center">{NEGATIVE_6MONTHS}</td>
 		</tr>
 	</table>
+
 	<span class="corners-bottom"><span></span></span></div>
 </div>
+
+<!-- IF REP_POWER_ENABLE -->
+<div class="panel bg1">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_RS_POWER_DETAILS}</h3>
+
+	<dl class="left-box details" style="width: 100%;">
+
+		<!-- IF RS_CFG_MEMBERSHIP_DAYS --><dt style="width: 50%">{L_RS_POWER_DETAIL_AGE}:</dt>        <dd style="width: 45%">{FOR_USER_AGE}</dd><!-- ENDIF -->
+		<!-- IF RS_CFG_TOTAL_POSTS --><dt style="width: 50%">{L_RS_POWER_DETAIL_POSTS}:</dt>      <dd style="width: 45%">{FOR_NUMBER_OF_POSTS}</dd><!-- ENDIF -->
+		<!-- IF RS_CFG_REP_POINT --><dt style="width: 50%">{L_RS_POWER_DETAIL_REPUTAION}:</dt>  <dd style="width: 45%">{FOR_REPUTATION}</dd><!-- ENDIF -->
+		<!-- IF RS_CFG_LOOSE_WARN --><dt style="width: 50%">{L_RS_POWER_DETAIL_WARNINGS}:</dt>   <dd style="width: 45%">{FOR_WARNINGS}</dd><!-- ENDIF -->
+		<!-- IF RS_CFG_LOOSE_BAN --><dt style="width: 50%">{L_RS_POWER_DETAIL_BANS}:</dt>       <dd style="width: 45%">{FOR_BANS}</dd><!-- ENDIF -->
+		<!-- IF MINIMUM_VOTING_POWER -->    <dt style="width: 50%">{L_RS_POWER_DETAIL_MIN}:</dt>        <dd style="width: 45%">{MINIMUM_VOTING_POWER}</dd>          <!-- ENDIF -->
+		<!-- IF MAXIMUM_VOTING_POWER -->    <dt style="width: 50%">{L_RS_POWER_DETAIL_MAX}:</dt>        <dd style="width: 45%">{MAXIMUM_VOTING_POWER}</dd>          <!-- ENDIF -->
+	</dl>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<!-- ENDIF -->
 
 </div>
 
@@ -98,7 +116,7 @@
 	<!-- BEGIN reputation -->
 	<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
 		<!-- IF reputation.USERNAME --><td class="name">{reputation.USERNAME}</td><!-- ENDIF -->
-		<td class="name">{reputation.ACTION}</td>
+		<td class="name"><!-- IF AJAX -->{reputation.SHORT_ACTION}<!-- ELSE -->{reputation.ACTION}<!-- ENDIF --></td>
 		<td class="name">{reputation.TIME}</td>
 		<!-- IF reputation.COMMENT and COMMENT and not AJAX --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
 		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
