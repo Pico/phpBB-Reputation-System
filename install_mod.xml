@@ -163,6 +163,7 @@
 			<file from="root/styles/prosilver/template/reputation/postdetails.html" to="styles/prosilver/template/reputation/postdetails.html"/>
 			<file from="root/styles/prosilver/template/reputation/ratepost.html" to="styles/prosilver/template/reputation/ratepost.html"/>
 			<file from="root/styles/prosilver/template/reputation/rateuser.html" to="styles/prosilver/template/reputation/rateuser.html"/>
+			<file from="root/styles/prosilver/template/reputation/jquery-1.8.0.min.js" to="styles/prosilver/template/reputation/jquery-1.8.0.min.js"/>
 			<file from="root/styles/prosilver/template/reputation/reputation.js" to="styles/prosilver/template/reputation/reputation.js"/>
 			<file from="root/styles/prosilver/template/reputation/ucp_front.html" to="styles/prosilver/template/reputation/ucp_front.html"/>
 			<file from="root/styles/prosilver/template/reputation/ucp_given.html" to="styles/prosilver/template/reputation/ucp_given.html"/>

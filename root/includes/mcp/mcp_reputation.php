@@ -122,9 +122,24 @@ class mcp_reputation
 					$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
 
 					$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
-					$post_link = (!empty($row['post_subject'])) ? '<a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : $post_subject;
+					$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
 
-					$action = ($row['warning'] == 2) ? $user->lang['RS_BAN'] : (($row['warning'] == 1) ? $user->lang['RS_WARNING'] : (!empty($row['user']) ? $user->lang['RS_USER_RATING'] : $user->lang['RS_POST_RATING'] . '<br />' . $post_link));
+					if ($row['action'] == 1)
+					{
+						$action = $user->lang['RS_POST_RATING'] . '' . $post_link;
+					}
+					else if ($row['action'] == 2)
+					{
+						$action = $user->lang['RS_USER_RATING'];
+					}
+					else if ($row['action'] == 3)
+					{
+						$action = $user->lang['RS_WARNING'];
+					}
+					else if ($row['action'] == 4)
+					{
+						$action = $user->lang['RS_BAN'];
+					}
 
 					if ($row['point'] < 0)
 					{
@@ -270,9 +285,24 @@ class mcp_reputation
 						$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
 
 						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-						$post_link = (!empty($row['post_subject'])) ? '<a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : $post_subject;
+						$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
 
-						$action = ($row['warning'] == 2) ? $user->lang['RS_BAN'] : (($row['warning'] == 1) ? $user->lang['RS_WARNING'] : (!empty($row['user']) ? $user->lang['RS_USER_RATING'] : $user->lang['RS_POST_RATING'] . '<br />' . $post_link));
+						if ($row['action'] == 1)
+						{
+							$action = $user->lang['RS_POST_RATING'] . '' . $post_link;
+						}
+						else if ($row['action'] == 2)
+						{
+							$action = $user->lang['RS_USER_RATING'];
+						}
+						else if ($row['action'] == 3)
+						{
+							$action = $user->lang['RS_WARNING'];
+						}
+						else if ($row['action'] == 4)
+						{
+							$action = $user->lang['RS_BAN'];
+						}
 
 						if ($row['point'] < 0)
 						{

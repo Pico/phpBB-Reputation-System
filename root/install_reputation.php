@@ -284,10 +284,9 @@ $versions = array(
 						'rep_id'				=> array('UINT', NULL, 'auto_increment'),
 						'rep_from'				=> array('UINT', 0),
 						'rep_to'				=> array('UINT', 0),
+						'action'				=> array('TINT:2', 0),
 						'time'					=> array('TIMESTAMP', 0),
 						'post_id'				=> array('UINT', 0),
-						'user'					=> array('BOOL', 1),
-						'warning'				=> array('BOOL', 1),
 						'point'					=> array('INT:11', 0),
 						'comment'				=> array('MTEXT_UNI', ''),
 						'bbcode_uid'			=> array('VCHAR:8', ''),
@@ -416,7 +415,7 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
 
 function update_rs_table($action)
 {
-	global $db, $table_prefix;
+	global $db, $table_prefix, $user;
 
 	if ($action == 'update')
 	{

@@ -18,7 +18,7 @@ class mcp_reputation_info
 		return array(
 			'filename'	=> 'mcp_reputation',
 			'title'		=> 'MCP_REPUTATION',
-			'version'	=> '0.4.2',
+			'version'	=> '0.4.3',
 			'modes'		=> array(
 				'front'				=> array('title' => 'MCP_REPUTATION_FRONT', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),
 				'list'				=> array('title' => 'MCP_REPUTATION_LIST', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),

@@ -397,8 +397,23 @@ switch ($mode)
 
 			$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
 			$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
-			
-			$action = ($row['warning'] == 2) ? $user->lang['RS_BAN'] : (($row['warning'] == 1) ? $user->lang['RS_WARNING'] : (!empty($row['user']) ? $user->lang['RS_USER_RATING'] : $user->lang['RS_POST_RATING'] . '' . $post_link));
+
+			if ($row['action'] == 1)
+			{
+				$action = $user->lang['RS_POST_RATING'] . '' . $post_link;
+			}
+			else if ($row['action'] == 2)
+			{
+				$action = $user->lang['RS_USER_RATING'];
+			}
+			else if ($row['action'] == 3)
+			{
+				$action = $user->lang['RS_WARNING'];
+			}
+			else if ($row['action'] == 4)
+			{
+				$action = $user->lang['RS_BAN'];
+			}
 
 			if ($row['point'] < 0)
 			{
@@ -638,7 +653,6 @@ switch ($mode)
 				trigger_error($message);
 			}
 		}
-
 
 		//You can not vote for your posts
 		if ($user_row['user_id'] == $user->data['user_id'])

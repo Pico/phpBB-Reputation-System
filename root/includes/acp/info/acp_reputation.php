@@ -23,7 +23,7 @@ class acp_reputation_info
 		return array(
 			'filename'	=> 'acp_reputation',
 			'title'		=> 'ACP_REPUTATION_SYSTEM',
-			'version'	=> '0.4.2',
+			'version'	=> '0.4.3',
 			'modes'		=> array(
 				'settings'		=> array('title' => 'ACP_REPUTATION_SETTINGS', 'auth' => 'acl_a_reputation', 'cat' => array('ACP_CAT_REPUTATION')),
 				'sync'			=> array('title' => 'ACP_REPUTATION_SYNC', 'auth' => 'acl_a_reputation', 'cat' => array('ACP_CAT_REPUTATION')),
