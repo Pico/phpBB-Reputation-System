@@ -418,6 +418,11 @@ switch ($mode)
 			{
 				$action = $short_action = $user->lang['RS_BAN'];
 			}
+			else if ($row['action'] == 5)
+			{
+				$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
+				$short_action = $user->lang['RS_ONLYPOST_RATING'];
+			}
 
 			if ($row['point'] < 0)
 			{
@@ -559,7 +564,7 @@ switch ($mode)
 			'U_SORT_POSTS'		=> $sort_url . '&amp;sk=c&amp;sd=' . (($sort_key == 'c' && $sort_dir == 'd') ? 'a' : 'd'),
 			'DELETE_LINK'		=> ($auth->acl_get('m_rs_moderate') || $auth->acl_get('u_rs_delete')) ? true : false,
 			'COMMENT'			=> $config['rs_enable_comment'] ? true : false,
-			'REP_POWER_ENABLE'	=> $config['rs_enable_power'] ? true : false,	
+			'REP_POWER_ENABLE'	=> $config['rs_enable_power'] ? true : false,
 			'POSITIVE_COUNT'	=> $positive_count,
 			'POSITIVE_WEEK'		=> $positive_week,
 			'POSITIVE_MONTH'	=> $positive_month,
@@ -857,10 +862,9 @@ switch ($mode)
 			}
 
 			//Preparing HTML for voting by manual spending of user power
-			if ($point == 'negative')
+			for($i = 1; $i <= $max_voting_allowed; ++$i)
 			{
-				//Preparing pull-down menu for nevative voting
-				for($i = 1; $i <= $max_voting_allowed; ++$i)
+				if ($point == 'negative')
 				{
 					$voting_power_pulldown = '<option value="-' . $i . '">' . $user->lang['RS_NEGATIVE'] . ' (-' . $i . ') </option>';
 
@@ -868,16 +872,8 @@ switch ($mode)
 					{
 						$voting_power_pulldown = '<option value="-' . $i . '" selected="selected">' . $user->lang['RS_NEGATIVE'] . ' (-' . $i . ') </option>';
 					}
-
-					$template->assign_block_vars('reputation', array(
-							'REPUTATION_POWER'	=> $voting_power_pulldown)
-					);
 				}
-			}
-			else
-			{
-				//Preparing pull-down menu for positive voting
-				for($i = $max_voting_allowed; $i >= 1; $i--)
+				else
 				{
 					$voting_power_pulldown = '<option value="' . $i . '">' . $user->lang['RS_POSITIVE'] . ' (+' . $i . ')</option>';
 
@@ -885,11 +881,11 @@ switch ($mode)
 					{
 						$voting_power_pulldown = '<option value="' . $i . '" selected="selected">' . $user->lang['RS_POSITIVE'] . ' (+' . $i . ') </option>';
 					}
-
-					$template->assign_block_vars('reputation', array(
-							'REPUTATION_POWER'	=> $voting_power_pulldown)
-					);
 				}
+
+				$template->assign_block_vars('reputation', array(
+					'REPUTATION_POWER'	=> $voting_power_pulldown)
+				);
 			}
 		}
 
@@ -934,7 +930,8 @@ switch ($mode)
 				WHERE user_id = " . $user->data['user_id'];
 			$db->sql_query($sql);
 
-			if ($reputation->give_point($user_row['poster_id'], $post_id, $comment, $notify, $rep_power))
+			$post_rating_mode = ($reputation_enabled_for_this_forum == 1) ? 'post' : 'onlypost';
+			if ($reputation->give_point($user_row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
 			{
 
 				if ($ajax)
@@ -1126,7 +1123,7 @@ switch ($mode)
 			FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_to = $user_to
 				AND rep_from = {$user->data['user_id']}
-				AND user = 1";
+				AND action = 2";
 		$result = $db->sql_query($sql);
 		$check_user = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);

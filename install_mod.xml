@@ -356,8 +356,9 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 				<find><![CDATA[				<label><input type="radio" class="radio" name="display_recent" value="0"<!-- IF not S_DISPLAY_ACTIVE_TOPICS --> id="display_recent" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
 		</dl>]]></find>
 				<action type="after-add"><![CDATA[		<dl>
-			<dt><label for="enable_icons">{L_RS_ENABLE_REPUTATION}:</label></dt>
-			<dd><label><input type="radio" class="radio" name="enable_reputation" value="1"<!-- IF S_ENABLE_REPUTATION --> id="enable_reputation" checked="checked"<!-- ENDIF --> /> {L_YES}</label>
+			<dt><label for="enable_reputation">{L_RS_FORUM_REPUTATION}:</label><br /><span>{L_RS_FORUM_REPUTATION_EXPLAIN}</span></dt>
+			<dd><label><input type="radio" class="radio" name="enable_reputation" value="1"<!-- IF S_ENABLE_REPUTATION eq 1 --> id="enable_reputation" checked="checked"<!-- ENDIF --> /> {L_RS_POST_WITH_USER}</label><br />
+				<label><input type="radio" class="radio" name="enable_reputation" value="2"<!-- IF S_ENABLE_REPUTATION eq 2 --> id="enable_reputation" checked="checked"<!-- ENDIF --> /> {L_RS_POST_WITHOUT_USER}</label><br />
 				<label><input type="radio" class="radio" name="enable_reputation" value="0"<!-- IF not S_ENABLE_REPUTATION --> id="enable_reputation" checked="checked"<!-- ENDIF --> /> {L_NO}</label></dd>
 		</dl>]]></action>
 			</edit>
@@ -415,7 +416,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		<open src="includes/acp/acp_forums.php">
 			<edit>
 				<find><![CDATA[						'forum_password_unset'	=> request_var('forum_password_unset', false),]]></find>
-				<action type="after-add"><![CDATA[						'enable_reputation'		=> request_var('enable_reputation', false),]]></action>
+				<action type="after-add"><![CDATA[						'enable_reputation'		=> request_var('enable_reputation', 0),]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[							'forum_password_confirm'=> '',]]></find>
@@ -423,7 +424,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			</edit>
 			<edit>
 				<find><![CDATA[					'S_CAN_COPY_PERMISSIONS'	=> ($action != 'edit' || empty($forum_id) || ($auth->acl_get('a_fauth') && $auth->acl_get('a_authusers') && $auth->acl_get('a_authgroups') && $auth->acl_get('a_mauth'))) ? true : false,]]></find>
-				<action type="after-add"><![CDATA[					'S_ENABLE_REPUTATION'		=> ($forum_data['enable_reputation']) ? true : false,]]></action>
+				<action type="after-add"><![CDATA[					'S_ENABLE_REPUTATION'		=> $forum_data['enable_reputation'],]]></action>
 			</edit>
 		</open>
 		<open src="includes/acp/acp_groups.php">

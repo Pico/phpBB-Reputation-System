@@ -69,6 +69,7 @@ $lang = array_merge($lang, array(
 	'RS_POST_DELETE'			=> 'Post deleted',
 	'RS_POWER'					=> 'Reputation power',
 	'RS_POST_RATING'			=> 'Rating post',
+	'RS_ONLYPOST_RATING'		=> 'Evaluating post',
 	'RS_RATE_BUTTON'			=> 'Rate',
 	'RS_RATE_USER'				=> 'Rate user',
 	'RS_RANK'					=> 'Reputation rank',

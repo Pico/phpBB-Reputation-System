@@ -141,6 +141,11 @@ class mcp_reputation
 					{
 						$action = $user->lang['RS_BAN'];
 					}
+					else if ($row['action'] == 5)
+					{
+						$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
+						$short_action = $user->lang['RS_ONLYPOST_RATING'];
+					}
 
 					if ($row['point'] < 0)
 					{
@@ -303,6 +308,11 @@ class mcp_reputation
 						else if ($row['action'] == 4)
 						{
 							$action = $user->lang['RS_BAN'];
+						}
+						else if ($row['action'] == 5)
+						{
+							$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
+							$short_action = $user->lang['RS_ONLYPOST_RATING'];
 						}
 
 						if ($row['point'] < 0)

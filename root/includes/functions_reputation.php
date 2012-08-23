@@ -198,7 +198,7 @@ class reputation
 					$message_parser->message = sprintf($user->lang['RS_PM_BODY'], $point, $post_link, '</a>');
 				}
 			}
-			elseif ($mode == 'user')
+			else if ($mode == 'user')
 			{
 				if (!empty($comment))
 				{
@@ -246,6 +246,10 @@ class reputation
 		{
 			$action = 4;
 		}
+		else if ($mode == 'onlypost')
+		{
+			$action = 5;
+		}
 
 		//Prepare comment text for storage
 		$text = utf8_normalize_nfc($comment);
@@ -272,6 +276,18 @@ class reputation
 		//Saving the vote. Used for post rating calculation. Not for user rating calculation
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
 
+		//Post reputation
+		if ($post_id)
+		{
+			$post_rs_count = ($point > 0) ? 1 : -1;
+
+			$sql = 'UPDATE ' . POSTS_TABLE . "
+				SET post_reputation = post_reputation + $point,
+					post_rs_count = post_rs_count + $post_rs_count
+				WHERE post_id = $post_id";
+			$db->sql_query($sql);
+		}
+
 		//Nofity user about the point
 		$new_points = '';
 		if ($config['rs_notification'])
@@ -287,6 +303,7 @@ class reputation
 			$new_points = ', user_rep_new = user_rep_new + 1' . $rep_last_time;
 		}
 
+		if ($mode == 'onlypost') $point = 0;
 		//Caching user reputation
 		$sql = 'UPDATE ' . USERS_TABLE . "
 			SET user_reputation = user_reputation + $point
@@ -304,18 +321,6 @@ class reputation
 		if ($config['rs_min_point'])
 		{
 			$this->check_point($to, 'min');
-		}
-
-		//Post reputation
-		if ($post_id)
-		{
-			$post_rs_count = ($point > 0) ? 1 : -1;
-
-			$sql = 'UPDATE ' . POSTS_TABLE . "
-				SET post_reputation = post_reputation + $point,
-					post_rs_count = post_rs_count + $post_rs_count
-				WHERE post_id = $post_id";
-			$db->sql_query($sql);
 		}
 
 		if ($config['rs_enable_ban'] && $mode != 'ban')
@@ -339,7 +344,7 @@ class reputation
 			$point = $config['rs_max_point'];
 			$sql_where = 'user_reputation > ' . $config['rs_max_point'];
 		}
-		elseif ($mode == 'min')
+		else if ($mode == 'min')
 		{
 			$point = $config['rs_min_point'];
 			$sql_where = 'user_reputation < ' . $config['rs_min_point'];

@@ -79,7 +79,6 @@ $lang = array_merge($lang, array(
 	'RS_WARNING_EXPLAIN'			=> 'Users with proper permissions can give negative points when warning users.',
 	'RS_USER_RATING'				=> 'Allow user rating',
 	'RS_POST_RATING'				=> 'Enable post rating',
-	'RS_ENABLE_REPUTATION'			=> 'Enable Reputation System',
 	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Submit and enable Reputation System in all forums',
 	'RS_NOTIFICATION'				=> 'Enable notifications',
 	'RS_NOTIFICATION_EXPLAIN'		=> 'This option enables notification of new reputation points in the header.',
@@ -205,6 +204,11 @@ $lang = array_merge($lang, array(
 	'RS_MINUTES'					=> 'minutes',
 	'RS_HOURS'						=> 'hours',
 	'RS_DAYS'						=> 'days',
+
+	'RS_FORUM_REPUTATION'			=> 'Enable reputation',
+	'RS_FORUM_REPUTATION_EXPLAIN'	=> 'Allow users to rate posts. You can choose if rating posts influence user reputation.',
+	'RS_POST_WITH_USER'				=> 'Yes, with influencing on user reputation',
+	'RS_POST_WITHOUT_USER'			=> 'Yes, without influencing on user reputation',
 
 	'LOG_REPUTATION_SETTING'		=> '<strong>Altered Reputation System settings</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputation System resynchronised</strong>',

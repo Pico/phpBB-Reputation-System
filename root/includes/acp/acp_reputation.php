@@ -288,6 +288,7 @@ class acp_reputation
 
 						$sql = 'SELECT SUM(point) AS rep_points, rep_to
 							FROM ' . REPUTATIONS_TABLE . '
+							WHERE action != 5
 							GROUP BY rep_to';
 						$result = $db->sql_query($sql);
 
