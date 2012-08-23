@@ -397,7 +397,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 				<find><![CDATA[		$db->sql_multi_insert(BANLIST_TABLE, $sql_ary);]]></find>
 				<action type="after-add"><![CDATA[
 		//Reputation System
-		if ($mode == 'user' && $config['rs_max_power_ban'])
+		if ($mode == 'user' && !$ban_exclude && $config['rs_max_power_ban'])
 		{
 			$ban_id = $db->sql_nextid();
 			$ban_time = round(($ban_end - $current_time) / 3600);
