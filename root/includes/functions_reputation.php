@@ -174,62 +174,9 @@ class reputation
 	function give_point($to, $post_id = 0, $comment, $notify = false, $point, $mode = 'post')
 	{
 		global $phpEx, $phpbb_root_path, $config;
-		global $template, $db, $user, $auth;
+		global $db, $user;
 
-		//If config allows and we are told so, we should send a private message to a user, who received the vote
-		if ($notify && $config['rs_pm_notify'])
-		{
-			include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
-			include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
-
-			$message_parser = new parse_message();
-
-			if ($post_id)
-			{
-				$post_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $post_id) . '#p' . $post_id;
-				$post_link = '<a href="' . $post_url . '">';
-
-				if (!empty($comment))
-				{
-					$message_parser->message = sprintf($user->lang['RS_PM_BODY_COMMENT'], $point, $comment, $post_link, '</a>');
-				}
-				else
-				{
-					$message_parser->message = sprintf($user->lang['RS_PM_BODY'], $point, $post_link, '</a>');
-				}
-			}
-			else if ($mode == 'user')
-			{
-				if (!empty($comment))
-				{
-					$message_parser->message = sprintf($user->lang['RS_PM_BODY_USER_COMMENT'], $point, $comment);
-				}
-				else
-				{
-					$message_parser->message = sprintf($user->lang['RS_PM_BODY_USER'], $point);
-				}
-			}
-
-			$message_parser->parse(true, true, true, false, false, true, true);
-
-			$pm_data = array(
-				'from_user_id'		=> $user->data['user_id'],
-				'from_user_ip'		=> $user->ip,
-				'from_username'		=> $user->data['username'],
-				'enable_sig'		=> false,
-				'enable_bbcode'		=> true,
-				'enable_smilies'	=> true,
-				'enable_urls'		=> true,
-				'icon_id'			=> 0,
-				'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
-				'bbcode_uid'		=> $message_parser->bbcode_uid,
-				'message'			=> $message_parser->message,
-				'address_list'		=> array('u' => array($to => 'to')),
-			);
-
-			submit_pm('post', $user->lang['RS_PM_SUBJECT'], $pm_data, false);
-		}
-
+		//Firstly, select mode
 		if ($mode == 'post')
 		{
 			$action = 1;
@@ -288,18 +235,19 @@ class reputation
 			$db->sql_query($sql);
 		}
 
+		//Get some user data
+		$sql = 'SELECT user_lang, user_reputation, user_rep_new
+			FROM ' . USERS_TABLE . " 
+			WHERE user_id = $to";
+		$result = $db->sql_query($sql);
+		$user_data = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
 		//Nofity user about the point
 		$new_points = '';
 		if ($config['rs_notification'])
 		{
-			$sql = 'SELECT user_rep_new
-				FROM ' . USERS_TABLE . " 
-				WHERE user_id = $to";
-			$result = $db->sql_query($sql);
-			$rep_new = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
-			$rep_last_time = !$rep_new['user_rep_new'] ? ', user_rep_last = ' . time() . '' : '';
+			$rep_last_time = !$user_data['user_rep_new'] ? ', user_rep_last = ' . time() . '' : '';
 			$new_points = ', user_rep_new = user_rep_new + 1' . $rep_last_time;
 		}
 
@@ -312,13 +260,13 @@ class reputation
 		$db->sql_query($sql);
 
 		//Max user reputation
-		if ($config['rs_max_point'])
+		if ($config['rs_max_point'] && ($config['rs_max_point'] < ($user_data['user_reputation'] + $point)))
 		{
 			$this->check_point($to, 'max');
 		}
 
 		//Min user reputation
-		if ($config['rs_min_point'])
+		if ($config['rs_min_point'] && ($config['rs_min_point'] > ($user_data['user_reputation'] + $point)))
 		{
 			$this->check_point($to, 'min');
 		}
@@ -326,6 +274,66 @@ class reputation
 		if ($config['rs_enable_ban'] && $mode != 'ban')
 		{
 			$this->ban_user($to);
+		}
+
+		//If config allows and we are told so, we should send a private message to a user, who received the vote
+		if ($notify && $config['rs_pm_notify'])
+		{
+			include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
+			include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+
+			$message_parser = new parse_message();
+
+			//Select receiver language
+			$user_data['user_lang'] = (file_exists($phpbb_root_path . 'language/' . $user_data['user_lang'] . '/mods/reputation_system.' .$phpEx)) ? $user_data['user_lang'] : $config['default_lang'];
+
+			//Load receiver language
+			include($phpbb_root_path . 'language/' . basename($user_data['user_lang']) . '/mods/reputation_system.' . $phpEx);
+
+			if ($post_id)
+			{
+				$post_url = append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $post_id) . '#p' . $post_id;
+				$post_link = '<a href="' . $post_url . '">';
+
+				if (!empty($comment))
+				{
+					$message_parser->message = sprintf($lang['RS_PM_BODY_COMMENT'], $point, $comment, $post_link, '</a>');
+				}
+				else
+				{
+					$message_parser->message = sprintf($lang['RS_PM_BODY'], $point, $post_link, '</a>');
+				}
+			}
+			else if ($mode == 'user')
+			{
+				if (!empty($comment))
+				{
+					$message_parser->message = sprintf($lang['RS_PM_BODY_USER_COMMENT'], $point, $comment);
+				}
+				else
+				{
+					$message_parser->message = sprintf($lang['RS_PM_BODY_USER'], $point);
+				}
+			}
+
+			$message_parser->parse(true, true, true, false, false, true, true);
+
+			$pm_data = array(
+				'from_user_id'		=> $user->data['user_id'],
+				'from_user_ip'		=> $user->ip,
+				'from_username'		=> $user->data['username'],
+				'enable_sig'		=> false,
+				'enable_bbcode'		=> true,
+				'enable_smilies'	=> true,
+				'enable_urls'		=> true,
+				'icon_id'			=> 0,
+				'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
+				'bbcode_uid'		=> $message_parser->bbcode_uid,
+				'message'			=> $message_parser->message,
+				'address_list'		=> array('u' => array($to => 'to')),
+			);
+
+			submit_pm('post', $lang['RS_PM_SUBJECT'], $pm_data, false);
 		}
 
 		return true;
