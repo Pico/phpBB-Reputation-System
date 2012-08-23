@@ -420,7 +420,7 @@ function update_rs_table($action)
 
 	if ($action == 'update')
 	{
-		$sql = 'ALTER TABLE ' . $table_prefix . "reputations ADD action TINYINT( 2 ) UNSIGNED NOT NULL DEFAULT '0' AFTER time";
+		$sql = 'ALTER TABLE ' . $table_prefix . "reputations ADD action TINYINT( 2 ) NOT NULL DEFAULT '0' AFTER time";
 		$db->sql_query($sql);
 
 		$sql = 'UPDATE  ' . $table_prefix . "reputations SET action = 1 WHERE post_id IS NOT NULL";
