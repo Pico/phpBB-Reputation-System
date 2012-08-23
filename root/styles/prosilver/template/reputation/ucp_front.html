@@ -2,24 +2,42 @@
 
 <h2>{L_UCP_REPUTATION_FRONT}</h2>
 
-<div style="float: left; width: 49%;">
+<div style="float: left; width: 69%;">
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
-	<h3>{L_RS_DETAILS}</h3>
-	<dl class="details">
-		<dt>{L_REPUTATION}:</dt> <dd><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
-		<!-- IF RS_POWER -->
-			<dt>{L_RS_POWER}:</dt> <dd>{RS_POWER}</dd>
-			<!-- IF RS_POWER_LEFT --><dt>{L_RS_VOTING_POWER}:</dt> <dd>{RS_POWER_LEFT}</dd><!-- ENDIF -->
-		<!-- ENDIF -->
-		<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT}</dd>
-		<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT}</dd>
-	</dl>
+	<div class="column1">
+
+		<h3>{L_RS_DETAILS}</h3>
+		<dl class="details">
+			<dt>{L_REPUTATION}:</dt> <dd><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+			<!-- IF RS_POWER -->
+				<dt>{L_RS_POWER}:</dt> <dd>{RS_POWER}</dd>
+				<!-- IF RS_POWER_LEFT --><dt>{L_RS_VOTING_POWER}:</dt> <dd>{RS_POWER_LEFT}</dd><!-- ENDIF -->
+			<!-- ENDIF -->
+			<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT}</dd>
+			<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT}</dd>
+		</dl>
+	</div>
+
+	<div class="column2">
+
+		<h3>{L_RS_POWER_DETAILS}</h3>
+
+		<dl class="left-box details" style="width: 100%;">
+			<!-- IF RS_CFG_MEMBERSHIP_DAYS --><dt style="width: 50%">{L_RS_POWER_DETAIL_AGE}:</dt>        <dd style="width: 45%">{FOR_USER_AGE}</dd><!-- ENDIF -->
+			<!-- IF RS_CFG_TOTAL_POSTS --><dt style="width: 50%">{L_RS_POWER_DETAIL_POSTS}:</dt>      <dd style="width: 45%">{FOR_NUMBER_OF_POSTS}</dd><!-- ENDIF -->
+			<!-- IF RS_CFG_REP_POINT --><dt style="width: 50%">{L_RS_POWER_DETAIL_REPUTAION}:</dt>  <dd style="width: 45%">{FOR_REPUTATION}</dd><!-- ENDIF -->
+			<!-- IF RS_CFG_LOOSE_WARN --><dt style="width: 50%">{L_RS_POWER_DETAIL_WARNINGS}:</dt>   <dd style="width: 45%">{FOR_WARNINGS}</dd><!-- ENDIF -->
+			<!-- IF RS_CFG_LOOSE_BAN --><dt style="width: 50%">{L_RS_POWER_DETAIL_BANS}:</dt>       <dd style="width: 45%">{FOR_BANS}</dd><!-- ENDIF -->
+			<!-- IF MINIMUM_VOTING_POWER -->    <dt style="width: 50%">{L_RS_POWER_DETAIL_MIN}:</dt>        <dd style="width: 45%">{MINIMUM_VOTING_POWER}</dd>          <!-- ENDIF -->
+			<!-- IF MAXIMUM_VOTING_POWER -->    <dt style="width: 50%">{L_RS_POWER_DETAIL_MAX}:</dt>        <dd style="width: 45%">{MAXIMUM_VOTING_POWER}</dd>          <!-- ENDIF -->
+		</dl>
+	</div>
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 </div>
 
-<div style="float: right; width: 49%;">
+<div style="float: right; width: 30%;">
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
 	<h3>{L_RS_STATS}</h3>

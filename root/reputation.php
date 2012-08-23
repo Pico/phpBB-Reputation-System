@@ -535,11 +535,11 @@ switch ($mode)
 			$template->assign_vars(array(
 				'RS_POWER'					=> $user_max_voting_power,
 				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
-				'RS_CFG_TOTAL_POSTS'		=> ($config['rs_total_posts'] ? 1 : 0),
-				'RS_CFG_MEMBERSHIP_DAYS'	=> ($config['rs_membership_days'] ? 1 : 0),
-				'RS_CFG_REP_POINT'			=> ($config['rs_power_rep_point'] ? 1 : 0),
-				'RS_CFG_LOOSE_WARN'			=> ($config['rs_power_loose_warn'] ? 1 : 0),
-				'RS_CFG_LOOSE_BAN'			=> ($config['rs_power_loose_ban'] ? 1 : 0),
+				'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
+				'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
+				'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
+				'RS_CFG_LOOSE_WARN'			=> $config['rs_power_loose_warn'] ? true : false,
+				'RS_CFG_LOOSE_BAN'			=> $config['rs_power_loose_ban'] ? true : false,
 			));
 
 			$template->assign_vars($user_power_explain);

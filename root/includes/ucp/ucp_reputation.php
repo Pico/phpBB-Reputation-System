@@ -174,13 +174,29 @@ class ucp_reputation
 				$rs_rank_title = $reputation->get_rs_rank($user->data['user_reputation']);
 				$reputation_box = $config['rs_ranks'] ? $reputation->get_rs_rank_color($rs_rank_title) : (($user->data['user_reputation'] == 0) ? 'zero' : (($user->data['user_reputation'] > 0) ? 'positive' : 'negative'));
 
-				$user_reputation_stats = $reputation->get_reputation_stats($user->data['user_id']);
-				$user_max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
-				$voting_power_left = '';
-				if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+				if ($config['rs_enable_power'])
 				{
-					$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
-					if ($voting_power_left <= 0) $voting_power_left = 0; 
+					$user_reputation_stats = $reputation->get_reputation_stats($user->data['user_id']);
+					$user_max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
+					$user_power_explain = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts'], true);
+					$voting_power_left = '';
+					if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+					{
+						$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
+						if ($voting_power_left <= 0) $voting_power_left = 0; 
+					}
+
+					$template->assign_vars(array(
+						'RS_POWER'					=> $user_max_voting_power,
+						'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
+						'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
+						'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
+						'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
+						'RS_CFG_LOOSE_WARN'			=> $config['rs_power_loose_warn'] ? true : false,
+						'RS_CFG_LOOSE_BAN'			=> $config['rs_power_loose_ban'] ? true : false,
+					));
+
+					$template->assign_vars($user_power_explain);
 				}
 
 				$template->assign_vars(array(

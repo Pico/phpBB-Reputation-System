@@ -657,7 +657,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			<ul class="profile-icons">
 				<li class="rate-good-icon"><!-- IF postrow.S_GIVE_REPUTATION --><a href="{postrow.U_ADD_POS}" class="repo-link<!-- IF postrow.RS_VOTED_POINTS > 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_VOTED_POINTS}"<!-- ELSE -->" title="{L_RS_ADD_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF -->><span>{L_RS_ADD_POINTS}</span></a><!-- ENDIF --></li>
 				<li class="reputation {postrow.REPUTATION_BOX}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.U_VIEW_REP --><a href="{postrow.U_VIEW_REP}"<!-- IF not S_RS_AJAX_ENABLE --> onclick="popup(this.href, 780, 550); return false;"<!-- ENDIF --> class="repo-link"><!-- ENDIF -->{postrow.POST_REP}<!-- IF postrow.U_VIEW_REP --></a><!-- ENDIF --></div></li>
-                <li class="rate-bad-icon"><!-- IF postrow.S_GIVE_REPUTATION && postrow.S_GIVE_NEGATIVE--><a href="{postrow.U_ADD_NEG}" class="repo-link <!-- IF postrow.RS_VOTED_POINTS < 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_VOTED_POINTS}"<!-- ELSE -->" title="{L_RS_SUBTRACT_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF -->><span>{L_RS_SUBTRACT_POINTS}</span></a><!-- ENDIF --></li>
+				<li class="rate-bad-icon"><!-- IF postrow.S_GIVE_REPUTATION && postrow.S_GIVE_NEGATIVE--><a href="{postrow.U_ADD_NEG}" class="repo-link <!-- IF postrow.RS_VOTED_POINTS < 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_VOTED_POINTS}"<!-- ELSE -->" title="{L_RS_SUBTRACT_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF -->><span>{L_RS_SUBTRACT_POINTS}</span></a><!-- ENDIF --></li>
 			</ul>
 			<br />
 			<!-- ENDIF -->]]></action>
