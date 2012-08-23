@@ -80,7 +80,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_RATING'			=> 'Rating user',
 	'RS_USER_RATING_CONFIRM'	=> 'Do you really want to rate %s?',
 	'RS_VIEW_DETAILS'			=> 'View details',
-	'RS_VOTING_POWER'			=> 'Voting power',
+	'RS_VOTING_POWER'			=> 'Remaing power points',
 	'RS_WARNING'				=> 'Warning user',
 
 	'RS_EMPTY_DATA'				=> 'There are no reputation points.',
@@ -150,6 +150,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_BANS'			=> 'For bans for the last year',
 	'RS_POWER_DETAIL_MIN'			=> 'Minimum voting power for everybody',
 	'RS_POWER_DETAIL_MAX'			=> 'Voting power capped to maximum allowed',
+	'RS_GROUP_POWER'				=> 'Voting power based on user group',
 ));
 
 ?>

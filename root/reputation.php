@@ -532,6 +532,14 @@ switch ($mode)
 				if ($voting_power_left <= 0) $voting_power_left = 0; 
 			}
 
+			$group_id = $user_row['group_id'];
+			$sql = 'SELECT group_reputation_power
+				FROM ' . GROUPS_TABLE . "
+				WHERE group_id = $group_id";
+			$result = $db->sql_query($sql);
+			$group_power = (int)$db->sql_fetchfield('group_reputation_power');
+			$db->sql_freeresult($result);
+
 			$template->assign_vars(array(
 				'RS_POWER'					=> $user_max_voting_power,
 				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
@@ -540,6 +548,7 @@ switch ($mode)
 				'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
 				'RS_CFG_LOOSE_WARN'			=> $config['rs_power_loose_warn'] ? true : false,
 				'RS_CFG_LOOSE_BAN'			=> $config['rs_power_loose_ban'] ? true : false,
+				'RS_GROUP_POWER'			=> $group_power ? true : false,
 			));
 
 			$template->assign_vars($user_power_explain);

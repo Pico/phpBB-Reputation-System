@@ -94,7 +94,8 @@ class reputation
 
 			if ($group_power)
 			{
-				$user_max_power = $group_power;
+				$user_max_power = $user_power['GROUP_VOTING_POWER'] = $group_power;
+				$user_power['MAXIMUM_VOTING_POWER'] = false;
 			}
 		}
 
