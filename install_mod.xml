@@ -404,7 +404,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			$ban_point = round($config['rs_max_power_ban'] * $ban_time / 672);
 			$ban_points = ($ban_end == 0) ? -$config['rs_max_power_ban'] : -min($config['rs_max_power_ban'],($ban_point == 0 ? 1 : $ban_point));
 
-			if (!function_exists('give_point'))
+			if (!class_exists('reputation'))
 			{
 				include($phpbb_root_path . '/includes/functions_reputation.' . $phpEx);
 			}
