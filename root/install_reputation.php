@@ -405,6 +405,10 @@ $versions = array(
 	'0.4.3' => array(
 		'custom' => 'update_rs_table',
 
+		'config_add' => array(
+			array('rs_min_rep_negative', '0', 0),
+		),
+
 		'cache_purge' => array(
 			'template',
 			'theme',

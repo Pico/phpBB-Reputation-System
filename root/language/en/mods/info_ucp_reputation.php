@@ -41,9 +41,9 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'UCP_REPUTATION'				=> 'Reputation',
 	'UCP_REPUTATION_FRONT'			=> 'Front page',
-	'UCP_REPUTATION_LIST'			=> 'List',
+	'UCP_REPUTATION_LIST'			=> 'Received points',
 	'UCP_REPUTATION_GIVEN'			=> 'Given points',
-	'UCP_REPUTATION_SETTING'		=> 'Settings',
+	'UCP_REPUTATION_SETTING'		=> 'Preferences',
 
 	'RS_CATCHUP'						=> 'Catchup new tags',
 	'RS_REPUTATION_LISTS_UCP'			=> 'This is a reputation points list. Here you find all the reputation points you have received from other members.',

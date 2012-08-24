@@ -238,7 +238,7 @@ $user->add_lang('mods/reputation_system');
 				<find><![CDATA[	'S_ENABLE_FEEDS_TOPIC'	=> ($config['feed_topic'] && !phpbb_optionget(FORUM_OPTION_FEED_EXCLUDE, $topic_data['forum_options'])) ? true : false,]]></find>
 				<action type="after-add"><![CDATA[	
 	//Reputation System
-	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation'] && $config['rs_post_rating']) ? true : false,
+	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,
 	//Reputation System]]></action>
 			</edit>
 			<edit>
@@ -277,7 +277,7 @@ $sql_array = array(
 		AND u.user_id = p.poster_id'
 );
 
-if ($config['rs_enable'] && $config['rs_post_rating'] && $topic_data['enable_reputation'])
+if ($config['rs_enable'] && $config['rs_post_rating'] && $topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL)
 {
 	$sql_array['LEFT_JOIN'][] = array('FROM' => array(REPUTATIONS_TABLE => 'r'), 'ON' => 'r.rep_from = ' . $user->data['user_id'] . ' AND r.post_id = p.post_id');
 	$sql_array['SELECT'] .= ', r.rep_id AS rated, r.point AS voting_points';

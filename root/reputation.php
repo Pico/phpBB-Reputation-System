@@ -727,7 +727,7 @@ switch ($mode)
 				trigger_error($message);
 			}
 		}
-			
+
 		//Check if user is allowed to vote
 		if (!$auth->acl_get('f_rs_give', $user_row['forum_id']) || !$auth->acl_get('f_rs_give_negative', $user_row['forum_id']) && $point == 'negative' || !$auth->acl_get('u_rs_ratepost'))
 		{
@@ -743,7 +743,23 @@ switch ($mode)
 				trigger_error($message);
 			}
 		}
-		
+
+		//Check if user reputation is enought to give negative points
+		if ($config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) && $point == 'negative')
+		{
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => sprintf($user->lang['RS_USER_NEGATIVE'], $config['rs_min_rep_negative'])));
+				return;
+			}
+			else
+			{
+				$message = sprintf($user->lang['RS_USER_NEGATIVE'], $config['rs_min_rep_negative']) . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $post_id) . '#p' . $post_id . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
+		}
+
 		// Anti-abuse behaviour
 		if (!empty($config['rs_anti_time']) && !empty($config['rs_anti_post']))
 		{
@@ -919,7 +935,8 @@ switch ($mode)
 				}
 			}
 
-			if ($config['rs_enable_power'] && (($rep_power > $max_voting_allowed) || ($rep_power < -$max_voting_allowed)))
+			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
+			if (!$auth->acl_get('f_rs_give_negative', $user_row['forum_id']) && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $max_voting_allowed) || ($rep_power < -$max_voting_allowed)))
 			{
 				if ($ajax)
 				{
@@ -982,35 +999,54 @@ switch ($mode)
 		$u_action = reapply_sid($use_page);
 		$u_action .= ((strpos($u_action, '?') === false) ? '?' : '&amp;') . 'confirm_key=' . $confirm_key;
 
-		// We want to make the message available here as a reminder
-		// Parse the message and subject
-		$message = (strlen($user_row['post_text']) > 1000) ? substr($user_row['post_text'], 0, 1000) . '...' : $user_row['post_text'];
-		$message = censor_text($message);
-
-		// Second parse bbcode here
-		if ($user_row['bbcode_bitfield'])
+		if (!$ajax)
 		{
-			include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
+			// We want to make the message available here as a reminder
+			// Parse the message and subject
+			$message = (strlen($user_row['post_text']) > 1000) ? substr($user_row['post_text'], 0, 1000) . '...' : $user_row['post_text'];
+			$message = censor_text($message);
 
-			$bbcode = new bbcode($user_row['bbcode_bitfield']);
-			$bbcode->bbcode_second_pass($message, $user_row['bbcode_uid'], $user_row['bbcode_bitfield']);
-		}
+			// Second parse bbcode here
+			if ($user_row['bbcode_bitfield'])
+			{
+				include_once($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 
-		$message = bbcode_nl2br($message);
-		$message = smiley_text($message);
+				$bbcode = new bbcode($user_row['bbcode_bitfield']);
+				$bbcode->bbcode_second_pass($message, $user_row['bbcode_uid'], $user_row['bbcode_bitfield']);
+			}
 
-		if (!function_exists('get_user_avatar'))
-		{
-			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-		}
+			$message = bbcode_nl2br($message);
+			$message = smiley_text($message);
 
-		$rank_title = $rank_img = $rank_img_src = '';
-		if ($config['rs_post_detail'])
-		{
-			get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, 	$rank_img_src);
-			$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
+			if (!function_exists('get_user_avatar'))
+			{
+				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+			}
 
-			$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+			$rank_title = $rank_img = $rank_img_src = '';
+			if ($config['rs_post_detail'])
+			{
+				get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, 	$rank_img_src);
+				$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
+
+				$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
+			}
+
+			$template->assign_vars(array(
+				'POST_DETAIL' 			=> $config['rs_post_detail'] ? true : false,
+				'POST'					=> $message,
+				'USERNAME'				=> $user_row['username'],
+				'USER_COLOR'			=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
+				'JOINED'				=> $user->format_date($user_row['user_regdate']),
+				'POSTS'					=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
+				'WARNINGS'				=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
+				'REPUTATIONS'			=> ($user_row['user_reputation']) ? $user_row['user_reputation'] : 0,
+				'RS_RANK_TITLE'			=> $config['rs_ranks'] ? $rs_rank_title : false,
+				'AVATAR_IMG'			=> $avatar_img,
+				'RANK_TITLE'			=> $rank_title,
+				'RANK_IMG'				=> $rank_img,
+				'HEADER_POINT'			=> ($point == 'negative') ? $user->lang['RS_SUBTRACT_POINTS_CONFIRM'] : $user->lang['RS_ADD_POINTS_CONFIRM'],
+			));
 		}
 
 		$s_hidden_fields = build_hidden_fields(array(
@@ -1022,37 +1058,21 @@ switch ($mode)
 			WHERE user_id = " . $user->data['user_id'];
 		$db->sql_query($sql);
 
-		page_header();
+		page_header($user->lang['RS_POST_RATING']);
 
 		$template->assign_vars(array(
 			'ERROR'					=> ($error) ? $error : '',
 
-			'POST'					=> $message,
-			'USERNAME'				=> $user_row['username'],
-			'USER_COLOR'			=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
-			'JOINED'				=> $user->format_date($user_row['user_regdate']),
-			'POSTS'					=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
-			'WARNINGS'				=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
-			'REPUTATIONS'			=> ($user_row['user_reputation']) ? $user_row['user_reputation'] : 0,
-			'RS_RANK_TITLE'			=> $config['rs_ranks'] ? $rs_rank_title : false,
-			'AVATAR_IMG'			=> $avatar_img,
-			'RANK_TITLE'			=> $rank_title,
-			'RANK_IMG'				=> $rank_img,
-			'HEADER_POINT'			=> ($point == 'negative') ? $user->lang['RS_SUBTRACT_POINTS_CONFIRM'] : $user->lang['RS_ADD_POINTS_CONFIRM'],
-			'POINT'					=> ($point == 'negative') ? $user->lang['RS_SUBTRACT_POINTS'] : $user->lang['RS_ADD_POINTS'],
-			'REPUTATION_BOX'		=> ($point == 'negative') ? 'negative' : 'positive',
 			'REP_POWER_ENABLE' 		=> $config['rs_enable_power'] ? true : false,
 			'RS_VOTE_POWER_LEFT_OF_MAX'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $config['rs_power_limit_value'], $max_voting_allowed) : '',
 			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? round((($config['rs_power_limit_value'] - $voting_power_left) / $config['rs_power_limit_value']) * 100,0) : '',
-			'REP_POWER_MAX1VOTE'	=> $config['rs_max_power'],
-			'REP_COMMENT_ENABLE'	=> $config['rs_enable_comment'] ? true : false,
-			'POST_DETAIL' 			=> $config['rs_post_detail'] ? true : false,
-			'REP_PM_NOTIFY' 		=> $config['rs_pm_notify'] ? true : false,
-			'USER_COMMENT'			=> ($point == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos'],
-
-			'S_CONFIRM_ACTION'		=> $u_action,
-			'S_HIDDEN_FIELDS'		=> $s_hidden_fields,
-			'AJAX'					=> $ajax ? true : false,
+			'REP_POWER_MAX1VOTE'		=> $config['rs_max_power'],
+			'REP_COMMENT_ENABLE'		=> $config['rs_enable_comment'] ? true : false,
+			'REP_PM_NOTIFY' 			=> $config['rs_pm_notify'] ? true : false,
+			'USER_COMMENT'				=> ($point == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos'],
+			'S_CONFIRM_ACTION'			=> $u_action,
+			'S_HIDDEN_FIELDS'			=> $s_hidden_fields,
+			'AJAX'						=> $ajax ? true : false,
 		));
 
 		$template->set_filenames(array(

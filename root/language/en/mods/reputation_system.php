@@ -99,6 +99,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_BANNED'			=> 'You are not allowed to give reputation points to banned users.',
 	'RS_USER_CANNOT_DELETE'		=> 'You do not have permission to delete points.',
 	'RS_USER_DISABLED'			=> 'You are not allowed to give reputation point.',
+	'RS_USER_NEGATIVE'			=> 'You are not allowed to give negative reputation point.<br />Your reputation has to be higher than %s.',
 	'RS_VIEW_DISALLOWED'		=> 'You are not allowed to view the reputation points.',
 
 	'RS_DELETE_POINT'			=> 'Delete point',
