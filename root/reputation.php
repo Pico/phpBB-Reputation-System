@@ -1211,7 +1211,7 @@ switch ($mode)
 				{
 					$rs_power = '<option value="' . $i . '">' . $user->lang['RS_POSITIVE'] . ' (+' . $i . ') </option>';
 				}
-				if ($i < 0 && $auth->acl_get('u_rs_give_negative'))
+				if ($i < 0 && $auth->acl_get('u_rs_give_negative') && (!$config['rs_min_rep_negative'] || ($config['rs_min_rep_negative'] && ($user->data['user_reputation'] >= $config['rs_min_rep_negative']))))
 				{
 					$rs_power = '<option value="' . $i . '">' . $user->lang['RS_NEGATIVE'] . ' (' . $i . ') </option>';
 				}
@@ -1247,9 +1247,10 @@ switch ($mode)
 				trigger_error($message);
 			}
 
-			if ($config['rs_enable_power'] && (($rep_power > $reputationpower) || ($rep_power < -$reputationpower)))
+			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
+			if (!$auth->acl_get('u_rs_give_negative') && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $reputationpower) || ($rep_power < -$reputationpower)))
 			{
-				$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RETURN_TOPIC'], '<a href="' . append_sid("{$phpbb_root_path}viewtopic.$phpEx", "p=$post_id") . '">', '</a>');
+				$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
 				meta_refresh(3, $redirect);
 				trigger_error($message);
 			}
