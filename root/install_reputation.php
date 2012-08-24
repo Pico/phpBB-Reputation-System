@@ -340,10 +340,10 @@ $versions = array(
 			array('rs_ban_groups', '0', 0),
 			array('rs_power_loose_ban', '7', 0),
 			array('rs_power_loose_warn', '3', 0),
-			array('rs_power_limit_value', '30', 0),
-			array('rs_power_limit_time', '24', 0),
+			array('rs_power_limit_value', '10', 0),
+			array('rs_power_limit_time', '12', 0),
 			array('rs_min_power', '1', 0),
-			array('rs_max_power_ban', '20', 0),
+			array('rs_max_power_ban', '50', 0),
 		),
 
 		'permission_add' => array(
@@ -406,7 +406,7 @@ $versions = array(
 		'custom' => 'update_rs_table',
 
 		'config_add' => array(
-			array('rs_min_rep_negative', '0', 0),
+			array('rs_min_rep_negative', '10', 0),
 		),
 
 		'cache_purge' => array(
