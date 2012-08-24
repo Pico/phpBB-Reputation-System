@@ -509,7 +509,7 @@ class reputation
 		global $config, $db, $cache;
 
 		//Get data for ban
-		$sql = 'SELECT user_type, group_id, user_reputation, user_last_rep_ban
+		$sql = 'SELECT user_type, group_id, username, user_reputation, user_last_rep_ban
 			FROM ' . USERS_TABLE . "
 			WHERE user_id = $user_id";
 		$result = $db->sql_query($sql);
@@ -546,21 +546,12 @@ class reputation
 			if ($user_row['user_reputation'] <= $row['point'])
 			{
 				//Now, let's ban the user
-				//We cannot use user_ban function due to an error of redecaler function so lest's write own sql query
-				$current_time = time();
-				$ban_end = max($current_time, $current_time + ($row['ban_time']) * 60);
-				$sql_ary = array(
-					'ban_userid'		=> $user_id,
-					'ban_start'			=> time(),
-					'ban_end'			=> $ban_end,
-					'ban_reason'		=> $row['ban_reason'],
-					'ban_give_reason'	=> $row['ban_give_reason'],
-				);
-
-				$sql = 'INSERT INTO ' . BANLIST_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary);
-				$db->sql_query($sql);
-
-				$cache->destroy('sql', BANLIST_TABLE);
+				if (!function_exists('user_ban'))
+				{
+					global $phpbb_root_path, $phpEx;
+					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+				}
+				user_ban('user', $user_row['username'], $row['ban_time'], '', 0, $row['ban_reason'], $row['ban_give_reason']);
 
 				//Shield for banned
 				$next_ban_time = time() + ($row['ban_time'] * 60) + ($config['rs_ban_shield'] * 86400);
