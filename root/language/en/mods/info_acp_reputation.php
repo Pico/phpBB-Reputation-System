@@ -209,8 +209,8 @@ $lang = array_merge($lang, array(
 
 	'RS_FORUM_REPUTATION'			=> 'Enable reputation',
 	'RS_FORUM_REPUTATION_EXPLAIN'	=> 'Allow users to rate posts. You can choose if rating posts influence user reputation.',
-	'RS_POST_WITH_USER'				=> 'Yes, with influencing on user reputation',
-	'RS_POST_WITHOUT_USER'			=> 'Yes, without influencing on user reputation',
+	'RS_POST_WITH_USER'				=> 'Yes, with influence on user reputation',
+	'RS_POST_WITHOUT_USER'			=> 'Yes, without influence on user reputation',
 
 	'LOG_REPUTATION_SETTING'		=> '<strong>Altered Reputation System settings</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputation System resynchronised</strong>',
@@ -231,7 +231,7 @@ $lang = array_merge($lang, array(
 	'CONVERT_KARMA'					=> 'Convert Karma MOD to Reputation System?',
 	'CONVERT_HELPMOD'				=> 'Convert HelpMOD to Reputation System?',
 	'CONVERT_DATA'					=> 'Converted MOD: %1$s.<br />Now, you can uninstall %2$s. Go to the ACP and Resynchronise Reputation System.',
-	'UPDATE_RS_TABLE'				=> 'Reputation table was updated successfully.',
+	'UPDATE_RS_TABLE'				=> 'Reputation table was successfully updated.',
 ));
 
 ?>
