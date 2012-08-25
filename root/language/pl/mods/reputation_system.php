@@ -150,7 +150,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_BANS'			=> 'Według liczby banów w ciągu ostatniego roku',
 	'RS_POWER_DETAIL_MIN'			=> 'Minimalna siła reputacji dla wszystkich użytkowników',
 	'RS_POWER_DETAIL_MAX'			=> 'Siła reputacji została ograniczona do maksymalnej wartości',
-	'RS_GROUP_POWER'				=> 'Siła reputacji oparta na grupie użytkownia',
+	'RS_GROUP_POWER'				=> 'Siła reputacji oparta na grupie użytkownika',
 ));
 
 ?>
