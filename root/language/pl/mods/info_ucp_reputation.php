@@ -42,7 +42,7 @@ $lang = array_merge($lang, array(
 	'UCP_REPUTATION_FRONT'			=> 'Przegląd',
 	'UCP_REPUTATION_LIST'			=> 'Lista otrzymanych punktów',
 	'UCP_REPUTATION_GIVEN'			=> 'Lista przyznanych punktów',
-	'UCP_REPUTATION_SETTING'		=> 'Ustawienia',
+	'UCP_REPUTATION_SETTING'		=> 'Preferencje',
 
 	'RS_CATCHUP'					=> 'Aktualizuj',
 	'RS_REPUTATION_LISTS_UCP'		=> 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie otrzymałeś/aś.',

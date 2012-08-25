@@ -68,6 +68,7 @@ $lang = array_merge($lang, array(
 	'RS_POST_DELETE'			=> 'Post usunięty',
 	'RS_POWER'					=> 'Siła reputacji',
 	'RS_POST_RATING'			=> 'Ocenianie postu',
+	'RS_ONLYPOST_RATING'		=> 'Ocena wpisu',
 	'RS_RATE_BUTTON'            => 'Oceń',
 	'RS_RATE_USER'				=> 'Oceń użytkownika',
 	'RS_RANK'					=> 'Ranga reputacji',
@@ -78,7 +79,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_RATING'			=> 'Ocenianie użytkownika',
 	'RS_USER_RATING_CONFIRM'	=> 'Czy na pewno chcesz przyznać punkty reputacji %s?',
 	'RS_VIEW_DETAILS'			=> 'Zobacz szczegóły',
-	'RS_VOTING_POWER'			=> 'Siła oceniania',
+	'RS_VOTING_POWER'			=> 'Pozostałe punkty',
 	'RS_WARNING'				=> 'Ostrzeżenie użytkownika',
 
 	'RS_EMPTY_DATA'				=> 'Brak punktów reputacji.',
@@ -97,6 +98,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_BANNED'			=> 'Nie możesz przyznać punktów reputacji zbanowanemu użytkownikowi.',
 	'RS_USER_CANNOT_DELETE'		=> 'Nie masz uprawnień do usunięcia punktu.',
 	'RS_USER_DISABLED'			=> 'Nie możesz dodawać punktów reputacji.',
+	'RS_USER_NEGATIVE'			=> 'Nie możesz dodawać negatywnych punktów reputacji.<br />Twoja reputacja musi wynosić co najmniej %s.',
 	'RS_VIEW_DISALLOWED'		=> 'Nie możesz przeglądać punktów reputacji.',
 
 	'RS_DELETE_POINT'			=> 'Usuń punkt',
@@ -139,6 +141,16 @@ $lang = array_merge($lang, array(
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> 'Pozostało %1$d punktów do wykorzystania z %2$d. Maksimum na głos: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d z %2$d',
+
+	'RS_POWER_DETAILS'				=> 'Sposób obliczania siły reputacji',
+	'RS_POWER_DETAIL_AGE'			=> 'Według daty rejestracji',
+	'RS_POWER_DETAIL_POSTS'			=> 'Według liczbę postów',
+	'RS_POWER_DETAIL_REPUTAION'		=> 'Według reputacji',
+	'RS_POWER_DETAIL_WARNINGS'		=> 'Według ostrzeżeń',
+	'RS_POWER_DETAIL_BANS'			=> 'Według liczby banów w ciągu ostatniego roku',
+	'RS_POWER_DETAIL_MIN'			=> 'Minimalna siła reputacji dla wszystkich użytkowników',
+	'RS_POWER_DETAIL_MAX'			=> 'Siła reputacji została ograniczona do maksymalnej wartości',
+	'RS_GROUP_POWER'				=> 'Siła reputacji oparta na grupie użytkownia',
 ));
 
 ?>

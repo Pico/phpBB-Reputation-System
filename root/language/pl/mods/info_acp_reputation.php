@@ -74,11 +74,12 @@ $lang = array_merge($lang, array(
 	'RS_AJAX_ENABLE_EXPLAIN'		=> 'Opcja ta umożliwia włączenie funkcji AJAX. Jeżeli występuje konflikt z innymi skryptami jQuery, możesz wyłączyć tą funkcję i korzystać z Systemu Reputacji bez funkcji AJAX.',
 	'RS_NEGATIVE_POINT'				=> 'Włącz negatywne punkty',
 	'RS_NEGATIVE_POINT_EXPLAIN'		=> 'Kiedy wyłączysz, nie będzie możliwości przyznawania negatywnych punktów. Reputacji będzie zbliżona do "Lubię to!" z FB.',
+	'RS_MIN_REP_NEGATIVE'			=> 'Minimalna reputacja dla negatywnych punktów',
+	'RS_MIN_REP_NEGATIVE_EXPLAIN'	=> 'Jaką reputację musi posiadać użytkownik, aby móc przyznawać negatywne punkty reputacji. Ustawienie wartość 0 wyłącza tę funckję.',
 	'RS_WARNING'					=> 'Włącz ostrzeżenia',
 	'RS_WARNING_EXPLAIN'			=> 'Użytkownik ze stosownymi uprawnieniami może przyznawać negatywne punkty podczas wystawiania ostrzeżenia.',
 	'RS_USER_RATING'				=> 'Włącz ocenę użytkownika',
 	'RS_POST_RATING'				=> 'Włącz ocenę postu',
-	'RS_ENABLE_REPUTATION'			=> 'Włącz reputację:',
 	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Wyślij i włącz reputację na wszystkich forach',
 	'RS_NOTIFICATION'				=> 'Włącz powiadomienia',
 	'RS_NOTIFICATION_EXPLAIN'		=> 'Opcja ta włączy informację o nowych punktach reputacji w nagłówku forum.',
@@ -205,6 +206,11 @@ $lang = array_merge($lang, array(
 	'RS_HOURS'						=> 'godziny',
 	'RS_DAYS'						=> 'dni',
 
+	'RS_FORUM_REPUTATION'			=> 'Włącz reputację',
+	'RS_FORUM_REPUTATION_EXPLAIN'	=> 'Zezwól użytkownikom na ocenę postów. Możesz wybrać, czy ocenianie postu ma wpływać na reputację użytkownika.',
+	'RS_POST_WITH_USER'				=> 'Tak, z wpływem na reputację użytkownika',
+	'RS_POST_WITHOUT_USER'			=> 'Tak, bez wpływu na reputację użytkownika',
+
 	'LOG_REPUTATION_SETTING'		=> '<strong>Zmieniono ustawienia Systemu Reputacji</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>System Reputacji został zsynchronizowany</strong>',
 	'LOG_RS_BAN_ADDED'				=> '<strong>Dodano nowy ban za reputację</strong>',
@@ -220,10 +226,11 @@ $lang = array_merge($lang, array(
 
 	//Installation
 	'FILES_NOT_EXIST'				=> 'Ikony oceniania:<br />%s<br /> nie istnieją.<br /><br /><strong>Zanim zaczniejsz instlację Ssytemu Reputacji, skopiuj ikony oceniania z <em>contrib/images</em> do folderów imageset styli, których używasz. Następnie odśwież tą stronę.</strong>',
-	'CONVERT_THANKS'				=> 'Konwertuj Thanks for posts',
-	'CONVERT_KARMA'					=> 'Konwertuj Karma MOD',
-	'CONVERT_HELPMOD'				=> 'Konwertuj HelpMOD',
+	'CONVERT_THANKS'				=> 'Konwertuj Thanks for posts do Systemu Reputacji',
+	'CONVERT_KARMA'					=> 'Konwertuj Karma MOD do Systemu Reputacji',
+	'CONVERT_HELPMOD'				=> 'Konwertuj HelpMOD do Systemu Reputacji',
 	'CONVERT_DATA'					=> 'Skonwertowane modyfikacje: %1$s.<br />Teraz możesz odinstalować %2$s. Przejdź do Panelu administracji i wykonaj synchronizację Systemu Reputacji.',
+	'UPDATE_RS_TABLE'				=> 'Tabela reputacji została zaktualizowana pomyślnie.',
 ));
 
 ?>
