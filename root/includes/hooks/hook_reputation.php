@@ -95,7 +95,7 @@ function hook_rs_toplist()
 	$result = $db->sql_query_limit($sql, $config['rs_toplist_num']);
 
 	while ($row = $db->sql_fetchrow($result))
-	{	
+	{
 		$direction = $config['rs_toplist_direction'] ? '<br />' : ', ';
 		$reputation_toplist .= (($reputation_toplist != '') ? $direction : '') . get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) . ' (' . $row['user_reputation'] . ')';
 	}

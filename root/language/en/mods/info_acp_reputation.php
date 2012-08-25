@@ -230,7 +230,7 @@ $lang = array_merge($lang, array(
 	'CONVERT_THANKS'				=> 'Convert Thanks for posts to Reputation System?',
 	'CONVERT_KARMA'					=> 'Convert Karma MOD to Reputation System?',
 	'CONVERT_HELPMOD'				=> 'Convert HelpMOD to Reputation System?',
-	'CONVERT_DATA'					=> 'Converted MOD: %1$s.<br />Now, you can uninstall %2$s. Go to the ACP and Resynchronise Reputation System.',
+	'CONVERT_DATA'					=> 'Converted MOD: %1$s.<br />Now, you can uninstall %2$s. Go to the ACP and resynchronise Reputation System.',
 	'UPDATE_RS_TABLE'				=> 'Reputation table was successfully updated.',
 ));
 

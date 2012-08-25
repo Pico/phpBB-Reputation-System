@@ -7,7 +7,6 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[Reputation System]]></title>
-		<title lang="pl"><![CDATA[System Reputacji]]></title>
 		<description lang="en"><![CDATA[This mod adds a reputation system to your phpBB3 board]]></description>
 		<author-group>
 			<author>
@@ -15,11 +14,11 @@
 				<homepage><![CDATA[http://www.modsteam.tk]]></homepage>
 			</author>
 		</author-group>
-		<mod-version>0.2.7</mod-version>
+		<mod-version>0.4.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
-			<target-version>3.0.10</target-version>
+			<target-version>3.0.11</target-version>
 		</installation>
 		<link-group>
 			<link type="contrib" href="../install_mod.xml" lang="en">Main Install File</link>
