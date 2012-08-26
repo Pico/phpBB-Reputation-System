@@ -17,7 +17,7 @@ Features
 Requirements
 ------------
 
-* phpBB 3.0.10
+* phpBB >3.0.10
 * PHP >5.2
 * Javascript is required by this MOD.
 
