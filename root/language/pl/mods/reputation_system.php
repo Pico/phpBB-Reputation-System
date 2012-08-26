@@ -144,7 +144,7 @@ $lang = array_merge($lang, array(
 
 	'RS_POWER_DETAILS'				=> 'Sposób obliczania siły reputacji',
 	'RS_POWER_DETAIL_AGE'			=> 'Według daty rejestracji',
-	'RS_POWER_DETAIL_POSTS'			=> 'Według liczbę postów',
+	'RS_POWER_DETAIL_POSTS'			=> 'Według liczby postów',
 	'RS_POWER_DETAIL_REPUTAION'		=> 'Według reputacji',
 	'RS_POWER_DETAIL_WARNINGS'		=> 'Według ostrzeżeń',
 	'RS_POWER_DETAIL_BANS'			=> 'Według liczby banów w ciągu ostatniego roku',
