@@ -506,7 +506,7 @@ function convert($action)
 					'time'				=> $row['karma_time'],
 					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'point'				=> 1,
+					'point'				=> $row['karma_power'],
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,
