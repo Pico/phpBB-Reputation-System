@@ -188,8 +188,7 @@ Special thanks to VSE for finding and correct spelling mistakes.]]></author-note
 			</edit>
 			<edit>
 				<find><![CDATA[$default_key = 'c';]]></find>
-				<action type="after-add"><![CDATA[
-//Reputation System
+				<action type="after-add"><![CDATA[//Reputation System
 if ($config['rs_sort_memberlist']){
 	//Sort by reputation by default if the mod config says so
 	$default_key = 'r';
@@ -318,8 +317,7 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 			<edit>
 				<find><![CDATA[		!$row['post_edit_locked']
 	)));]]></find>
-				<action type="after-add"><![CDATA[
-	//Reputation System
+				<action type="after-add"><![CDATA[	//Reputation System
 	$post_rep_sum = ($config['rs_post_display']) ? $row['post_reputation'] : $row['post_rs_count'];
 	$reputation_box = reputation::get_vote_class($post_rep_sum);
 	$rs_ajax = ($config['rs_ajax_enable']) ? 'ajax=1&amp;' : '';
@@ -405,8 +403,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			</edit>
 			<edit>
 				<find><![CDATA[		$db->sql_multi_insert(BANLIST_TABLE, $sql_ary);]]></find>
-				<action type="after-add"><![CDATA[
-		//Reputation System
+				<action type="after-add"><![CDATA[		//Reputation System
 		if ($mode == 'user' && !$ban_exclude && $config['rs_max_power_ban'])
 		{
 			$ban_id = $db->sql_nextid();
@@ -662,8 +659,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[			<div class="content">{postrow.MESSAGE}</div>]]></find>
-				<action type="after-add"><![CDATA[
-			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->
+				<action type="after-add"><![CDATA[			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->
 			<ul class="profile-icons">
 				<li class="rate-good-icon"><!-- IF postrow.S_GIVE_REPUTATION --><a href="{postrow.U_ADD_POS}" class="repo-link<!-- IF postrow.RS_VOTED_POINTS > 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_VOTED_POINTS}"<!-- ELSE -->" title="{L_RS_ADD_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF -->><span>{L_RS_ADD_POINTS}</span></a><!-- ENDIF --></li>
 				<li class="reputation {postrow.REPUTATION_BOX}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.U_VIEW_REP --><a href="{postrow.U_VIEW_REP}"<!-- IF not S_RS_AJAX_ENABLE --> onclick="popup(this.href, 780, 550); return false;"<!-- ENDIF --> class="repo-link"><!-- ENDIF -->{postrow.POST_REP}<!-- IF postrow.U_VIEW_REP --></a><!-- ENDIF --></div></li>
@@ -684,5 +680,6 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			</edit>
 		</open>
 		<php-installer><![CDATA[install_reputation.php]]></php-installer>
+		<diy-instructions lang="en"><![CDATA[After installation, go to ACP and enable Reputation System.]]></diy-instructions>
 	</action-group>
 </mod>
