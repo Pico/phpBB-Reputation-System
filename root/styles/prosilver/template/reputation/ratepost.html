@@ -1,6 +1,14 @@
 <!-- IF not AJAX -->
 	<!-- INCLUDE overall_header.html -->
 <!-- ENDIF -->
+<script type="text/javascript">
+// <![CDATA[
+	var commentreq = '{S_RS_COMMENT_REQ}';
+	var nocomment = '{L_RS_NO_COMMENT}';
+	var commentlen = '{RS_COMMENT_TOO_LONG}';
+	var toolongcomment = '{S_RS_COMMENT_TOO_LONG}';
+// ]]>
+</script>
 
 <form method="post" action="{S_CONFIRM_ACTION}">
 
@@ -22,8 +30,8 @@
 							<dt>{L_JOINED}:</dt><dd>{JOINED}</dd>
 							<dt>{L_TOTAL_POSTS}:</dt><dd>{POSTS}</dd>
 							<dt>{L_WARNINGS}: </dt><dd>{WARNINGS}</dd>
-							<dt>{L_REPUTATION}: </dt><dd>{REPUTATIONS}</dd>
-							<!-- IF RS_RANK_TITLE --><dt>{L_RS_RANK}: </dt><dd>{RS_RANK_TITLE}</dd><!-- ENDIF -->
+							<dt>{L_REPUTATION}:</dt><dd><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+							<!-- IF RS_RANK_IMG --><dt>&nbsp;</dt><dd>{RS_RANK_IMG}</dd><!-- ENDIF -->
 						</dl>
 					</div>
 					<div class="column2">
@@ -51,7 +59,7 @@
 	<!-- IF not AJAX --><p>{L_RS_POINT_EXPLAIN}</p><!-- ENDIF -->
 
 	<fieldset>
-		<!-- IF REP_POWER_ENABLE -->
+		<!-- IF RS_POWER_ENABLE -->
 		<!-- IF RS_VOTE_POWER_LEFT_OF_MAX -->
 		<div style="margin-bottom:10px ;text-align: center">
 			<div class="progress-bar">
@@ -71,18 +79,17 @@
 		</dl>
 		<!-- ENDIF -->
 		<!-- ENDIF -->
-		<!-- IF REP_COMMENT_ENABLE or REP_PM_NOTIFY -->
-		<!-- IF REP_COMMENT_ENABLE -->
-		<dl>
+		<!-- IF RS_COMMENT_ENABLE -->
+		<dl class="comment">
 			<dt><label>{L_RS_COMMENT}</label></dt>
-			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{USER_COMMENT}</textarea><!-- IF ERROR and not AJAX --><p class="error">{ERROR}</p><!-- ENDIF -->
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{USER_COMMENT}</textarea>
+			<!-- IF ERROR and not AJAX --><p class="error">{ERROR}</p><!-- ENDIF -->
 		</dl>
 		<!-- ENDIF -->
-		<!-- IF REP_PM_NOTIFY -->
+		<!-- IF RS_PM_NOTIFY -->
 		<dl>
 			<label><input type="checkbox" name="notify_user" /> {L_NOTIFY_USER_REP}</label>
 		</dl>
-		<!-- ENDIF -->
 		<!-- ENDIF -->
 	</fieldset>
 
@@ -91,12 +98,11 @@
 	<!-- IF AJAX -->
 		<input type="hidden" name="ajax" value="1" />
 		<input type="submit" name="confirm" value="{L_RS_RATE_BUTTON}" class="button2" onclick="submit_vote();return false;" />&nbsp;
-		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="$('#repo-popup').fadeOut();return false;" />
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="$('#repo-popup').fadeOut('fast');return false;" />
 	<!-- ELSE -->
 		<input type="submit" name="confirm" value="{L_YES}" class="button2" />&nbsp;
 		<input type="submit" name="cancel" value="{L_NO}" class="button2" />
 	<!-- ENDIF -->
-	{S_FORM_TOKEN}
 	</fieldset>
 <span class="corners-bottom"><span></span></span></div>
 </div>

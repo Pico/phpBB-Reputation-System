@@ -51,9 +51,6 @@ $lang = array_merge($lang, array(
 
 	'RS_BEST_REPUTATION'			=> 'Users with the best reputation',
 	'RS_WORST_REPUTATION'			=> 'Users with the worst reputation',
-	'RS_DELETE_POINTS'				=> 'Delete points',
-	'RS_DELETE_POINTS_CONFIRM'		=> 'Do you really want to delete these reputation points?',
-	'RS_POINTS_DELETED'				=> 'The reputation points have been deleted.',
 	'RS_REPUTATION_LISTS'			=> 'This is a reputation points list. Here you can find all reputation points. You can use the filters below to narrow the search. You can fill both search fields to find all reputation points given from one user to another.',
 	'RS_SEARCH_FROM'				=> 'Search reputation points given by',
 	'RS_SEARCH_TO'				  	=> 'Search reputation points received by',

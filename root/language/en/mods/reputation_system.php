@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -88,8 +87,10 @@ $lang = array_merge($lang, array(
 	'RS_NO_COMMENT'				=> 'You cannot leave the comment field blank.',
 	'RS_NO_ID'					=> 'No ID',
 	'RS_NO_POST_ID'				=> 'There is no such post.',
-	'RS_NO_POWER_LEFT'			=> 'Not enough voting power points.<br/>Wait until they replenish.<br/>Your voting power is %s',
+	'RS_NO_POWER_LEFT'			=> 'Not enough voting power points.<br/>Wait until they renew.<br/>Your reputation power is %s',
 	'RS_NO_USER_ID'				=> 'The requested user does not exist.',
+	'RS_TOO_LONG_COMMENT'		=> 'Your comment contains %1$d characters. The maximum number of allowed characters is %2$d.',
+	'RS_COMMENT_TOO_LONG'		=> 'Too long comment.<br />Max characters: %s. Your comment:',
 
 	'RS_NO_POST'				=> 'There is no such post.',
 	'RS_SAME_POST'				=> 'You have already rated this post.<br />You gave %s reputation points.',
@@ -105,6 +106,10 @@ $lang = array_merge($lang, array(
 	'RS_DELETE_POINT'			=> 'Delete point',
 	'RS_DELETE_POINT_CONFIRM'	=> 'Do you really want to delete this reputation point?',
 	'RS_POINT_DELETED'			=> 'The reputation point has been deleted.',
+	'RS_DELETE_POINTS'			=> 'Delete points',
+	'RS_DELETE_POINTS_CONFIRM'	=> 'Do you really want to delete these reputation points?',
+	'RS_POINTS_DELETED'			=> 'The reputation points have been deleted.',
+	'NO_REPUTATION_SELECTED'	=> 'You did not select reputation point.',
 
 	'RS_PM_BODY'				=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Click %shere%s to view the post.',
 	'RS_PM_BODY_COMMENT'		=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Comment: [i]%s&nbsp;[/i] <br />Click %shere%s to view the post.',
@@ -130,28 +135,29 @@ $lang = array_merge($lang, array(
 	'RS_NEW_REP'					=> 'You have <strong>1 new</strong> reputation comment',
 	'RS_NEW_REPS'					=> 'You have <strong>%s new</strong> reputation comments',
 
-	'RS_CLOSE_POPUP'				=> 'close',
-	'RS_POPUP_MORE_DETAILS'			=> 'more details',
+	'RS_POPUP_MORE_DETAILS'			=> '» more details',
 
-	'RS_HIDE_POST'					=> 'This post by <strong>%1$s</strong> is hidden because is has too low rating. %2$s %3$s %4$s',
+	'RS_HIDE_POST'					=> 'This post was made by <strong>%1$s</strong> and was hidden because it had too low rating. %2$s',
 	'RS_SHOW_HIDDEN_POST'			=> 'Show this post',
 	'RS_SHOW_HIDE_HIDDEN_POST'		=> 'Show / Hide',
 	'RS_ANTISPAM_INFO'				=> 'You cannot give reputation so soon. You may try again later.',
 	'RS_POST_REPUTATION'			=> 'Post reputation',
 	'RS_YOU_HAVE_VOTED'				=> 'You have given reputation points. Points:',
 
-	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d voting power points left of %2$d. Maximum per vote: %3$d',
+	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d reputation power points left of %2$d. Maximum per vote: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d of %2$d',
 
-	'RS_POWER_DETAILS'				=> 'How voting power should be calculated',
+	'RS_POWER_DETAILS'				=> 'How reputation power should be calculated',
 	'RS_POWER_DETAIL_AGE'			=> 'By registration date',
 	'RS_POWER_DETAIL_POSTS'			=> 'By number of posts',
 	'RS_POWER_DETAIL_REPUTAION'		=> 'By reputation',
 	'RS_POWER_DETAIL_WARNINGS'		=> 'By warnings',
 	'RS_POWER_DETAIL_BANS'			=> 'By number of bans within the last year',
-	'RS_POWER_DETAIL_MIN'			=> 'Minimum voting power for all users',
-	'RS_POWER_DETAIL_MAX'			=> 'Voting power capped at maximum allowed',
-	'RS_GROUP_POWER'				=> 'Voting power based on usergroup',
+	'RS_POWER_DETAIL_MIN'			=> 'Minimum reputation power for all users',
+	'RS_POWER_DETAIL_MAX'			=> 'Reputation power capped at maximum allowed',
+	'RS_GROUP_POWER'				=> 'Reputation power based on usergroup',
+
+	'RS_USER_GAP'					=> 'You cannot rate the same user so soon. You can try again in %s.',
 ));
 
 ?>

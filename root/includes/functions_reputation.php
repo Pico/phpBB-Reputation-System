@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -19,6 +18,9 @@ if (!defined('IN_PHPBB'))
 
 class reputation
 {
+	private $power;
+	private $group;
+
 	/**Function returns maximum voting power of one user
 	* @param int $user_posts
 	* @param $user_regdate
@@ -26,10 +28,8 @@ class reputation
 	* @param int $user_group_id
 	* @param int $number_of_active_warnings
 	* @param int $number_of_ban_days_in_1year
-	* @param bool $explain_structure Set to true if you want function to return an array explaining structure of the user power
-	* @return array|int Current voting power or array explaining voting power
 	*/
-	function get_rep_power($user_posts, $user_regdate, $user_reputation, $user_group_id, $number_of_active_warnings, $number_of_ban_days_in_1year = 0, $explain_structure = false)
+	function get_rep_power($user_posts, $user_regdate, $user_reputation, $user_group_id, $number_of_active_warnings, $number_of_ban_days_in_1year = 0)
 	{
 		global $config, $db;
 		$now = time();
@@ -67,10 +67,18 @@ class reputation
 
 		$user_max_power = array_sum($user_power);
 
+		//Starting power
+		$user_max_power = $user_max_power + $config['rs_min_power'];
+
+		//Check min power - if it is set, inform about it
+		if ($config['rs_min_power'])
+		{
+			$user_power['MINIMUM_VOTING_POWER'] = $config['rs_min_power'];
+		}
+
 		//Checking that user min power is not lower than minimum power set in ACP
 		if ($user_max_power < $config['rs_min_power'])
 		{
-			$user_power['MINIMUM_VOTING_POWER'] = $config['rs_min_power'];
 			$user_max_power = max($config['rs_min_power'], $user_max_power);
 		}
 
@@ -97,15 +105,30 @@ class reputation
 				$user_max_power = $user_power['GROUP_VOTING_POWER'] = $group_power;
 				$user_power['MAXIMUM_VOTING_POWER'] = false;
 			}
+			//Put group power into $this->group
+			$this->group = $group_power;
 		}
 
-		//If you want to get explained structure of user power as a string
-		if ($explain_structure)
-		{
-			return $user_power;
-		}
+		//Put the structure of the user power into $this->power
+		$this->power = $user_power;
 
 		return $user_max_power;
+	}
+
+	/* Function return an array explaining structure of the user power
+	* @return array|int
+	*/
+	function explain_power()
+	{
+		return $this->power;
+	}
+
+	/* Function return a group power
+	* @return int
+	*/
+	function get_group_power()
+	{
+		return $this->group;
 	}
 
 	/**Function analyzes voting of a user and returns an array with statistics
@@ -118,28 +141,28 @@ class reputation
 
 		//That's what we will calculate
 		$statistics = array(
-			'bancounts'			=> 0,
-			'vote_power_spent'	=> 0,
+			'bancounts'		=> 0,
+			'renewal_time'	=> 0,
 		);
 
-		if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+		if ($config['rs_power_renewal'])
 		{
 			//Until what timestamp should we count user votes
-			$voting_timeout = time() - $config['rs_power_limit_time'] * 3600;
+			$renewal_timeout = time() - $config['rs_power_renewal'] * 3600;
 
 			//Let's get all voting data on this user.
-			$sql = 'SELECT *
+			$sql = 'SELECT point
 				FROM ' . REPUTATIONS_TABLE . "
 				WHERE rep_from = $user_id
 					AND post_id != 0
-					AND time > $voting_timeout";
+					AND time > $renewal_timeout";
 			$result = $db->sql_query($sql);
 
 			//Let's run through the rows and make statistics
-			while($user_voting = $db->sql_fetchrow($result))
+			while($renewal = $db->sql_fetchrow($result))
 			{
 				//How much power a user spent in a specified period of time
-				$statistics['vote_power_spent'] += abs($user_voting['point']);
+				$statistics['renewal_time'] += abs($renewal['point']);
 			}
 			$db->sql_freeresult($result);
 		}
@@ -366,104 +389,131 @@ class reputation
 		$db->sql_query($sql);
 	}
 
-	function delete($id = '', $post_id = false)
+	/** Function responsible for deleting reputation
+	* @param int $id reputation ID
+	* @return bool
+	*/
+	function delete($id)
 	{
 		global $db, $user, $uid;
 
-		$sql = 'SELECT rep_from, rep_to, point
-			FROM ' . REPUTATIONS_TABLE . " r
-			WHERE rep_id = $id";
+		if (empty($id))
+		{
+			return false;
+		}
+
+		$sql_array = array(
+			'SELECT'	=> 'r.rep_from, r.rep_to, r.action, r.post_id, r.point, u.username',
+			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
+			'LEFT_JOIN'	=> array(
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'	=> 'r.rep_to = u.user_id',
+				),
+			),
+			'WHERE'		=> 'r.rep_id = ' . $id
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if ($post_id)
+		if ($row['post_id'])
 		{
 			$post_rs_count = ($row['point'] > 0) ? 1 : -1;
 
 			$sql = 'UPDATE ' . POSTS_TABLE . "
 				SET post_reputation = post_reputation - {$row['point']},
 					post_rs_count = post_rs_count - $post_rs_count
-				WHERE post_id = $post_id";
+				WHERE post_id = {$row['post_id']}";
 			$db->sql_query($sql);
 		}
 
-		$sql = 'UPDATE ' . USERS_TABLE . "
-			SET user_reputation = user_reputation - {$row['point']}
-			WHERE user_id = {$row['rep_to']}";
-		$db->sql_query($sql);
+		if ($row['action'] != 5)
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = user_reputation - {$row['point']}
+				WHERE user_id = {$row['rep_to']}";
+			$db->sql_query($sql);
+		}
 
 		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_id = $id";
 		$db->sql_query($sql);
 
+		add_log('mod', '', '', 'LOG_USER_REP_DELETE', $row['username']);
+
 		return true;
 	}
 
-	function get_rs_rank($points)
+	/** Obtain reputation ranks
+	*/
+	function obtain_rs_ranks()
 	{
-		global $cache, $db;
+		global $cache;
 
-		if ($cache->get('_rs_ranks') === false)
+		if (($rs_ranks = $cache->get('_rs_ranks')) === false)
 		{
-			$ranks = array();
-			$sql = 'SELECT rank_title, rank_points, rank_color
+			global $db;
+
+			$sql = 'SELECT *
 				FROM ' . REPUTATIONS_RANKS_TABLE . '
 				ORDER BY rank_points DESC';
 			$result = $db->sql_query($sql);
 
+			$rs_ranks = array();
 			while ($row = $db->sql_fetchrow($result)) {
-				$ranks[] = $row;
+				$rs_ranks[] = $row;
 			}
 			$db->sql_freeresult($result);
 
-			$cache->put('_rs_ranks', $ranks);
-		}
-		else
-		{
-			$ranks = $cache->get('_rs_ranks');
+			$cache->put('_rs_ranks', $rs_ranks);
 		}
 
-		$rs_rank_title = '';
-		foreach ($ranks as $rank)
+		return $rs_ranks;
+	}
+
+
+	/** Get user rank title, image and color
+	* @param int $points the users reputations
+	*/
+	function get_rs_rank($points, &$rs_rank_title, &$rs_rank_img, &$rs_rank_img_src, &$rs_rank_color)
+	{
+		global $rs_ranks, $config, $phpbb_root_path, $user;
+
+		if (!$user->data['is_registered'])
+		{
+			return;
+		}
+
+		if (empty($rs_ranks))
+		{
+			$rs_ranks = $this->obtain_rs_ranks();
+		}
+
+		$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
+
+		foreach ($rs_ranks as $rank)
 		{
 			if ($points >= $rank['rank_points'])
 			{
 				$rs_rank_title = $rank['rank_title'];
-				break;
-			}
-		}
-
-		return $rs_rank_title;
-	}
-
-	function get_rs_rank_color($rs_rank)
-	{
-		global $cache;
-
-		$ranks = $cache->get('_rs_ranks');
-
-		$rs_rank_color = '';
-		foreach ($ranks as $rank)
-		{
-			if ($rs_rank == $rank['rank_title'])
-			{
+				$rs_rank_img = (!empty($rank['rank_image'])) ? '<img src="' . $phpbb_root_path . $config['rs_ranks_path'] . '/' . $rank['rank_image'] . '" alt="' . $rank['rank_title'] . '" title="' . $rank['rank_title'] . '" />' : '';
+				$rs_rank_img_src = (!empty($rank['rank_image'])) ? $phpbb_root_path . $config['rs_ranks_path'] . '/' . $rank['rank_image'] : '';
 				$rs_rank_color = $rank['rank_color'];
 				break;
 			}
 		}
-
-		return $rs_rank_color;
 	}
 
 	/** Returns the rating of a post.
 	* @param $post_id ID of a post
-	* @param bool $true_rating If true returns sum of rating points. Otherwise returns count of votes
+	* @param bool $true_rating if true returns sum of rating points. Otherwise returns count of votes
 	*/
 	function get_rating($post_id, $true_rating = true)
 	{
 		global $db;
-		$sql = 'SELECT ' . ($true_rating ? 'post_reputation' : 'post_rs_count') . ' as rating
+		$sql = 'SELECT ' . ($true_rating ? 'post_reputation' : 'post_rs_count') . ' AS rating
 			FROM ' . POSTS_TABLE . "
 			WHERE post_id = $post_id";
 		$result = $db->sql_query($sql);
@@ -474,14 +524,23 @@ class reputation
 	}
 
 	/**
-	* @param $vote Rating value
+	* @param $points Rating points
 	* @return string String value of CSS class for voting placeholder
 	*/
-	static function get_vote_class($vote)
+	static function get_vote_class($points)
 	{
-		if ($vote == 0) return 'zero';
-		if ($vote < 0) return 'negative';
-		if ($vote > 0) return 'positive';
+		if ($points > 0) 
+		{
+			return 'positive';
+		}
+		else if ($points < 0) 
+		{
+			return 'negative';
+		}
+		else
+		{
+			return 'zero';
+		}
 	}
 
 	/** Returns user reputation.
@@ -501,7 +560,29 @@ class reputation
 		return $row['reputation'];
 	}
 
-	/** Ban user by minimum reputation;
+	/** Returns user reputation rank.
+	* @param $points user reputation
+	*/
+	function get_rs_new_rank($points)
+	{
+		global $cache, $config, $phpbb_root_path;
+
+		$ranks = $cache->get('_rs_ranks');
+
+		$rs_rank_img = '';
+		foreach ($ranks as $rank)
+		{
+			if ($points >= $rank['rank_points'])
+			{
+				$rs_rank_img = (!empty($rank['rank_image'])) ? '<img src="' . $phpbb_root_path . $config['rs_ranks_path'] . '/' . $rank['rank_image'] . '" alt="' . $rank['rank_title'] . '" title="' . $rank['rank_title'] . '" />' : '';
+				break;
+			}
+		}
+
+		return $rs_rank_img;
+	}
+
+	/** Ban user by minimum reputation
 	* @param $user_id user ID
 	*/
 	function ban_user($user_id)
@@ -553,7 +634,7 @@ class reputation
 				}
 				user_ban('user', $user_row['username'], $row['ban_time'], '', 0, $row['ban_reason'], $row['ban_give_reason']);
 
-				//Shield for banned
+				//Shield for banned, why not
 				$next_ban_time = time() + ($row['ban_time'] * 60) + ($config['rs_ban_shield'] * 86400);
 				$sql = 'UPDATE ' . USERS_TABLE . "
 					SET user_last_rep_ban = $next_ban_time

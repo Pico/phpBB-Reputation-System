@@ -414,6 +414,81 @@ $versions = array(
 			'theme',
 		),
 	),
+
+	'0.4.4' => array(
+		'config_add' => array(
+			array('rs_ranks_path', 'images/reputation', 0),
+			array('rs_user_rating_gap', '2', 0),
+			array('rs_power_renewal', '5', 0),
+			array('rs_power_explain', '1', 0),
+		),
+
+		'config_remove' => array(
+			array('rs_power_limit_value'),
+			array('rs_power_limit_time'),
+		),
+
+		'table_column_add' => array(
+			array('phpbb_reputations_ranks', 'rank_image', array('VCHAR:255', '')),
+		),
+
+		'module_remove' => array(
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_SETTINGS'),
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_RANKS'),
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_GIVE'),
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_BANS'),
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_SYNC'),
+		),
+
+		'module_add' => array(
+			array('acp', 'ACP_REPUTATION_SYSTEM',
+				array(
+					'module_basename'	=> 'reputation',
+					'module_langname'	=> 'ACP_REPUTATION_OVERVIEW',
+					'module_mode'		=> 'overview',
+					'module_auth'		=> 'acl_a_reputation',
+				),
+			),
+			array('acp', 'ACP_REPUTATION_SYSTEM',
+				array(
+					'module_basename'	=> 'reputation',
+					'module_langname'	=> 'ACP_REPUTATION_SETTINGS',
+					'module_mode'		=> 'settings',
+					'module_auth'		=> 'acl_a_reputation',
+				),
+			),
+			array('acp', 'ACP_REPUTATION_SYSTEM',
+				array(
+					'module_basename'	=> 'reputation',
+					'module_langname'	=> 'ACP_REPUTATION_RANKS',
+					'module_mode'		=> 'ranks',
+					'module_auth'		=> 'acl_a_reputation',
+				),
+			),
+			array('acp', 'ACP_REPUTATION_SYSTEM',
+				array(
+					'module_basename'	=> 'reputation',
+					'module_langname'	=> 'ACP_REPUTATION_BANS',
+					'module_mode'		=> 'bans',
+					'module_auth'		=> 'acl_a_reputation',
+				),
+			),
+			array('acp', 'ACP_REPUTATION_SYSTEM',
+				array(
+					'module_basename'	=> 'reputation',
+					'module_langname'	=> 'ACP_REPUTATION_GIVE',
+					'module_mode'		=> 'give_point',
+					'module_auth'		=> 'acl_a_reputation',
+				),
+			),
+		),
+	),
+
+	'0.4.5' => array(
+		'config_add' => array(
+			array('rs_comment_max_chars', '150', 0),
+		),
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest
@@ -506,7 +581,7 @@ function convert($action)
 					'time'				=> $row['karma_time'],
 					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'point'				=> $row['karma_power'],
+					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,

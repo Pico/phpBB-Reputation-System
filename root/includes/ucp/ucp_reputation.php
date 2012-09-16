@@ -171,32 +171,27 @@ class ucp_reputation
 				}
 				$db->sql_freeresult($result);
 
-				$rs_rank_title = $reputation->get_rs_rank($user->data['user_reputation']);
-				$reputation_box = $config['rs_ranks'] ? $reputation->get_rs_rank_color($rs_rank_title) : (($user->data['user_reputation'] == 0) ? 'zero' : (($user->data['user_reputation'] > 0) ? 'positive' : 'negative'));
+				$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
+				if ($config['rs_ranks']) $reputation->get_rs_rank($user->data['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
 
 				if ($config['rs_enable_power'])
 				{
 					$user_reputation_stats = $reputation->get_reputation_stats($user->data['user_id']);
 					$user_max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
-					$user_power_explain = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts'], true);
+					$user_power_explain = $reputation->explain_power();
 					$voting_power_left = '';
-					if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+					if ($config['rs_power_renewal'])
 					{
-						$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
+						$voting_power_left = $user_max_voting_power - $user_reputation_stats['renewal_time'];
 						if ($voting_power_left <= 0) $voting_power_left = 0; 
 					}
 
-					$group_id = $user->data['group_id'];
-					$sql = 'SELECT group_reputation_power
-						FROM ' . GROUPS_TABLE . "
-						WHERE group_id = $group_id";
-					$result = $db->sql_query($sql);
-					$group_power = (int)$db->sql_fetchfield('group_reputation_power');
-					$db->sql_freeresult($result);
+					$group_power = $reputation->get_group_power();
 
 					$template->assign_vars(array(
+						'RS_POWER_EXPLAIN'			=> $config['rs_power_explain'] ? true : false,
 						'RS_POWER'					=> $user_max_voting_power,
-						'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
+						'RS_POWER_LEFT'				=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
 						'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
 						'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
 						'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
@@ -211,10 +206,9 @@ class ucp_reputation
 				$template->assign_vars(array(
 					'COMMENT'			=> $config['rs_enable_comment'] ? true : false,
 					'REPUTATIONS'		=> ($user->data['user_reputation']) ? $user->data['user_reputation'] : 0,
-					'RS_RANK_TITLE'		=> $config['rs_ranks'] ? $rs_rank_title : false,
-					'REPUTATION_BOX'	=> $reputation_box,
-					'RS_POWER'			=> $user_max_voting_power,
-					'RS_POWER_LEFT'		=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
+					'RS_RANK_TITLE'		=> $rs_rank_title,
+					'RS_RANK_IMG'		=> $rs_rank_img,
+					'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user_row['user_reputation'] == 0) ? 'zero' : (($user_row['user_reputation'] > 0) ? 'positive' : 'negative')),
 					'POSITIVE_COUNT'	=> $positive_count,
 					'POSITIVE_WEEK'		=> $positive_week,
 					'POSITIVE_MONTH'	=> $positive_month,
@@ -626,23 +620,7 @@ function ucp_reputation_delete($rep_id_list)
 	{
 		foreach ($rep_id_list as $rep_id)
 		{
-			$sql = 'SELECT rep_to, post_id
-				FROM ' . REPUTATIONS_TABLE . '
-				WHERE rep_id=' . $rep_id;
-			$result = $db->sql_query($sql);
-			$row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
-			$reputation->delete($rep_id, $row['post_id']);
-
-			$sql = 'SELECT username
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . $row['rep_to'];
-			$result = $db->sql_query($sql);
-			$user_row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
-			add_log('mod', '', '', 'LOG_USER_REP_DELETE', $user_row['username']);
+			$reputation->delete($rep_id);
 
 			$success_msg = 'RS_POINT' . ((sizeof($rep_id_list) == 1) ? '' : 'S') .'_DELETED';
 		}
@@ -652,7 +630,6 @@ function ucp_reputation_delete($rep_id_list)
 		confirm_box(false, $user->lang['RS_DELETE_POINT' . ((sizeof($rep_id_list) == 1) ? '' : 'S') . '_CONFIRM'], $s_hidden_fields);
 	}
 
-	$redirect = request_var('redirect', "index.$phpEx");
 	$redirect = reapply_sid($redirect);
 
 	if (!$success_msg)

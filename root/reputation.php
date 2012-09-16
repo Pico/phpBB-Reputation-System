@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -31,7 +30,7 @@ $uid = intval(request_var('u', ''));
 $post_id = intval(request_var('p', ''));
 $point = request_var('point', 'positive');
 $start = request_var('start', 0);
-$ajax = request_var('ajax',0);
+$ajax = request_var('ajax', 0);
 
 if (!$config['rs_enable'])
 {
@@ -107,28 +106,10 @@ switch ($mode)
 
 				if (confirm_box(true))
 				{
-					if ($reputation->delete($id, $row['post_id']))
+					if ($reputation->delete($id))
 					{
-						$sql_array = array(
-							'SELECT'	=> 'u.username',
-							'FROM'		=> array(USERS_TABLE => 'u'),
-							'LEFT_JOIN'	=> array(
-								array(
-									'FROM'	=> array(POSTS_TABLE => 'p'),
-									'ON'	=> 'p.poster_id = u.user_id',
-								),
-							),
-							'WHERE'		=> 'p.post_id = ' . $row['post_id']
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-						$post_row = $db->sql_fetchrow($result);
-						$db->sql_freeresult($result);
-
 						$meta_info = append_sid("{$phpbb_root_path}reputation.$phpEx", "mode=postdetails&amp;p={$row['post_id']}");
 						$message = $user->lang['RS_POINT_DELETED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_POSTDETAILS'], '<a href="' . append_sid("{$phpbb_root_path}reputation.$phpEx", "mode=postdetails&amp;p={$row['post_id']}") . '">', '</a>');
-
-						add_log('mod', '', '', 'LOG_USER_REP_DELETE', $post_row['username']);
 
 						meta_refresh(3, $meta_info);
 						trigger_error($message);
@@ -464,10 +445,9 @@ switch ($mode)
 			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
 
-		$rank_title = $rank_img = $rank_img_src = $rs_rank_title = '';
+		$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
 		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
-		$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
-		$reputation_box = $config['rs_ranks'] ? $reputation->get_rs_rank_color($rs_rank_title) : (($user_row['user_reputation'] == 0) ? 'zero' : (($user_row['user_reputation'] > 0) ? 'positive' : 'negative'));
+		if ($config['rs_ranks']) $reputation->get_rs_rank($user_row['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
 
 		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 
@@ -524,25 +504,20 @@ switch ($mode)
 		{
 			$user_reputation_stats = $reputation->get_reputation_stats($user_row['user_id']);
 			$user_max_voting_power = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts']);
-			$user_power_explain = $reputation->get_rep_power($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['group_id'], $user_row['user_warnings'], $user_reputation_stats['bancounts'], true);
+			$user_power_explain = $reputation->explain_power();
 			$voting_power_left = '';
-			if ($config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+			if ($config['rs_power_renewal'])
 			{
-				$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
+				$voting_power_left = $user_max_voting_power - $user_reputation_stats['renewal_time'];
 				if ($voting_power_left <= 0) $voting_power_left = 0; 
 			}
 
-			$group_id = $user_row['group_id'];
-			$sql = 'SELECT group_reputation_power
-				FROM ' . GROUPS_TABLE . "
-				WHERE group_id = $group_id";
-			$result = $db->sql_query($sql);
-			$group_power = (int)$db->sql_fetchfield('group_reputation_power');
-			$db->sql_freeresult($result);
+			$group_power = $reputation->get_group_power();
 
 			$template->assign_vars(array(
+				'RS_POWER_EXPLAIN'			=> $config['rs_power_explain'] ? true : false,
 				'RS_POWER'					=> $user_max_voting_power,
-				'RS_POWER_LEFT'				=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $config['rs_power_limit_value']) : '',
+				'RS_POWER_LEFT'				=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
 				'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
 				'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
 				'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
@@ -564,8 +539,9 @@ switch ($mode)
 			'AVATAR_IMG'		=> $avatar_img,
 			'RANK_TITLE'		=> $rank_title,
 			'RANK_IMG'			=> $rank_img,
-			'RS_RANK_TITLE'		=> $config['rs_ranks'] ? $rs_rank_title : false,
-			'REPUTATION_BOX'	=> $reputation_box,
+			'RS_RANK_TITLE'		=> $rs_rank_title,
+			'RS_RANK_IMG'		=> $rs_rank_img,
+			'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user_row['user_reputation'] == 0) ? 'zero' : (($user_row['user_reputation'] > 0) ? 'positive' : 'negative')),
 			'PAGINATION'		=> generate_pagination($pagination_url, $total_reps, $config['rs_per_page'], $start),
 			'PAGE_NUMBER'		=> on_page($total_reps, $config['rs_per_page'], $start),
 			'U_SORT_USERNAME'	=> $sort_url . '&amp;sk=a&amp;sd=' . (($sort_key == 'a' && $sort_dir == 'd') ? 'a' : 'd'),
@@ -807,7 +783,7 @@ switch ($mode)
 			}
 		}
 
-		//Check if voting was confirmed by user. No confirmation required for AJAX voting
+		// Check if voting was confirmed by user. No confirmation required for AJAX voting
 		$confirm = false;
 		if (isset($_POST['ajax']))
 		{
@@ -828,15 +804,13 @@ switch ($mode)
 		// Force comment
 		if ($confirm && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
 		{
-			If ($ajax)
-			{
-				echo json_encode(array('error_msg' => $user->lang['RS_NO_COMMENT']));
-				return;
-			}
-			else
-			{
-				$error = $user->lang['RS_NO_COMMENT'];
-			}
+			$error = $user->lang['RS_NO_COMMENT'];
+		}
+
+		// Comment length
+		if ($confirm && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
+		{
+			$error = sprintf($user->lang['RS_TOO_LONG_COMMENT'], strlen($comment), $config['rs_comment_max_chars']);
 		}
 
 		if (!$config['rs_enable_comment'] && !$config['rs_enable_power'])
@@ -863,13 +837,13 @@ switch ($mode)
 			//Calculate how much maximum power a user has
 			$max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
 
-			$voting_power_left = $config['rs_power_limit_value'] - $user_reputation_stats['vote_power_spent'];
+			$voting_power_left = $max_voting_power - $user_reputation_stats['renewal_time'];
 
 			//Don't allow to vote more than set in ACP per 1 vote
-			$max_voting_allowed = ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? min($max_voting_power, $voting_power_left) : $max_voting_power;
+			$max_voting_allowed = $config['rs_power_renewal'] ? min($max_voting_power, $voting_power_left) : $max_voting_power;
 
 			//If now voting power left - fire error and exit
-			if ($voting_power_left <= 0 && $config['rs_power_limit_time'] && $config['rs_power_limit_value'])
+			if ($voting_power_left <= 0 && $config['rs_power_renewal'])
 			{
 				$error_text = sprintf($user->lang['RS_NO_POWER_LEFT'], $max_voting_power);
 				//$error_text = sprintf("Not enough voting power.<br/>Wait until it replenishes.<br/>Your voting power is %d.", $max_voting_power);
@@ -959,18 +933,22 @@ switch ($mode)
 			$post_rating_mode = ($reputation_enabled_for_this_forum == 1) ? 'post' : 'onlypost';
 			if ($reputation->give_point($user_row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
 			{
-
 				if ($ajax)
 				{
 					// If it's an AJAX request, generate JSON reply
 					$new_rating = $reputation->get_rating($post_id, $config['rs_post_display']);
+					$new_user_reputation = $reputation->get_user_reputation($user_row['poster_id']);
+					$new_reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($new_user_reputation) : '';
 					$json_data = array(
 						'post_id'				=> $post_id,
+						'poster_id'				=> $user_row['poster_id'],
 						'new_post_rating'		=> $new_rating,
-						'new_user_reputation'	=> $reputation->get_user_reputation($user_row['poster_id']),
+						'new_user_reputation'	=> '<strong>' . $new_user_reputation . '</strong>',
+						'new_reputation_rank'	=> $new_reputation_rank,
 						'new_post_rating_class' => $reputation->get_vote_class($new_rating),
-						'new_post_class'		=> ($rep_power > 0 ? 'rated_good' : 'rated_bad'),
-						'what_to_fadeout'		=> ($rep_power > 0 ? '.rate-bad-icon a' : '.rate-good-icon a'),
+						'new_post_class'		=> ($rep_power > 0) ? 'rated_good' : 'rated_bad',
+						'check_vote'			=> $config['rs_negative_point'] ? true : false,
+						'what_to_fadeout'		=> ($rep_power > 0) ? '.rate-bad-icon a' : '.rate-good-icon a',
 					);
 
 					echo json_encode($json_data);
@@ -1023,29 +1001,32 @@ switch ($mode)
 				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 			}
 
-			$rank_title = $rank_img = $rank_img_src = '';
+			$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
 			if ($config['rs_post_detail'])
 			{
 				get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, 	$rank_img_src);
-				$rs_rank_title = $reputation->get_rs_rank($user_row['user_reputation']);
+				if ($config['rs_ranks']) $reputation->get_rs_rank($user_row['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
 
 				$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 			}
 
 			$template->assign_vars(array(
-				'POST_DETAIL' 			=> $config['rs_post_detail'] ? true : false,
-				'POST'					=> $message,
-				'USERNAME'				=> $user_row['username'],
-				'USER_COLOR'			=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
-				'JOINED'				=> $user->format_date($user_row['user_regdate']),
-				'POSTS'					=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
-				'WARNINGS'				=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
-				'REPUTATIONS'			=> ($user_row['user_reputation']) ? $user_row['user_reputation'] : 0,
-				'RS_RANK_TITLE'			=> $config['rs_ranks'] ? $rs_rank_title : false,
-				'AVATAR_IMG'			=> $avatar_img,
-				'RANK_TITLE'			=> $rank_title,
-				'RANK_IMG'				=> $rank_img,
-				'HEADER_POINT'			=> ($point == 'negative') ? $user->lang['RS_SUBTRACT_POINTS_CONFIRM'] : $user->lang['RS_ADD_POINTS_CONFIRM'],
+				'POST_DETAIL' 		=> $config['rs_post_detail'] ? true : false,
+				'POST'				=> $message,
+				'USERNAME'			=> $user_row['username'],
+				'USER_COLOR'		=> (!empty($user_row['user_colour'])) ? $user_row['user_colour'] : '',
+				'JOINED'			=> $user->format_date($user_row['user_regdate']),
+				'POSTS'				=> ($user_row['user_posts']) ? $user_row['user_posts'] : 0,
+				'WARNINGS'			=> ($user_row['user_warnings']) ? $user_row['user_warnings'] : 0,
+				'REPUTATIONS'		=> ($user_row['user_reputation']) ? $user_row['user_reputation'] : 0,
+				'RS_RANK_TITLE'		=> $config['rs_ranks'] ? $rs_rank_title : false,
+				'AVATAR_IMG'		=> $avatar_img,
+				'RANK_TITLE'		=> $rank_title,
+				'RANK_IMG'			=> $rank_img,
+				'RS_RANK_TITLE'		=> $rs_rank_title,
+				'RS_RANK_IMG'		=> $rs_rank_img,
+				'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user_row['user_reputation'] == 0) ? 'zero' : (($user_row['user_reputation'] > 0) ? 'positive' : 'negative')),
+				'HEADER_POINT'		=> ($point == 'negative') ? $user->lang['RS_SUBTRACT_POINTS_CONFIRM'] : $user->lang['RS_ADD_POINTS_CONFIRM'],
 			));
 		}
 
@@ -1063,13 +1044,18 @@ switch ($mode)
 		$template->assign_vars(array(
 			'ERROR'					=> ($error) ? $error : '',
 
-			'REP_POWER_ENABLE' 		=> $config['rs_enable_power'] ? true : false,
-			'RS_VOTE_POWER_LEFT_OF_MAX'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $config['rs_power_limit_value'], $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_limit_time'] && $config['rs_power_limit_value']) ? round((($config['rs_power_limit_value'] - $voting_power_left) / $config['rs_power_limit_value']) * 100,0) : '',
-			'REP_POWER_MAX1VOTE'		=> $config['rs_max_power'],
-			'REP_COMMENT_ENABLE'		=> $config['rs_enable_comment'] ? true : false,
-			'REP_PM_NOTIFY' 			=> $config['rs_pm_notify'] ? true : false,
-			'USER_COMMENT'				=> ($point == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos'],
+			'RS_POWER_ENABLE' 			=> $config['rs_enable_power'] ? true : false,
+			'RS_VOTE_POWER_LEFT_OF_MAX'	=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100,0) : '',
+			'RS_POWER_MAX1VOTE'			=> $config['rs_max_power'],
+			'RS_COMMENT_ENABLE'			=> $config['rs_enable_comment'] ? true : false,
+			'RS_PM_NOTIFY' 				=> $config['rs_pm_notify'] ? true : false,
+
+			'USER_COMMENT'				=> (!empty($comment)) ? $comment : (($point == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos']),
+			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
+
+			'S_RS_COMMENT_TOO_LONG'		=> $config['rs_comment_max_chars'] ? $config['rs_comment_max_chars'] : false,
+			'S_RS_COMMENT_REQ'			=> ($config['rs_force_comment'] == RS_COMMENT_BOTH) ? true : (($config['rs_force_comment'] == RS_COMMENT_POST) ? true : ($config['rs_force_comment'] == RS_COMMENT_USER) ? true : false),
 			'S_CONFIRM_ACTION'			=> $u_action,
 			'S_HIDDEN_FIELDS'			=> $s_hidden_fields,
 			'AJAX'						=> $ajax ? true : false,
@@ -1087,10 +1073,19 @@ switch ($mode)
 
 		if (!$config['rs_user_rating'] || !$auth->acl_get('u_rs_give'))
 		{
-			$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");
-			$message = $user->lang['RS_DISABLED'] . '<br /><br />' . sprintf($user->lang['RETURN_INDEX'], '<a href="' . append_sid("{$phpbb_root_path}index.$phpEx", "") . '">', '</a>');
-			meta_refresh(3, $meta_info);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_DISABLED']));
+				return;
+			}
+			else
+			{
+				$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");
+				$message = $user->lang['RS_DISABLED'] . '<br /><br />' . sprintf($user->lang['RETURN_INDEX'], '<a href="' . append_sid("{$phpbb_root_path}index.$phpEx", "") . '">', '</a>');
+				meta_refresh(3, $meta_info);
+				trigger_error($message);
+			}
+
 		}
 
 		$username = request_var('username', '');
@@ -1103,9 +1098,12 @@ switch ($mode)
 		$error = '';
 		$redirect = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
 
+		//If cancel was pressed, exit voting
 		if (isset($_POST['cancel']))
 		{
-			redirect($redirect);
+			//We won't get there if the template is correct, but just to be safe
+			if (!$ajax) redirect($redirect);
+			return;
 		}
 
 		$sql = 'SELECT *
@@ -1117,55 +1115,121 @@ switch ($mode)
 
 		if (!$user_row)
 		{
-			$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");
-			$message = $user->lang['RS_NO_USER_ID'] . '<br /><br />' . sprintf($user->lang['RETURN_INDEX'], '<a href="' . append_sid("{$phpbb_root_path}index.$phpEx", "") . '">', '</a>');
-			meta_refresh(3, $meta_info);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_NO_USER_ID']));
+				return;
+			}
+			else
+			{
+				$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");
+				$message = $user->lang['RS_NO_USER_ID'] . '<br /><br />' . sprintf($user->lang['RETURN_INDEX'], '<a href="' . append_sid("{$phpbb_root_path}index.$phpEx", "") . '">', '</a>');
+				meta_refresh(3, $meta_info);
+				trigger_error($message);
+			}
 		}
 
 		if ($user_row['user_type'] == USER_IGNORE)
 		{
-			$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-			$message = $user->lang['RS_USER_ANONYMOUS'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-			meta_refresh(3, $meta_info);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_USER_ANONYMOUS']));
+				return;
+			}
+			else
+			{
+				$message = $user->lang['RS_USER_ANONYMOUS'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
 		}
 
 		if ($user_row['user_id'] == $user->data['user_id'])
 		{
-			$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-			$message = $user->lang['RS_SELF'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-			meta_refresh(3, $meta_info);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_SELF']));
+				return;
+			}
+			else
+			{
+				$message = $user->lang['RS_SELF'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
 		}
 
 		// Disallow rating banned users
 		if ($user->check_ban($user_row['user_id'], false, false, true))
 		{
-			$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-			$message = $user->lang['RS_USER_BANNED'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-			meta_refresh(3, $redirect);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_USER_BANNED']));
+				return;
+			}
+			else
+			{
+				$message = $user->lang['RS_USER_BANNED'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
 		}
 
-		$sql = 'SELECT rep_id
+		$sql = 'SELECT rep_id, time
 			FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_to = $user_to
 				AND rep_from = {$user->data['user_id']}
-				AND action = 2";
+				AND action = 2
+			ORDER by rep_id DESC";
 		$result = $db->sql_query($sql);
 		$check_user = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if ($check_user)
+		if ($check_user && !$config['rs_user_rating_gap'])
 		{
-			$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-			$message = $user->lang['RS_SAME_USER'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-			meta_refresh(3, $meta_info);
-			trigger_error($message);
+			if ($ajax)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_SAME_USER']));
+				return;
+			}
+			else
+			{
+				$message = $user->lang['RS_SAME_USER'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
+		}
+		if ($config['rs_user_rating_gap'] && (time() < $check_user['time'] + $config['rs_user_rating_gap'] * 86400))
+		{
+			if ($ajax)
+			{
+				//Informe user how long he has to wait to rate user
+				$next_vote_time = ($check_user['time'] + $config['rs_user_rating_gap'] * 86400) - time();
+				$next_vote_in = '';
+				$next_vote_in .= intval($next_vote_time / 86400) ? intval($next_vote_time / 86400) . ' ' . $user->lang['DAYS'] . ' ' : '';
+				$next_vote_in .= (intval(intval($next_vote_time) / 3600) && !intval($next_vote_time / 86400))  ? intval(($next_vote_time / 3600) % 24) . ' ' . $user->lang['HOURS'] . ' ' : '';
+				$next_vote_in .= intval(($next_vote_time / 60) % 60) ? intval(($next_vote_time / 60) % 60) . ' ' . $user->lang['MINUTES'] : '';
+
+				echo json_encode(array('error_msg' => sprintf($user->lang['RS_USER_GAP'], $next_vote_in)));
+				return;
+			}
+			else
+			{
+				$message = $user->lang['RS_SAME_USER'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				meta_refresh(3, $redirect);
+				trigger_error($message);
+			}
 		}
 
+		//Check if voting was confirmed by user. No confirmation required for AJAX voting
 		$confirm = false;
+		if (isset($_POST['ajax']))
+		{
+			if ($_POST['ajax'] == 1)
+			{
+				$confirm = true;
+			}
+		}
 		if (isset($_POST['confirm']))
 		{
 			// language frontier
@@ -1175,10 +1239,16 @@ switch ($mode)
 			}
 		}
 
-		//Force comment
-		if ($confirm && (($config['rs_force_comment'] == RS_COMMENT_BOTH) || ($config['rs_force_comment'] == RS_COMMENT_USER)) && ((utf8_clean_string($comment) === '')))
+		// Force comment
+		if ($confirm && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
 		{
 			$error = $user->lang['RS_NO_COMMENT'];
+		}
+
+		// Comment length
+		if ($confirm && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
+		{
+			$error = sprintf($user->lang['RS_TOO_LONG_COMMENT'], strlen($comment), $config['rs_comment_max_chars']);
 		}
 
 		if (!$config['rs_enable_comment'] && !$config['rs_enable_power'])
@@ -1241,18 +1311,33 @@ switch ($mode)
 
 			if (($user_id != $user->data['user_id'] || $session_id != $user->session_id || !$confirm_key || !$user->data['user_last_confirm_key'] || $confirm_key != $user->data['user_last_confirm_key']) && $config['rs_enable_comment'])
 			{
-				$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-				$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-				meta_refresh(3, $meta_info);
-				trigger_error($message);
+				if ($ajax)
+				{
+					echo json_encode(array('error_msg' => $user->lang['RS_USER_DISABLED']));
+					return;
+				}
+				else
+				{
+					$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . $redirect . '">', '</a>');
+					meta_refresh(3, $redirect);
+					trigger_error($message);
+				}
 			}
 
 			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
 			if (!$auth->acl_get('u_rs_give_negative') && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $reputationpower) || ($rep_power < -$reputationpower)))
 			{
-				$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-				meta_refresh(3, $redirect);
-				trigger_error($message);
+				if ($ajax)
+				{
+					echo json_encode(array('error_msg' => $user->lang['RS_USER_DISABLED']));
+					return;
+				}
+				else
+				{
+					$message = $user->lang['RS_USER_DISABLED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . $redirect . '">', '</a>');
+					meta_refresh(3, $redirect);
+					trigger_error($message);
+				}
 			}
 
 			// Reset user_last_confirm_key
@@ -1262,11 +1347,23 @@ switch ($mode)
 
 			if ($reputation->give_point($user_row['user_id'], $post_id, $comment, $notify, $rep_power, $mode))
 			{
-				$meta_info = append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to");
-				$message = $user->lang['RS_SENT'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx?mode=viewprofile", "u=$user_to") . '">', '</a>');
-
-				meta_refresh(3, $meta_info);
-				trigger_error($message);
+				if ($ajax)
+				{
+					// If it's an AJAX request, generate JSON reply
+					$json_data = array(
+						'user_id'				=> $user_row['user_id'],
+						'user_reputation'		=> '<strong>' . $reputation->get_user_reputation($user_row['user_id']) . '</strong>',
+					);
+					echo json_encode($json_data);
+					return '';
+					//Returned JSON data and stop the script.
+				}
+				else
+				{
+					$message = $user->lang['RS_SENT'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_USER'], '<a href="' . $redirect . '">', '</a>');
+					meta_refresh(3, $redirect);
+					trigger_error($message);
+				}
 			}
 		}
 
@@ -1298,9 +1395,16 @@ switch ($mode)
 			'USER_RATING_CONFIRM'	=> sprintf($user->lang['RS_USER_RATING_CONFIRM'], $user_row['username']),
 			'REP_PM_NOTIFY'			=> $config['rs_pm_notify'] ? true : false,
 			'REP_COMMENT_ENABLE'	=> $config['rs_enable_comment'] ? true : false,
+			'COMMENT_REQUIRE'		=> ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_USER) ? $user->lang['RS_COMMENT_REQUIRE'] : '',
 
+			'COMMENT'				=> $comment,
+			'RS_COMMENT_TOO_LONG'	=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
+
+			'S_RS_COMMENT_TOO_LONG'		=> $config['rs_comment_max_chars'] ? $config['rs_comment_max_chars'] : false,
+			'S_RS_COMMENT_REQ'	=> ($config['rs_force_comment'] == RS_COMMENT_BOTH) ? 1 : (($config['rs_force_comment'] == RS_COMMENT_POST) ? 1 : ($config['rs_force_comment'] == RS_COMMENT_USER) ? 1 : 0),
 			'S_CONFIRM_ACTION'	=> $u_action,
-			'S_HIDDEN_FIELDS'	=> $s_hidden_fields)
+			'S_HIDDEN_FIELDS'	=> $s_hidden_fields,
+			'AJAX'					=> $ajax ? true : false,)
 		);
 
 		$template->set_filenames(array(
@@ -1323,7 +1427,7 @@ switch ($mode)
 			trigger_error($message);
 		}
 
-		$sql = 'SELECT rep_from, rep_to, post_id
+		$sql = 'SELECT rep_from, rep_to
 			FROM ' . REPUTATIONS_TABLE . "
 				WHERE rep_id = $id";
 		$result = $db->sql_query($sql);
@@ -1347,18 +1451,10 @@ switch ($mode)
 
 			if (confirm_box(true))
 			{
-				if ($reputation->delete($id, $row['post_id']))
+				if ($reputation->delete($id))
 				{
-					$sql = 'SELECT username
-						FROM ' . USERS_TABLE . " 
-						WHERE user_id = {$row['rep_to']}";
-					$result = $db->sql_query($sql);
-					$user_row = $db->sql_fetchrow($result);
-					$db->sql_freeresult($result);
-
 					$message = $user->lang['RS_POINT_DELETED'] . '<br /><br />' . sprintf($user->lang['RS_RETURN_DETAILS'], '<a href="' . $redirect . '">', '</a>');
 
-					add_log('mod', '', '', 'LOG_USER_REP_DELETE', $user_row['username']);
 					meta_refresh(3, $redirect);
 					trigger_error($message);
 				}

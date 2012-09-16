@@ -48,7 +48,7 @@ $lang = array_merge($lang, array(
 	'RS_CATCHUP'						=> 'Catchup new tags',
 	'RS_REPUTATION_LISTS_UCP'			=> 'This is a reputation points list. Here you find all the reputation points you have received from other members.',
 	'RS_NEW'							=> 'New!',
-	'RS_REPUTATION_GIVEN_LISTS_UCP'	 	=> 'This is a reputation points list. Here you find all the reputation points you have given to other members.',
+	'RS_REPUTATION_GIVEN_LISTS_UCP'		=> 'This is a reputation points list. Here you find all the reputation points you have given to other members.',
 	'RS_REPUTATION_SETTINGS_UCP'		=> 'Reputation settings',
 	'RS_DEFAULT_COMMENT_POS'			=> 'Default positive comment',
 	'RS_DEFAULT_COMMENT_POS_EXPLAIN'	=> 'You can define a default positive comment for post ratings.',
@@ -62,7 +62,6 @@ $lang = array_merge($lang, array(
 	'RS_NOTIFICATION'					=> 'Notification',
 	'RS_NOTIFICATION_EXPLAIN'			=> 'Enable notifications of new reputation points (this is independent of your other PM notification preferences).',
 	'RS_DISPLAY_REPUTATIONS'			=> 'Display reputation points from previous',
-	'RS_DELETE_POINTS'					=> 'Delete points',
 ));
 
 ?>

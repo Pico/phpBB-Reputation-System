@@ -481,23 +481,7 @@ function mcp_reputation_delete($rep_id_list)
 	{
 		foreach ($rep_id_list as $rep_id)
 		{
-			$sql = 'SELECT rep_to, post_id
-				FROM ' . REPUTATIONS_TABLE . '
-				WHERE rep_id=' . $rep_id;
-			$result = $db->sql_query($sql);
-			$row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
-			$reputation->delete($rep_id, $row['post_id']);
-
-			$sql = 'SELECT username
-				FROM ' . USERS_TABLE . ' 
-				WHERE user_id = ' . $row['rep_to'];
-			$result = $db->sql_query($sql);
-			$user_row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
-			add_log('mod', '', '', 'LOG_USER_REP_DELETE', $user_row['username']);
+			$reputation->delete($rep_id);
 
 			$success_msg = 'RS_POINT' . ((sizeof($rep_id_list) == 1) ? '' : 'S') .'_DELETED';
 		}
@@ -507,7 +491,6 @@ function mcp_reputation_delete($rep_id_list)
 		confirm_box(false, $user->lang['RS_DELETE_POINT' . ((sizeof($rep_id_list) == 1) ? '' : 'S') . '_CONFIRM'], $s_hidden_fields);
 	}
 
-	$redirect = request_var('redirect', "index.$phpEx");
 	$redirect = reapply_sid($redirect);
 
 	if (!$success_msg)

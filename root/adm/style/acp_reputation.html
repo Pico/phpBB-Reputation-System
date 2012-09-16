@@ -2,64 +2,10 @@
 
 <a name="maincontent"></a>
 
-<!-- IF S_RS_SET -->
-<h1>{L_TITLE}</h1>
-
-<p>{L_TITLE_EXPLAIN}</p>
-
-<!-- IF S_ERROR -->
-	<div class="errorbox">
-		<h3>{L_WARNING}</h3>
-		<p>{ERROR_MSG}</p>
-	</div>
-<!-- ENDIF -->
-
-<fieldset>
-	<dl>
-		<dt><label>{L_RS_CURRENT_VERSION}</label></dt>
-		<dd><strong>{CURRENT_VERSION}</strong></dd>
-	</dl>
-	<dl>
-		<dt><label>{L_RS_LATEST_VERSION}</label></dt>
-		<dd><strong>{LATEST_VERSION}</strong></dd>
-	</dl>
-</fieldset>
-	
-<form id="acp_board" method="post" action="{U_ACTION}">
-
-<!-- BEGIN options -->
-	<!-- IF options.S_LEGEND -->
-		<!-- IF not options.S_FIRST_ROW -->
-			</fieldset>
-		<!-- ENDIF -->
-		<fieldset>
-			<legend>{options.LEGEND}</legend>
-	<!-- ELSE -->
-
-		<dl>
-			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
-			<dd>{options.CONTENT}</dd>
-		</dl>
-
-	<!-- ENDIF -->
-<!-- END options -->
-</fieldset>
-
-<fieldset>
-	<legend>{L_ACP_SUBMIT_CHANGES}</legend>
-	<p class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-	</p>
-	{S_FORM_TOKEN}
-</fieldset>
-</form>
-<!-- ENDIF -->
+<!-- IF S_RS_OVERVIEW -->
 
 <!-- IF S_RS_SYNC -->
 <h1>{L_RS_SYNC}</h1>
-
-<p>{L_RS_SYNC_EXPLAIN}</p>
 
 <fieldset>
 	<!-- IF PROGRESS -->
@@ -75,14 +21,143 @@
 	</div>
 	<!-- ENDIF -->
 </fieldset>
-<!-- IF S_REFRESH -->
-<form id="acp_reputation" method="post" action="{U_ACTION}">
-	<fieldset class="submit-buttons">
-		<legend>{L_SUBMIT}</legend>
-		<input class="button1" type="submit" id="refresh" name="refresh" value="{L_RS_RESYNC}" />
-	</fieldset>
-</form>
+
+<!-- ELSE -->
+<h1>{L_ACP_REPUTATION_SYSTEM}</h1>
+
+<p>{L_ACP_REPUTATION_SYSTEM_EXPLAIN}</p>
+
+<fieldset>
+	<legend>{L_VERSION_CHECK}</legend>
+	<p style="font-weight: bold; color: <!-- IF S_UP_TO_DATE -->#228822<!-- ELSE -->#BC2A4D<!-- ENDIF -->;">{UP_TO_DATE}</p>
+	<dl>
+		<dt><label>{L_CURRENT_VERSION}</label></dt>
+		<dd><strong>{CURRENT_VERSION}</strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_LATEST_VERSION}</label></dt>
+		<dd><strong>{LATEST_VERSION}</strong></dd>
+	</dl>
+	<!-- IF not S_UP_TO_DATE -->
+	<dl>
+		<dt><label>{L_DOWNLOAD_LATEST}</label></dt>
+		<dd><strong><a href="{DOWNLOAD}">{L_DOWNLOAD} {TITLE} {LATEST_VERSION}</a></strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_ANNOUNCEMENT_TOPIC}</label></dt>
+		<dd><strong><a href="{ANNOUNCEMENT}">{L_RELEASE_ANNOUNCEMENT}</a></strong></dd>
+	</dl>
+	<!-- ENDIF -->
+</fieldset>
+
+<fieldset>
+	<form id="action_sync" method="post" action="{U_ACTION}">
+	<dl>
+		<dt><label>{L_RS_STATUS}</label></dt>
+		<dd><!-- IF S_RS_ENABLE --><span style="font-weight:bold;color:#228822;">{L_ENABLE}<!-- ELSE --><span style="font-weight:bold;color:#BC2A4D;">{L_DISABLE}<!-- ENDIF --></span></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_RS_AJAX_STATUS}</label></dt>
+		<dd><!-- IF S_RS_AJAX --><span style="font-weight:bold;color:#228822;">{L_ENABLE}<!-- ELSE --><span style="font-weight:bold;color:#BC2A4D;">{L_DISABLE}<!-- ENDIF --></span></dd>
+	</dl>
+	<dl>
+		<dt><label for="action_sync">{L_RS_SYNC}</label><br />{L_RS_SYNC_EXPLAIN}</dt>
+		<dd><input type="hidden" name="action" value="sync" /><input class="button2" type="submit" id="action_sync" name="action_sync" value="{L_RUN}" /></dd>
+	</dl>
+	</form>
+	<!-- IF S_FOUNDER -->
+	<form id="action_truncate" method="post" action="{U_ACTION}">
+	<dl>
+		<dt><label for="action_truncate">{L_RS_TRUNCATE}</label><br /><span>{L_RS_TRUNCATE_EXPLAIN}</span></dt>
+		<dd><input type="hidden" name="action" value="truncate" /><input class="button2" type="submit" id="action_truncate" name="action_truncate" value="{L_RUN}" /></dd>
+	</dl>
+	</form>
+	<!-- ENDIF -->
+</fieldset>
 <!-- ENDIF -->
+
+<!-- ENDIF -->
+
+<!-- IF S_RS_SET -->
+<h1>{L_TITLE}</h1>
+
+<p>{L_TITLE_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="acp_board" method="post" action="{U_ACTION}">
+
+<script type="text/javascript">
+// <![CDATA[
+	var active_cat = 'main';
+	var id = 'main';
+// ]]>
+</script>
+<script type="text/javascript" src="style/rs_config.js"></script>
+
+<div class="clearfix"></div>
+
+<fieldset class="permissions">
+
+<div class="permissions-category">
+	<ul>
+	<!-- BEGIN options -->
+		<!-- IF options.S_LEGEND -->
+			<li class="permissions-preset-yes<!-- IF options.S_FIRST_ROW --> activetab<!-- ENDIF -->" id="tab_{options.TAB}"><a href="#" onclick="swap_options('{options.TAB}'); return false;"><span class="tabbg"><span class="colour"></span>{options.LEGEND}</span></a></li>
+		<!-- ENDIF -->
+	<!-- END options -->
+	</ul>
+</div>
+
+<!-- BEGIN options -->
+	<!-- IF options.S_LEGEND -->
+		<!-- IF not options.S_FIRST_ROW -->
+			</fieldset>
+		</div>
+
+	<span class="corners-bottom"><span></span></span>
+</div>
+		<!-- ENDIF -->
+<div class="permissions-panel" id="options{options.TAB}" <!-- IF not options.S_FIRST_ROW -->style="display: none;"<!-- ENDIF -->>
+	<span class="corners-top"><span></span></span>
+
+	<div class="tablewrap">
+		<fieldset>
+	<!-- ELSE -->
+			<dl>
+				<dt><label for="{options.KEY}" >{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+				<dd>{options.CONTENT}</dd>
+			</dl>
+	<!-- ENDIF -->
+<!-- END options -->
+			</fieldset>
+		</div>
+
+	<span class="corners-bottom"><span></span></span>
+</div>
+
+</fieldset>
+
+<fieldset>
+	<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<script type="text/javascript">
+// <![CDATA[
+	init_checked();
+// ]]>
+</script>
 <!-- ENDIF -->
 
 <!-- IF S_RS_GIVE -->
@@ -125,11 +200,22 @@
 
 <p>{L_RS_RANKS_EXPLAIN}</p>
 
+<p>{RANKS_ENABLE}</p>
+
 <form id="acp_reputation" method="post" action="{U_ACTION}">
 
 <!-- IF S_EDIT -->
 
 <a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+
+<script type="text/javascript">
+// <![CDATA[
+	function update_image(newimage)
+	{
+		document.getElementById('image').src = (newimage) ? "{RANKS_PATH}/" + encodeURI(newimage) : "./images/spacer.gif";
+	}
+// ]]>
+</script>
 
 <p>&nbsp;</p>
 
@@ -140,16 +226,21 @@
 	<dd><input name="title" type="text" id="title" value="{RANK_TITLE}" maxlength="255" /></dd>
 </dl>
 <dl>
+	<dt><label for="rank_image">{L_RS_RANK_IMAGE}:</label></dt>
+	<dd><select name="rank_image" id="rank_image" onchange="update_image(this.options[selectedIndex].value);">{S_FILENAME_LIST}</select></dd>
+	<dd><img src="{RANK_IMAGE}" id="image" alt="" /></dd>
+</dl>
+<dl>
 	<dt><label for="min_points">{L_RS_RANK_MIN}:</label></dt>
 	<dd><input name="min_points" type="text" id="min_points" maxlength="10" value="{MIN_POINTS}" /></dd>
 </dl>
 <dl>
 	<dt><label for="color">{L_RS_RANK_COLOR}:</label></dt>
 	<dd><select name="color" id="colour">
-				<option value="zero" <!-- IF S_NEUTRAL -->selected="selected"<!-- ENDIF -->>Neutral</option>
-				<option value="positive" <!-- IF S_POSITIVE -->selected="selected"<!-- ENDIF --> style="background-color:#6F8F52; color:#FFF;">Positive</option>
-				<option value="negative" <!-- IF S_NEGATIVE -->selected="selected"<!-- ENDIF --> style="background-color:#B82929; color:#FFF;">Negative</option>
-			</select></dd>
+			<option value="zero" <!-- IF S_NEUTRAL -->selected="selected"<!-- ENDIF -->>Neutral</option>
+			<option value="positive" <!-- IF S_POSITIVE -->selected="selected"<!-- ENDIF --> style="background-color:#6F8F52; color:#FFF;">Positive</option>
+			<option value="negative" <!-- IF S_NEGATIVE -->selected="selected"<!-- ENDIF --> style="background-color:#B82929; color:#FFF;">Negative</option>
+		</select></dd>
 </dl>
 
 <p class="submit-buttons">
@@ -170,6 +261,7 @@
 <thead>
 	<tr>
 		<th>{L_RS_RANK_TITLE}</th>
+		<th>{L_RS_RANK_IMAGE}</th>
 		<th>{L_RS_RANK_MIN}</th>
 		<th>{L_ACTION}</th>
 	</tr>
@@ -178,6 +270,7 @@
 <!-- BEGIN ranks -->
 	<!-- IF ranks.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
 		<td style="text-align: center; <!-- IF ranks.S_POSITIVE -->color: #6F8F52;<!-- ENDIF --><!-- IF ranks.S_NEGATIVE -->color: #B82929;<!-- ENDIF -->">{ranks.RANK_TITLE}</td>
+		<td style="text-align: center;"><!-- IF ranks.S_RANK_IMAGE --><img src="{ranks.RANK_IMAGE}" alt="{ranks.RANK_TITLE}" title="{ranks.RANK_TITLE}" /><!-- ELSE -->&nbsp; - &nbsp;<!-- ENDIF --></td>
 		<td style="text-align: center;">{ranks.MIN_POINTS}</td>
 		<td style="text-align: center;"><a href="{ranks.U_EDIT}">{ICON_EDIT}</a> <a href="{ranks.U_DELETE}">{ICON_DELETE}</a></td>
 	</tr>

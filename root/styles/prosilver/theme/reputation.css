@@ -1,8 +1,7 @@
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -72,10 +71,9 @@ ul.profile-icons li.rate-good-icon a	{ background-image: url("{IMG_ICON_RATE_GOO
 ul.profile-icons li.rate-bad-icon a	{ background-image: url("{IMG_ICON_RATE_BAD_SRC}"); }
 
 ul.profile-icons li.rate-good-icon a:hover,
-ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
+ul.profile-icons li.rate-bad-icon a:hover { background-position: center bottom }
 
-.own .rate-good-icon a, .own .rate-bad-icon a,
-.rated_good .rate-good-icon a, .rated_bad .rate-bad-icon a{
+.rated_good .rate-good-icon a, .rated_bad .rate-bad-icon a {
 	width: 100%;
 	opacity: 0.3;
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
@@ -84,8 +82,10 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 	-khtml-opacity: 0.3;
 	cursor: default;
 	background-position: center top !important;
-	/*Uncomment this if you want to hide own voting buttons*/
-	/*display:none;*/
+}
+
+.own .rate-good-icon a, .own .rate-bad-icon a {
+	display: none;
 }
 
 .rated_good .rate-bad-icon a, .rated_bad .rate-good-icon a {
@@ -94,7 +94,7 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 
 #repo-popup {
 	width:  300px;
-	font-size: 80%;
+	font-size: 0.8em;
 	position: absolute;
 	z-index: 500;
 	display: none;
@@ -107,7 +107,7 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 	margin-bottom: 0px;
 }
 
-#repo-popup .error {
+#repo-popup div.error {
 	text-align: center;
 	font-size:140%;
 }
@@ -128,19 +128,17 @@ ul.profile-icons li.rate-bad-icon a:hover {background-position: center bottom}
 .rs_more_details {
 	background: #FFFFFF;
 	padding: 3px;
-	font-size:110%;
-	border-radius: 0 0 3px 3px;
-	border:1px solid #0F9BE1;
-	margin: -5px auto 5px;
-	width:100px;
+	font-size: 1.1em;
 	text-align: center;
+	width: 100px;
+	float: right;
 }
 
-.too_low_rating  .postbody, .too_low_rating .postprofile {
+.hidden  .postbody, .hidden .postprofile {
 	display:none
 }
 
-div.online.too_low_rating {
+div.online.hidden {
 	background-image: none;
 }
 
@@ -156,11 +154,6 @@ div.online.too_low_rating {
 .info ul.profile-icons li {
 	margin-bottom:0px;
 	line-height: 20px;
-}
-
-.hidden {
-	float: left;
-	margin-left: 15px;
 }
 
 .progress-bar {

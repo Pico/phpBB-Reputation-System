@@ -27,7 +27,8 @@
 			<!-- IF RANK_TITLE --><dt style="width: 50%;">{L_RANK}:</dt> <dd style="width: 45%;">{RANK_TITLE}</dd><!-- ENDIF -->
 			<!-- IF RANK_IMG --><dt style="width: 50%;"><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt> <dd style="width: 45%;">{RANK_IMG}</dd><!-- ENDIF -->
 		<!-- ENDIF -->
-		<dt style="width: 50%;">{L_REPUTATION}:</dt> <dd style="width: 45%;"><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+		<dt style="width: 50%;">{L_REPUTATION}:</dt><dd style="width: 45%;"><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+		<!-- IF RS_RANK_IMG --><dt style="width: 50%;">&nbsp;</dt><dd style="width: 45%;">{RS_RANK_IMG}</dd><!-- ENDIF -->
 		<!-- IF REP_POWER_ENABLE -->
 			<dt style="width: 50%;">{L_RS_POWER}:</dt> <dd style="width: 45%;">{RS_POWER}</dd>
 			<!-- IF RS_POWER_LEFT --><dt style="width: 50%;">{L_RS_VOTING_POWER}:</dt> <dd style="width: 45%;">{RS_POWER_LEFT}</dd><!-- ENDIF -->
@@ -70,7 +71,7 @@
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 
-<!-- IF REP_POWER_ENABLE -->
+<!-- IF REP_POWER_ENABLE and RS_POWER_EXPLAIN -->
 <div class="panel bg1">
 	<div class="inner"><span class="corners-top"><span></span></span>
 

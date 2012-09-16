@@ -35,13 +35,13 @@ function hook_reputation_system()
 	if ($config['rs_notification'] && $user->data['user_rep_new'] && $user->data['user_rs_notification'])
 	{
 		$user->add_lang('mods/reputation_system');
-		
+
 		$notification = $user->data['user_rep_new'] ? ($user->data['user_rep_new'] == 1 ? $user->lang['RS_NEW_REP'] : sprintf($user->lang['RS_NEW_REPS'], $user->data['user_rep_new'])) : false;
 	}
-	
+
 	$template->assign_vars(array(
 		'S_REPUTATION'		=> $config['rs_enable'] ? true : false,
-        'S_RS_AJAX_ENABLE'  => $config['rs_ajax_enable'] ? true : false,
+		'S_RS_AJAX_ENABLE'	=> $config['rs_ajax_enable'] ? true : false,
 		'S_RS_NOTIFICATION'	=> $notification,
 		'U_RS_NOTIFICATION'	=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=reputation&amp;mode=list'),
 	));
@@ -52,15 +52,15 @@ function hook_rs_copyright()
 	global $template;
 	
 	$copy_string = '<a href="http://modsteam.tk/" title="Reputation System">Reputation System</a> &copy;';
-	if (!isset($template->_tpldata['.'][0]['DEBUG_OUTPUT']))
+	if (!isset($template->_tpldata['.'][0]['CREDIT_LINE']))
 	{
-		$template->_tpldata['.'][0]['DEBUG_OUTPUT'] = '';
+		$template->_tpldata['.'][0]['CREDIT_LINE'] = '';
 	}
 
-	if (isset($template->_tpldata['.'][0]['DEBUG_OUTPUT']) && strpos($template->_tpldata['.'][0]['DEBUG_OUTPUT'], $copy_string) === false)
+	if (isset($template->_tpldata['.'][0]['CREDIT_LINE']) && strpos($template->_tpldata['.'][0]['CREDIT_LINE'], $copy_string) === false)
 	{
-		$debug_output =& $template->_tpldata['.'][0]['DEBUG_OUTPUT'];
-		$debug_output = $copy_string . ((!empty($debug_output)) ? '<br />' . $debug_output : '');
+		$credit_line =& $template->_tpldata['.'][0]['CREDIT_LINE'];
+		$credit_line = ((!empty($credit_line)) ? $credit_line . '<br />' : '') . $copy_string;
 	}
 }
 
@@ -95,7 +95,7 @@ function hook_rs_toplist()
 	$result = $db->sql_query_limit($sql, $config['rs_toplist_num']);
 
 	while ($row = $db->sql_fetchrow($result))
-	{
+	{	
 		$direction = $config['rs_toplist_direction'] ? '<br />' : ', ';
 		$reputation_toplist .= (($reputation_toplist != '') ? $direction : '') . get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) . ' (' . $row['user_reputation'] . ')';
 	}

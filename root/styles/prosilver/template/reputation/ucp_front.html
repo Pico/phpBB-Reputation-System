@@ -5,7 +5,9 @@
 <div style="float: left; width: 69%;">
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
+	<!-- IF RS_POWER and RS_POWER_EXPLAIN-->
 	<div class="column1">
+	<!-- ENDIF -->
 
 		<h3>{L_RS_DETAILS}</h3>
 		<dl class="details">
@@ -17,6 +19,7 @@
 			<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT}</dd>
 			<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT}</dd>
 		</dl>
+	<!-- IF RS_POWER and RS_POWER_EXPLAIN-->
 	</div>
 
 	<div class="column2">
@@ -36,6 +39,7 @@
 			<!-- IF RS_GROUP_POWER --><dt style="width: 50%">{L_RS_GROUP_POWER}:</dt> <dd style="width: 45%">{GROUP_VOTING_POWER}</dd><!-- ENDIF -->
 		</dl>
 	</div>
+	<!-- ENDIF -->
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 </div>
