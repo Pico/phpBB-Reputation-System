@@ -29,7 +29,11 @@
 		<copy>
 			<file from="root/install_reputation.php" to="install_reputation.php"/>
 			<file from="root/reputation.php" to="reputation.php"/>
+			<file from="root/adm/mods/reputation_system_version.php" to="adm/mods/reputation_system_version.php"/>
 			<file from="root/adm/style/acp_reputation.html" to="adm/style/acp_reputation.html"/>
+			<file from="root/adm/style/rs_config.js" to="adm/style/rs_config.js"/>
+			<file from="root/images/reputation/neg.png" to="images/reputation/neg.png"/>
+			<file from="root/images/reputation/pos.png" to="images/reputation/pos.png"/>
 			<file from="root/includes/functions_reputation.php" to="includes/functions_reputation.php"/>
 			<file from="root/includes/acp/acp_reputation.php" to="includes/acp/acp_reputation.php"/>
 			<file from="root/includes/acp/info/acp_reputation.php" to="includes/acp/info/acp_reputation.php"/>
@@ -45,9 +49,17 @@
 			<file from="root/language/en/mods/reputation_system.php" to="language/en/mods/reputation_system.php"/>
 			<file from="root/styles/prosilver/template/reputation/details.html" to="styles/prosilver/template/reputation/details.html"/>
 			<file from="root/styles/prosilver/template/reputation/jquery-1.8.0.min.js" to="styles/prosilver/template/reputation/jquery-1.8.0.min.js"/>
+			<file from="root/styles/prosilver/template/reputation/mcp_front.html" to="styles/prosilver/template/reputation/mcp_front.html"/>
+			<file from="root/styles/prosilver/template/reputation/mcp_give.html" to="styles/prosilver/template/reputation/mcp_give.html"/>
+			<file from="root/styles/prosilver/template/reputation/mcp_list.html" to="styles/prosilver/template/reputation/mcp_list.html"/>
+			<file from="root/styles/prosilver/template/reputation/postdetails.html" to="styles/prosilver/template/reputation/postdetails.html"/>
 			<file from="root/styles/prosilver/template/reputation/ratepost.html" to="styles/prosilver/template/reputation/ratepost.html"/>
 			<file from="root/styles/prosilver/template/reputation/rateuser.html" to="styles/prosilver/template/reputation/rateuser.html"/>
+			<file from="root/styles/prosilver/template/reputation/reputation.js" to="styles/prosilver/template/reputation/reputation.js"/>
 			<file from="root/styles/prosilver/template/reputation/ucp_front.html" to="styles/prosilver/template/reputation/ucp_front.html"/>
+			<file from="root/styles/prosilver/template/reputation/ucp_given.html" to="styles/prosilver/template/reputation/ucp_given.html"/>
+			<file from="root/styles/prosilver/template/reputation/ucp_list.html" to="styles/prosilver/template/reputation/ucp_list.html"/>
+			<file from="root/styles/prosilver/template/reputation/ucp_setting.html" to="styles/prosilver/template/reputation/ucp_setting.html"/>
 			<file from="root/styles/prosilver/theme/reputation.css" to="styles/prosilver/theme/reputation.css"/>
 		</copy>
 		<open src="viewtopic.php">
