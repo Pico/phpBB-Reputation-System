@@ -6,10 +6,10 @@ A full reputation system for PHPBB3, with adjustable reputation settings. It all
 Features
 --------
 * AJAX post rating
-* user rating
+* AJAX user rating
 * posibility to choose reputation power during giving a reputation point
 * giving negative reputation points during warning users
-* resynchronise function
+* resynchronise and truncate function
 * lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disbale comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)
 * permissions system - you can adjust it to your board
 * built-in converter from other similar system
@@ -19,7 +19,7 @@ Requirements
 
 * phpBB >3.0.10
 * PHP >5.2
-* Javascript is required by this MOD.
+* Javascript is required by this MOD (for AJAX functions).
 
 License
 -------
