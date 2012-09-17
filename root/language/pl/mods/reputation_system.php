@@ -135,9 +135,9 @@ $lang = array_merge($lang, array(
 	'RS_NEW_REP'					=> 'Masz <strong>1 nowy</strong> punkt reputacji',
 	'RS_NEW_REPS'					=> 'Masz <strong>%s nowe/ych</strong> punktów reputacji',
 
-	'RS_POPUP_MORE_DETAILS'			=> 'więcej szczegółów',
+	'RS_POPUP_MORE_DETAILS'			=> '» więcej szczegółów',
 
-	'RS_HIDE_POST'					=> 'Ten post został napisany przez <strong>%1$s</strong> i został ukrty, bo otrzymał za dużo negatywnych głósów. %2$s %3$s %4$s',
+	'RS_HIDE_POST'					=> 'Ten post został napisany przez <strong>%1$s</strong> i został ukrty, bo otrzymał za dużo negatywnych głósów. %2$s',
 	'RS_SHOW_HIDDEN_POST'			=> 'Pokaż ten post',
 	'RS_SHOW_HIDE_HIDDEN_POST'		=> 'Pokaż / Ukryj',
 	'RS_ANTISPAM_INFO'				=> 'Nie możesz przyznać punktów reputacji tak szybko. Wróć później.',

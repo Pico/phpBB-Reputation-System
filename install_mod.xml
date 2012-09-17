@@ -718,7 +718,10 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[		<!-- IF postrow.POSTER_FROM --><dd><strong>{L_LOCATION}:</strong> {postrow.POSTER_FROM}</dd><!-- ENDIF -->]]></find>
-				<action type="after-add"><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR --><dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.U_VIEW_REP_LIST --><a href="{postrow.U_VIEW_REP_LIST}" class="repo-link"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.U_VIEW_REP_LIST --></a><!-- ENDIF --></dd><!-- ENDIF -->]]></action>
+				<action type="after-add"><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR -->
+			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.U_VIEW_REP_LIST --><a href="{postrow.U_VIEW_REP_LIST}" class="repo-link"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.U_VIEW_REP_LIST --></a><!-- ENDIF --></dd>
+			<!-- IF postrow.RS_RANK_IMG --><dd class="reputation-rank">{postrow.RS_RANK_IMG}</dd><!-- ENDIF -->
+		<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/theme/stylesheet.css">

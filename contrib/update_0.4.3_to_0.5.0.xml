@@ -201,6 +201,13 @@ $rs_ranks = reputation::obtain_rs_ranks();]]></action>
 				<find><![CDATA[			<dl class="postprofile" id="profile{postrow.POST_ID}">]]></find>
 				<action type="replace-with"><![CDATA[			<dl class="postprofile" id="profile{postrow.POSTER_ID}">]]></action>
 			</edit>
+			<edit>
+				<find><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR --><dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.U_VIEW_REP_LIST --><a href="{postrow.U_VIEW_REP_LIST}" class="repo-link"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.U_VIEW_REP_LIST --></a><!-- ENDIF --></dd><!-- ENDIF -->]]></find>
+				<action type="replace-with"><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR -->
+			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.U_VIEW_REP_LIST --><a href="{postrow.U_VIEW_REP_LIST}" class="repo-link"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.U_VIEW_REP_LIST --></a><!-- ENDIF --></dd>
+			<!-- IF postrow.RS_RANK_IMG --><dd class="reputation-rank">{postrow.RS_RANK_IMG}</dd><!-- ENDIF -->
+		<!-- ENDIF -->]]></action>
+			</edit>
 		</open>
 		<php-installer><![CDATA[install_reputation.php]]></php-installer>
 	</action-group>
