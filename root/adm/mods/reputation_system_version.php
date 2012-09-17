@@ -25,7 +25,7 @@ class reputation_system_version
 			'author'	=> 'Pico88',
 			'title'		=> 'Reputation System',
 			'tag'		=> 'reputation_system',
-			'version'	=> '0.4.4',
+			'version'	=> '0.5.0',
 			'file'		=> array('modsteam.tk', 'updatecheck', 'reputation.xml'),
 		);
 	}
