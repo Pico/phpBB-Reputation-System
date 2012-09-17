@@ -26,6 +26,14 @@
 	<!-- ENDIF -->
 
 	<fieldset>
+		<!-- IF RS_POWER_POINTS_LEFT -->
+		<div style="margin-bottom:10px; text-align:center">
+			<div class="progress-bar">
+				<div class="empty-progress" style="width:{RS_POWER_PROGRESS_EMPTY}%"></div>
+			</div>
+			<span>{RS_POWER_POINTS_LEFT}</span><br/>
+		</div>
+		<!-- ENDIF -->
 		<dl>
 			<dt><label>{L_RS_POINTS}<label></dt>
 			<dd><select name="rep_power" id="rep_power">
@@ -34,13 +42,13 @@
 				<!-- END reputation -->
 				</select></dd>
 		</dl>
-		<!-- IF REP_COMMENT_ENABLE -->
+		<!-- IF S_RS_COMMENT_ENABLE -->
 		<dl class="comment">
 			<dt><label>{L_RS_COMMENT}<label></dt>
 			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{COMMENT}</textarea><!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
 		</dl>
 		<!-- ENDIF -->
-		<!-- IF REP_PM_NOTIFY -->
+		<!-- IF S_RS_PM_NOTIFY -->
 		<dl>
 			<label><input type="checkbox" name="notify_user" /> {L_NOTIFY_USER_REP}</label>
 		</dl>
@@ -49,15 +57,9 @@
 
 	<fieldset class="submit-buttons">
 	{S_HIDDEN_FIELDS}
-	<!-- IF AJAX -->
-		<input type="hidden" name="ajax" value="1" />
-		<input type="submit" name="confirm" value="{L_RS_RATE_BUTTON}" class="button2" onclick="submit_vote();return false;" />&nbsp;
-		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="$('#repo-popup').fadeOut();return false;" />
-	<!-- ELSE -->
-		<input type="submit" name="confirm" value="{L_YES}" class="button2" />&nbsp;
-		<input type="submit" name="cancel" value="{L_NO}" class="button2" />
-	<!-- ENDIF -->
-	{S_FORM_TOKEN}
+	<!-- IF AJAX --><input type="hidden" name="ajax" value="1" /><!-- ENDIF -->
+		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button2"<!-- IF AJAX --> onclick="submit_vote();return false;"<!-- ENDIF --> />&nbsp;
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2"<!-- IF AJAX -->  onclick="$('#repo-popup').fadeOut('fast');return false;"<!-- ENDIF --> />
 	</fieldset>
 
 	<span class="corners-bottom"><span></span></span></div>

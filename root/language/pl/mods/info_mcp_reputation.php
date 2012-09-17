@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (Pico) (http://www.modsteam.tk)
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -50,11 +50,7 @@ $lang = array_merge($lang, array(
 
 	'RS_BEST_REPUTATION'			=> 'Użytkownicy z najlepszą reputacją',
 	'RS_WORST_REPUTATION'			=> 'Użytkownicy z najgorszą reputacją',
-	'RS_DELETE_POINTS'				=> 'Usuń punkty',
-	'RS_DELETE_POINTS_CONFIRM'		=> 'Czy na pewno chcesz usunąć te punkty reputacji?',
-	'RS_POINTS_DELETED'				=> 'Punkty reputacji zostały usunięte',
 	'RS_REPUTATION_LISTS'			=> 'To jest lista z punktami reputacji. Tutaj znajdziesz wszystkie punkty reputacji jakie zostały udzielone na forum. Możesz użyć różnych filtrów, aby zawęzić obszar wyszukiwań. Możesz także szukać punktów przyznanych przez konkretnego lub konkretnemu użytkownikowi, jak i pomiędzy nimi.',
-
 	'RS_SEARCH_FROM'				=> 'Szukaj punktów przyznanych przez',
 	'RS_SEARCH_TO'				  	=> 'Szukaj punktów otrzymanych przez',
 	'RS_DISPLAY_REPUTATIONS'		=> 'Wyświetl punkty nie starsze niż',

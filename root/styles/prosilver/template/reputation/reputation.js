@@ -3,8 +3,8 @@ $(document).ready(function()
 	$("a.repo-link").click(function(e){
 		e.stopPropagation();
 		e.preventDefault();
-		//Do not vote again if you voted
-		if (($(this).parents('.profile-icons').hasClass('rated_good') || $(this).parents('.profile-icons').hasClass('rated_bad') || $(this).parents('.post').hasClass('own')) && $(this).parents('.reputation').length == 0 && $(this).parents('.postprofile').length == 0)
+		// Do not vote again if you voted
+		if (($(this).parents('.post-reputation').hasClass('rated_good') || $(this).parents('.post-reputation').hasClass('rated_bad')) && $(this).parents('.reputation').length == 0)
 		{
 			return false;
 		}
@@ -30,27 +30,27 @@ function show_repo_popup($url, clickedx, clickedy)
 {
 	$('#repo-popup').empty();
 
-	//Center popup relative to clicked coordinate
+	// Center popup relative to clicked coordinate
 	targetleft = clickedx - $('#repo-popup').width() / 2;
-	//Popup can not be too close or behind the right border of the screen
+	// Popup can not be too close or behind the right border of the screen
 	targetleft = Math.min (targetleft, $(document).width() - 20 - $('#repo-popup').width());
 	targetleft = Math.max (targetleft, 20);
 
-	$('#repo-popup').load($url, function(response, status, xhr){
+	$('#repo-popup').load($url, function(response){
 
 		$('#repo-popup').css('top', clickedy+15+'px');
 		$('#repo-popup').css('left', targetleft+'px');
 		if (response.substr(0,1) == '{') {
-			//It's JSON. Probably an error. Let's clean the DIV and show the error there.
+			// It's JSON. Probably an error. Let's clean the DIV and show the error there
 			response = jQuery.parseJSON(response);
-			update_points_or_show_error(response);
+			reputation_action(response);
 			return true;
 		}
 		$('#repo-popup').fadeIn();
 	});
 }
 
-//Function for converting form into JSON
+// Function for converting form into JSON
 $.fn.serializeObject = function()
 {
 	var o = {};
@@ -70,12 +70,14 @@ $.fn.serializeObject = function()
 
 function submit_vote()
 {
+	// Comment required
 	if (!$.trim($('#comment').val()) & commentreq) 
 	{
 		$('.error').detach();
 		$('.comment').append('<dl class="error"><span>' + nocomment + '</span></dl>');
 	}
-	else if ($('#comment').val().length > toolongcomment)
+	// Comment too long
+	else if (($('#comment').val().length > toolongcomment) & (toolongcomment > 0))
 	{
 		$('.error').detach();
 		$('.comment').append('<dl class="error"><span>' + commentlen + ' ' + $('#comment').val().length + '.</span></dl>');
@@ -87,51 +89,51 @@ function submit_vote()
 			data: $('#repo-popup > form').serializeObject(),
 			dataType: 'json',
 			type: 'POST',
-			success: function(json_reply) {
-				update_points_or_show_error(json_reply);
+			success: function(reply) {
+				reputation_action(reply);
 			}
 		});
 	}
 }
 
-function update_points_or_show_error(json_reply)
+function reputation_action(action)
 {
-	if (json_reply.error_msg)
+	if (action.error_msg)
 	{
-		//If there is an error, show it
+		// If there is an error, show it
 		$('#repo-popup').empty();
-		$('#repo-popup').append('<div class="error">' + json_reply.error_msg + '</div>');
+		$('#repo-popup').append('<div class="error">' + action.error_msg + '</div>');
 		$('#repo-popup').fadeIn();
 	}
-	else if (json_reply.post_id)
+	else if (action.post_id)
 	{
-		var post_id = json_reply.post_id;
-		var poster_id = json_reply.poster_id;
-		var fadeout = '#p'+post_id+' ' + json_reply.what_to_fadeout;
+		var post_id = action.post_id;
+		var poster_id = action.poster_id;
+		var fadeout = '#p'+post_id+' ' + action.what_to_fadeout;
 
 		$('#repo-popup').fadeOut('fast');
-		//No error? Then it's rating info. Let's update it
-		$('#p'+post_id+' .reputation a.repo-link').text(json_reply.new_post_rating);
-		$('#profile'+poster_id+' .user-reputation a.repo-link').html(json_reply.new_user_reputation);
-		$('#profile'+poster_id+' .reputation-rank').html(json_reply.new_reputation_rank);
+		// No error? Then it's rating info. Let's update it
+		$('#profile'+poster_id+' .user-reputation a.repo-link').html(action.new_user_reputation);
+		$('#profile'+poster_id+' .reputation-rank').html(action.new_reputation_rank);
+		$('#p'+post_id+' .reputation a.repo-link').text(action.new_post_rating);
 		$('#p'+post_id+' .reputation').removeClass('zero negative positive');
-		$('#p'+post_id+' .reputation').addClass(json_reply.new_post_rating_class);
+		$('#p'+post_id+' .reputation').addClass(action.new_post_rating_class);
 		$('#p'+post_id).removeClass('rated_good rated_bad');
-		//Check if negative points are disabled. If yes, change behaviour.
-		if (json_reply.check_vote)
+		// Check if negative points are disabled. If yes, change behaviour
+		if (action.check_vote)
 		{
 			$(fadeout).fadeOut(function(){
-				$('#p'+post_id+' .post-reputation').addClass(json_reply.new_post_class);
+				$('#p'+post_id+' .post-reputation').addClass(action.new_post_class);
 			});
 		}
 		else
 		{
-			$('#p'+post_id+' .post-reputation').addClass(json_reply.new_post_class);
+			$('#p'+post_id+' .post-reputation').addClass(action.new_post_class);
 		}
 	}
-	else if (json_reply.user_id)
+	else if (action.user_id)
 	{
 		$('#repo-popup').fadeOut('fast');
-		$('.user-reputation').html(json_reply.user_reputation);
+		$('.user-reputation').html(action.user_reputation);
 	}
 }

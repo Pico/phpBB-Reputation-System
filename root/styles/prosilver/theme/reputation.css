@@ -7,6 +7,38 @@
 *
 */
 
+ul.post-reputation {
+	float: right;
+	width: auto;
+	padding: 0;
+	list-style: none;
+}
+
+ul.post-reputation li {
+	float: left;
+	margin-right: 3px;
+	background-position: 0 100%;
+}
+
+ul.post-reputation li a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background-position: 0 0;
+}
+
+ul.post-reputation li span { display:none; }
+ul.post-reputation li a:hover { background: none; }
+
+ul.post-reputation li.rate-good-icon	{ width: {IMG_ICON_RATE_GOOD_WIDTH}px; height: {IMG_ICON_RATE_GOOD_HEIGHT}px; }
+ul.post-reputation li.rate-bad-icon	{ width: {IMG_ICON_RATE_BAD_WIDTH}px; height: {IMG_ICON_RATE_BAD_HEIGHT}px; }
+
+ul.post-reputation li.rate-good-icon a	{ background-image: url("{IMG_ICON_RATE_GOOD_SRC}"); }
+ul.post-reputation li.rate-bad-icon a	{ background-image: url("{IMG_ICON_RATE_BAD_SRC}"); }
+
+ul.post-reputation li.rate-good-icon a:hover,
+ul.post-reputation li.rate-bad-icon a:hover { background-position: center bottom }
+
 .reputation.zero a {
 	color: #6E6E6E;
 	text-decoration: none;
@@ -48,7 +80,6 @@
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
-
 	line-height: normal;
 }
 
@@ -63,15 +94,6 @@ li.reputation {
 .negative {
 	color: #B82929;
 }
-
-ul.profile-icons li.rate-good-icon	{ width: {IMG_ICON_RATE_GOOD_WIDTH}px; height: {IMG_ICON_RATE_GOOD_HEIGHT}px; }
-ul.profile-icons li.rate-bad-icon	{ width: {IMG_ICON_RATE_BAD_WIDTH}px; height: {IMG_ICON_RATE_BAD_HEIGHT}px; }
-
-ul.profile-icons li.rate-good-icon a	{ background-image: url("{IMG_ICON_RATE_GOOD_SRC}"); }
-ul.profile-icons li.rate-bad-icon a	{ background-image: url("{IMG_ICON_RATE_BAD_SRC}"); }
-
-ul.profile-icons li.rate-good-icon a:hover,
-ul.profile-icons li.rate-bad-icon a:hover { background-position: center bottom }
 
 .rated_good .rate-good-icon a, .rated_bad .rate-bad-icon a {
 	width: 100%;
@@ -109,7 +131,7 @@ ul.profile-icons li.rate-bad-icon a:hover { background-position: center bottom }
 
 #repo-popup div.error {
 	text-align: center;
-	font-size:140%;
+	font-size: 140%;
 }
 
 .vote_status_positive, .vote_status_negative {
@@ -135,25 +157,11 @@ ul.profile-icons li.rate-bad-icon a:hover { background-position: center bottom }
 }
 
 .hidden  .postbody, .hidden .postprofile {
-	display:none
+	display: none;
 }
 
 div.online.hidden {
 	background-image: none;
-}
-
-.info .profile-icons {
-	margin-right: 15px;
-	float: right;
-}
-
-.info ul.profile-icons {
-	padding-top:0px;
-}
-
-.info ul.profile-icons li {
-	margin-bottom:0px;
-	line-height: 20px;
 }
 
 .progress-bar {

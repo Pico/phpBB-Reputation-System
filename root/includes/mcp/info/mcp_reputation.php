@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -19,7 +18,7 @@ class mcp_reputation_info
 		return array(
 			'filename'	=> 'mcp_reputation',
 			'title'		=> 'MCP_REPUTATION',
-			'version'	=> '0.4.3',
+			'version'	=> '0.5.0',
 			'modes'		=> array(
 				'front'				=> array('title' => 'MCP_REPUTATION_FRONT', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),
 				'list'				=> array('title' => 'MCP_REPUTATION_LIST', 'auth' => 'acl_m_rs_moderate', 'cat' => array('MCP_REPUTATION')),

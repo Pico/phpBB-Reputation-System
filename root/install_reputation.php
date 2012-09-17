@@ -1,9 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (Pico) (http://www.modsteam.tk)
-* @co-author	Versusnja
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -415,12 +414,13 @@ $versions = array(
 		),
 	),
 
-	'0.4.4' => array(
+	'0.5.0' => array(
 		'config_add' => array(
 			array('rs_ranks_path', 'images/reputation', 0),
 			array('rs_user_rating_gap', '2', 0),
 			array('rs_power_renewal', '5', 0),
 			array('rs_power_explain', '1', 0),
+			array('rs_comment_max_chars', '255', 0),
 		),
 
 		'config_remove' => array(
@@ -481,12 +481,6 @@ $versions = array(
 					'module_auth'		=> 'acl_a_reputation',
 				),
 			),
-		),
-	),
-
-	'0.4.5' => array(
-		'config_add' => array(
-			array('rs_comment_max_chars', '150', 0),
 		),
 	),
 );

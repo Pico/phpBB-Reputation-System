@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (Pico) (http://www.modsteam.tk)
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -44,10 +44,10 @@ $lang = array_merge($lang, array(
 	'UCP_REPUTATION_GIVEN'			=> 'Lista przyznanych punktów',
 	'UCP_REPUTATION_SETTING'		=> 'Preferencje',
 
-	'RS_CATCHUP'					=> 'Aktualizuj',
-	'RS_REPUTATION_LISTS_UCP'		=> 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie otrzymałeś/aś.',
+	'RS_CATCHUP'						=> 'Aktualizuj',
+	'RS_REPUTATION_LISTS_UCP'			=> 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie otrzymałeś/aś.',
 	'RS_NEW'							=> 'Nowy!',
-	'RS_REPUTATION_GIVEN_LISTS_UCP'	 => 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie przyznałeś/aś innym użytkownikom.',
+	'RS_REPUTATION_GIVEN_LISTS_UCP'		=> 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie przyznałeś/aś innym użytkownikom.',
 	'RS_REPUTATION_SETTINGS_UCP'		=> 'Ustawienia reputacji',
 	'RS_DEFAULT_COMMENT_POS'			=> 'Domyślny pozytywny komentarz',
 	'RS_DEFAULT_COMMENT_POS_EXPLAIN'	=> 'Możesz zdefiniować domyślny komentarz dla pozystywnej oceny postu.',
@@ -61,7 +61,6 @@ $lang = array_merge($lang, array(
 	'RS_NOTIFICATION'					=> 'Powiadomienia',
 	'RS_NOTIFICATION_EXPLAIN'			=> 'Włącz powiadomienia o nowych punktach reputacji (opcja ta nie ma wpływu na powiadomienia w prywatnych wiadomościach).',
 	'RS_DISPLAY_REPUTATIONS'			=> 'Wyświetl punkty nie starsze niż',
-	'RS_DELETE_POINTS'					=> 'Usuń punkty',
 ));
 
 ?>

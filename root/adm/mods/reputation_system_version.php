@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package Reputation System
-* @author Pico88 (http://www.modsteam.tk)
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *

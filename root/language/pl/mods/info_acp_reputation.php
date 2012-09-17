@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (Pico) (http://www.modsteam.tk)
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -40,34 +40,36 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'REPUTATION_SYSTEM'				=> 'System Reputacji',
 
-	'ACP_REPUTATION_SYSTEM'			=> 'System Reputacji',
-	'ACP_REPUTATION_SYSTEM_EXPLAIN'	=> 'Tutaj można skonfigurować System Reputacji do własnych potrzeb.',
-	'ACP_REPUTATION_SETTINGS'		=> 'Ustawienia reputacji',
-	'ACP_REPUTATION_SYNC'			=> 'Synchronizacja',
-	'ACP_REPUTATION_GIVE'			=> 'Przyznaj punkt',
-	'ACP_REPUTATION_RANKS'			=> 'Rangi',
-	'ACP_REPUTATION_BANS'			=> 'Bany',
-	'MCP_REPUTATION'				=> 'Reputacja',
-	'MCP_REPUTATION_FRONT'			=> 'Przegląd',
-	'MCP_REPUTATION_LIST'			=> 'Lista',
-	'MCP_REPUTATION_GIVE'			=> 'Przyznaj punkt',
-	'UCP_REPUTATION'				=> 'Reputacja',
-	'UCP_REPUTATION_FRONT'			=> 'Przegląd',
-	'UCP_REPUTATION_LIST'			=> 'Lista otrzymanych punktów',
-	'UCP_REPUTATION_GIVEN'			=> 'Lista udzielonych punktów',
-	'UCP_REPUTATION_SETTING'		=> 'Ustawienia',
+	'ACP_REPUTATION_SYSTEM'				=> 'System Reputacji',
+	'ACP_REPUTATION_SYSTEM_EXPLAIN'		=> 'Tutaj możesz zarządzać całym Systemem Reputacji.<br />Menu po lewej pomoże Ci poruszać się między działami.',
+	'ACP_REPUTATION_OVERVIEW'			=> 'Informacje',
+	'ACP_REPUTATION_SETTINGS'			=> 'Ustawienia reputacji',
+	'ACP_REPUTATION_SETTINGS_EXPLAIN'	=> 'Tutaj można skonfigurować System Reputacji do własnych potrzeb.',
+	'ACP_REPUTATION_GIVE'				=> 'Przyznaj punkt',
+	'ACP_REPUTATION_RANKS'				=> 'Rangi',
+	'ACP_REPUTATION_BANS'				=> 'Bany',
+	'MCP_REPUTATION'					=> 'Reputacja',
+	'MCP_REPUTATION_FRONT'				=> 'Przegląd',
+	'MCP_REPUTATION_LIST'				=> 'Lista',
+	'MCP_REPUTATION_GIVE'				=> 'Przyznaj punkt',
+	'UCP_REPUTATION'					=> 'Reputacja',
+	'UCP_REPUTATION_FRONT'				=> 'Przegląd',
+	'UCP_REPUTATION_LIST'				=> 'Lista otrzymanych punktów',
+	'UCP_REPUTATION_GIVEN'				=> 'Lista udzielonych punktów',
+	'UCP_REPUTATION_SETTING'			=> 'Ustawienia',
 
-	'ACP_RS_MAIN'					=> 'Główne ustawienia',
-	'ACP_RS_POST_RATING'			=> 'Ustawienia oceniania postów',
-	'ACP_RS_COMMENT'				=> 'Komentarze',
-	'ACP_RS_POWER'					=> 'Siła reputacji',
-	'ACP_RS_TOPLIST'				=> 'Toplist',
-	'ACP_RS_BAN'		 			=> 'Bany',
+	'ACP_RS_MAIN'			=> 'Główne',
+	'ACP_RS_DISPLAY'		=> 'Wyświetlanie',
+	'ACP_RS_POST_RATING'	=> 'Oceniania postów',
+	'ACP_RS_USERS_RATING'	=> 'Oceniania użytkowników',
+	'ACP_RS_COMMENT'		=> 'Komentarze',
+	'ACP_RS_POWER'			=> 'Siła reputacji',
+	'ACP_RS_RANKS'			=> 'Rangi',
+	'ACP_RS_TOPLIST'		=> 'Toplist',
+	'ACP_RS_BAN'		 	=> 'Bany',
 
-	'RS_LATEST_VERSION'				=> 'Najnowsza wersja',
-	'RS_CURRENT_VERSION'			=> 'Używana wersja',
-	'RS_CLICK_CHECK_NEW_VERSION'	=> 'Kliknij %stutaj%s aby sprawdzić czy jest nowe wydanie.',
-	'RS_CLICK_GET_NEW_VERSION'		=> 'Kliknij %stutaj%s aby pobrać nową wersję.',
+	'RS_STATUS'			=> 'System Reputacji - stan',
+	'RS_AJAX_STATUS'	=> 'Wykorzystanie AJAX',
 
 	'RS_ENABLE'						=> '<span style="color: red;">Włącz System Reputacji</span>',
 	'RS_AJAX_ENABLE'				=> '<span style="color: green;">Włącz AJAX</span>',
@@ -78,22 +80,19 @@ $lang = array_merge($lang, array(
 	'RS_MIN_REP_NEGATIVE_EXPLAIN'	=> 'Jaką reputację musi posiadać użytkownik, aby móc przyznawać negatywne punkty reputacji. Ustawienie wartość 0 wyłącza tę funckję.',
 	'RS_WARNING'					=> 'Włącz ostrzeżenia',
 	'RS_WARNING_EXPLAIN'			=> 'Użytkownik ze stosownymi uprawnieniami może przyznawać negatywne punkty podczas wystawiania ostrzeżenia.',
-	'RS_USER_RATING'				=> 'Włącz ocenę użytkownika',
-	'RS_POST_RATING'				=> 'Włącz ocenę postu',
-	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Wyślij i włącz reputację na wszystkich forach',
 	'RS_NOTIFICATION'				=> 'Włącz powiadomienia',
 	'RS_NOTIFICATION_EXPLAIN'		=> 'Opcja ta włączy informację o nowych punktach reputacji w nagłówku forum.',
 	'RS_PM_NOTIFY'					=> 'Włącz powiadomienia PW',
 	'RS_PM_NOTIFY_EXPLAIN'			=> 'Opcja ta umożliwia użytkownikowi wysłanie powiadomienia PW z powiadomieniem o punktach reputacji.',
-	'RS_RANK_ENABLE'				=> 'Włącz rangi',
-	'RS_POINT_TYPE'					=> 'Metoda wyświeltania punktów',
-	'RS_POINT_TYPE_EXPLAIN'			=> 'Tutaj możesz ustawić metodę wyświetlanai punktów',
-	'RS_POINT_VALUE'				=> 'Wartość liczbowa',
-	'RS_POINT_IMG'					=> 'Obrazek',
 	'RS_MIN_POINT'					=> 'Minimum punktów',
 	'RS_MIN_POINT_EXPLAIN'			=> 'Minimalna liczba punktów, które użytkownik może otrzymać. Ustawienie wartość 0 wyłącza tę funckję.',
 	'RS_MAX_POINT'					=> 'Maksimum punktów',
 	'RS_MAX_POINT_EXPLAIN'			=> 'Maksymalna liczba punktów, które użytkownik może otrzymać. Ustawienie wartość 0 wyłącza tę funckję.',
+
+	'RS_POINT_TYPE'					=> 'Metoda wyświeltania punktów',
+	'RS_POINT_TYPE_EXPLAIN'			=> 'Tutaj możesz ustawić metodę wyświetlanai punktów',
+	'RS_POINT_VALUE'				=> 'Wartość liczbowa',
+	'RS_POINT_IMG'					=> 'Obrazek',
 	'RS_PER_PAGE'					=> 'Wpisów reputacji na stronę',
 	'RS_PER_PAGE_EXPLAIN'			=> 'Ile wpisów ma być wyświetlanych na stronach z reputacją',
 	'RS_PER_POPUP'					=> 'Wpisów reputacji w okienku popup',
@@ -101,6 +100,8 @@ $lang = array_merge($lang, array(
 	'RS_SORT_MEMBERLIST_BY_REPO'	=> 'Sortuj listę użytkowników na podstawie reputacji',
 	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN' => 'Zmienia domyślny sposób sortowania listy użytkowników uwzględniając reputację a nie nazwę użytkownika.',
 
+	'RS_POST_RATING'				=> 'Włącz ocenę postu',
+	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Wyślij i włącz reputację na wszystkich forach',
 	'RS_POST_DISPLAY'				=> 'Metoda wyświetlana punktów w postach',
 	'RS_POST_DISPLAY_EXPLAIN'		=> 'Opcja ta umożliwia wybranie zachowania dotyczącego wyświetlania punktów podczas przeglądania postów. Metoda punktów oparta jest na sumie punktów jakie dany post posiada. Metoda użytkowników sumuje użytkowników, którzy oddali głos (głos pozytywny = +1 punkt, głos negatywny = -1 punkt).',
 	'RS_POINT_METHOD'				=> 'Punkty',
@@ -118,6 +119,10 @@ $lang = array_merge($lang, array(
 	'RS_SAME_USER'					=> 'Ten sam użytkownik',
 	'RS_ALL_USERS'					=> 'Wszyscy użytkownicy',
 
+	'RS_USER_RATING'				=> 'Włącz ocenę użytkownika',
+	'RS_USER_RATING_GAP'			=> 'Przerwa w ocenianiu',
+	'RS_USER_RATING_GAP_EXPLAIN'	=> 'Okres czasu, w którym użytkownik nie może ocenić tego samego użytkownika. Użytkownicy muszą czekać przez podany okres, aby oddać kolejny głos. Ustawienie wartości na 0 zablokuje tą funkcję i użytkownicy będą mogli ocenić tego samego użytkownika tylko raz.',
+
 	'RS_ENABLE_COMMENT'				=> 'Włącz komentarze',
 	'RS_ENABLE_COMMENT_EXPLAIN'		=> 'Jeżeli włączone, użytkownicy będa mogli dodać własny komentarz do przyznawanego punktu.',
 	'RS_FORCE_COMMENT'				=> 'Zmuś użytkownika do wpisania komentarza',
@@ -126,14 +131,13 @@ $lang = array_merge($lang, array(
 	'RS_COMMENT_BOTH'				=> 'Oba (posty i użytkownicy)',
 	'RS_COMMENT_POST'				=> 'Tylko ocena postu',
 	'RS_COMMENT_USER'				=> 'Tylko ocena użytkownika',
+	'RS_COMMEN_LENGTH'				=> 'Długość komentarza',
+	'RS_COMMEN_LENGTH_EXPLAIN'		=> 'Ilość znaków jaką może zawierać komentarz.',
 
 	'RS_ENABLE_POWER'				=> 'Włącz siłę reputacji',
 	'RS_ENABLE_POWER_EXPLAIN'		=> 'Siła reputacja jest czymś, co użytkownicy forum mogą gromadzić i wykorzystywać do głosowania. Nowi użytkownicy mają niską siłę reputacji, starzy i pomocni użytkownicy mogą uzyskują większą siłę reputacji. Im większa jest twoja siła, tym więcej możesz głosować w określonym czasie oraz twój wpływ na ocenę postu czy użytkowników jest większy.<br/>Użytkownicy mogą wybrać podczas przyznawania punktów, ile punktów chcą przyznać za danych posty czy też konkretnemu użytkownikowi.',
-	'RS_POWER_LIMIT'				=> 'Limit wydatkowania siły reputacji',
-	'RS_POWER_LIMIT_EXPLAIN'		=> 'Opcja ta umożliwa kontrolę przyznawania punktów.<br />Należy pamiętać, że nawet jeśli użytkownik jest bardzo renomowany, pomocny, to i tak nie będzie mógł przyznać więcej punktów niż tutaj podane.<br />Sugerowanie ustawienia: 30 punktów w ciągu 24 godzin.<br />Ustwienie wartość 0 dla jednego lub obu pół wyłącza tą funkcję.',
-	'RS_POWER_LIMIT_VALUE'			=> 'Użytkownik może przyznać ',
-	'RS_POWER_LIMIT_TIME'			=> ' punktów w przeciągu ',
-	'RS_POWER_LIMIT_HOURS'			=> ' godzin',
+	'RS_POWER_RENEWAL'				=> 'Czas odnowienia siły',
+	'RS_POWER_RENEWAL_EXPLAIN'		=> 'Opcja ta umożliwa kontrolę przyznawania punktów.<br />Każdy punkt siły reputacji zostanie odnowiony po upływie podanego okresu.<br />Sugerowanie ustawienia: 5 godzin.<br />Ustwienie wartość 0 wyłącza tą funkcję.',
 	'RS_MIN_POWER'					=> 'Minimalna siła reptuacji',
 	'RS_MIN_POWER_EXPLAIN'			=> 'Jest to siła reputacji z jaką będą startowali użytkownicy forum.<br/>Dozwolone: 0-10. Sugerowane: 1.',
 	'RS_MAX_POWER'					=> 'Maksymalna siła reputacji',
@@ -153,6 +157,10 @@ $lang = array_merge($lang, array(
 	'RS_LOOSE_POWER_WARN'			=> 'Czynnik ostrzeżeń',
 	'RS_LOOSE_POWER_WARN_EXPLAIN'	=> 'Każde ostrzeżęnie będzie zmniejszało siłę reputacji o x pkt.',
 	'RS_GROUP_POWER'				=> 'Siła reputacji grupy',
+
+	'RS_RANK_ENABLE'				=> 'Włącz rangi',
+	'RS_RANKS_PATH'					=> 'Ścieżka do obrazków rang:',
+	'RS_RANKS_PATH_EXPLAIN'			=> 'Ścieżka do katalogu znajdującym się w katalogu głównym phpBB, w którym będą przechowywane obrazki rang, np. <samp>images/reputation</samp>.',
 
 	'RS_ENABLE_TOPLIST'				=> 'Włącz Toplistę',
 	'RS_ENABLE_TOPLIST_EXPLAIN' 	=> 'Na stronie głównej zostanie wyświetlona lista z użytkownikami mającymi najwięcej punktów reputacji.',
@@ -213,6 +221,7 @@ $lang = array_merge($lang, array(
 
 	'LOG_REPUTATION_SETTING'		=> '<strong>Zmieniono ustawienia Systemu Reputacji</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>System Reputacji został zsynchronizowany</strong>',
+	'LOG_REPUTATION_SYNC'			=> '<strong>Wyczyszczono reputację</strong>',
 	'LOG_RS_BAN_ADDED'				=> '<strong>Dodano nowy ban za reputację</strong>',
 	'LOG_RS_BAN_REMOVED'			=> '<strong>Usunięto ban za reputację</strong>',
 	'LOG_RS_BAN_UPDATED'			=> '<strong>Zaktualizowano ban za reputację</strong>',
@@ -231,6 +240,17 @@ $lang = array_merge($lang, array(
 	'CONVERT_HELPMOD'				=> 'Konwertuj HelpMOD do Systemu Reputacji',
 	'CONVERT_DATA'					=> 'Skonwertowane modyfikacje: %1$s.<br />Teraz możesz odinstalować %2$s. Przejdź do Panelu administracji i wykonaj synchronizację Systemu Reputacji.',
 	'UPDATE_RS_TABLE'				=> 'Tabela reputacji została zaktualizowana pomyślnie.',
+
+	//MOD Version Check
+	'ANNOUNCEMENT_TOPIC'		=> 'Ogłoszenie o wydaniu',
+	'CURRENT_VERSION'			=> 'Używana wersja',
+	'DOWNLOAD_LATEST'			=> 'Pobierz najnowszą wersję',
+	'LATEST_VERSION'			=> 'Najnowsza wersja',
+	'NO_INFO'					=> 'Nie można połączyć się z serwerem',
+	'NOT_UP_TO_DATE'			=> '%s nie jest zaktualizowany',
+	'RELEASE_ANNOUNCEMENT'		=> 'Ogłoszenie',
+	'UP_TO_DATE'				=> '%s jest zakutalizowany',
+	'VERSION_CHECK'				=> 'Sprawdzanie wersji modyfikacji',
 ));
 
 ?>

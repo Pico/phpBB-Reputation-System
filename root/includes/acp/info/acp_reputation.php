@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (http://www.modsteam.tk)
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -23,7 +23,7 @@ class acp_reputation_info
 		return array(
 			'filename'	=> 'acp_reputation',
 			'title'		=> 'ACP_REPUTATION_SYSTEM',
-			'version'	=> '0.4.4',
+			'version'	=> '0.5.0',
 			'modes'		=> array(
 				'overview'		=> array('title' => 'ACP_REPUTATION_OVERVIEW', 'auth' => 'acl_a_reputation', 'cat' => array('ACP_CAT_REPUTATION')),
 				'settings'		=> array('title' => 'ACP_REPUTATION_SETTINGS', 'auth' => 'acl_a_reputation', 'cat' => array('ACP_CAT_REPUTATION')),

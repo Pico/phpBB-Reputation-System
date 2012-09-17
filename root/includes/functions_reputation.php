@@ -154,7 +154,7 @@ class reputation
 			$sql = 'SELECT point
 				FROM ' . REPUTATIONS_TABLE . "
 				WHERE rep_from = $user_id
-					AND post_id != 0
+					AND (action = 1 OR action = 2)
 					AND time > $renewal_timeout";
 			$result = $db->sql_query($sql);
 

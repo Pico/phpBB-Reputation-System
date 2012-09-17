@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (http://www.modsteam.tk)
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -380,7 +380,7 @@ class acp_reputation
 						'legend5'				=> array('lang' => 'ACP_RS_COMMENT', 'tab' => 'comment'),
 						'rs_enable_comment'		=> array('lang' => 'RS_ENABLE_COMMENT', 'validate' => 'bool', 'type' => 'custom', 'method' => 'comment', 'explain' => true),
 						'rs_force_comment'		=> array('lang' => 'RS_FORCE_COMMENT', 'validate' => 'int:0:3', 'type' => 'custom', 'method' => 'select_comment', 'explain' => true),
-						'rs_comment_max_chars'	=> array('lang' => 'RS_USER_RATING_GAP', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
+						'rs_comment_max_chars'	=> array('lang' => 'RS_COMMEN_LENGTH', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
 						'legend6'				=> array('lang' => 'ACP_RS_POWER', 'tab' => 'power'),
 						'rs_enable_power'		=> array('lang' => 'RS_ENABLE_POWER', 'validate' => 'bool', 'type' => 'custom', 'method' => 'power', 'explain' => true),

@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package		Reputation System
-* @author		Pico88 (http://www.modsteam.tk)
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -131,6 +131,8 @@ $lang = array_merge($lang, array(
 	'RS_COMMENT_BOTH'				=> 'Both user and post ratings',
 	'RS_COMMENT_POST'				=> 'Only post ratings',
 	'RS_COMMENT_USER'				=> 'Only user ratings',
+	'RS_COMMEN_LENGTH'				=> 'Comment length',
+	'RS_COMMEN_LENGTH_EXPLAIN'		=> 'The number of characters allowed within a comment. Set to 0 for unlimited characters.',
 
 	'RS_ENABLE_POWER'				=> 'Enable reputation power',
 	'RS_ENABLE_POWER_EXPLAIN'		=> 'Reputation power is something that users earn and spend on voting. New users have low power, active and veteran users gain more power. The more power you have the more you can vote during a specified period of time and the more influence you can have on the rating of another user or post.<br/>Users will choose during voting how much power they will spend on a vote, giving more points to interesting posts.',

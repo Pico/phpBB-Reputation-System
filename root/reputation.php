@@ -783,32 +783,25 @@ switch ($mode)
 			}
 		}
 
-		// Check if voting was confirmed by user. No confirmation required for AJAX voting
-		$confirm = false;
-		if (isset($_POST['ajax']))
+		// Submit vote
+		$submit = false;
+		if (isset($_POST['submit']) && !$ajax)
 		{
-			if ($_POST['ajax'] == 1)
-			{
-				$confirm = true;
-			}
+			$submit = true;
 		}
-		if (isset($_POST['confirm']))
+		if (isset($_POST['ajax']) && $_POST['ajax'] == 1)
 		{
-			// language frontier
-			if ($_POST['confirm'] === $user->lang['YES'])
-			{
-				$confirm = true;
-			}
+			$submit = true;
 		}
 
 		// Force comment
-		if ($confirm && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
+		if ($submit && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
 		{
 			$error = $user->lang['RS_NO_COMMENT'];
 		}
 
 		// Comment length
-		if ($confirm && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
+		if ($submit && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
 		{
 			$error = sprintf($user->lang['RS_TOO_LONG_COMMENT'], strlen($comment), $config['rs_comment_max_chars']);
 		}
@@ -816,7 +809,7 @@ switch ($mode)
 		if (!$config['rs_enable_comment'] && !$config['rs_enable_power'])
 		{
 			$error = '';
-			$confirm = true;
+			$submit = true;
 			$rep_power = ($point == 'negative') ? -1 : 1;
 		}
 
@@ -846,7 +839,7 @@ switch ($mode)
 			if ($voting_power_left <= 0 && $config['rs_power_renewal'])
 			{
 				$error_text = sprintf($user->lang['RS_NO_POWER_LEFT'], $max_voting_power);
-				//$error_text = sprintf("Not enough voting power.<br/>Wait until it replenishes.<br/>Your voting power is %d.", $max_voting_power);
+
 				if ($ajax)
 				{
 					echo json_encode(array('error_msg' => $error_text));
@@ -888,13 +881,12 @@ switch ($mode)
 			}
 		}
 
-		if ($confirm && !$error)
+		if ($submit && !$error)
 		{
 			$user_id = request_var('user_id', 0);
 			$session_id = request_var('sess', '');
-			$confirm_key = request_var('confirm_key', '');
 
-			if (($user_id != $user->data['user_id'] || $session_id != $user->session_id || !$confirm_key || !$user->data['user_last_confirm_key'] || $confirm_key != $user->data['user_last_confirm_key']) && $config['rs_enable_comment'])
+			if (($user_id != $user->data['user_id'] || $session_id != $user->session_id) && $config['rs_enable_comment'])
 			{
 				if ($ajax)
 				{
@@ -924,11 +916,6 @@ switch ($mode)
 					trigger_error($message);
 				}
 			}
-
-			// Reset user_last_confirm_key
-			$sql = 'UPDATE ' . USERS_TABLE . " SET user_last_confirm_key = ''
-				WHERE user_id = " . $user->data['user_id'];
-			$db->sql_query($sql);
 
 			$post_rating_mode = ($reputation_enabled_for_this_forum == 1) ? 'post' : 'onlypost';
 			if ($reputation->give_point($user_row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
@@ -966,16 +953,8 @@ switch ($mode)
 			}
 		}
 
-		// Generate activation key
-		$confirm_key = gen_rand_string(10);
-
-		if (request_var('confirm_key', '') && !$error)
-		{
-			return;
-		}
 		$use_page = $phpbb_root_path . str_replace('&', '&amp;', $user->page['page']);
 		$u_action = reapply_sid($use_page);
-		$u_action .= ((strpos($u_action, '?') === false) ? '?' : '&amp;') . 'confirm_key=' . $confirm_key;
 
 		if (!$ajax)
 		{
@@ -1035,27 +1014,23 @@ switch ($mode)
 			'sess'		=> $user->session_id)
 		);
 
-		$sql = 'UPDATE ' . USERS_TABLE . " SET user_last_confirm_key = '" . $db->sql_escape($confirm_key) . "'
-			WHERE user_id = " . $user->data['user_id'];
-		$db->sql_query($sql);
-
 		page_header($user->lang['RS_POST_RATING']);
 
 		$template->assign_vars(array(
 			'ERROR'					=> ($error) ? $error : '',
 
-			'RS_POWER_ENABLE' 			=> $config['rs_enable_power'] ? true : false,
-			'RS_VOTE_POWER_LEFT_OF_MAX'	=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
+			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
 			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100,0) : '',
-			'RS_POWER_MAX1VOTE'			=> $config['rs_max_power'],
-			'RS_COMMENT_ENABLE'			=> $config['rs_enable_comment'] ? true : false,
-			'RS_PM_NOTIFY' 				=> $config['rs_pm_notify'] ? true : false,
 
 			'USER_COMMENT'				=> (!empty($comment)) ? $comment : (($point == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos']),
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
+			'S_RS_COMMENT_ENABLE'		=> $config['rs_enable_comment'] ? true : false,
+			'S_RS_COMMENT_REQ'			=> ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) ? true : false,
 			'S_RS_COMMENT_TOO_LONG'		=> $config['rs_comment_max_chars'] ? $config['rs_comment_max_chars'] : false,
-			'S_RS_COMMENT_REQ'			=> ($config['rs_force_comment'] == RS_COMMENT_BOTH) ? true : (($config['rs_force_comment'] == RS_COMMENT_POST) ? true : ($config['rs_force_comment'] == RS_COMMENT_USER) ? true : false),
+			'S_RS_PM_NOTIFY' 			=> $config['rs_pm_notify'] ? true : false,
+			'S_RS_POWER_ENABLE' 		=> $config['rs_enable_power'] ? true : false,
+
 			'S_CONFIRM_ACTION'			=> $u_action,
 			'S_HIDDEN_FIELDS'			=> $s_hidden_fields,
 			'AJAX'						=> $ajax ? true : false,
@@ -1201,52 +1176,46 @@ switch ($mode)
 		}
 		if ($config['rs_user_rating_gap'] && (time() < $check_user['time'] + $config['rs_user_rating_gap'] * 86400))
 		{
+			//Informe user how long he has to wait to rate user
+			$next_vote_time = ($check_user['time'] + $config['rs_user_rating_gap'] * 86400) - time();
+			$next_vote_in = '';
+			$next_vote_in .= intval($next_vote_time / 86400) ? intval($next_vote_time / 86400) . ' ' . $user->lang['DAYS'] . ' ' : '';
+			$next_vote_in .= (intval(intval($next_vote_time) / 3600) && !intval($next_vote_time / 86400))  ? intval(($next_vote_time / 3600) % 24) . ' ' . $user->lang['HOURS'] . ' ' : '';
+			$next_vote_in .= intval(($next_vote_time / 60) % 60) ? intval(($next_vote_time / 60) % 60) . ' ' . $user->lang['MINUTES'] : '';
+			$next_vote_in .= (intval($next_vote_time) < 60) ? intval($next_vote_time) . ' ' . $user->lang['SECONDS'] : '';
+
 			if ($ajax)
 			{
-				//Informe user how long he has to wait to rate user
-				$next_vote_time = ($check_user['time'] + $config['rs_user_rating_gap'] * 86400) - time();
-				$next_vote_in = '';
-				$next_vote_in .= intval($next_vote_time / 86400) ? intval($next_vote_time / 86400) . ' ' . $user->lang['DAYS'] . ' ' : '';
-				$next_vote_in .= (intval(intval($next_vote_time) / 3600) && !intval($next_vote_time / 86400))  ? intval(($next_vote_time / 3600) % 24) . ' ' . $user->lang['HOURS'] . ' ' : '';
-				$next_vote_in .= intval(($next_vote_time / 60) % 60) ? intval(($next_vote_time / 60) % 60) . ' ' . $user->lang['MINUTES'] : '';
-
 				echo json_encode(array('error_msg' => sprintf($user->lang['RS_USER_GAP'], $next_vote_in)));
 				return;
 			}
 			else
 			{
-				$message = $user->lang['RS_SAME_USER'] . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
+				$message = sprintf($user->lang['RS_USER_GAP'], $next_vote_in) . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . $redirect . '">', '</a>');
 				meta_refresh(3, $redirect);
 				trigger_error($message);
 			}
 		}
 
-		//Check if voting was confirmed by user. No confirmation required for AJAX voting
-		$confirm = false;
-		if (isset($_POST['ajax']))
+		// Submit vote
+		$submit = false;
+		if (isset($_POST['submit']) && !$ajax)
 		{
-			if ($_POST['ajax'] == 1)
-			{
-				$confirm = true;
-			}
+			$submit = true;
 		}
-		if (isset($_POST['confirm']))
+		if (isset($_POST['ajax']) && $_POST['ajax'] == 1)
 		{
-			// language frontier
-			if ($_POST['confirm'] === $user->lang['YES'])
-			{
-				$confirm = true;
-			}
+			$submit = true;
 		}
 
 		// Force comment
-		if ($confirm && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
+		if ($submit && ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_POST) && ((utf8_clean_string($comment) === '')))
 		{
 			$error = $user->lang['RS_NO_COMMENT'];
 		}
 
 		// Comment length
-		if ($confirm && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
+		if ($submit && $config['rs_comment_max_chars'] && (strlen($comment) > $config['rs_comment_max_chars']))
 		{
 			$error = sprintf($user->lang['RS_TOO_LONG_COMMENT'], strlen($comment), $config['rs_comment_max_chars']);
 		}
@@ -1254,40 +1223,67 @@ switch ($mode)
 		if (!$config['rs_enable_comment'] && !$config['rs_enable_power'])
 		{
 			$error = '';
-			$confirm = true;
+			$submit = true;
 			// Always give positive points
 			$rep_power = 1;
 		}
 
+		$voting_power_left = $max_voting_allowed = '';
 		// Get reputation power
 		if ($config['rs_enable_power'])
 		{
-			$rs_power = '';
+			$voting_power_pulldown = '';
+
 			//Get details on user voting: how much power he spent, how many bandays he had
 			$user_reputation_stats = $reputation->get_reputation_stats($user->data['user_id']);
 
 			//Calculate how much maximum power a user has
-			$reputationpower = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
-			$startpower = $config['rs_negative_point'] ? -$reputationpower : 1;
+			$max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
 
-			for($i = $reputationpower; $i >= $startpower; $i--) //from + to -
+			$voting_power_left = $max_voting_power - $user_reputation_stats['renewal_time'];
+
+			//Don't allow to vote more than set in ACP per 1 vote
+			$max_voting_allowed = $config['rs_power_renewal'] ? min($max_voting_power, $voting_power_left) : $max_voting_power;
+
+			//If now voting power left - fire error and exit
+			if ($voting_power_left <= 0 && $config['rs_power_renewal'])
+			{
+				$error_text = sprintf($user->lang['RS_NO_POWER_LEFT'], $max_voting_power);
+
+				if ($ajax)
+				{
+					echo json_encode(array('error_msg' => $error_text));
+					return;
+				}
+				else
+				{
+					$message = $error_text . '<br /><br />' . sprintf($user->lang['RETURN_PAGE'], '<a href="' . append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'p=' . $post_id) . '#p' . $post_id . '">', '</a>');
+					meta_refresh(3, $redirect);
+					trigger_error($message);
+				}
+			}
+
+			//Preparing HTML for voting by manual spending of user power
+			//for($i = 1; $i <= $max_voting_allowed; ++$i)
+			$startpower = $config['rs_negative_point'] ? -$max_voting_allowed : 1;
+			for($i = $max_voting_allowed; $i >= $startpower; $i--) //from + to -
 			//for($i = $startpower; $i <= $reputationpower; ++$i) //from - to +
 			{
 				if ($i == 0)
 				{
-					$rs_power = '';
+					$voting_power_pulldown = '';
 				}
 				if ($i > 0)
 				{
-					$rs_power = '<option value="' . $i . '">' . $user->lang['RS_POSITIVE'] . ' (+' . $i . ') </option>';
+					$voting_power_pulldown = '<option value="' . $i . '">' . $user->lang['RS_POSITIVE'] . ' (+' . $i . ') </option>';
 				}
 				if ($i < 0 && $auth->acl_get('u_rs_give_negative') && (!$config['rs_min_rep_negative'] || ($config['rs_min_rep_negative'] && ($user->data['user_reputation'] >= $config['rs_min_rep_negative']))))
 				{
-					$rs_power = '<option value="' . $i . '">' . $user->lang['RS_NEGATIVE'] . ' (' . $i . ') </option>';
+					$voting_power_pulldown = '<option value="' . $i . '">' . $user->lang['RS_NEGATIVE'] . ' (' . $i . ') </option>';
 				}
-				
+
 				$template->assign_block_vars('reputation', array(
-					'REPUTATION_POWER'	=> $rs_power)
+					'REPUTATION_POWER'	=> $voting_power_pulldown)
 				);
 			}
 		}
@@ -1303,13 +1299,12 @@ switch ($mode)
 			);
 		}
 
-		if ($confirm && !$error)
+		if ($submit && !$error)
 		{
 			$user_id = request_var('user_id', 0);
 			$session_id = request_var('sess', '');
-			$confirm_key = request_var('confirm_key', '');
 
-			if (($user_id != $user->data['user_id'] || $session_id != $user->session_id || !$confirm_key || !$user->data['user_last_confirm_key'] || $confirm_key != $user->data['user_last_confirm_key']) && $config['rs_enable_comment'])
+			if (($user_id != $user->data['user_id'] || $session_id != $user->session_id) && $config['rs_enable_comment'])
 			{
 				if ($ajax)
 				{
@@ -1325,7 +1320,7 @@ switch ($mode)
 			}
 
 			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
-			if (!$auth->acl_get('u_rs_give_negative') && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $reputationpower) || ($rep_power < -$reputationpower)))
+			if (!$auth->acl_get('u_rs_give_negative') && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $max_voting_allowed) || ($rep_power < -$max_voting_allowed)))
 			{
 				if ($ajax)
 				{
@@ -1339,11 +1334,6 @@ switch ($mode)
 					trigger_error($message);
 				}
 			}
-
-			// Reset user_last_confirm_key
-			$sql = 'UPDATE ' . USERS_TABLE . " SET user_last_confirm_key = ''
-				WHERE user_id = " . $user->data['user_id'];
-			$db->sql_query($sql);
 
 			if ($reputation->give_point($user_row['user_id'], $post_id, $comment, $notify, $rep_power, $mode))
 			{
@@ -1367,43 +1357,33 @@ switch ($mode)
 			}
 		}
 
-		// generate activation key
-		$confirm_key = gen_rand_string(10);
-
-		if (request_var('confirm_key', '') && !$error)
-		{
-			redirect($redirect);
-		}
-
 		$use_page = $phpbb_root_path . str_replace('&', '&amp;', $user->page['page']);
 		$u_action = reapply_sid($use_page);
-		$u_action .= ((strpos($u_action, '?') === false) ? '?' : '&amp;') . 'confirm_key=' . $confirm_key;
 
 		$s_hidden_fields = build_hidden_fields(array(
 			'user_id'	=> $user->data['user_id'],
 			'sess'		=> $user->session_id)
 		);
 
-		$sql = 'UPDATE ' . USERS_TABLE . " SET user_last_confirm_key = '" . $db->sql_escape($confirm_key) . "'
-			WHERE user_id = " . $user->data['user_id'];
-		$db->sql_query($sql);
-
 		page_header($user->lang['RS_USER_RATING']);
 
 		$template->assign_vars(array(
-			'ERROR'					=> ($error) ? $error : '',
-			'USER_RATING_CONFIRM'	=> sprintf($user->lang['RS_USER_RATING_CONFIRM'], $user_row['username']),
-			'REP_PM_NOTIFY'			=> $config['rs_pm_notify'] ? true : false,
-			'REP_COMMENT_ENABLE'	=> $config['rs_enable_comment'] ? true : false,
-			'COMMENT_REQUIRE'		=> ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_USER) ? $user->lang['RS_COMMENT_REQUIRE'] : '',
+			'ERROR'						=> ($error) ? $error : '',
 
-			'COMMENT'				=> $comment,
-			'RS_COMMENT_TOO_LONG'	=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
+			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100,0) : '',
 
+			'USER_RATING_CONFIRM'		=> sprintf($user->lang['RS_USER_RATING_CONFIRM'], $user_row['username']),
+			'COMMENT'					=> $comment,
+			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
+
+			'S_RS_COMMENT_ENABLE'		=> $config['rs_enable_comment'] ? true : false,
+			'S_RS_COMMENT_REQ'			=> ($config['rs_force_comment'] == RS_COMMENT_BOTH || $config['rs_force_comment'] == RS_COMMENT_USER) ? true : false,
 			'S_RS_COMMENT_TOO_LONG'		=> $config['rs_comment_max_chars'] ? $config['rs_comment_max_chars'] : false,
-			'S_RS_COMMENT_REQ'	=> ($config['rs_force_comment'] == RS_COMMENT_BOTH) ? 1 : (($config['rs_force_comment'] == RS_COMMENT_POST) ? 1 : ($config['rs_force_comment'] == RS_COMMENT_USER) ? 1 : 0),
-			'S_CONFIRM_ACTION'	=> $u_action,
-			'S_HIDDEN_FIELDS'	=> $s_hidden_fields,
+			'S_RS_PM_NOTIFY' 			=> $config['rs_pm_notify'] ? true : false,
+
+			'S_CONFIRM_ACTION'		=> $u_action,
+			'S_HIDDEN_FIELDS'		=> $s_hidden_fields,
 			'AJAX'					=> $ajax ? true : false,)
 		);
 

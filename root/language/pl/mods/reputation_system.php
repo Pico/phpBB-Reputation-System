@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* Reputation System [Polish]
-* @author	Pico88 (Pico) (http://www.modsteam.tk)
+* @package	Reputation System
+* @author	Pico88 (http://www.modsteam.tk)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -69,7 +69,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER'					=> 'Siła reputacji',
 	'RS_POST_RATING'			=> 'Ocenianie postu',
 	'RS_ONLYPOST_RATING'		=> 'Ocena wpisu',
-	'RS_RATE_BUTTON'            => 'Oceń',
+	'RS_RATE_BUTTON'			=> 'Oceń',
 	'RS_RATE_USER'				=> 'Oceń użytkownika',
 	'RS_RANK'					=> 'Ranga reputacji',
 	'RS_SENT'					=> 'Punkt reputacji został dodany pomyślnie',
@@ -89,6 +89,8 @@ $lang = array_merge($lang, array(
 	'RS_NO_POST_ID'				=> 'Nie ma takiego postu.',
 	'RS_NO_POWER_LEFT'			=> 'Nie posiadasz żadnych punktów do rozdysponowania.<br/>Poczekaj, aż zostaną uzupełnione.<br/>Twoja siła reputacji: %s',
 	'RS_NO_USER_ID'				=> 'Nie ma takiego użytkownika.',
+	'RS_TOO_LONG_COMMENT'		=> 'Twój komentarz składa się z %1$d znaków. Dozwolone maksimum to %2$d znaków.',
+	'RS_COMMENT_TOO_LONG'		=> 'Za długi komentarz.<br />Maksymalna ilość znaków: %s. Twój komentarz:',
 
 	'RS_NO_POST'				=> 'Wybrany post nie istnieje',	
 	'RS_SAME_POST'				=> 'Dodałeś już punkt reputacji za ten post.',
@@ -101,9 +103,13 @@ $lang = array_merge($lang, array(
 	'RS_USER_NEGATIVE'			=> 'Nie możesz dodawać negatywnych punktów reputacji.<br />Twoja reputacja musi wynosić co najmniej %s.',
 	'RS_VIEW_DISALLOWED'		=> 'Nie możesz przeglądać punktów reputacji.',
 
-	'RS_DELETE_POINT'			=> 'Usuń punkt',
-	'RS_DELETE_POINT_CONFIRM'	=> 'Czy na pewno chcesz skasować ten punkt reputacji?',
-	'RS_POINT_DELETED'			=> 'Punkt reputacji został usunięty',
+	'RS_DELETE_POINT'				=> 'Usuń punkt',
+	'RS_DELETE_POINT_CONFIRM'		=> 'Czy na pewno chcesz skasować ten punkt reputacji?',
+	'RS_POINT_DELETED'				=> 'Punkt reputacji został usunięty',
+	'RS_DELETE_POINTS'				=> 'Usuń punkty',
+	'RS_DELETE_POINTS_CONFIRM'		=> 'Czy na pewno chcesz usunąć te punkty reputacji?',
+	'RS_POINTS_DELETED'				=> 'Punkty reputacji zostały usunięte',
+	'NO_REPUTATION_SELECTED'		=> 'Nie wybrano punktu reputacji.',
 
 	'RS_PM_BODY'				=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
 	'RS_PM_BODY_COMMENT'		=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />Komentarz: [i]%s&nbsp;[/i] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
@@ -129,7 +135,6 @@ $lang = array_merge($lang, array(
 	'RS_NEW_REP'					=> 'Masz <strong>1 nowy</strong> punkt reputacji',
 	'RS_NEW_REPS'					=> 'Masz <strong>%s nowe/ych</strong> punktów reputacji',
 
-	'RS_CLOSE_POPUP'				=> 'zamknij',
 	'RS_POPUP_MORE_DETAILS'			=> 'więcej szczegółów',
 
 	'RS_HIDE_POST'					=> 'Ten post został napisany przez <strong>%1$s</strong> i został ukrty, bo otrzymał za dużo negatywnych głósów. %2$s %3$s %4$s',
@@ -151,6 +156,8 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_MIN'			=> 'Minimalna siła reputacji dla wszystkich użytkowników',
 	'RS_POWER_DETAIL_MAX'			=> 'Siła reputacji została ograniczona do maksymalnej wartości',
 	'RS_GROUP_POWER'				=> 'Siła reputacji oparta na grupie użytkownika',
+
+	'RS_USER_GAP'					=> 'Nie możesz ponownie ocenić tego samego użytkownika. Spróbuj ponownie za %s.',
 ));
 
 ?>
