@@ -60,7 +60,7 @@ $lang = array_merge($lang, array(
 
 	'ACP_RS_MAIN'			=> 'Główne',
 	'ACP_RS_DISPLAY'		=> 'Wyświetlanie',
-	'ACP_RS_POST_RATING'	=> 'Oceniania postów',
+	'ACP_RS_POSTS_RATING'	=> 'Oceniania postów',
 	'ACP_RS_USERS_RATING'	=> 'Oceniania użytkowników',
 	'ACP_RS_COMMENT'		=> 'Komentarze',
 	'ACP_RS_POWER'			=> 'Siła reputacji',
@@ -146,6 +146,8 @@ $lang = array_merge($lang, array(
 	'RS_MAX_POWER_WARNING_EXPLAIN'	=> 'Maksymalna dozwolona siła punktów reputacji dla wystawianych ostrzeżeń.',
 	'RS_MAX_POWER_BAN'				=> 'Maksymalna siła reputacji dla banów',
 	'RS_MAX_POWER_BAN_EXPLAIN'		=> 'Maksymalna siła punktów reputacji, jakie użytkownik otrzyma w przypadku otrzymania banu trwającego 1 miesiąc lub dłużej (w tym ban na stałe).<br />Jeżeli użytkownik został zbanowany na krótszy okres, otrzyma stosunkową liczbę punktów do okresu bana.',
+	'RS_POWER_EXPLAIN'				=> 'Wyjaśnienie siły reputacji',
+	'RS_POWER_EXPLAIN_EXPLAIN'		=> 'Wyjaśnij użytkownikom jak jest obliczana siła reputacji.',
 	'RS_TOTAL_POSTS'				=> 'Czynnik postów',
 	'RS_TOTAL_POSTS_EXPLAIN'		=> 'Użytkownik będzie otrzymywał większą siłę reputacji co każde x postów.',
 	'RS_MEMBERSHIP_DAYS'			=> 'Czynnik dni członkostwa',
@@ -158,7 +160,7 @@ $lang = array_merge($lang, array(
 	'RS_LOOSE_POWER_WARN_EXPLAIN'	=> 'Każde ostrzeżęnie będzie zmniejszało siłę reputacji o x pkt.',
 	'RS_GROUP_POWER'				=> 'Siła reputacji grupy',
 
-	'RS_RANK_ENABLE'				=> 'Włącz rangi',
+	'RS_RANKS_ENABLE'				=> 'Włącz rangi',
 	'RS_RANKS_PATH'					=> 'Ścieżka do obrazków rang:',
 	'RS_RANKS_PATH_EXPLAIN'			=> 'Ścieżka do katalogu znajdującym się w katalogu głównym phpBB, w którym będą przechowywane obrazki rang, np. <samp>images/reputation</samp>.',
 
@@ -187,7 +189,12 @@ $lang = array_merge($lang, array(
 	'RS_SYNC_STEP_POST_2'			=> 'Krok 4/4 - synchronizacja reputacji postów (krok 2 z 2)',
 	'RS_SYNC_DONE'					=> 'Synchronizacja Systemu Reputacji zostałą zakończona pomyślnie',
 	'RS_RESYNC'						=> 'Uruchom',
-		
+
+	'RS_TRUNCATE'				=> 'Wyczyść reputację',
+	'RS_TRUNCATE_EXPLAIN'		=> 'Ta procedura wyszyści tabelę z reputacją.<br /><strong>Czynności tej nie można odwrócić!</strong>',
+	'RS_TRUNCATE_CONFIRM'		=> 'Czy jesteś pewien, że chcesz wyczyścić reputację?',
+	'RS_TRUNCATE_DONE'			=> 'Reputacja została wyczyszczona.',
+
 	'RS_GIVE_POINT'					=> 'Przyznaj punkt reputacji',
 	'RS_GIVE_POINT_EXPLAIN'			=> 'Tutaj możesz przyznać punkt reputacji innemu użytkownikowi.',
 
@@ -199,8 +206,12 @@ $lang = array_merge($lang, array(
 	'RS_RANK_ADDED'					=> 'Ranga została dodana pomyślnie.',
 	'RS_RANK_MIN'					=> 'Minimum punktów',
 	'RS_RANK_TITLE'					=> 'Tytuł rangi',
+	'RS_RANK_IMAGE'					=> 'Obraz rangi',
 	'RS_RANK_COLOR'					=> 'Kolor rangi',
 	'RS_RANK_UPDATED'				=> 'Ranga została zaktualizowana pomyślnie.',
+	'RS_IMAGE_IN_USE'				=> '(w użyciu)',
+	'RS_RANKS_ON'					=> '<span style="color:green;">Rangi reputacji są włączone.</span>',
+	'RS_RANKS_OFF'					=> '<span style="color:red;">Rangi reputacji są wyłączone.</span>',
 
 	'RS_BANS'						=> 'Zarządzanie banami za reputację',
 	'RS_BANS_EXPLAIN'				=> 'Tutaj możesz dodać, edytować, usuwać bany bazowane na punktach reputacji.',

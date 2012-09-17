@@ -54,7 +54,8 @@
 			<edit>
 				<find><![CDATA[// Grab ranks
 $ranks = $cache->obtain_ranks();]]></find>
-				<action type="replace-with"><![CDATA[// Grab reputation ranks
+				<action type="after-add"><![CDATA[
+// Grab reputation ranks
 $rs_ranks = reputation::obtain_rs_ranks();]]></action>
 			</edit>
 			<edit>
@@ -74,8 +75,8 @@ $rs_ranks = reputation::obtain_rs_ranks();]]></action>
 				'rs_rank_color'		=> '',]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[get_user_rank($row['user_rank'], $row['user_posts'], $user_cache[$poster_id]['rank_title'], $user_cache[$poster_id]['rank_image'], $user_cache[$poster_id]['rank_image_src']);]]></find>
-				<action type="after-add"><![CDATA[//Reputation System
+				<find><![CDATA[			get_user_rank($row['user_rank'], $row['user_posts'], $user_cache[$poster_id]['rank_title'], $user_cache[$poster_id]['rank_image'], $user_cache[$poster_id]['rank_image_src']);]]></find>
+				<action type="after-add"><![CDATA[			//Reputation System
 			if ($config['rs_enable'] && $config['rs_ranks']) reputation::get_rs_rank($user_cache[$poster_id]['reputation'], $user_cache[$poster_id]['rs_rank_title'], $user_cache[$poster_id]['rs_rank_img'], $user_cache[$poster_id]['rs_rank_img_src'], $user_cache[$poster_id]['rs_rank_color']);]]></action>
 			</edit>
 			<edit>
