@@ -42,10 +42,6 @@ class acp_reputation
 				$this->page_title = 'ACP_REPUTATION_OVERVIEW';
 				$template->assign_var('S_RS_OVERVIEW', true);
 
-				if (!$cache->get('_reputation') || $cache->get('_reputation') == 0)
-				{
-					$cache->put('_reputation', $step_sync = 0);
-				}
 				$step_sync = $cache->get('_reputation');
 
 				if (!confirm_box(true))
