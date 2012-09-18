@@ -207,7 +207,7 @@ class ucp_reputation
 					'REPUTATIONS'		=> ($user->data['user_reputation']) ? $user->data['user_reputation'] : 0,
 					'RS_RANK_TITLE'		=> $rs_rank_title,
 					'RS_RANK_IMG'		=> $rs_rank_img,
-					'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user_row['user_reputation'] == 0) ? 'zero' : (($user_row['user_reputation'] > 0) ? 'positive' : 'negative')),
+					'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user->data['user_reputation'] == 0) ? 'zero' : (($user->data['user_reputation'] > 0) ? 'positive' : 'negative')),
 					'POSITIVE_COUNT'	=> $positive_count,
 					'POSITIVE_WEEK'		=> $positive_week,
 					'POSITIVE_MONTH'	=> $positive_month,
