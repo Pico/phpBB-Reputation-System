@@ -181,14 +181,13 @@ $lang = array_merge($lang, array(
 	'RS_BAN_GROUPS_EXPLAIN'			=> 'Jeśli nie ma wybranych grup, wszyscy użytkownicy mogą być zbanowani (z wyjątkiem założycieli). W celu zaznaczenia (lub odznaczenia) więcej niż jednej grupy, musisz użyć kombinacji CTRL+LPM (albo CMD-LPM dla Mac) na grupie. Jeżeli zapomnisz przytrzymać CTRL/CMD na wybranej grupie, wszystkie wcześniej wybrane pozycje zostaną odznaczone',
 
 	'RS_SYNC'						=> 'Synchronizacja Systemu Reputacji',
-	'RS_SYNC_EXPLAIN'				=> 'Tutaj możesz zsynchronizować System Reputacji po masowym usunięciu postów/tematów/użytkowników, podziale/połączeniu tematów, zmiany autorów postów, konwersji z innych systemów itp. Synchronizacja zajmię chwilę, więc proszę być cierpliwym. Po zakończeniu synchronizacji zostaniesz powiadomiony o tym fakcie.',
-	'RS_SYNC_START'					=> 'Start synchronizacji',
+	'RS_SYNC_EXPLAIN'				=> 'Możesz zsynchronizować System Reputacji po masowym usunięciu postów/tematów/użytkowników, podziale/połączeniu tematów, zmiany autorów postów, konwersji z innych systemów itp. Synchronizacja zajmie chwilę, więc proszę być cierpliwym. Po zakończeniu synchronizacji zostaniesz powiadomiony o tym fakcie.',
 	'RS_SYNC_STEP_DEL'				=> 'Krok 1/4 - usunięcie wpisów (punktów) reputacji nieistniejących użytkowników',
 	'RS_SYNC_STEP_USER'				=> 'Krok 2/4 - synchronizacja punktów reputacji użytkowników',
 	'RS_SYNC_STEP_POST_1'			=> 'Krok 3/4 - synchronizacja reputacji postów (krok 1 z 2)',
 	'RS_SYNC_STEP_POST_2'			=> 'Krok 4/4 - synchronizacja reputacji postów (krok 2 z 2)',
-	'RS_SYNC_DONE'					=> 'Synchronizacja Systemu Reputacji zostałą zakończona pomyślnie',
-	'RS_RESYNC'						=> 'Uruchom',
+	'RS_SYNC_DONE'					=> 'Synchronizacja Systemu Reputacji została zakończona pomyślnie',
+	'RS_RESYNC_REPUTATION_CONFIRM'	=> 'Czy na pewno chcesz przeprowadzić synchronizację reputacji?',
 
 	'RS_TRUNCATE'				=> 'Wyczyść reputację',
 	'RS_TRUNCATE_EXPLAIN'		=> 'Ta procedura wyszyści tabelę z reputacją.<br /><strong>Czynności tej nie można odwrócić!</strong>',
