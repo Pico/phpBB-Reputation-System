@@ -462,7 +462,8 @@ class reputation
 			$result = $db->sql_query($sql);
 
 			$rs_ranks = array();
-			while ($row = $db->sql_fetchrow($result)) {
+			while ($row = $db->sql_fetchrow($result))
+			{
 				$rs_ranks[] = $row;
 			}
 			$db->sql_freeresult($result);
@@ -488,7 +489,7 @@ class reputation
 
 		if (empty($rs_ranks))
 		{
-			$rs_ranks = $this->obtain_rs_ranks();
+			$rs_ranks = self::obtain_rs_ranks();
 		}
 
 		$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
