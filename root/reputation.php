@@ -980,7 +980,7 @@ switch ($mode)
 				include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 			}
 
-			$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
+			$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = $avatar_img = '';
 			if ($config['rs_post_detail'])
 			{
 				get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, 	$rank_img_src);
