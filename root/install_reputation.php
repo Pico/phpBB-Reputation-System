@@ -488,6 +488,12 @@ $versions = array(
 			'theme',
 		),
 	),
+
+	'0.5.1' => array(
+		'cache_purge' => array(
+			'template',
+		),
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest

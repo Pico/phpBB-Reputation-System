@@ -25,7 +25,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.5.0</mod-version>
+		<mod-version>0.5.1</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>900</time>
@@ -149,6 +149,17 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 					<change><![CDATA[ADD support for MOD Version Check]]></change>
 				</changelog>
 			</entry>
+			<entry>
+				<date>2012-09-23</date>
+				<rev-version>0.5.1</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[FIX for sync with APC cache]]></change>
+					<change><![CDATA[FIX UPC - an error during disabled ranks]]></change>
+					<change><![CDATA[Add missing rank image in UCP front]]></change>
+					<change><![CDATA[FIX viewtopic if ranks are enabled]]></change>
+					<change><![CDATA[FIX non define avatar image variable]]></change>
+				</changelog>
+			</entry>
 		</history>
 		<link-group>
 			<link type="language" href="./contrib/polish.xml" lang="pl">Polish</link>
@@ -162,6 +173,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 			<link type="contrib" href="./contrib/update_0.4.1_to_0.4.2.xml" lang="en">Update from 0.4.1 to 0.4.2</link>
 			<link type="contrib" href="./contrib/update_0.4.2_to_0.4.3.xml" lang="en">Update from 0.4.2 to 0.4.3</link>
 			<link type="contrib" href="./contrib/update_0.4.3_to_0.5.0.xml" lang="en">Update from 0.4.3 to 0.5.0</link>
+			<link type="contrib" href="./contrib/update_0.5.0_to_0.5.1.xml" lang="en">Update from 0.5.0 to 0.5.1</link>
 		</link-group>
 	</header>
 	<action-group>
