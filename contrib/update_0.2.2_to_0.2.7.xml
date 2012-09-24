@@ -27,6 +27,7 @@
 	</header>
 	<action-group>
 		<copy>
+			<file from="contrib/update_reputation.php" to="update_reputation.php"/>
 			<file from="root/*.*" to="*.*"/>
 		</copy>
 		<open src="memberlist.php">
@@ -109,7 +110,7 @@ $lang = array_merge($lang, array(
 				<action type="replace-with"><![CDATA[<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->]]></action>
 			</edit>
 		</open>
-		<php-installer><![CDATA[install_reputation.php]]></php-installer>
+		<php-installer><![CDATA[update_reputation.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Purge cache and refresh style]]></diy-instructions>
 	</action-group>
 </mod>
