@@ -122,7 +122,7 @@ $lang = array_merge($lang, array(
 	'RS_RETURN_USER'			=> '%sReturn to the user details%s',
 
 	'RS_TOPLIST'			=> 'Reputation Toplist',
-	'RS_TOPLIST_EXPLAIN'	=> 'We are proud of',
+	'RS_TOPLIST_EXPLAIN'	=> 'Most popular members',
 
 	'NOTIFY_USER_REP'		=> 'Notify user about the point?',
 
