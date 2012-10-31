@@ -29,7 +29,7 @@ function hook_reputation_system()
 {
 	global $config, $template, $user;
 	global $phpbb_root_path, $phpEx;
-	
+
 	$notification = false;
 	if ($config['rs_notification'] && $user->data['user_rep_new'] && $user->data['user_rs_notification'])
 	{
@@ -40,9 +40,10 @@ function hook_reputation_system()
 
 	$template->assign_vars(array(
 		'S_REPUTATION'		=> $config['rs_enable'] ? true : false,
-		'S_RS_AJAX_ENABLE'	=> $config['rs_ajax_enable'] ? true : false,
 		'S_RS_NOTIFICATION'	=> $notification,
+
 		'U_RS_NOTIFICATION'	=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'i=reputation&amp;mode=list'),
+		'U_REPUTATION'		=> append_sid("{$phpbb_root_path}reputation.$phpEx"),
 	));
 }
 

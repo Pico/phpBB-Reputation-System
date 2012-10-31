@@ -40,13 +40,14 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'MCP_REPUTATION'				=> 'Reputation',
 	'MCP_REPUTATION_FRONT'			=> 'Front page',
-	'MCP_REPUTATION_LIST'			=> 'List reputations',
+	'MCP_REPUTATION_LIST'			=> 'Reputations list',
 	'MCP_REPUTATION_GIVE'			=> 'Give point',
 
 	'MCP_RS_REP_POINT'				=> 'Reputation points for warning',
 	'MCP_RS_GIVE_REP_POINT'			=> 'Give reputation points',
 
 	'LOG_USER_REP_DELETE'			=> '<strong>Reputation point has been deleted</strong><br />User: %s',
+	'LOG_POST_REP_TRUNCATE'			=> '<strong>Cleared post reputation</strong><br />Post: %s',
 
 	'RS_BEST_REPUTATION'			=> 'Users with the best reputation',
 	'RS_WORST_REPUTATION'			=> 'Users with the worst reputation',

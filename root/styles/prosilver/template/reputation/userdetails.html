@@ -1,4 +1,4 @@
-<h3>{L_RS_POST_REPUTATION} - {POST_SUBJECT}</h3>
+<h3>{L_RS_USER_REPUTATION}</h3>
 
 <div id="post-reputation-list">
 	<!-- IF .reputation -->
@@ -11,6 +11,7 @@
 			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del('{reputation.REP_ID}'); return false;">{L_DELETE}</a><!-- ENDIF -->
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
+			<span>{reputation.ACTION} {reputation.GO_TO_POST}</span><br />
 			<!-- IF S_RS_COMMENT -->
 			<span>{L_RS_COMMENT}:</span>
 			<div class="comment_message">{reputation.COMMENT}</div>
@@ -18,19 +19,20 @@
 		</div>
 	</div>
 	<!-- END reputation -->
+</div>
+
+<div class="footer-popup">
+	<label>{L_SORT_BY}:</label>
+	<a href="#" onclick="sortby.username('user','{USER_ID}','{V_SORT_DIR}'); return false;">{L_USERNAME}</a> &bull; 
+	<a href="#" onclick="sortby.time('user','{USER_ID}','{V_SORT_DIR}'); return false;">{L_TIME}</a> &bull; 
+	<a href="#" onclick="sortby.points('user','{USER_ID}','{V_SORT_DIR}'); return false;">{L_RS_POINTS}</a> &bull; 
+	<a href="#" onclick="sortby.action('user','{USER_ID}','{V_SORT_DIR}'); return false;">{L_RS_ACTION}</a> &bull; 
+	<a href="#" onclick="sortby.post('user','{USER_ID}','{V_SORT_DIR}'); return false;">{L_POST}</a>
+	<span style="float:right;"><a href="{U_RS_USER_DETAILS}" title="{L_RS_MORE_DETAILS}">{L_RS_MORE_DETAILS}</a></span>
+</div>
 	<!-- ELSE -->
 	<div class="reputation-list bg3">
 		<span>{L_RS_EMPTY_DATA}</span>
 	</div>
+</div>
 	<!-- ENDIF -->
-</div>
-
-<!-- IF .reputation -->
-<div class="footer-popup">
-	<label>{L_SORT_BY}:</label>
-	<a href="#" onclick="sortby.username('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_USERNAME}</a> &bull; 
-	<a href="#" onclick="sortby.time('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_TIME}</a> &bull; 
-	<a href="#" onclick="sortby.points('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_RS_POINTS}</a>
-	<span style="float:right;"><a href="#" onclick="jRS.truncate('{POST_ID}'); return false;">{L_RS_CLEAR_POST}</a></span>
-</div>
-<!-- ENDIF -->

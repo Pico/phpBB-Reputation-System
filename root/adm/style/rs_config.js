@@ -48,8 +48,6 @@ function init_check(option)
 
 function init_checked()
 {
-	var options = ["post_rating","user_rating","comment","power","rank","toplist","ban"];
-
 	for (var i = 0, option; option = options[i]; i++)
 	{
 		var input = document.getElementById(option);

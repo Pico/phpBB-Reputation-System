@@ -1,29 +1,6 @@
-<!-- IF not AJAX -->
-<!-- INCLUDE overall_header.html -->
-<!-- ENDIF -->
-<script type="text/javascript">
-// <![CDATA[
-	var commentreq = '{S_RS_COMMENT_REQ}';
-	var nocomment = '{L_RS_NO_COMMENT}';
-	var commentlen = '{RS_COMMENT_TOO_LONG}';
-	var toolongcomment = '{S_RS_COMMENT_TOO_LONG}';
-// ]]>
-</script>
-
-<form method="post" action="{S_CONFIRM_ACTION}">
-
-<!-- IF not AJAX -->
-<h2>{USER_RATING_CONFIRM}</h2>
-<!-- ENDIF -->
-
+<form>
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
-
-	<!-- IF not AJAX -->
-	<h3>{L_RS_USER_RATING}</h3>
-
-	<p>{L_RS_USER_POINT_EXPLAIN}</p>
-	<!-- ENDIF -->
 
 	<fieldset>
 		<!-- IF RS_POWER_POINTS_LEFT -->
@@ -45,7 +22,7 @@
 		<!-- IF S_RS_COMMENT_ENABLE -->
 		<dl class="comment">
 			<dt><label>{L_RS_COMMENT}<label></dt>
-			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{COMMENT}</textarea><!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;"></textarea>
 		</dl>
 		<!-- ENDIF -->
 		<!-- IF S_RS_PM_NOTIFY -->
@@ -56,17 +33,23 @@
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-	{S_HIDDEN_FIELDS}
-	<!-- IF AJAX --><input type="hidden" name="ajax" value="1" /><!-- ENDIF -->
-		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button2"<!-- IF AJAX --> onclick="submit_vote();return false;"<!-- ENDIF --> />&nbsp;
-		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2"<!-- IF AJAX -->  onclick="$('#repo-popup').fadeOut('fast');return false;"<!-- ENDIF --> />
+		<input type="hidden" name="rate" value="1" />
+		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button2" onclick="jRS.rateuser('{USER_ID}'); return false;" />&nbsp;
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="rs('#reputation-popup').fadeOut('fast'); return false;" />
 	</fieldset>
 
 	<span class="corners-bottom"><span></span></span></div>
 </div>
-
 </form>
 
-<!-- IF not AJAX -->
-<!-- INCLUDE overall_footer.html -->
-<!-- ENDIF -->
+<script type="text/javascript">
+// <![CDATA[
+
+var commenton = '{S_RS_COMMENT_ENABLE}';
+var commentreq = '{S_RS_COMMENT_REQ}';
+var nocomment = '{L_RS_NO_COMMENT}';
+var commentlen = '{RS_COMMENT_TOO_LONG}';
+var toolongcomment = '{S_RS_COMMENT_TOO_LONG}';
+
+// ]]>
+</script>

@@ -337,7 +337,7 @@ class ucp_reputation
 
 						$template->assign_block_vars('reputation', array(
 							'USERNAME_FROM'		=> $user_from,
-							'ACTION'			=> $new_rep . ' ' .$action,
+							'ACTION'			=> $action,
 							'TIME'				=> $time,
 							'COMMENT' 			=> $comment,
 							'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],

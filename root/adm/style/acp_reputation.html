@@ -50,16 +50,23 @@
 	<!-- ENDIF -->
 </fieldset>
 
+<form id="acp_reputation" method="post" action="{U_ACTION}">
+<fieldset>
+	<dl>
+		<dt><label for="repuation_enable">{L_RS_ENABLE}</label></dt>
+		<dd><label><input type="radio" class="radio" id="reputation_enable" name="reputation_enable" value="1"<!-- IF S_RS_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+			<label><input type="radio" class="radio" name="reputation_enable" value="0"<!-- IF not S_RS_ENABLE --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+	</dl>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
 <fieldset>
 	<form id="action_sync" method="post" action="{U_ACTION}">
-	<dl>
-		<dt><label>{L_RS_STATUS}</label></dt>
-		<dd><!-- IF S_RS_ENABLE --><span style="font-weight:bold;color:#228822;">{L_ENABLE}<!-- ELSE --><span style="font-weight:bold;color:#BC2A4D;">{L_DISABLE}<!-- ENDIF --></span></dd>
-	</dl>
-	<dl>
-		<dt><label>{L_RS_AJAX_STATUS}</label></dt>
-		<dd><!-- IF S_RS_AJAX --><span style="font-weight:bold;color:#228822;">{L_ENABLE}<!-- ELSE --><span style="font-weight:bold;color:#BC2A4D;">{L_DISABLE}<!-- ENDIF --></span></dd>
-	</dl>
 	<dl>
 		<dt><label for="action_sync">{L_RS_SYNC}</label><br />{L_RS_SYNC_EXPLAIN}</dt>
 		<dd><input type="hidden" name="action" value="sync" /><input class="button2" type="submit" id="action_sync" name="action_sync" value="{L_RUN}" /></dd>
@@ -74,6 +81,7 @@
 	</form>
 	<!-- ENDIF -->
 </fieldset>
+
 <!-- ENDIF -->
 
 <!-- ENDIF -->
@@ -90,12 +98,13 @@
 	</div>
 <!-- ENDIF -->
 
-<form id="acp_board" method="post" action="{U_ACTION}">
+<form id="acp_reputation" method="post" action="{U_ACTION}">
 
 <script type="text/javascript">
 // <![CDATA[
 	var active_cat = 'main';
 	var id = 'main';
+	var options = [<!-- BEGIN options --><!-- IF options.OPTION -->"{options.OPTION}",<!-- ENDIF --><!-- END options -->];
 // ]]>
 </script>
 <script type="text/javascript" src="style/rs_config.js"></script>
@@ -250,7 +259,6 @@
 	{S_FORM_TOKEN}
 </p>
 </fieldset>
-</form>
 
 <!-- ELSE -->
 
@@ -283,9 +291,9 @@
 	{S_FORM_TOKEN}
 </p>
 </fieldset>
-</form>
 
 <!-- ENDIF -->
+</form>
 <!-- ENDIF -->
 
 <!-- IF S_RS_BANS -->
@@ -328,7 +336,6 @@
 		{S_FORM_TOKEN}
 	</p>
 </fieldset>
-</form>
 
 <!-- ELSE -->
 
@@ -363,9 +370,9 @@
 		{S_FORM_TOKEN}
 	</p>
 </fieldset>
-</form>
-
 <!-- ENDIF -->
+
+</form>
 <!-- ENDIF -->
 
 <!-- INCLUDE overall_footer.html -->

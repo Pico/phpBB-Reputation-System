@@ -37,6 +37,14 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'REPUTATION'		=> 'Reputation',
+	'LIKES'				=> 'Likes',
+	'BEERS'				=> 'Beers',
+	'BEERS_RECEIVED'	=> 'Beers (received)',
+	'BEERS_GIVEN'		=> 'Beers (given)',
+	'HELPS'				=> 'Helps',
+	'THANKS'			=> 'Thanks',
+	'THANKS_RECEIVED'	=> 'Thanks (received)',
+	'THANKS_GIVEN'		=> 'Thanks (given)',
 
 	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
 	'RS_TITLE'			=> 'Reputation System',
@@ -110,6 +118,8 @@ $lang = array_merge($lang, array(
 	'RS_DELETE_POINTS_CONFIRM'	=> 'Do you really want to delete these reputation points?',
 	'RS_POINTS_DELETED'			=> 'The reputation points have been deleted.',
 	'NO_REPUTATION_SELECTED'	=> 'You did not select reputation point.',
+	'RS_TRUNCATE_POST_CONFIRM'	=> 'Do you really want to delete all reputation points of that post?',
+	'RS_CLEAR_POST'				=> 'Clear post reputation',
 
 	'RS_PM_BODY'				=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Click %shere%s to view the post.',
 	'RS_PM_BODY_COMMENT'		=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Comment: [i]%s&nbsp;[/i] <br />Click %shere%s to view the post.',
@@ -122,7 +132,7 @@ $lang = array_merge($lang, array(
 	'RS_RETURN_USER'			=> '%sReturn to the user details%s',
 
 	'RS_TOPLIST'			=> 'Reputation Toplist',
-	'RS_TOPLIST_EXPLAIN'	=> 'Most popular members',
+	'RS_TOPLIST_EXPLAIN'	=> 'We are proud of',
 
 	'NOTIFY_USER_REP'		=> 'Notify user about the point?',
 
@@ -135,13 +145,14 @@ $lang = array_merge($lang, array(
 	'RS_NEW_REP'					=> 'You have <strong>1 new</strong> reputation comment',
 	'RS_NEW_REPS'					=> 'You have <strong>%s new</strong> reputation comments',
 
-	'RS_POPUP_MORE_DETAILS'			=> '» more details',
+	'RS_MORE_DETAILS'				=> '» more details',
 
 	'RS_HIDE_POST'					=> 'This post was made by <strong>%1$s</strong> and was hidden because it had too low rating. %2$s',
 	'RS_SHOW_HIDDEN_POST'			=> 'Show this post',
 	'RS_SHOW_HIDE_HIDDEN_POST'		=> 'Show / Hide',
 	'RS_ANTISPAM_INFO'				=> 'You cannot give reputation so soon. You may try again later.',
 	'RS_POST_REPUTATION'			=> 'Post reputation',
+	'RS_USER_REPUTATION'			=> '%s\'s reputation',
 	'RS_YOU_HAVE_VOTED'				=> 'You have given reputation points. Points:',
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d reputation power points left of %2$d. Maximum per vote: %3$d',
@@ -158,6 +169,17 @@ $lang = array_merge($lang, array(
 	'RS_GROUP_POWER'				=> 'Reputation power based on usergroup',
 
 	'RS_USER_GAP'					=> 'You cannot rate the same user so soon. You can try again in %s.',
+
+	'RS_VIEWTOPIC_BEER'		=> 'Author of post received %s beer(s)',
+	'RS_VIEWTOPIC_THANKS'	=> 'For this message the author has received %s thank(s)',
+
+	//Likes
+	'RS_LIKE'			=> 'like it',
+	'RS_LIKES'			=> 'likes it',
+	'RS_OTHER_LIKE'		=> 'other',
+	'RS_OTHERS_LIKES'	=> 'others',
+	'RS_YOU_LIKE'		=> 'You',
+	'RS_AND'			=> ' and '
 ));
 
 ?>

@@ -1,62 +1,6 @@
-<!-- IF not AJAX -->
-	<!-- INCLUDE overall_header.html -->
-<!-- ENDIF -->
-<script type="text/javascript">
-// <![CDATA[
-	var commentreq = '{S_RS_COMMENT_REQ}';
-	var nocomment = '{L_RS_NO_COMMENT}';
-	var commentlen = '{RS_COMMENT_TOO_LONG}';
-	var toolongcomment = '{S_RS_COMMENT_TOO_LONG}';
-// ]]>
-</script>
-
-<form method="post" action="{S_CONFIRM_ACTION}">
-
-<!-- IF not AJAX -->
-	<h2>{HEADER_POINT}</h2>
-
-	<!-- IF POST_DETAIL -->
-	<div class="panel">
-		<div class="inner"><span class="corners-top"><span></span></span>
-
-			<div class="column1"><h3><!-- IF USER_COLOR --><span style="color: #{USER_COLOR}">{USERNAME}</span><!-- ELSE -->{USERNAME}<!-- ENDIF --></h3></div>
-			<div class="column12"><h3>{L_POST_DETAILS}</h3></div>
-			<div>
-				<div class="column1">
-					<div class="column1">
-						<dl class="details">
-							<!-- IF RANK_TITLE --><dt>{L_RANK}:</dt><dd>{RANK_TITLE}</dd><!-- ENDIF -->
-							<!-- IF RANK_IMG --><dt><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt><dd>{RANK_IMG}</dd><!-- ENDIF -->
-							<dt>{L_JOINED}:</dt><dd>{JOINED}</dd>
-							<dt>{L_TOTAL_POSTS}:</dt><dd>{POSTS}</dd>
-							<dt>{L_WARNINGS}: </dt><dd>{WARNINGS}</dd>
-							<dt>{L_REPUTATION}:</dt><dd><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
-							<!-- IF RS_RANK_IMG --><dt>&nbsp;</dt><dd>{RS_RANK_IMG}</dd><!-- ENDIF -->
-						</dl>
-					</div>
-					<div class="column2">
-						<!-- IF AVATAR_IMG --><div>{AVATAR_IMG}</div><!-- ENDIF -->
-					</div>
-				</div>
-
-				<div class="column2">
-					<div class="postbody">
-						<div class="content">
-							{POST}
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<span class="corners-bottom"><span></span></span></div>
-	</div>
-	<!-- ENDIF -->
-<!-- ENDIF -->
-
+<form>
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
-
-	<!-- IF not AJAX --><p>{L_RS_POINT_EXPLAIN}</p><!-- ENDIF -->
 
 	<fieldset>
 		<!-- IF S_RS_POWER_ENABLE -->
@@ -83,7 +27,6 @@
 		<dl class="comment">
 			<dt><label>{L_RS_COMMENT}</label></dt>
 			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;">{USER_COMMENT}</textarea>
-			<!-- IF ERROR and not AJAX --><p class="error">{ERROR}</p><!-- ENDIF -->
 		</dl>
 		<!-- ENDIF -->
 		<!-- IF S_RS_PM_NOTIFY -->
@@ -94,15 +37,21 @@
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-	{S_HIDDEN_FIELDS}
-		<!-- IF AJAX --><input type="hidden" name="ajax" value="1" /><!-- ENDIF -->
-		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button2"<!-- IF AJAX --> onclick="submit_vote();return false;"<!-- ENDIF --> />&nbsp;
-		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2"<!-- IF AJAX -->  onclick="$('#repo-popup').fadeOut('fast');return false;"<!-- ENDIF --> />
+		<input type="hidden" name="rate" value="1" />
+		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button2" onclick="jRS.ratepost('{POST_ID}'); return false;" />&nbsp;
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" onclick="rs('#reputation-popup').fadeOut('fast'); return false;" />
 	</fieldset>
-<span class="corners-bottom"><span></span></span></div>
+
+	<span class="corners-bottom"><span></span></span></div>
 </div>
 </form>
 
-<!-- IF not AJAX -->
-<!-- INCLUDE overall_footer.html -->
-<!-- ENDIF -->
+<script type="text/javascript">
+// <![CDATA[
+	var commenton = '{S_RS_COMMENT_ENABLE}';
+	var commentreq = '{S_RS_COMMENT_REQ}';
+	var nocomment = '{L_RS_NO_COMMENT}';
+	var commentlen = '{RS_COMMENT_TOO_LONG}';
+	var toolongcomment = '{S_RS_COMMENT_TOO_LONG}';
+// ]]>
+</script>

@@ -42,6 +42,7 @@ class acp_reputation
 				$this->page_title = 'ACP_REPUTATION_OVERVIEW';
 				$template->assign_var('S_RS_OVERVIEW', true);
 
+				$reputation_enable = request_var('reputation_enable', $config['rs_enable']);
 				$step_sync = $cache->get('_reputation');
 
 				if (!confirm_box(true))
@@ -97,23 +98,23 @@ class acp_reputation
 							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_DEL'],
 						));
 
+						$users_ids = array();
+
 						$sql = 'SELECT rep_to
 							FROM ' . REPUTATIONS_TABLE . '
 							GROUP BY rep_to';
 						$result = $db->sql_query($sql);
 
-						if ($row = $db->sql_fetchrow($result))
+						while ($row = $db->sql_fetchrow($result))
 						{
-							do
-							{
-								$this->sync_reputation($row['rep_to']);
-							}
-							while ($row = $db->sql_fetchrow($result));
+							$users_ids[] = $this->sync_user_reputation($row['rep_to']);
 						}
+
+						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+							WHERE ' . $db->sql_in_set('forum_id', $users_ids);
 						$db->sql_freeresult($result);
 
-						$step_sync = $step_sync + 1;
-						$cache->put('_reputation', $step_sync);
+						$cache->put('_reputation', 2);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
@@ -122,42 +123,26 @@ class acp_reputation
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_USER'],
+							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS_DEL'],
 						));
 
-						$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
+						$posts_ids = array();
 
-						$sql = 'SELECT SUM(point) AS rep_points, rep_to
+						$sql = 'SELECT post_id
 							FROM ' . REPUTATIONS_TABLE . '
-							WHERE action != 5
-							GROUP BY rep_to';
+							GROUP BY post_id';
 						$result = $db->sql_query($sql);
 
-						if ($row = $db->sql_fetchrow($result))
+						while ($row = $db->sql_fetchrow($result))
 						{
-							do
-							{
-								$user_point = 0;
-								if ($row['rep_points'] > 0)
-								{
-									$user_point = ($config['rs_max_point'] && ($row['rep_points'] > $config['rs_max_point'])) ? $config['rs_max_point'] : $row['rep_points'];
-								}
-								else if ($row['rep_points'] < 0)
-								{
-									$user_point =($config['rs_min_point'] && ($row['rep_points'] < $config['rs_min_point'])) ? $config['rs_min_point'] : $row['rep_points'];
-								}
-
-								$sql = 'UPDATE ' . USERS_TABLE . "
-									SET user_reputation = user_reputation + $user_point
-									WHERE user_id = {$row['rep_to']}";
-								$db->sql_query($sql);
-							}
-							while ($row = $db->sql_fetchrow($result));
+							$posts_ids[] = $this->sync_post_reputation($row['post_id']);
 						}
-						$db->sql_freeresult($result);
 
-						$step_sync = $step_sync + 1;
-						$cache->put('_reputation', $step_sync);
+						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+							WHERE ' . $db->sql_in_set('post_id', $posts_ids);
+						$db->sql_query($sql);
+
+						$cache->put('_reputation', 3);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
@@ -166,32 +151,39 @@ class acp_reputation
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_1'],
+							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_USER'],
 						));
 
-						$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
+						$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
 
-						$sql = 'SELECT SUM(point) AS rep_points, post_id
-							FROM ' . REPUTATIONS_TABLE . '
-							WHERE post_id != 0
-							GROUP BY post_id';
+						$where_negative = $config['rs_negative_point'] ? '' : 'AND point > 0';
+
+						$sql = 'SELECT SUM(point) AS rep_points, rep_to
+							FROM ' . REPUTATIONS_TABLE . "
+							WHERE action != 5
+								$where_negative
+							GROUP BY rep_to";
 						$result = $db->sql_query($sql);
 
-						if ($row = $db->sql_fetchrow($result))
+						while ($row = $db->sql_fetchrow($result))
 						{
-							do
+							$user_point = 0;
+							if ($row['rep_points'] > 0)
 							{
-								$sql = 'UPDATE ' . POSTS_TABLE . "
-									SET post_reputation = post_reputation + {$row['rep_points']}
-									WHERE post_id = {$row['post_id']}";
-								$db->sql_query($sql);
+								$user_point = ($config['rs_max_point'] && ($row['rep_points'] > $config['rs_max_point'])) ? $config['rs_max_point'] : $row['rep_points'];
 							}
-							while ($row = $db->sql_fetchrow($result));
-						}
-						$db->sql_freeresult($result);
+							else if ($row['rep_points'] < 0)
+							{
+								$user_point =($config['rs_min_point'] && ($row['rep_points'] < $config['rs_min_point'])) ? $config['rs_min_point'] : $row['rep_points'];
+							}
 
-						$step_sync = $step_sync + 1;
-						$cache->put('_reputation', $step_sync);
+							$sql = 'UPDATE ' . USERS_TABLE . "
+								SET user_reputation = user_reputation + $user_point
+								WHERE user_id = {$row['rep_to']}";
+							$db->sql_query($sql);
+						}
+
+						$cache->put('_reputation', 4);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
@@ -200,51 +192,29 @@ class acp_reputation
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_2'],
+							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS'],
 						));
 
-						$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_rs_count = 0');
+						$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
 
-						$sql = 'SELECT COUNT(rep_from) AS p_users, post_id
-							FROM ' . REPUTATIONS_TABLE . '
-							WHERE point > 0
-							GROUP BY post_id';
+						$where_negative = $config['rs_negative_point'] ? '' : 'AND point > 0';
+
+						$sql = 'SELECT SUM(point) AS rep_points, post_id
+							FROM ' . REPUTATIONS_TABLE . "
+							WHERE post_id != 0
+								$where_negative
+							GROUP BY post_id";
 						$result = $db->sql_query($sql);
 
-						if ($row = $db->sql_fetchrow($result))
+						while ($row = $db->sql_fetchrow($result))
 						{
-							do
-							{
-								$sql = 'UPDATE ' . POSTS_TABLE . "
-									SET post_rs_count = post_rs_count + {$row['p_users']}
-									WHERE post_id = {$row['post_id']}";
-								$db->sql_query($sql);
-							}
-							while ($row = $db->sql_fetchrow($result));
+							$sql = 'UPDATE ' . POSTS_TABLE . "
+								SET post_reputation = post_reputation + {$row['rep_points']}
+								WHERE post_id = {$row['post_id']}";
+							$db->sql_query($sql);
 						}
-						$db->sql_freeresult($result);
 
-						$sql = 'SELECT COUNT(rep_from) AS n_users, post_id
-							FROM ' . REPUTATIONS_TABLE . '
-							WHERE point < 0
-							GROUP BY post_id';
-						$result = $db->sql_query($sql);
-
-						if ($row = $db->sql_fetchrow($result))
-						{
-							do
-							{
-								$sql = 'UPDATE ' . POSTS_TABLE . "
-									SET post_rs_count = post_rs_count - {$row['n_users']}
-									WHERE post_id = {$row['post_id']}";
-								$db->sql_query($sql);
-							}
-							while ($row = $db->sql_fetchrow($result));
-						}
-						$db->sql_freeresult($result);
-
-						$step_sync = $step_sync + 1;
-						$cache->put('_reputation', $step_sync);
+						$cache->put('_reputation', 5);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
@@ -298,54 +268,61 @@ class acp_reputation
 
 							$data = array(
 								'title'			=> $row->title,
-								'description'	=> $row->description,
 								'download'		=> $row->download,
 								'announcement'	=> $row->announcement,
 							);
 						}
 					}
-
-					$version = str_replace(' ', '', $var['version']);
 				}
 
 				if ($return_version)
 				{
-					$version = $config['rs_version'];
 					$mod_version = $user->lang['NO_INFO'];
 					$data = array(
 						'title'			=> $user->lang['REPUTATION_SYSTEM'],
-						'description'	=> $user->lang['NO_INFO'],
 						'download'		=> $user->lang['NO_INFO'],
 						'announcement'	=> $user->lang['NO_INFO'],
 					);
 				}
 
-				$version_compare = (version_compare($version, $mod_version, '<')) ? false : true;
+				$version_compare = (version_compare($config['rs_version'], $mod_version, '<')) ? false : true;
+
+				if ($submit)
+				{
+					if (!check_form_key($form_key))
+					{
+						trigger_error($user->lang['FORM_INVALID']. adm_back_link($this->u_action), E_USER_WARNING);
+					}
+
+					set_config('rs_enable', $reputation_enable);
+
+					add_log('admin', 'LOG_REPUTATION_SETTING');
+
+					trigger_error($user->lang['CONFIG_UPDATED'] . adm_back_link($this->u_action));
+				}
 
 				$template->assign_vars(array(
 					'ANNOUNCEMENT'		=> $data['announcement'],
-					'CURRENT_VERSION'	=> $version,
-					'DESCRIPTION'		=> $data['description'],
+					'CURRENT_VERSION'	=> $config['rs_version'],
 					'DOWNLOAD'			=> $data['download'],
 					'LATEST_VERSION'	=> $mod_version,
 					'TITLE'				=> $data['title'],
 					'UP_TO_DATE'		=> sprintf((!$version_compare) ? $user->lang['NOT_UP_TO_DATE'] : $user->lang['UP_TO_DATE'], $data['title']),
-					'S_UP_TO_DATE'		=> $version_compare,
 
-					'S_RS_ENABLE'		=> $config['rs_enable'] ? true : false,
-					'S_RS_AJAX'			=> $config['rs_ajax_enable'] ? true : false,
+					'S_UP_TO_DATE'		=> $version_compare,
+					'S_RS_ENABLE'		=> $config['rs_enable'],
 					'S_FOUNDER'			=> ($user->data['user_type'] == USER_FOUNDER) ? true : false,
+
 					'U_ACTION'			=> $this->u_action
 				));
 			break;
 
 			case 'settings':
+
 				$display_vars = array(
 					'title'	=> 'ACP_REPUTATION_SETTINGS',
 					'vars'	=> array(
 						'legend1'				=> array('lang' => 'ACP_RS_MAIN', 'tab' => 'main'),
-						'rs_enable'				=> array('lang' => 'RS_ENABLE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => false),
-						'rs_ajax_enable'		=> array('lang' => 'RS_AJAX_ENABLE', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_negative_point'		=> array('lang' => 'RS_NEGATIVE_POINT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_min_rep_negative'	=> array('lang' => 'RS_MIN_REP_NEGATIVE', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_warning'			=> array('lang' => 'RS_WARNING', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
@@ -356,29 +333,27 @@ class acp_reputation
 
 						'legend2'				=> array('lang' => 'ACP_RS_DISPLAY', 'tab' => 'display'),
 						'rs_per_page'			=> array('lang' => 'RS_PER_PAGE', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
-						'rs_per_popup'			=> array('lang' => 'RS_PER_POPUP', 'validate' => 'int:1:10', 'type' => 'text:4:5', 'explain' => true),
+						'rs_display_avatar'		=> array('lang' => 'RS_DISPLAY_AVATAR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_sort_memberlist'	=> array('lang' => 'RS_SORT_MEMBERLIST_BY_REPO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_point_type'			=> array('lang' => 'RS_POINT_TYPE', 'validate' => 'bool', 'type' => 'custom', 'method' => 'point_type', 'explain' => true),
 
-						'legend3'				=> array('lang' => 'ACP_RS_POSTS_RATING', 'tab' => 'post_rating'),
+						'legend3'				=> array('lang' => 'ACP_RS_POSTS_RATING', 'tab' => 'post_rating', 'option' => 'post_rating'),
 						'rs_post_rating'		=> array('lang' => 'RS_POST_RATING', 'validate' => 'bool', 'type' => 'custom', 'method' => 'post_rating', 'explain' => false),
-						'rs_post_display'		=> array('lang' => 'RS_POST_DISPLAY', 'validate' => 'bool', 'type' => 'custom', 'method' => 'post_display', 'explain' => true),
-						'rs_post_detail'		=> array('lang' => 'RS_POST_DETAIL', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_hide_post'			=> array('lang' => 'RS_HIDE_POST', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_anti_time'			=> array('lang' => 'RS_ANTISPAM', 'validate' => 'int:0:180', 'type' => false, 'method' => false, 'explain' => false,),
 						'rs_anti_post'			=> array('lang' => 'RS_ANTISPAM', 'validate' => 'int:0', 'type' => 'custom:0:180', 'method' => 'antispam', 'explain' => true),
 						'rs_anti_method'		=> array('lang' => 'RS_ANTISPAM_METHOD', 'validate' => 'bool', 'type' => 'custom', 'method' => 'antimethod', 'explain' => true),
 
-						'legend4'				=> array('lang' => 'ACP_RS_USERS_RATING', 'tab' => 'user_rating'),
+						'legend4'				=> array('lang' => 'ACP_RS_USERS_RATING', 'tab' => 'user_rating', 'option' => 'user_rating'),
 						'rs_user_rating'		=> array('lang' => 'RS_USER_RATING', 'validate' => 'bool', 'type' => 'custom', 'method' => 'user_rating', 'explain' => false),
 						'rs_user_rating_gap'	=> array('lang' => 'RS_USER_RATING_GAP', 'validate' => 'string', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['DAYS']),
 
-						'legend5'				=> array('lang' => 'ACP_RS_COMMENT', 'tab' => 'comment'),
+						'legend5'				=> array('lang' => 'ACP_RS_COMMENT', 'tab' => 'comment', 'option' => 'comment'),
 						'rs_enable_comment'		=> array('lang' => 'RS_ENABLE_COMMENT', 'validate' => 'bool', 'type' => 'custom', 'method' => 'comment', 'explain' => true),
 						'rs_force_comment'		=> array('lang' => 'RS_FORCE_COMMENT', 'validate' => 'int:0:3', 'type' => 'custom', 'method' => 'select_comment', 'explain' => true),
 						'rs_comment_max_chars'	=> array('lang' => 'RS_COMMEN_LENGTH', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
-						'legend6'				=> array('lang' => 'ACP_RS_POWER', 'tab' => 'power'),
+						'legend6'				=> array('lang' => 'ACP_RS_POWER', 'tab' => 'power', 'option' => 'power'),
 						'rs_enable_power'		=> array('lang' => 'RS_ENABLE_POWER', 'validate' => 'bool', 'type' => 'custom', 'method' => 'power', 'explain' => true),
 						'rs_power_renewal'		=> array('lang' => 'RS_POWER_RENEWAL', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['HOURS']),
 						'rs_min_power'			=> array('lang' => 'RS_MIN_POWER', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
@@ -392,20 +367,20 @@ class acp_reputation
 						'rs_power_loose_warn'	=> array('lang' => 'RS_LOOSE_POWER_WARN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_loose_ban'	=> array('lang' => 'RS_LOOSE_POWER_BAN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
-						'legend7'				=> array('lang' => 'ACP_RS_RANKS', 'tab' => 'rank'),
+						'legend7'				=> array('lang' => 'ACP_RS_RANKS', 'tab' => 'rank', 'option' => 'rank'),
 						'rs_ranks'				=> array('lang' => 'RS_RANKS_ENABLE', 'validate' => 'bool', 'type' => 'custom', 'method' => 'rank', 'explain' => false),
 						'rs_ranks_path'			=> array('lang' => 'RS_RANKS_PATH', 'validate' => 'rpath', 'type' => 'text:20:255', 'explain' => true),
 
-						'legend8'				=> array('lang' => 'ACP_RS_TOPLIST', 'tab' => 'toplist'),
+						'legend8'				=> array('lang' => 'ACP_RS_TOPLIST', 'tab' => 'toplist', 'option' => 'toplist'),
 						'rs_enable_toplist'		=> array('lang' => 'RS_ENABLE_TOPLIST', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist', 'explain' => true),
 						'rs_toplist_direction'	=> array('lang' => 'RS_TOPLIST_DIRECTION', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist_direction', 'explain' => true),
 						'rs_toplist_num'		=> array('lang' => 'RS_TOPLIST_NUM', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 
-						'legend9'				=> array('lang' => 'ACP_RS_BAN', 'tab' => 'ban'),
+						'legend9'				=> array('lang' => 'ACP_RS_BAN', 'tab' => 'ban', 'option' => 'ban'),
 						'rs_enable_ban'			=> array('lang' => 'RS_ENABLE_BAN', 'validate' => 'bool', 'type' => 'custom', 'method' => 'ban', 'explain' => true),
 						'rs_ban_shield'			=> array('lang' => 'RS_BAN_SHIELD', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['DAYS']),
 						'rs_ban_groups'			=> array('lang' => 'RS_BAN_GROUPS', 'validate' => 'string', 'type' => 'custom', 'method' => 'group_exclude', 'explain' => true),
-					)
+					),
 				);
 
 				if (isset($display_vars['lang']))
@@ -490,7 +465,8 @@ class acp_reputation
 						$template->assign_block_vars('options', array(
 							'S_LEGEND'		=> true,
 							'LEGEND'		=> (isset($user->lang[$vars['lang']])) ? $user->lang[$vars['lang']] : $vars['lang'],
-							'TAB'			=> $vars['tab']
+							'TAB'			=> $vars['tab'],
+							'OPTION'		=> isset($vars['option']) ? $vars['option'] : ''
 							)
 						);
 
@@ -1088,20 +1064,6 @@ class acp_reputation
 		return $radio_text;
 	}
 
-	function post_display($value, $key)
-	{
-		global $user, $config;
-
-		$radio_ary = array(
-			0	=> 'RS_USER_METHOD',
-			1	=> 'RS_POINT_METHOD',
-		);
-
-		$radio_text = h_radio('config[rs_post_display]', $radio_ary, $value, 'rs_post_display', $key);
-
-		return $radio_text;
-	}
-
 	function antimethod($value, $key)
 	{
 		global $user, $config;
@@ -1176,26 +1138,6 @@ class acp_reputation
 		return $group_options;
 	}
 
-	function sync_reputation($rep_to)
-	{
-		global $db;
-
-		$sql = 'SELECT user_id
-			FROM ' . USERS_TABLE . "
-			WHERE user_id = $rep_to";
-		$result = $db->sql_query($sql);
-		$users = $db->sql_fetchfield('user_id');
-		$db->sql_freeresult($result);
-
-		if (empty($users))
-		{
-			$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
-						WHERE rep_to = " . $rep_to;
-			$db->sql_query($sql);
-		}
-	}
-
-
 	function h_rsradio($name, $input_ary, $input_default = false, $id = false, $key = false, $onclick = false, $separator = '')
 	{
 		global $user;
@@ -1210,6 +1152,40 @@ class acp_reputation
 		}
 
 		return $html;
+	}
+
+	function sync_user_reputation($rep_to)
+	{
+		global $db;
+
+		$sql = 'SELECT user_id
+			FROM ' . USERS_TABLE . "
+			WHERE user_id = $rep_to";
+		$result = $db->sql_query($sql);
+		$users = $db->sql_fetchfield('user_id');
+		$db->sql_freeresult($result);
+
+		if (empty($users))
+		{
+			return $rep_to;
+		}
+	}
+
+	function sync_post_reputation($post_id)
+	{
+		global $db;
+
+		$sql = 'SELECT post_id
+			FROM ' . POSTS_TABLE . "
+			WHERE post_id = $post_id";
+		$result = $db->sql_query($sql);
+		$posts = $db->sql_fetchfield('post_id');
+		$db->sql_freeresult($result);
+
+		if (empty($posts))
+		{
+			return $post_id;
+		}
 	}
 }
 

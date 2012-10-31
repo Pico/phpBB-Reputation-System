@@ -403,7 +403,7 @@ class reputation
 		}
 
 		$sql_array = array(
-			'SELECT'	=> 'r.rep_from, r.rep_to, r.action, r.post_id, r.point, u.username',
+			'SELECT'	=> 'r.rep_to, r.action, r.post_id, r.point, u.username',
 			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -417,6 +417,11 @@ class reputation
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
+
+		if (empty($row))
+		{
+			return false;
+		}
 
 		if ($row['post_id'])
 		{
@@ -442,6 +447,60 @@ class reputation
 		$db->sql_query($sql);
 
 		add_log('mod', '', '', 'LOG_USER_REP_DELETE', $row['username']);
+
+		return true;
+	}
+
+	/** Function responsible for truncate post reputation
+	* @param int $id post ID
+	* @return bool
+	*/
+	function truncate($post_id)
+	{
+		global $db, $user, $uid;
+
+		if (empty($post_id))
+		{
+			return false;
+		}
+
+		$sql = 'SELECT SUM(point) AS user_points, rep_to
+			FROM ' . REPUTATIONS_TABLE . "
+			WHERE action != 5
+				AND post_id = $post_id";
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
+		$sql = 'UPDATE ' . USERS_TABLE . "
+			SET user_reputation = user_reputation - {$row['user_points']}
+			WHERE user_id = {$row['rep_to']}";
+		$db->sql_query($sql);
+
+		unset($row);
+
+		$sql = 'SELECT  topic_id, forum_id, post_subject
+			FROM ' . POSTS_TABLE . "
+			WHERE post_id = $post_id";
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
+		if (empty($row))
+		{
+			return false;
+		}
+
+		$sql = 'UPDATE ' . POSTS_TABLE . "
+			SET post_reputation = 0
+			WHERE post_id = $post_id";
+		$db->sql_query($sql);
+
+		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
+			WHERE post_id = $post_id";
+		$db->sql_query($sql);
+
+		add_log('mod', $row['topic_id'], $row['forum_id'], 'LOG_POST_REP_TRUNCATE', $row['post_subject']);
 
 		return true;
 	}
@@ -507,7 +566,7 @@ class reputation
 		}
 	}
 
-	/** Returns the rating of a post.
+	/** Return the rating of a post
 	* @param $post_id ID of a post
 	* @param bool $true_rating if true returns sum of rating points. Otherwise returns count of votes
 	*/
@@ -544,7 +603,7 @@ class reputation
 		}
 	}
 
-	/** Returns user reputation.
+	/** Return user reputation
 	* @param $user_id user ID
 	*/
 	function get_user_reputation($user_id)
@@ -561,26 +620,90 @@ class reputation
 		return $row['reputation'];
 	}
 
-	/** Returns user reputation rank.
+	/** Return user reputation rank
 	* @param $points user reputation
 	*/
-	function get_rs_new_rank($points)
+	function get_rs_new_rank($points, $title = false)
 	{
 		global $cache, $config, $phpbb_root_path;
 
 		$ranks = $cache->get('_rs_ranks');
 
-		$rs_rank_img = '';
+		$rs_rank_img = $rs_rank_title = '';
 		foreach ($ranks as $rank)
 		{
 			if ($points >= $rank['rank_points'])
 			{
+				$rs_rank_title = $rank['rank_title'];
 				$rs_rank_img = (!empty($rank['rank_image'])) ? '<img src="' . $phpbb_root_path . $config['rs_ranks_path'] . '/' . $rank['rank_image'] . '" alt="' . $rank['rank_title'] . '" title="' . $rank['rank_title'] . '" />' : '';
 				break;
 			}
 		}
 
-		return $rs_rank_img;
+		$return_rank = ($title) ? $rs_rank_title : $rs_rank_img;
+
+		return $return_rank;
+	}
+
+	/** Return user reputation.
+	* @param $points user reputation
+	*/
+	function get_row($user_id)
+	{
+		global $auth, $config, $db, $user;
+		global $phpbb_root_path, $phpEx;
+
+		if (!function_exists('get_user_avatar'))
+		{
+			include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+		}
+
+		$tr_reputation = '';
+
+		$sql_array = array(
+			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, r.*',
+			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
+			'LEFT_JOIN' => array(
+				array(
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'	=> 'r.rep_from = u.user_id',
+				),
+			),
+			'WHERE'		=> 'r.rep_to = ' . $user_id,
+			'ORDER_BY'	=> 'r.rep_id DESC'
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow($result);
+
+		$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 60 : (60 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 60 : (60 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="40px;" height="40px;" alt="" />';
+
+		if ($row['point'] < 0)
+		{
+			$point_img = '<img src="' . $phpbb_root_path . 'images/reputation/neg.png" alt="" title="' . $user->lang['RS_POINTS'] . ': ' . $row['point'] . '" />';
+			$point_class = 'negative';
+		}
+
+		if ($row['point'] > 0)
+		{
+			$point_img = '<img src="' . $phpbb_root_path . 'images/reputation/pos.png" alt="" title="' . $user->lang['RS_POINTS'] . ': ' . $row['point'] . '" />';
+			$point_class = 'positive';
+		}
+		$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+		$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
+
+		$tr_reputation .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
+		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="reputation-avatar-big">' . $avatar_img . '</div>' : '';
+		$tr_reputation .= '<div style="padding-left: 5px;">';
+		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.remove(\'' . $row['rep_id'] . '\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
+		$tr_reputation .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
+		$tr_reputation .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
+
+		$tr_reputation .= $config['rs_enable_comment'] ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
+		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="comment_message">' . $comment . '</div>' : '';
+		$tr_reputation .= '</div>';
+
+		return $tr_reputation;
 	}
 
 	/** Ban user by minimum reputation

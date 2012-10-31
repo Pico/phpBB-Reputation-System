@@ -1,139 +1,329 @@
-$(document).ready(function()
-{
-	$("a.repo-link").click(function(e){
-		e.stopPropagation();
-		e.preventDefault();
-		// Do not vote again if you voted
-		if (($(this).parents('.post-reputation').hasClass('rated_good') || $(this).parents('.post-reputation').hasClass('rated_bad')) && $(this).parents('.reputation').length == 0)
-		{
-			return false;
-		}
-		show_repo_popup(this.href+"&ajax=1", e.pageX, e.pageY);
-		return false;
+/**
+*
+* @package Reputation System
+* @author Pico88 (http://www.modsteam.tk)
+* @copyright (c) 2012
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+*/
+
+var rs = jQuery.noConflict();
+
+rs(document).ready(function() {
+	rs("body").click(function(){
+		rs("#reputation-popup").fadeOut('fast');
 	});
 
-	$("body").click(function(){
-		$("#repo-popup").fadeOut('fast');
-	});
-
-	$("#repo-popup").click(function(e){
+	rs("#reputation-popup").click(function(e){
 		e.stopPropagation();
 	});
 
-	$(".show_hide_post").click(function(e){
-		$(this).parents('.post').toggleClass('hidden');
+	rs(".show_hide_post").click(function(e){
+		rs(this).parents('.post').toggleClass('hidden');
 		e.preventDefault();
 	});
 });
 
-function show_repo_popup($url, clickedx, clickedy)
-{
-	$('#repo-popup').empty();
-
-	// Center popup relative to clicked coordinate
-	targetleft = clickedx - $('#repo-popup').width() / 2;
-	// Popup can not be too close or behind the right border of the screen
-	targetleft = Math.min (targetleft, $(document).width() - 20 - $('#repo-popup').width());
-	targetleft = Math.max (targetleft, 20);
-
-	$('#repo-popup').load($url, function(response){
-
-		$('#repo-popup').css('top', clickedy+15+'px');
-		$('#repo-popup').css('left', targetleft+'px');
-		if (response.substr(0,1) == '{') {
-			// It's JSON. Probably an error. Let's clean the DIV and show the error there
-			response = jQuery.parseJSON(response);
-			reputation_action(response);
-			return true;
+var jRS = {
+	positive: function(a, b, c) {
+		show_popup('positive', a, b, c);
+	},
+	negative: function(a, b, c) {
+		show_popup('negative', a, b, c);
+	},
+	postdetails: function(a) {
+		show_popup('postdetails', a);
+	},
+	userdetails: function(a) {
+		show_popup('userdetails', a);
+	},
+	userrating: function(a, b) {
+		show_popup('rate_user', a, b);
+	},
+	ratepost: function(id) {
+		submit_action('post', id);
+	},
+	rateuser: function(id) {
+		submit_action('user', id);
+	},
+	del: function(id) {
+		if(confirm(rsdelete))
+		{
+			submit_action('delete', id);
 		}
-		$('#repo-popup').fadeIn();
+	},
+	remove: function(id) {
+		if(confirm(rsdelete))
+		{
+			submit_action('remove', id);
+		}
+	},
+	truncate: function(id) {
+		if(confirm(rstruncate))
+		{
+			submit_action('truncate', id);
+		}
+	},
+}
+
+function show_popup(a, b, c, d)
+{
+	if ((rs(d).parents('.post-reputation').hasClass('rated_good') || rs(d).parents('.post-reputation').hasClass('rated_bad')) && rs(d).parents('.reputation').length == 0)
+	{
+		return false;
+	}
+
+	switch(a)
+	{
+		case 'positive':
+		case 'negative':
+			mode = 'post';
+		break;
+		case 'rate_user':
+			mode = 'user';
+		break;
+	}
+
+	switch(a)
+	{
+		case 'positive':
+			data = 'mode=ratepost&rpmode=positive&p=' + b;
+		break;
+		case 'negative':
+			data = 'mode=ratepost&rpmode=negative&p=' + b;
+		break;
+		case 'postdetails':
+			data = 'mode=postdetails&p=' + b;
+		break;
+		case 'userdetails':
+			data = 'mode=userdetails&u=' + b;
+		break;
+		case 'rate_user':
+			data = 'mode=rateuser&u=' + b;
+		break;
+	}
+
+	rs.ajax({
+		url: rsfile,
+		data: data,
+		dataType: 'html',
+		beforeSend: function() {
+			rs('#reputation-popup').hide().empty().removeClass('small-popup normal-popup');
+
+			switch(a)
+			{
+				case 'postdetails':
+					rs('#reputation-popup').addClass('normal-popup');
+					targetleft = (rs(window).width() - rs('#reputation-popup').width()) / 2;
+					targettop = rs('#p' + b).offset().top;
+				break;
+				case 'userdetails':
+					rs('#reputation-popup').addClass('normal-popup');
+					targetleft = (rs(window).width() - rs('#reputation-popup').width()) / 2;
+					targettop = rs('#profile' + b).offset().top;
+				break;
+				default:
+					rs('#reputation-popup').addClass('small-popup');
+					// Center popup relative to clicked coordinate
+					targetleft = c.pageX - rs('#reputation-popup').width() / 2;
+					// Popup can not be too close or behind the right border of the screen
+					targetleft = Math.min (targetleft, rs(document).width() - 20 - rs('#reputation-popup').width());
+					targetleft = Math.max (targetleft, 20);
+					targettop = c.pageY + 10;
+				break;
+			}
+		},
+		success: function(s) {
+			rs('#reputation-popup').append(s).css({'top': targettop + 'px', 'left': targetleft + 'px'});
+			if (s.substr(0,1) == '{')
+			{
+				// It's JSON. Probably an error. Let's clean the DIV and show the error there
+				r = jQuery.parseJSON(s);
+				response(r, mode);
+				return true;
+			}
+			rs('#reputation-popup').fadeIn();
+		}
 	});
 }
 
-// Function for converting form into JSON
-$.fn.serializeObject = function()
+function submit_action(a, b)
 {
-	var o = {};
-	var a = this.serializeArray();
-	$.each(a, function() {
-		if (o[this.name] !== undefined) {
-			if (!o[this.name].push) {
-				o[this.name] = [o[this.name]];
-			}
-			o[this.name].push(this.value || '');
-		} else {
-			o[this.name] = this.value || '';
-		}
-	});
-	return o;
-};
+	var submit = true;
 
-function submit_vote()
-{
-	// Comment required
-	if (!$.trim($('#comment').val()) & commentreq) 
+	switch(a)
 	{
-		$('.error').detach();
-		$('.comment').append('<dl class="error"><span>' + nocomment + '</span></dl>');
+		case 'post':
+		case 'user':
+			// Comment required
+			if(commenton)
+			{
+				if(!rs.trim(rs('#comment').val()) & commentreq) 
+				{
+					submit = false;
+					rs('.error').detach();
+					rs('.comment').append('<dl class="error"><span>' + nocomment + '</span></dl>');
+				}
+				// Comment too long
+				else if(commenton & (rs('#comment').val().length > toolongcomment) & (toolongcomment > 0))
+				{
+					submit = false;
+					rs('.error').detach();
+					rs('.comment').append('<dl class="error"><span>' + commentlen + ' ' + rs('#comment').val().length + '.</span></dl>');
+				}
+			}
+		break;
 	}
-	// Comment too long
-	else if (($('#comment').val().length > toolongcomment) & (toolongcomment > 0))
+
+	if(submit)
 	{
-		$('.error').detach();
-		$('.comment').append('<dl class="error"><span>' + commentlen + ' ' + $('#comment').val().length + '.</span></dl>');
-	}
-	else
-	{
-		$.ajax({
-			url: $('#repo-popup > form').attr('action'),
-			data: $('#repo-popup > form').serializeObject(),
+		switch(a)
+		{
+			case 'post':
+				data = 'mode=ratepost&p=' + b + '&' + rs('#reputation-popup form').serialize();
+			break;
+			case 'user':
+				data = 'mode=rateuser&u=' + b + '&' + rs('#reputation-popup form').serialize();
+			break;
+			case 'delete':
+				data = 'mode=delete&id=' + b;
+			break;
+			case 'remove':
+				data = 'mode=remove&id=' + b;
+			break;
+			case 'truncate':
+				data = 'mode=truncate&p=' + b;
+			break;
+		}
+
+		rs.ajax({
+			url: rsfile,
+			data: data,
 			dataType: 'json',
 			type: 'POST',
-			success: function(reply) {
-				reputation_action(reply);
+			success: function(r) {
+				response(r, a);
 			}
 		});
 	}
 }
 
-function reputation_action(action)
+function response(a, b)
 {
-	if (action.error_msg)
+	if(a.error_msg)
 	{
 		// If there is an error, show it
-		$('#repo-popup').empty();
-		$('#repo-popup').append('<div class="error">' + action.error_msg + '</div>');
-		$('#repo-popup').fadeIn();
+		rs('#reputation-popup').empty().append('<div class="error">' + a.error_msg + '</div>').fadeIn();
 	}
-	else if (action.post_id)
+	else
 	{
-		var post_id = action.post_id;
-		var poster_id = action.poster_id;
-		var fadeout = '#p'+post_id+' ' + action.what_to_fadeout;
+		switch (b)
+		{
+			case 'post':
+				var post_id = a.post_id;
+				var poster_id = a.poster_id;
 
-		$('#repo-popup').fadeOut('fast');
-		// No error? Then it's rating info. Let's update it
-		$('#profile'+poster_id+' .user-reputation a.repo-link').html(action.new_user_reputation);
-		$('#profile'+poster_id+' .reputation-rank').html(action.new_reputation_rank);
-		$('#p'+post_id+' .reputation a.repo-link').text(action.new_post_rating);
-		$('#p'+post_id+' .reputation').removeClass('zero negative positive');
-		$('#p'+post_id+' .reputation').addClass(action.new_post_rating_class);
-		$('#p'+post_id).removeClass('rated_good rated_bad');
-		// Check if negative points are disabled. If yes, change behaviour
-		if (action.check_vote)
-		{
-			$(fadeout).fadeOut(function(){
-				$('#p'+post_id+' .post-reputation').addClass(action.new_post_class);
-			});
-		}
-		else
-		{
-			$('#p'+post_id+' .post-reputation').addClass(action.new_post_class);
+				rs('#reputation-popup').fadeOut('fast').empty();
+				rs('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
+				rs('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
+				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
+				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
+				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad').addClass(a.reputation_vote);
+			break;
+			case 'user':
+				rs('#reputation-popup').fadeOut('fast').empty();
+				rs('.user-reputation').html(a.user_reputation);
+				rs('.reputation-rank').html(a.reputation_rank);
+				rs('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
+				rs('.rs-rank-title').text(a.rank_title);
+				rs('.empty').detach();
+				rs('#post-reputation-list').prepend(a.add);
+			break;
+			case 'delete':
+				var post_id = a.post_id;
+				var poster_id = a.poster_id;
+				var rep_id = a.rep_id;
+
+				rs('#r' + rep_id).hide('fast', function() {
+					rs('#r' + rep_id).detach();
+					if (rs('.reputation-list').length == 0)
+					{
+						rs('#reputation-popup').fadeOut('fast').empty();
+					}
+				});
+				rs('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
+				rs('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
+				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
+				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
+				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+			break;
+			case 'remove':
+				var rep_id = a.rep_id;
+
+				rs('.user-reputation').html(a.user_reputation);
+				rs('.reputation-rank').html(a.reputation_rank);
+				rs('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
+				rs('.rs-rank-title').text(a.rank_title);
+				rs('#r' + rep_id).hide(function() {
+					rs('#r' + rep_id).detach();
+					if (rs('#post-reputation-list .bg1').length == 0 && rs('#post-reputation-list .bg2').length == 0 )
+					{
+						rs('#post-reputation-list').append(a.empty);
+						rs('#post-reputation-list .linklist').detach();
+					}
+				});
+			break;
+			case 'truncate':
+				var post_id = a.post_id;
+				var poster_id = a.poster_id;
+
+				rs('#reputation-popup').hide().empty();
+				rs('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
+				rs('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
+				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
+				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
+				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+			break;
 		}
 	}
-	else if (action.user_id)
+}
+
+var sortby = {
+	username: function(a, b, c) {
+		sort_order_by(a, b, c, 'a');
+	},
+	time:  function(a, b, c) {
+		sort_order_by(a, b, c, 'b');
+	},
+	points:  function(a, b, c) {
+		sort_order_by(a, b, c, 'c');
+	},
+	action: function(a, b, c) {
+		sort_order_by(a, b, c, 'd');
+	},
+	post: function(a, b, c) {
+		sort_order_by(a, b, c, 'e');
+	},
+}
+
+function sort_order_by(a, b, c, d)
+{
+	switch(a)
 	{
-		$('#repo-popup').fadeOut('fast');
-		$('.user-reputation').html(action.user_reputation);
+		case 'post':
+			data = 'mode=postdetails&p=' + b + '&sk=' + d + '&sd=' + c;
+		break;
+		case 'user':
+			data = 'mode=userdetails&u=' + b + '&sk=' + d + '&sd=' + c;
+		break;
 	}
+
+	rs.ajax({
+		url: rsfile,
+		data: data,
+		dataType: 'html',
+		success: function(s) {
+			rs('#reputation-popup').empty().append(s);
+		}
+	});
 }
