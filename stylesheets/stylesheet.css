@@ -155,13 +155,13 @@ a.button span {
 #download-zip span {
   background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
 }
-#download-tar-gz span {
-  background: transparent url(../images/tar-gz-icon.png) 12px 50% no-repeat;
-}
 #view-on-github span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
-#view-on-github {
+#view-on-phpbb span {
+  background: transparent url(../images/phpbb-icon.png) 12px 50% no-repeat;
+}
+#view-on-phpbb {
   margin-right: 0;
 }
 
@@ -369,3 +369,9 @@ footer a:hover {
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {}
+
+/* Image resize */
+img {
+  height: 120px;
+  padding: 6px;
+}

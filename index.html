@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" href="./fancybox/jquery.fancybox.css" type="text/css" media="screen" />
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,13 +20,13 @@
 
         <header>
           <h1>phpBB Reputation System</h1>
-          <h2>Reputation system for phpBB3</h2>
+          <h2>Probably the best reputation system ever!</h2>
         </header>
 
         <section id="downloads" class="clearfix">
-          <a href="https://github.com/Pico88/phpBB-Reputation-System/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/Pico88/phpBB-Reputation-System/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Pico88/phpBB-Reputation-System/zipball/master" id="download-zip" class="button"><span>Download 0.6.0</span></a>
           <a href="https://github.com/Pico88/phpBB-Reputation-System" id="view-on-github" class="button"><span>View on GitHub</span></a>
+          <a href="https://www.phpbb.com/community/viewtopic.php?f=70&t=2147118" id="view-on-phpbb" class="button"><span>View on phpBB</span></a>
         </section>
 
         <hr>
@@ -33,37 +34,67 @@
         <section id="main_content">
           <h1>Reputation System</h1>
 
-<p>A full reputation system for PHPBB3, with adjustable reputation settings. It allows forum users to rate posts or users, view rating statistics, reputation rankings. Users can write a short comment with giving reputation.</p>
+            <p>A full reputation system for phpBB3, with adjustable reputation settings. It allows forum users to rate posts or users, view rating statistics, reputation rankings. Users can write a short comment with giving reputation.</p>
 
-<h2>Features</h2>
+          <h2>Features</h2>
 
-<ul>
-<li>AJAX post rating</li>
-<li>AJAX user rating</li>
-<li>posibility to choose reputation power during giving a reputation point</li>
-<li>giving negative reputation points during warning users</li>
-<li>resynchronise and truncate function</li>
-<li>lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disbale comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)</li>
-<li>permissions system - you can adjust it to your board</li>
-<li>built-in converter from other similar system</li>
-</ul><h2>Requirements</h2>
+            <ul>
+              <li>post rating</li>
+              <li>user rating</li>
+              <li>posibility to choose reputation power during giving a reputation point</li>
+              <li>giving negative reputation points during warning users</li>
+              <li>resynchronise and truncate function</li>
+              <li>lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disbale comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)</li>
+              <li>permissions system - you can adjust it to your board</li>
+              <li>built-in converter from other similar system</li>
+            </ul>
 
-<ul>
-<li>phpBB &gt;3.0.10</li>
-<li>PHP &gt;5.2</li>
-<li>Javascript is required by this MOD (for AJAX functions).</li>
-</ul><h2>License</h2>
+          <h2>Screenshots</h2>
 
-<p>GNU General Public License v2</p>
+            <a id="screenshot" href="screenshots/ajax_post_rating.png" rel="gallery" title="Ajax post rating"><img src="screenshots/ajax_post_rating.png" alt="" /></a>
+            <a id="screenshot" href="screenshots/post_details.png" rel="gallery" title="Post reputation details"><img src="screenshots/post_details.png" alt="" /></a>
+			<a id="screenshot" href="screenshots/ajax_post_rating.png" rel="gallery" title="Ajax post rating"><img src="screenshots/ajax_post_rating.png" alt="" /></a>
+            <a id="screenshot" href="screenshots/post_details.png" rel="gallery" title="Post reputation details"><img src="screenshots/post_details.png" alt="" /></a>
+			<a id="screenshot" href="screenshots/ajax_post_rating.png" rel="gallery" title="Ajax post rating"><img src="screenshots/ajax_post_rating.png" alt="" /></a>
+            <a id="screenshot" href="screenshots/post_details.png" rel="gallery" title="Post reputation details"><img src="screenshots/post_details.png" alt="" /></a>
+			<a id="screenshot" href="screenshots/ajax_post_rating.png" rel="gallery" title="Ajax post rating"><img src="screenshots/ajax_post_rating.png" alt="" /></a>
+            <a id="screenshot" href="screenshots/post_details.png" rel="gallery" title="Post reputation details"><img src="screenshots/post_details.png" alt="" /></a>
+
+          <h2>Requirements</h2>
+
+            <ul>
+              <li>phpBB &gt;3.0.11</li>
+              <li>PHP &gt;5.2</li>
+              <li>Javascript</li>
+            </ul>
+
+          <h2>License</h2>
+
+            <p>GNU General Public License v2</p>
         </section>
 
         <footer>
           phpBB Reputation System is maintained by <a href="https://github.com/Pico88">Pico88</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a> modified by <a href="https://github.com/Pico88">Pico88</a>.
         </footer>
 
         
       </div>
     </div>
   </body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script type="text/javascript" src="./fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $("a#screenshot").fancybox({
+    helpers : {
+        title: {
+            type: 'inside'
+        }
+    },
+	openEffect	: 'none',
+	closeEffect	: 'none'
+  });
+});
+</script>
 </html>
