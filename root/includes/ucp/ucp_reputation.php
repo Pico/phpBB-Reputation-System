@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -59,6 +59,7 @@ class ucp_reputation
 					FROM ' . REPUTATIONS_TABLE . "
 					WHERE rep_to = {$user->data['user_id']}";
 				$result = $db->sql_query($sql);
+
 				while ($reputation_vote = $db->sql_fetchrow($result))
 				{
 					if ($reputation_vote['point'] > 0)
@@ -108,7 +109,7 @@ class ucp_reputation
 							'ON'	=> 'p.post_id = r.post_id',
 						),
 					),
-					'WHERE' 	=> 'r.rep_to = ' . $user->data['user_id'] . '',
+					'WHERE' 	=> 'r.rep_to = ' . $user->data['user_id'] . '' . ($config['rs_negative_point'] ? '' : ' AND point > 0'),
 					'ORDER_BY'	=> 'r.time DESC',
 				);
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -116,8 +117,8 @@ class ucp_reputation
 
 				while ($row = $db->sql_fetchrow($result))
 				{
-					$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
-					
+					$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
+
 					$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 					$time = $user->format_date($row['time']);
 					$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
@@ -144,7 +145,6 @@ class ucp_reputation
 					else if ($row['action'] == 5)
 					{
 						$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-						$short_action = $user->lang['RS_ONLYPOST_RATING'];
 					}
 
 					if ($row['point'] < 0)
@@ -203,7 +203,6 @@ class ucp_reputation
 				}
 
 				$template->assign_vars(array(
-					'COMMENT'			=> $config['rs_enable_comment'] ? true : false,
 					'REPUTATIONS'		=> ($user->data['user_reputation']) ? $user->data['user_reputation'] : 0,
 					'RS_RANK_TITLE'		=> $rs_rank_title,
 					'RS_RANK_IMG'		=> $rs_rank_img,
@@ -216,6 +215,9 @@ class ucp_reputation
 					'NEGATIVE_WEEK'		=> $negative_week,
 					'NEGATIVE_MONTH'	=> $negative_month,
 					'NEGATIVE_6MONTHS'	=> $negative_6months,
+
+					'S_RS_COMMENT'			=> $config['rs_enable_comment'] ? true : false,
+					'S_RS_NEGATIVE'		=> $config['rs_negative_point'] ? true : false,
 				));
 
 				$this->tpl_name = 'reputation/ucp_front';
@@ -229,6 +231,7 @@ class ucp_reputation
 						WHERE user_id = {$user->data['user_id']}";
 					$db->sql_query($sql);
 				}
+
 				if (isset($_POST['catchup']))
 				{
 					$sql = 'UPDATE ' . USERS_TABLE . "
@@ -246,6 +249,7 @@ class ucp_reputation
 				reputation_sorting($sort_days, $sort_key, $sort_dir, $sort_by_sql, $sort_order_sql, $total, 'list');
 
 				$limit_time_sql = ($sort_days) ? 'AND r.time >= ' . (time() - ($sort_days * 86400)) : '';
+				$where_negative = $config['rs_negative_point'] ? '' : 'AND r.point > 0';
 
 				$sort_order_u = ($sort_order_sql[0] == 'u') ? ' LEFT JOIN ' . USERS_TABLE . ' u ON r.rep_from = u.user_id' : '';
 
@@ -253,7 +257,8 @@ class ucp_reputation
 					FROM ' . REPUTATIONS_TABLE . ' r
 					' . $sort_order_u . '
 					WHERE r.rep_to = ' . $user->data['user_id'] . '
-						' .$limit_time_sql . '
+						' . $limit_time_sql . '
+						' . $where_negative . '
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
@@ -269,7 +274,7 @@ class ucp_reputation
 				if (sizeof($reputation_ids))
 				{
 					$sql = $db->sql_build_query('SELECT', array(
-						'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, r.*, p.post_subject',
+						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, p.post_subject',
 						'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 						'LEFT_JOIN' => array(
 							array(
@@ -288,18 +293,16 @@ class ucp_reputation
 
 					while ($row = $db->sql_fetchrow($result))
 					{
-						$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
-						(($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) +
-						(($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
-						
+						$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
+
 						$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 						$time = $user->format_date($row['time']);
 						$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
 
-						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
+						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
 						$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
 
-						$new_rep = ($config['rs_notification'] && $user->data['user_rs_notification'] && ($row['time'] >= $user->data['user_rep_last'])) ? ' ( <span style="color: red; font-weight: bold;">' . $user->lang['RS_NEW'] . '</span> )' : '';
+						$new_rep = ($config['rs_notification'] && $user->data['user_rs_notification'] && ($row['time'] >= $user->data['user_rep_last'])) ? '<span class="new-repo">' . $user->lang['RS_NEW'] . '</span>' : '';
 
 						if ($row['action'] == 1)
 						{
@@ -337,7 +340,7 @@ class ucp_reputation
 
 						$template->assign_block_vars('reputation', array(
 							'USERNAME_FROM'		=> $user_from,
-							'ACTION'			=> $action,
+							'ACTION'			=> $new_rep . ' ' . $action,
 							'TIME'				=> $time,
 							'COMMENT' 			=> $comment,
 							'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
@@ -382,6 +385,7 @@ class ucp_reputation
 				reputation_sorting($sort_days, $sort_key, $sort_dir, $sort_by_sql, $sort_order_sql, $total, 'given');
 
 				$limit_time_sql = ($sort_days) ? 'AND r.time >= ' . (time() - ($sort_days * 86400)) : '';
+				$where_negative = $config['rs_negative_point'] ? '' : 'AND r.point > 0';
 
 				$sort_order_u = ($sort_order_sql[0] == 'u') ? ' LEFT JOIN ' . USERS_TABLE . ' u ON r.rep_from = u.user_id' : '';
 
@@ -390,6 +394,7 @@ class ucp_reputation
 					' . $sort_order_u . '
 					WHERE r.rep_from = ' . $user->data['user_id'] . '
 						' .$limit_time_sql . '
+						' . $where_negative . '
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
@@ -424,15 +429,13 @@ class ucp_reputation
 
 					while ($row = $db->sql_fetchrow($result))
 					{
-						$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
-						(($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) +
-						(($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+						$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 						$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 						$time = $user->format_date($row['time']);
 						$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
-						
-						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
+
+						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
 						$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
 
 						if ($row['action'] == 1)
@@ -454,7 +457,6 @@ class ucp_reputation
 						else if ($row['action'] == 5)
 						{
 							$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-							$short_action = $user->lang['RS_ONLYPOST_RATING'];
 						}
 
 						if ($row['point'] < 0)
@@ -505,8 +507,6 @@ class ucp_reputation
 				$data = array(
 					'notification'		=> request_var('notification', $user->data['user_rs_notification']),
 					'default_power'		=> request_var('default_power', $user->data['user_rs_default_power']),
-					'comment_pos'		=> utf8_normalize_nfc(request_var('comment_pos', $user->data['user_rs_comment_pos'], true)),
-					'comment_neg'		=> utf8_normalize_nfc(request_var('comment_neg', $user->data['user_rs_comment_neg'], true)),
 				);
 
 				if ($config['rs_enable_power'])
@@ -526,8 +526,8 @@ class ucp_reputation
 						if ($i == 0) $rs_power = '<option value="0" selected="selected">' . $user->lang['RS_EMPTY'] . '</option>';
 
 						$template->assign_block_vars('reputation', array(
-								'REPUTATION_POWER'	=> $rs_power)
-						);
+							'REPUTATION_POWER'	=> $rs_power
+						));
 					}
 				}
 
@@ -535,10 +535,7 @@ class ucp_reputation
 
 				if ($submit)
 				{
-					$validate_array = array(
-						'comment_pos'	=> array('string', true, 2, 255),
-						'comment_neg'	=> array('string', true, 2, 255),
-					);
+					$validate_array = array();
 
 					if ($config['rs_enable_power']) $validate_array['default_power'] = array('num', true, 1, $reputationpower);
 
@@ -554,8 +551,6 @@ class ucp_reputation
 						$sql_ary = array(
 							'user_rs_notification'	=> $data['notification'],
 							'user_rs_default_power'	=> $data['default_power'],
-							'user_rs_comment_pos'	=> $data['comment_pos'],
-							'user_rs_comment_neg'	=> $data['comment_neg'],
 						);
 
 						$sql = 'UPDATE ' . USERS_TABLE . '
@@ -577,12 +572,9 @@ class ucp_reputation
 
 					'NOTIFICATION'		=> $data['notification'],
 					'DEFAULT_POWER'		=> $data['default_power'],
-					'COMMENT_POS'		=> $data['comment_pos'],
-					'COMMENT_NEG'		=> $data['comment_neg'],
 
 					'S_NOTIFICATION'	=> ($config['rs_notification']) ? true : false,
 					'S_POWER_ENABLE'	=> ($config['rs_enable_power']) ? true : false,
-					'S_COMMENT'			=> ($config['rs_enable_comment'] && $auth->acl_get('u_rs_ratepost')) ? true : false,
 					'S_NEGATIVE_ENABLE'	=> ($config['rs_negative_point']) ? true : false,
 				));
 
@@ -644,34 +636,39 @@ function ucp_reputation_delete($rep_id_list)
 
 function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, &$sort_order_sql, &$total, $mode)
 {
-	global $db, $user, $auth, $template;
+	global $config, $db, $user, $auth, $template;
 
 	$sort_days = request_var('st', 0);
 	$min_time = ($sort_days) ? time() - ($sort_days * 86400) : 0;
 
-	$default_key = 't';
-	$default_dir = 'd';
-	$limit_time_sql = ($min_time) ? "AND r.time >= $min_time" : '';
 	$where_sql = ($mode == 'list') ? "WHERE r.rep_to = {$user->data['user_id']}" : "WHERE r.rep_from = {$user->data['user_id']}";
+	$where_sql .= $config['rs_negative_point'] ? '' : ' AND r.point > 0';
+	$where_sql .= ($min_time) ? " AND r.time >= $min_time" : '';
 
 	$sql = 'SELECT COUNT(r.rep_id) AS total
-				FROM ' . REPUTATIONS_TABLE . " r
-				$where_sql
-				$limit_time_sql";
+		FROM ' . REPUTATIONS_TABLE . " r
+		$where_sql";
 
-	$sort_key = request_var('sk', $default_key);
-	$sort_dir = request_var('sd', $default_dir);
+	$sort_key = request_var('sk', 'f');
+	$sort_dir = request_var('sd', 'd');
 	$sort_dir_text = array('a' => $user->lang['ASCENDING'], 'd' => $user->lang['DESCENDING']);
 
-
 	$limit_days = array(0 => $user->lang['ALL_REPUTATIONS'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
-	$sort_by_text = array('u' => $user->lang['USERNAME'], 't' => $user->lang['RS_TIME'], 'p' => $user->lang['RS_POINT']);
-	$sort_by_sql = array('u' => 'u.username_clean', 't' => 'r.time', 'p' => 'r.point');
-
-	if (!isset($sort_by_sql[$sort_key]))
-	{
-		$sort_key = $default_key;
-	}
+	$sort_by_text = array(
+		'a'	=> $user->lang['USERNAME'],
+		'b'	=> $user->lang['RS_TIME'],
+		'c'	=> $user->lang['RS_POINT'],
+		'd'	=> $user->lang['RS_ACTION'],
+		'e'	=> $user->lang['POST']
+	);
+	$sort_by_sql = array(
+		'a'	=> 'u.username_clean',
+		'b'	=> 'r.time',
+		'c'	=> 'r.point',
+		'd'	=> 'r.action',
+		'e'	=> 'r.post_id',
+		'f'	=> 'r.rep_id'
+	);
 
 	$sort_order_sql = $sort_by_sql[$sort_key] . ' ' . (($sort_dir == 'd') ? 'DESC' : 'ASC');
 
@@ -681,8 +678,8 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 	$template->assign_vars(array(
 		'S_SELECT_SORT_DIR'		=> $s_sort_dir,
 		'S_SELECT_SORT_KEY'		=> $s_sort_key,
-		'S_SELECT_SORT_DAYS'	=> $s_limit_days)
-	);
+		'S_SELECT_SORT_DAYS'	=> $s_limit_days
+	));
 
 	$result = $db->sql_query($sql);
 	$total = (int) $db->sql_fetchfield('total');
