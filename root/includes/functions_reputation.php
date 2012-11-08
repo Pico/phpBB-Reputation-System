@@ -239,9 +239,6 @@ class reputation
 			'comment'			=> $text,
 			'bbcode_bitfield'	=> $bitfield,
 			'bbcode_uid'		=> $uid,
-			'enable_bbcode'		=> $allow_bbcode,
-			'enable_urls'		=> $allow_urls,
-			'enable_smilies'	=> $allow_smilies,
 		);
 
 		//Saving the vote. Used for post rating calculation. Not for user rating calculation
@@ -418,11 +415,6 @@ class reputation
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if (empty($row))
-		{
-			return false;
-		}
-
 		if ($row['post_id'])
 		{
 			$post_rs_count = ($row['point'] > 0) ? 1 : -1;
@@ -486,11 +478,6 @@ class reputation
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if (empty($row))
-		{
-			return false;
-		}
-
 		$sql = 'UPDATE ' . POSTS_TABLE . "
 			SET post_reputation = 0
 			WHERE post_id = $post_id";
@@ -548,7 +535,7 @@ class reputation
 
 		if (empty($rs_ranks))
 		{
-			$rs_ranks = self::obtain_rs_ranks();
+			$rs_ranks = $this->obtain_rs_ranks();
 		}
 
 		$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
@@ -566,21 +553,20 @@ class reputation
 		}
 	}
 
-	/** Return the rating of a post
+	/** Return post reputation
 	* @param $post_id ID of a post
-	* @param bool $true_rating if true returns sum of rating points. Otherwise returns count of votes
 	*/
-	function get_rating($post_id, $true_rating = true)
+	function get_post_reputation($post_id)
 	{
 		global $db;
-		$sql = 'SELECT ' . ($true_rating ? 'post_reputation' : 'post_rs_count') . ' AS rating
+		$sql = 'SELECT post_reputation
 			FROM ' . POSTS_TABLE . "
 			WHERE post_id = $post_id";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		return $row['rating'];
+		return $row['post_reputation'];
 	}
 
 	/**
@@ -610,43 +596,60 @@ class reputation
 	{
 		global $db;
 
-		$sql = 'SELECT user_reputation as reputation
+		$sql = 'SELECT user_reputation
 			FROM ' . USERS_TABLE . "
 			WHERE user_id = $user_id";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		return $row['reputation'];
+		return $row['user_reputation'];
 	}
 
 	/** Return user reputation rank
-	* @param $points user reputation
+	* @param $points reputation points
+	* @param bool $title return rank title
+	* @param bool $color return rank color
 	*/
-	function get_rs_new_rank($points, $title = false)
+	function get_rs_new_rank($points, $title = false, $color = false)
 	{
-		global $cache, $config, $phpbb_root_path;
+		global $rs_ranks, $config, $phpbb_root_path;
 
-		$ranks = $cache->get('_rs_ranks');
+		if (empty($rs_ranks))
+		{
+			$rs_ranks = $this->obtain_rs_ranks();
+		}
 
-		$rs_rank_img = $rs_rank_title = '';
-		foreach ($ranks as $rank)
+		$rs_rank_img = $rs_rank_title = $rs_rank_color = '';
+		foreach ($rs_ranks as $rank)
 		{
 			if ($points >= $rank['rank_points'])
 			{
 				$rs_rank_title = $rank['rank_title'];
 				$rs_rank_img = (!empty($rank['rank_image'])) ? '<img src="' . $phpbb_root_path . $config['rs_ranks_path'] . '/' . $rank['rank_image'] . '" alt="' . $rank['rank_title'] . '" title="' . $rank['rank_title'] . '" />' : '';
+				$rs_rank_color = $rank['rank_color'];
 				break;
 			}
 		}
 
-		$return_rank = ($title) ? $rs_rank_title : $rs_rank_img;
+		if ($title)
+		{
+			$return_rank = $rs_rank_title;
+		}
+		elseif ($color)
+		{
+			$return_rank = $rs_rank_color;
+		}
+		else
+		{
+			$return_rank = $rs_rank_img;
+		}
 
 		return $return_rank;
 	}
 
-	/** Return user reputation.
-	* @param $points user reputation
+	/** Return user rating row.
+	* @param $user_id user ID
 	*/
 	function get_row($user_id)
 	{
@@ -689,7 +692,7 @@ class reputation
 			$point_img = '<img src="' . $phpbb_root_path . 'images/reputation/pos.png" alt="" title="' . $user->lang['RS_POINTS'] . ': ' . $row['point'] . '" />';
 			$point_class = 'positive';
 		}
-		$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+		$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 		$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 
 		$tr_reputation .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
@@ -698,7 +701,7 @@ class reputation
 		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.remove(\'' . $row['rep_id'] . '\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
 		$tr_reputation .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
 		$tr_reputation .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
-
+		$tr_reputation .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';
 		$tr_reputation .= $config['rs_enable_comment'] ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
 		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="comment_message">' . $comment . '</div>' : '';
 		$tr_reputation .= '</div>';
