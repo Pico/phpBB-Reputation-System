@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -157,7 +157,7 @@ $versions = array(
 			array('rs_toplist_num', '5', 0),
 		),
 		
-		'table_column_add'	=> array(
+		'table_column_add' => array(
 			array('phpbb_forums', 'enable_reputation', array('BOOL', 0)),
 			array('phpbb_groups', 'group_reputation_power', array('UINT', 0)),
 			array('phpbb_posts', 'post_reputation', array('INT:11', 0)),
@@ -494,6 +494,34 @@ $versions = array(
 			'template',
 		),
 	),
+
+	'0.6.0' => array(
+		'config_add' => array(
+			array('rs_display_avatar', '1', 0),
+			array('rs_post_highlight', '10', 0),
+		),
+
+		'config_remove' => array(
+			array('rs_ajax_enable'),
+			array('rs_per_popup'),
+			array('rs_post_display'),
+			array('rs_post_detail'),
+		),
+
+		'table_column_remove' => array(
+			array('phpbb_posts', 'post_rs_count'),
+			array('phpbb_reputations', 'enable_bbcode'),
+			array('phpbb_reputations', 'enable_smilies'),
+			array('phpbb_reputations', 'enable_urls'),
+			array('phpbb_users', 'user_rs_comment_pos'),
+			array('phpbb_users', 'user_rs_comment_neg'),
+		),
+
+		'cache_purge' => array(
+			'template',
+			'theme',
+		),
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest
@@ -557,9 +585,6 @@ function convert($action)
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,
-					'enable_bbcode'		=> $allow_bbcode,
-					'enable_smilies'	=> $allow_smilies,
-					'enable_urls'		=> $allow_urls,
 				);
 
 				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
@@ -586,13 +611,10 @@ function convert($action)
 					'time'				=> $row['karma_time'],
 					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'point'				=> $row['karma_power'],
+					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,
-					'enable_bbcode'		=> $allow_bbcode,
-					'enable_smilies'	=> $allow_smilies,
-					'enable_urls'		=> $allow_urls,
 				);
 
 				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
@@ -623,9 +645,6 @@ function convert($action)
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,
-					'enable_bbcode'		=> $allow_bbcode,
-					'enable_smilies'	=> $allow_smilies,
-					'enable_urls'		=> $allow_urls,
 				);
 
 				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
