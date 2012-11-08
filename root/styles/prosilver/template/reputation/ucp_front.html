@@ -53,22 +53,22 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th align="center"><span class="positive">{L_RS_POSITIVE}</span></th>
-			<th align="center"><span class="negative">{L_RS_NEGATIVE}</span></th>
+			<!-- IF S_RS_NEGATIVE --><th align="center"><span class="negative">{L_RS_NEGATIVE}</span></th><!-- ENDIF -->
 		</tr>
 		<tr class="bg1">
 			<td>{L_RS_WEEK}</td>
 			<td align="center">{POSITIVE_WEEK}</td>
-			<td align="center">{NEGATIVE_WEEK}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_WEEK}</td><!-- ENDIF -->
 		</tr>
 		<tr class="bg2">
 			<td>{L_RS_MONTH}</td>
 			<td align="center">{POSITIVE_MONTH}</td>
-			<td align="center">{NEGATIVE_MONTH}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_MONTH}</td><!-- ENDIF -->
 		</tr>
 		<tr class="bg1">
 			<td>{L_RS_6MONTHS}</td>
 			<td align="center">{POSITIVE_6MONTHS}</td>
-			<td align="center">{NEGATIVE_6MONTHS}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_6MONTHS}</td><!-- ENDIF -->
 		</tr>
 	</table>
 		
@@ -89,7 +89,7 @@
 		<th class="name">{L_RS_FROM}</th>
 		<th class="name">{L_RS_ACTION}</th>
 		<th class="name">{L_RS_DATE}</th>
-		<!-- IF COMMENT --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
+		<!-- IF S_RS_COMMENT --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
 		<th class="name">{L_RS_POINTS}</th>
 	</tr>
 	</thead>
@@ -100,7 +100,7 @@
 		<td class="name">{reputation.USERNAME_FROM}</td>
 		<td class="name">{reputation.ACTION}</td>
 		<td class="name">{reputation.TIME}</td>
-		<!-- IF reputation.COMMENT and COMMENT --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+		<!-- IF reputation.COMMENT and S_RS_COMMENT --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
 		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
 	</tr>
 	<!-- END reputation -->

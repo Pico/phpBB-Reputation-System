@@ -7,6 +7,11 @@
 *
 */
 
+/* Highlight class - can be modified as you wish*/
+.highlight {
+	background-color: #d4f0cc;
+}
+
 ul.post-reputation {
 	float: right;
 	width: auto;
@@ -102,6 +107,11 @@ li.reputation {
 	color: #B82929;
 }
 
+.new-repo {
+	color: red;
+	font-weight: bold;
+}
+
 .rated_good .rate-good-icon a, .rated_bad .rate-bad-icon a {
 	width: 100%;
 	opacity: 0.3;
@@ -150,7 +160,7 @@ li.reputation {
 }
 
 .normal-popup {
-	width: 600px;
+	width: 570px;
 }
 
 .normal-popup #post-reputation-list{

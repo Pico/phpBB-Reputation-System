@@ -17,14 +17,12 @@ rs(document).ready(function() {
 	rs("#reputation-popup").click(function(e){
 		e.stopPropagation();
 	});
-
-	rs(".show_hide_post").click(function(e){
-		rs(this).parents('.post').toggleClass('hidden');
-		e.preventDefault();
-	});
 });
 
 var jRS = {
+	showhide: function(a) {
+		rs(a).parents('.post').toggleClass('hidden');
+	},
 	positive: function(a, b, c) {
 		show_popup('positive', a, b, c);
 	},
@@ -229,6 +227,21 @@ function response(a, b)
 				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
 				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
 				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad').addClass(a.reputation_vote);
+				
+				if(a.highlight)
+				{
+					rs('#p' + post_id).removeClass('highlight hidden').addClass('highlight');
+				}
+				if(a.hidden)
+				{
+					rs('#p' + post_id + ' #hideshow').detach();
+				}
+				if(a.hidepost)
+				{
+					rs('#p' + post_id + ' #hideshow').detach();
+					rs('#p' + post_id + ' .postbody').before(a.hidemessage);
+					rs('#p' + post_id).removeClass('highlight hidden').addClass('hidden');
+				}
 			break;
 			case 'user':
 				rs('#reputation-popup').fadeOut('fast').empty();
@@ -256,6 +269,21 @@ function response(a, b)
 				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
 				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
 				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+
+				if(a.highlight)
+				{
+					rs('#p' + post_id).removeClass('highlight');
+				}
+				if(a.hidden)
+				{
+					rs('#p' + post_id + ' #hideshow').detach();
+				}
+				if(a.hidepost)
+				{
+					rs('#p' + post_id + ' #hideshow').detach();
+					rs('#p' + post_id + ' .postbody').before(a.hidemessage);
+					rs('#p' + post_id).removeClass('highlight hidden').addClass('hidden');
+				}
 			break;
 			case 'remove':
 				var rep_id = a.rep_id;
@@ -277,12 +305,16 @@ function response(a, b)
 				var post_id = a.post_id;
 				var poster_id = a.poster_id;
 
-				rs('#reputation-popup').hide().empty();
+				rs('.reputation-list').hide('slow', function() {
+					rs('#reputation-popup').fadeOut('fast').empty();
+				});
 				rs('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
 				rs('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
 				rs('#p' + post_id + ' .reputation a').text(a.post_reputation);
 				rs('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
 				rs('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+				rs('#p' + post_id).removeClass('highlight hidden');
+				rs('#p' + post_id + ' #hideshow').detach();
 			break;
 		}
 	}
