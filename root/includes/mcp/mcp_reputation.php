@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -70,7 +70,7 @@ class mcp_reputation
 					));
 				}
 				$db->sql_freeresult($result);
-				
+
 				$sql = 'SELECT user_id, username, user_colour, user_reputation
 					FROM ' . USERS_TABLE . '
 					WHERE user_reputation < 0
@@ -106,15 +106,14 @@ class mcp_reputation
 							'ON'	=> 'p.post_id = r.post_id',
 						),
 					),
+					'WHERE'		=> $config['rs_negative_point'] ? '' : 'point > 0',
 					'ORDER_BY'	=> 'r.time DESC',
 				));
 				$result = $db->sql_query_limit($sql, 5);
 
 				while ($row = $db->sql_fetchrow($result))
 				{
-					$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
-					(($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) +
-					(($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+					$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 					$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 					$time = $user->format_date($row['time']);
@@ -143,7 +142,6 @@ class mcp_reputation
 					else if ($row['action'] == 5)
 					{
 						$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-						$short_action = $user->lang['RS_ONLYPOST_RATING'];
 					}
 
 					if ($row['point'] < 0)
@@ -238,6 +236,10 @@ class mcp_reputation
 				{
 					$sql_where[] = 'r.rep_to = ' . $row_to['user_id'];
 				}
+				if (!$config['rs_negative_point'])
+				{
+					$sql_where[] = 'point > 0';
+				}
 				$sql_array['WHERE'] = implode(' AND ', $sql_where);
 
 				$sql_array['ORDER_BY'] = $sort_order_sql;
@@ -257,7 +259,7 @@ class mcp_reputation
 				if (sizeof($reputation_ids))
 				{
 					$sql = $db->sql_build_query('SELECT', array(
-						'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, ru.username as username_rep_to, ru.user_colour as user_colour_rep_to, ru.user_reputation, r.*, p.post_subject',
+						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, ru.username as username_rep_to, ru.user_colour as user_colour_rep_to, ru.user_reputation, p.post_subject',
 						'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 						'LEFT_JOIN' => array(
 							array(
@@ -280,9 +282,7 @@ class mcp_reputation
 
 					while ($row = $db->sql_fetchrow($result))
 					{
-						$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
-						(($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) +
-						(($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+						$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 						$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 						$time = $user->format_date($row['time']);
@@ -311,7 +311,6 @@ class mcp_reputation
 						else if ($row['action'] == 5)
 						{
 							$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-							$short_action = $user->lang['RS_ONLYPOST_RATING'];
 						}
 
 						if ($row['point'] < 0)
@@ -334,8 +333,8 @@ class mcp_reputation
 							'COMMENT'			=> $comment,
 							'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
 							'POINT_CLASS'		=> $config['rs_point_type'] ? 'zero' : $point_class,
-							'REP_ID'			=> $row['rep_id'])
-						);
+							'REP_ID'			=> $row['rep_id']
+						));
 					}
 					$db->sql_freeresult($result);
 					unset($reputation_ids, $row);
@@ -352,8 +351,7 @@ class mcp_reputation
 					'PAGE_NUMBER'			=> on_page($total, $config['rs_per_page'], $start),
 					'TOTAL'					=> $total,
 					'TOTAL_REPS'			=> ($total == 1) ? $user->lang['LIST_REPUTATION'] : sprintf($user->lang['LIST_REPUTATIONS'], $total),
-					)
-				);
+				));
 
 				$this->tpl_name = 'reputation/mcp_list';
 			break;
@@ -394,7 +392,7 @@ class mcp_reputation
 					}
 
 					$template->assign_block_vars('reputation', array(
-							'REPUTATION_POWER'	=> $rs_power)
+						'REPUTATION_POWER'	=> $rs_power)
 					);
 				}
 
@@ -446,10 +444,9 @@ class mcp_reputation
 				$this->page_title = 'ACP_REPUTATION_GIVE';
 
 				$template->assign_vars(array(
-						'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp_reputation&amp;field=username&amp;select_single=true'),
-						'S_MCP_ACTION'		=> $this->u_action,
-					)
-				);
+					'U_FIND_USERNAME'	=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=mcp_reputation&amp;field=username&amp;select_single=true'),
+					'S_MCP_ACTION'		=> $this->u_action,
+				));
 
 				$this->tpl_name = 'reputation/mcp_give';
 			break;
@@ -510,9 +507,6 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 	$sort_days = request_var('st', 0);
 	$min_time = ($sort_days) ? time() - ($sort_days * 86400) : 0;
 
-	$default_key = 't';
-	$default_dir = 'd';
-
 	$sql_where = '';
 	$sql_where_array = array();
 	if ($min_time)
@@ -537,17 +531,27 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 		FROM ' . REPUTATIONS_TABLE . " r
 		$sql_where";
 
-	$sort_key = request_var('sk', $default_key);
-	$sort_dir = request_var('sd', $default_dir);
+	$sort_key = request_var('sk', 'g');
+	$sort_dir = request_var('sd', 'd');
 
 	$limit_days = array(0 => $user->lang['ALL_REPUTATIONS'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
-	$sort_by_text = array('rf' => $user->lang['RS_FROM'], 'ru' => $user->lang['RS_TO_USER'], 't' => $user->lang['RS_TIME'], 'p' => $user->lang['RS_POINT']);
-	$sort_by_sql = array('rf' => 'u.username_clean', 'ru' => 'ru.username_clean', 't' => 'r.time', 'p' => 'r.point');
-
-	if (!isset($sort_by_sql[$sort_key]))
-	{
-		$sort_key = $default_key;
-	}
+	$sort_by_text = array(
+		'a'	=> $user->lang['RS_FROM'],
+		'b'	=> $user->lang['RS_TO_USER'],
+		'c'	=> $user->lang['RS_TIME'],
+		'd'	=> $user->lang['RS_POINT'],
+		'e'	=> $user->lang['RS_ACTION'],
+		'f'	=> $user->lang['POST']
+	);
+	$sort_by_sql = array(
+		'a'=> 'u.username_clean',
+		'b'	=> 'ru.username_clean',
+		'c'	=> 'r.time',
+		'd'	=> 'r.point',
+		'e'	=> 'r.action',
+		'f'	=> 'r.post_id',
+		'g'	=> 'r.rep_id'
+	);
 
 	$sort_order_sql = $sort_by_sql[$sort_key] . ' ' . (($sort_dir == 'd') ? 'DESC' : 'ASC');
 
