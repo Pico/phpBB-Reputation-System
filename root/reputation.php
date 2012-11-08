@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -42,25 +42,29 @@ if (!$config['rs_enable'])
 switch ($mode)
 {
 	case 'ratepost':
-		//Let's check if reputation is enabled for viewing forum
+		//Let get some data
 		$sql_array = array(
-			'SELECT'	=> 'f.enable_reputation',
-			'FROM'		=> array(FORUMS_TABLE => 'f'),
+			'SELECT'	=> 'u.user_type, u.username, u.user_colour, p.forum_id, p.poster_id, p.post_username , f.enable_reputation',
+			'FROM'		=> array(
+				POSTS_TABLE => 'p',
+				USERS_TABLE => 'u'
+			),
 			'LEFT_JOIN' => array(
 				array(
-					'FROM'	=> array(POSTS_TABLE => 'p'),
-					'ON'	=> 'f.forum_id = p.forum_id',
+					'FROM'	=> array(FORUMS_TABLE => 'f'),
+					'ON'	=> 'p.forum_id = f.forum_id',
 				),
 			),
-			'WHERE'		=> 'p.post_id = ' . $post_id,
+			'WHERE'		=> 'p.post_id = ' . $post_id . '
+				AND p.poster_id = u.user_id',
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
-		$reputation_enabled_for_this_forum = (int) $db->sql_fetchfield('enable_reputation');
+		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
 		//Fire error if it's disabled and exit
-		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'ratepostneg' || !$reputation_enabled_for_this_forum)
+		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'ratepostneg' || !$row['enable_reputation'])
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_DISABLED']));
 			return;
@@ -70,30 +74,22 @@ switch ($mode)
 		$comment = utf8_normalize_nfc(request_var('comment', '', true));
 		$rep_power = request_var('rep_power', '');
 
-		$sql = 'SELECT u.*, p.poster_id, p.forum_id
-			FROM ' . POSTS_TABLE . ' p, ' . USERS_TABLE . " u
-			WHERE post_id = $post_id
-				AND u.user_id = p.poster_id";
-		$result = $db->sql_query($sql);
-		$user_row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
-
 		//We couldn't find this post. May be it was deleted while user voted?
-		if (!$user_row)
+		if (!$row)
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_NO_POST']));
 			return;
 		}
 
 		//No anonymous voting is allowed
-		if ($user_row['user_type'] == USER_IGNORE)
+		if ($row['user_type'] == USER_IGNORE)
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_ANONYMOUS']));
 			return;
 		}
 
 		//You can not vote for your posts
-		if ($user_row['user_id'] == $user->data['user_id'])
+		if ($row['poster_id'] == $user->data['user_id'])
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_SELF']));
 			return;
@@ -115,7 +111,7 @@ switch ($mode)
 		}
 
 		//Check if user is allowed to vote
-		if (!$auth->acl_get('f_rs_give', $user_row['forum_id']) || !$auth->acl_get('f_rs_give_negative', $user_row['forum_id']) && $rpmode == 'ratepostneg' || !$auth->acl_get('u_rs_ratepost'))
+		if (!$auth->acl_get('f_rs_give', $row['forum_id']) || !$auth->acl_get('f_rs_give_negative', $row['forum_id']) && $rpmode == 'ratepostneg' || !$auth->acl_get('u_rs_ratepost'))
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_DISABLED']));
 			return;
@@ -132,7 +128,7 @@ switch ($mode)
 		if (!empty($config['rs_anti_time']) && !empty($config['rs_anti_post']))
 		{
 			$anti_time = time() - $config['rs_anti_time'] * 3600;
-			$sql_and = (!$config['rs_anti_method']) ? 'AND rep_to = ' . $user_row['user_id'] : '';
+			$sql_and = (!$config['rs_anti_method']) ? 'AND rep_to = ' . $row['poster_id'] : '';
 			$sql = 'SELECT COUNT(rep_id) AS rep_per_day
 				FROM ' . REPUTATIONS_TABLE . '
 				WHERE rep_from = ' . $user->data['user_id'] . '
@@ -140,18 +136,18 @@ switch ($mode)
 					AND post_id != 0
 					AND time > ' . $anti_time;
 			$result = $db->sql_query($sql);
-			$row = $db->sql_fetchrow($result);
+			$anti_row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
 
-			if ($row['rep_per_day'] >= $config['rs_anti_post'])
+			if ($anti_row['rep_per_day'] >= $config['rs_anti_post'])
 			{
 				echo json_encode(array('error_msg' => $user->lang['RS_ANTISPAM_INFO']));
 				return;
 			}
-			unset($row);
 		}
 
 		// Disallow rating banned users
-		if ($user->check_ban($user_row['poster_id'], false, false, true))
+		if ($user->check_ban($row['poster_id'], false, false, true))
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_BANNED']));
 			return;
@@ -231,27 +227,31 @@ switch ($mode)
 		if ($submit)
 		{
 			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
-			if (!$auth->acl_get('f_rs_give_negative', $user_row['forum_id']) && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $max_voting_allowed) || ($rep_power < -$max_voting_allowed)))
+			if (!$auth->acl_get('f_rs_give_negative', $row['forum_id']) && $rep_power < 0 || $rep_power < 0 && $config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) || $config['rs_enable_power'] && (($rep_power > $max_voting_allowed) || ($rep_power < -$max_voting_allowed)))
 			{
 				echo json_encode(array('error_msg' => $user->lang['RS_USER_DISABLED']));
 				return;
 			}
 
-			$post_rating_mode = ($reputation_enabled_for_this_forum == 1) ? 'post' : 'onlypost';
-			if ($reputation->give_point($user_row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
+			$post_rating_mode = ($row['enable_reputation'] == 1) ? 'post' : 'onlypost';
+			if ($reputation->give_point($row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
 			{
 				// If it's an AJAX request, generate JSON reply
-				$post_reputation = $reputation->get_rating($post_id, $config['rs_post_display']);
-				$user_reputation = $reputation->get_user_reputation($user_row['poster_id']);
+				$post_reputation = $reputation->get_post_reputation($post_id);
+				$user_reputation = $reputation->get_user_reputation($row['poster_id']);
 				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 				$json_data = array(
 					'post_id'				=> $post_id,
-					'poster_id'				=> $user_row['poster_id'],
+					'poster_id'				=> $row['poster_id'],
 					'post_reputation'		=> $post_reputation,
 					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
 					'reputation_rank'		=> $reputation_rank,
 					'reputation_class'		=> $reputation->get_vote_class($post_reputation),
 					'reputation_vote'		=> ($rep_power > 0) ? 'rated_good' : 'rated_bad',
+					'highlight'				=> (!empty($config['rs_post_highlight']) && ($post_reputation >= $config['rs_post_highlight'])) ? true : false,
+					'hidden'				=> (!empty($config['rs_hide_post']) && ($post_reputation > $config['rs_hide_post'])) ? true : false,
+					'hidepost'				=> (!empty($config['rs_hide_post']) && ($post_reputation <= $config['rs_hide_post'])) ? true : false,
+					'hidemessage'			=> '<div id="hideshow">' . sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $row['poster_id'], $row['username'], $row['user_colour'], $row['post_username']), '<a href="#" onclick="jRS.showhide(this); return false;">' . $user->lang['RS_SHOW_HIDE_HIDDEN_POST'] . '</a>') . '</div>',
 				);
 
 				echo json_encode($json_data);
@@ -263,9 +263,8 @@ switch ($mode)
 		$template->assign_vars(array(
 			'POST_ID'					=> $post_id,
 			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100,0) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
-			'USER_COMMENT'				=> ($rpmode == 'negative') ? $user->data['user_rs_comment_neg'] : $user->data['user_rs_comment_pos'],
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
 			'S_RS_COMMENT_ENABLE'		=> $config['rs_enable_comment'] ? true : false,
@@ -291,41 +290,39 @@ switch ($mode)
 			return;
 		}
 
-		$username = request_var('username', '');
 		$notify = request_var('notify_user', '');
-		$user_to = request_var('u', 0);
 		$comment = utf8_normalize_nfc(request_var('comment', '', true));
 		$rep_power = request_var('rep_power', '');
 
 		$mode = 'user';
 
-		$sql = 'SELECT *
+		$sql = 'SELECT user_id, user_type
 			FROM ' . USERS_TABLE . "
-			WHERE user_id = $user_to";
+			WHERE user_id = $uid";
 		$result = $db->sql_query($sql);
-		$user_row = $db->sql_fetchrow($result);
+		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		if (!$user_row)
+		if (!$row)
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_NO_USER_ID']));
 			return;
 		}
 
-		if ($user_row['user_type'] == USER_IGNORE)
+		if ($row['user_type'] == USER_IGNORE)
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_ANONYMOUS']));
 			return;
 		}
 
-		if ($user_row['user_id'] == $user->data['user_id'])
+		if ($row['user_id'] == $user->data['user_id'])
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_SELF']));
 			return;
 		}
 
 		// Disallow rating banned users
-		if ($user->check_ban($user_row['user_id'], false, false, true))
+		if ($user->check_ban($uid, false, false, true))
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_BANNED']));
 			return;
@@ -333,7 +330,7 @@ switch ($mode)
 
 		$sql = 'SELECT rep_id, time
 			FROM ' . REPUTATIONS_TABLE . "
-			WHERE rep_to = $user_to
+			WHERE rep_to = {$row['user_id']}
 				AND rep_from = {$user->data['user_id']}
 				AND action = 2
 			ORDER by rep_id DESC";
@@ -353,7 +350,7 @@ switch ($mode)
 			$next_vote_time = ($check_user['time'] + $config['rs_user_rating_gap'] * 86400) - time();
 			$next_vote_in = '';
 			$next_vote_in .= intval($next_vote_time / 86400) ? intval($next_vote_time / 86400) . ' ' . $user->lang['DAYS'] . ' ' : '';
-			$next_vote_in .= (intval(intval($next_vote_time) / 3600) && !intval($next_vote_time / 86400))  ? intval(($next_vote_time / 3600) % 24) . ' ' . $user->lang['HOURS'] . ' ' : '';
+			$next_vote_in .= intval(($next_vote_time / 3600) % 24)  ? intval(($next_vote_time / 3600) % 24) . ' ' . $user->lang['HOURS'] . ' ' : '';
 			$next_vote_in .= intval(($next_vote_time / 60) % 60) ? intval(($next_vote_time / 60) % 60) . ' ' . $user->lang['MINUTES'] : '';
 			$next_vote_in .= (intval($next_vote_time) < 60) ? intval($next_vote_time) . ' ' . $user->lang['SECONDS'] : '';
 
@@ -395,7 +392,6 @@ switch ($mode)
 			}
 
 			//Preparing HTML for voting by manual spending of user power
-			//for($i = 1; $i <= $max_voting_allowed; ++$i)
 			$startpower = $config['rs_negative_point'] ? -$max_voting_allowed : 1;
 			for($i = $max_voting_allowed; $i >= $startpower; $i--) //from + to -
 			//for($i = $startpower; $i <= $reputationpower; ++$i) //from - to +
@@ -445,20 +441,21 @@ switch ($mode)
 				return;
 			}
 
-			if ($reputation->give_point($user_row['user_id'], $post_id, $comment, $notify, $rep_power, $mode))
+			if ($reputation->give_point($row['user_id'], $post_id, $comment, $notify, $rep_power, $mode))
 			{
 				$rs_ranks = reputation::obtain_rs_ranks();
 
 				// If it's an AJAX request, generate JSON reply
-				$user_reputation = $reputation->get_user_reputation($user_row['user_id']);
+				$user_reputation = $reputation->get_user_reputation($row['user_id']);
 				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
+				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
 				$json_data = array(
 					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
-					'reputation_class'		=> $reputation->get_vote_class($user_reputation),
+					'reputation_class'		=> $reputation_color,
 					'reputation_rank'		=> $reputation_rank,
 					'rank_title'			=> $reputation_title,
-					'add'					=> $reputation->get_row($user_row['user_id']),
+					'add'					=> $reputation->get_row($row['user_id']),
 				);
 				echo json_encode($json_data);
 				return;
@@ -467,10 +464,10 @@ switch ($mode)
 		}
 
 		$template->assign_vars(array(
-			'USER_ID'					=> $user_row['user_id'],
+			'USER_ID'					=> $row['user_id'],
 
 			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100,0) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
@@ -542,7 +539,7 @@ switch ($mode)
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$userid_to = $row['rep_to'];
-			$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+			$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 			$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 			$time = $user->format_date($row['time']);
@@ -574,23 +571,11 @@ switch ($mode)
 				'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
 				'POINT_CLASS'		=> $config['rs_point_type'] ? 'zero' : $point_class,
 			));
-
-			unset($row);
 		}
 
-
-		$sql_array = array(
-			'SELECT'	=> 'p.post_subject, u.user_id, u.username, u.user_colour',
-			'FROM'		=> array(POSTS_TABLE => 'p'),
-			'LEFT_JOIN' => array(
-				array(
-					'FROM'	=> array(USERS_TABLE => 'u'),
-					'ON'	=> 'u.user_id = p.poster_id',
-				),
-			),
-			'WHERE'		=> 'p.post_id = ' . $post_id
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$sql = 'SELECT post_subject
+			FROM ' . POSTS_TABLE . "
+			WHERE post_id = $post_id";
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -686,7 +671,7 @@ switch ($mode)
 
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+			$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 			$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 			$time = $user->format_date($row['time']);
@@ -716,8 +701,8 @@ switch ($mode)
 			}
 			else if ($row['action'] == 5)
 			{
-				$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-				$short_action = $user->lang['RS_ONLYPOST_RATING'];
+				$action = $user->lang['RS_ONLYPOST_RATING'];
+				$go_to_post = $post_link;
 			}
 
 			if ($row['point'] < 0)
@@ -881,7 +866,7 @@ switch ($mode)
 
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$row['bbcode_options'] = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_urls']) ? OPTION_FLAG_LINKS : 0);
+			$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 
 			$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 			$time = $user->format_date($row['time']);
@@ -911,8 +896,8 @@ switch ($mode)
 			}
 			else if ($row['action'] == 5)
 			{
-				$action = $user->lang['RS_ONLYPOST_RATING'] . '' . $post_link;
-				$short_action = $user->lang['RS_ONLYPOST_RATING'];
+				$action = $user->lang['RS_ONLYPOST_RATING'];
+				$go_to_post = $post_link;
 			}
 
 			if ($row['point'] < 0)
@@ -1014,7 +999,7 @@ switch ($mode)
 			$group_power = $reputation->get_group_power();
 
 			$template->assign_vars(array(
-				'RS_POWER_EXPLAIN'			=> $config['rs_power_explain'] ? true : false,
+				'S_RS_POWER_EXPLAIN'			=> $config['rs_power_explain'] ? true : false,
 				'RS_POWER'					=> $user_max_voting_power,
 				'RS_POWER_LEFT'				=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
 				'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
@@ -1044,6 +1029,8 @@ switch ($mode)
 
 			'PAGINATION'		=> generate_pagination($pagination_url, $total_reps, $config['rs_per_page'], $start),
 			'PAGE_NUMBER'		=> on_page($total_reps, $config['rs_per_page'], $start),
+			'TOTAL'				=> $total_reps,
+			'TOTAL_REPS'		=> ($total_reps == 1) ? $user->lang['LIST_REPUTATION'] : sprintf($user->lang['LIST_REPUTATIONS'], $total_reps),
 
 			'U_SORT_USERNAME'	=> $sort_url . '&amp;sk=a&amp;sd=' . (($sort_key == 'a' && $sort_dir == 'a') ? 'd' : 'a'),
 			'U_SORT_TIME'		=> $sort_url . '&amp;sk=b&amp;sd=' . (($sort_key == 'b' && $sort_dir == 'a') ? 'd' : 'a'),
@@ -1063,7 +1050,8 @@ switch ($mode)
 			'S_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? true : false,
 			'S_RS_AVATAR'		=> $config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
-			'REP_POWER_ENABLE'	=> $config['rs_enable_power'] ? true : false,
+			'S_RS_NEGATIVE'		=> $config['rs_negative_point'] ? true : false,
+			'S_RS_POWER_ENABLE'	=> $config['rs_enable_power'] ? true : false,
 		 ));
 
 		$template->set_filenames(array(
@@ -1076,9 +1064,22 @@ switch ($mode)
 
 	case 'delete':
 	case 'remove':
-		$sql = 'SELECT rep_from, rep_to, post_id
-			FROM ' . REPUTATIONS_TABLE . "
-			WHERE rep_id = $id";
+		$sql_array = array(
+			'SELECT'	=> 'r.rep_from, r.rep_to, r.post_id, u.username, u.user_colour, p.post_username',
+			'FROM'		=> array(
+				REPUTATIONS_TABLE => 'r',
+				USERS_TABLE => 'u'
+			),
+			'LEFT_JOIN' => array(
+				array(
+					'FROM'	=> array(POSTS_TABLE => 'p'),
+					'ON'	=> 'r.post_id = p.post_id',
+				),
+			),
+			'WHERE'		=> 'r.rep_id = ' . $id . '
+				AND r.rep_to = u.user_id',
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
@@ -1093,7 +1094,7 @@ switch ($mode)
 
 			if ($mode == 'delete')
 			{
-				$post_reputation = $reputation->get_rating($row['post_id'], $config['rs_post_display']);
+				$post_reputation = $reputation->get_post_reputation($row['post_id']);
 				$json_data = array(
 					'post_id'				=> $row['post_id'],
 					'poster_id'				=> $row['rep_to'],
@@ -1102,16 +1103,21 @@ switch ($mode)
 					'reputation_rank'		=> $reputation_rank,
 					'post_reputation'		=> $post_reputation,
 					'reputation_class'		=> $reputation->get_vote_class($post_reputation),
+					'highlight'				=> (!empty($config['rs_post_highlight']) && ($post_reputation < $config['rs_post_highlight'])) ? true : false,
+					'hidden'				=> (!empty($config['rs_hide_post']) && ($post_reputation > $config['rs_hide_post'])) ? true : false,
+					'hidepost'				=> (!empty($config['rs_hide_post']) && ($post_reputation <= $config['rs_hide_post'])) ? true : false,
+					'hidemessage'			=> '<div id="hideshow">' . sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $row['rep_to'], $row['username'], $row['user_colour'], $row['post_username']), '<a href="#" onclick="jRS.showhide(this); return false;">' . $user->lang['RS_SHOW_HIDE_HIDDEN_POST'] . '</a>') . '</div>',
 				);
 			}
 			else
 			{
 				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
+				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
 				$json_data = array(
 					'rep_id'				=> $id,
 					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
 					'reputation_rank'		=> $reputation_rank,
-					'reputation_class'		=> $reputation->get_vote_class($user_reputation),
+					'reputation_class'		=> $reputation_color,
 					'rank_title'			=> $reputation_title,
 					'empty'					=> '<div class="reputation-list empty bg3"><span>' . $user->lang['RS_EMPTY_DATA'] . '</span></div>',
 				);
@@ -1143,7 +1149,7 @@ switch ($mode)
 
 			$user_reputation = $reputation->get_user_reputation($row['rep_to']);
 			$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
-			$post_reputation = $reputation->get_rating($post_id, $config['rs_post_display']);
+			$post_reputation = $reputation->get_post_reputation($post_id);
 
 			$json_data = array(
 				'post_id'				=> $post_id,
