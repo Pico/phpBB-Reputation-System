@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -17,7 +17,7 @@ if (!defined('IN_PHPBB'))
 }
 
 //Don't load hook if not installed.
-if (!isset($config['rs_version']) || !isset($config['rs_enable']) || !isset($config['rs_ajax_enable']) || !isset($config['rs_notification']) || !isset($config['rs_enable_toplist']))
+if (!isset($config['rs_version']) || !isset($config['rs_enable']) || !isset($config['rs_notification']) || !isset($config['rs_enable_toplist']))
 {
 	return;
 }
@@ -51,7 +51,7 @@ function hook_rs_copyright()
 {
 	global $template;
 	
-	$copy_string = '<a href="http://modsteam.tk/" title="Reputation System">Reputation System</a> &copy;';
+	$copy_string = '<a href="http://pico88.github.com/phpBB-Reputation-System/" title="Reputation System">Reputation System</a> &copy;';
 	if (!isset($template->_tpldata['.'][0]['CREDIT_LINE']))
 	{
 		$template->_tpldata['.'][0]['CREDIT_LINE'] = '';
