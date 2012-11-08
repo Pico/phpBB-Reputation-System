@@ -25,8 +25,8 @@ class reputation_system_version
 			'author'	=> 'Pico88',
 			'title'		=> 'Reputation System',
 			'tag'		=> 'reputation_system',
-			'version'	=> '0.6.0',
-			'file'		=> array('modsteam.tk', 'updatecheck', 'reputation.xml'),
+			'version'	=> '0.5.0',
+			'file'		=> array('pico88.github.com', 'phpBB-Reputation-System', 'reputation.xml'),
 		);
 	}
 }
