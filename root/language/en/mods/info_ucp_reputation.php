@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -49,10 +49,6 @@ $lang = array_merge($lang, array(
 	'RS_NEW'							=> 'New!',
 	'RS_REPUTATION_GIVEN_LISTS_UCP'		=> 'This is a reputation points list. Here you find all the reputation points you have given to other members.',
 	'RS_REPUTATION_SETTINGS_UCP'		=> 'Reputation settings',
-	'RS_DEFAULT_COMMENT_POS'			=> 'Default positive comment',
-	'RS_DEFAULT_COMMENT_POS_EXPLAIN'	=> 'You can define a default positive comment for post ratings.',
-	'RS_DEFAULT_COMMENT_NEG'			=> 'Default negative comment',
-	'RS_DEFAULT_COMMENT_NEG_EXPLAIN'	=> 'You can define a default negative comment for post ratings.',
 	'RS_DEFAULT_POWER'					=> 'Default power',
 	'RS_DEFAULT_POWER_EXPLAIN'			=> 'You can set the default point(s) you prefer to give.',
 	'RS_EMPTY'							=> 'No default',

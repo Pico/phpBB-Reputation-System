@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -37,24 +37,12 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'REPUTATION'		=> 'Reputation',
-	'LIKES'				=> 'Likes',
-	'BEERS'				=> 'Beers',
-	'BEERS_RECEIVED'	=> 'Beers (received)',
-	'BEERS_GIVEN'		=> 'Beers (given)',
-	'HELPS'				=> 'Helps',
-	'THANKS'			=> 'Thanks',
-	'THANKS_RECEIVED'	=> 'Thanks (received)',
-	'THANKS_GIVEN'		=> 'Thanks (given)',
 
 	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
 	'RS_TITLE'			=> 'Reputation System',
 
-	'RS_ADD_POINTS'					=> 'Give positive reputation point',
-	'RS_ADD_POINTS_CONFIRM'			=> 'Do you really want to give a positive reputation point?',
-	'RS_SUBTRACT_POINTS'			=> 'Give negative reputation point',
-	'RS_SUBTRACT_POINTS_CONFIRM'	=> 'Do you really want to give a negative reputation point?',
-	'RS_POINT_EXPLAIN'				=> 'By using this form you can post a comment for giving a reputation point for this post. If you want to notify user about this action, check the option below.',
-	'RS_USER_POINT_EXPLAIN'			=> 'By using this form you can post a comment for giving a reputation point. If you want to notify user about this action, check the option below.',
+	'RS_ADD_POINTS'				=> 'Give positive reputation point',
+	'RS_SUBTRACT_POINTS'		=> 'Give negative reputation point',
 
 	'RS_ACTION'					=> 'Action',
 	'RS_BAN'					=> 'Ban user',
@@ -71,6 +59,7 @@ $lang = array_merge($lang, array(
 	'RS_6MONTHS'				=> 'Last 6 months',
 	'RS_NEGATIVE'				=> 'Negative',
 	'RS_POSITIVE'				=> 'Positive',
+	'RS_POINT'					=> 'Point',
 	'RS_POINTS'					=> 'Points',
 	'RS_POST'					=> 'Post',
 	'RS_POST_DELETE'			=> 'Post deleted',
@@ -83,6 +72,7 @@ $lang = array_merge($lang, array(
 	'RS_SENT'					=> 'Your reputation point has been sent successfully',
 	'RS_TIME'					=> 'Time',
 	'RS_TO'						=> 'to',
+	'RS_TO_USER'				=> 'To',
 	'RS_TYPE'					=> 'Type',
 	'RS_USER_RATING'			=> 'Rating user',
 	'RS_USER_RATING_CONFIRM'	=> 'Do you really want to rate %s?',
@@ -127,12 +117,8 @@ $lang = array_merge($lang, array(
 	'RS_PM_BODY_USER_COMMENT'	=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Comment: [i]%s&nbsp;[/i]',
 	'RS_PM_SUBJECT'				=> 'You received a reputation point',
 
-	'RS_RETURN_DETAILS'			=> '%sReturn to the reputation list%s',
-	'RS_RETURN_POSTDETAILS'		=> '%sReturn to the reputation post list%s',
-	'RS_RETURN_USER'			=> '%sReturn to the user details%s',
-
 	'RS_TOPLIST'			=> 'Reputation Toplist',
-	'RS_TOPLIST_EXPLAIN'	=> 'We are proud of',
+	'RS_TOPLIST_EXPLAIN'	=> 'Most popular members',
 
 	'NOTIFY_USER_REP'		=> 'Notify user about the point?',
 
@@ -140,8 +126,7 @@ $lang = array_merge($lang, array(
 	'LIST_REPUTATION'				=> '1 reputation',
 	'LIST_REPUTATIONS'				=> '%s reputations',
 	'ALL_REPUTATIONS'				=> 'All reputations',
-	'RS_TO_USER'					=> 'To',
-	'RS_POINT'						=> 'Point',
+
 	'RS_NEW_REP'					=> 'You have <strong>1 new</strong> reputation comment',
 	'RS_NEW_REPS'					=> 'You have <strong>%s new</strong> reputation comments',
 
@@ -169,17 +154,6 @@ $lang = array_merge($lang, array(
 	'RS_GROUP_POWER'				=> 'Reputation power based on usergroup',
 
 	'RS_USER_GAP'					=> 'You cannot rate the same user so soon. You can try again in %s.',
-
-	'RS_VIEWTOPIC_BEER'		=> 'Author of post received %s beer(s)',
-	'RS_VIEWTOPIC_THANKS'	=> 'For this message the author has received %s thank(s)',
-
-	//Likes
-	'RS_LIKE'			=> 'like it',
-	'RS_LIKES'			=> 'likes it',
-	'RS_OTHER_LIKE'		=> 'other',
-	'RS_OTHERS_LIKES'	=> 'others',
-	'RS_YOU_LIKE'		=> 'You',
-	'RS_AND'			=> ' and '
 ));
 
 ?>
