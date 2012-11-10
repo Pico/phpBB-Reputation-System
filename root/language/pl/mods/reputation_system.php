@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -41,12 +41,8 @@ $lang = array_merge($lang, array(
 	'RS_DISABLED'		=> 'Przepraszamy, ale administrator wyłączył tą funkcję.',
 	'RS_TITLE'			=> 'System Reputacji',
 	
-	'RS_ADD_POINTS'					=> 'Oceń post pozytywnie (przyznaj punkt)',
-	'RS_ADD_POINTS_CONFIRM'			=> 'Czy na pewno chcesz przyznać pozytywny punkt reputacji za ten post?',
-	'RS_SUBTRACT_POINTS'			=> 'Oceń post negatywnie (odejmij punkt)',
-	'RS_SUBTRACT_POINTS_CONFIRM'	=> 'Czy na pewno chcesz przyznać negatywny punkt reputacji za ten post?',
-	'RS_POINT_EXPLAIN'				=> 'Za pomocą poniższego formularza możesz dodać komentarz przyznania punktu za powyższy post. Jeśli chcesz, żeby użytkownik został powiadomiony o punkcie, zaznacz poniżej tę opcję.',
-	'RS_USER_POINT_EXPLAIN'			=> 'Za pomocą poniższego formularza możesz dodać komentarz przyznania punktu. Jeśli chcesz, żeby użytkownik został powiadomiony o punkcie, zaznacz poniżej tę opcję.',
+	'RS_ADD_POINTS'				=> 'Oceń post pozytywnie (przyznaj punkt)',
+	'RS_SUBTRACT_POINTS'		=> 'Oceń post negatywnie (odejmij punkt)',
 
 	'RS_ACTION'					=> 'Czynność',
 	'RS_BAN'					=> 'Ban',
@@ -63,6 +59,7 @@ $lang = array_merge($lang, array(
 	'RS_6MONTHS'				=> 'ostatnie 6 miesięcy',
 	'RS_NEGATIVE'				=> 'Negatywne',
 	'RS_POSITIVE'				=> 'Pozytywne',
+	'RS_POINT'					=> 'Punkt',
 	'RS_POINTS'					=> 'Punkty',
 	'RS_POST'					=> 'Post',
 	'RS_POST_DELETE'			=> 'Post usunięty',
@@ -75,6 +72,7 @@ $lang = array_merge($lang, array(
 	'RS_SENT'					=> 'Punkt reputacji został dodany pomyślnie',
 	'RS_TIME'					=> 'Data',
 	'RS_TO'						=> 'do',
+	'RS_TO_USER'				=> 'Do',
 	'RS_TYPE'					=> 'Typ',
 	'RS_USER_RATING'			=> 'Ocenianie użytkownika',
 	'RS_USER_RATING_CONFIRM'	=> 'Czy na pewno chcesz przyznać punkty reputacji %s?',
@@ -87,6 +85,7 @@ $lang = array_merge($lang, array(
 	'RS_NO_COMMENT'				=> 'Musisz uzupełnić pole z komentarzem!',
 	'RS_NO_ID'					=> 'Brak ID',
 	'RS_NO_POST_ID'				=> 'Nie ma takiego postu.',
+	'RS_NO_POWER'				=> 'Twoja siła reputacji jest za niska.',
 	'RS_NO_POWER_LEFT'			=> 'Nie posiadasz żadnych punktów do rozdysponowania.<br/>Poczekaj, aż zostaną uzupełnione.<br/>Twoja siła reputacji: %s',
 	'RS_NO_USER_ID'				=> 'Nie ma takiego użytkownika.',
 	'RS_TOO_LONG_COMMENT'		=> 'Twój komentarz składa się z %1$d znaków. Dozwolone maksimum to %2$d znaków.',
@@ -103,23 +102,21 @@ $lang = array_merge($lang, array(
 	'RS_USER_NEGATIVE'			=> 'Nie możesz dodawać negatywnych punktów reputacji.<br />Twoja reputacja musi wynosić co najmniej %s.',
 	'RS_VIEW_DISALLOWED'		=> 'Nie możesz przeglądać punktów reputacji.',
 
-	'RS_DELETE_POINT'				=> 'Usuń punkt',
-	'RS_DELETE_POINT_CONFIRM'		=> 'Czy na pewno chcesz skasować ten punkt reputacji?',
-	'RS_POINT_DELETED'				=> 'Punkt reputacji został usunięty',
-	'RS_DELETE_POINTS'				=> 'Usuń punkty',
-	'RS_DELETE_POINTS_CONFIRM'		=> 'Czy na pewno chcesz usunąć te punkty reputacji?',
-	'RS_POINTS_DELETED'				=> 'Punkty reputacji zostały usunięte',
-	'NO_REPUTATION_SELECTED'		=> 'Nie wybrano punktu reputacji.',
+	'RS_DELETE_POINT'			=> 'Usuń punkt',
+	'RS_DELETE_POINT_CONFIRM'	=> 'Czy na pewno chcesz skasować ten punkt reputacji?',
+	'RS_POINT_DELETED'			=> 'Punkt reputacji został usunięty',
+	'RS_DELETE_POINTS'			=> 'Usuń punkty',
+	'RS_DELETE_POINTS_CONFIRM'	=> 'Czy na pewno chcesz usunąć te punkty reputacji?',
+	'RS_POINTS_DELETED'			=> 'Punkty reputacji zostały usunięte',
+	'NO_REPUTATION_SELECTED'	=> 'Nie wybrano punktu reputacji.',
+	'RS_TRUNCATE_POST_CONFIRM'	=> 'Czy na pewno chcesz skasować wszystkie punkt reputacji tego postu?',
+	'RS_CLEAR_POST'				=> 'Wyczyść reputację postu',
 
 	'RS_PM_BODY'				=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
 	'RS_PM_BODY_COMMENT'		=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />Komentarz: [i]%s&nbsp;[/i] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
 	'RS_PM_BODY_USER'			=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b]',
 	'RS_PM_BODY_USER_COMMENT'	=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />Komentarz: [i]%s&nbsp;[/i]',
 	'RS_PM_SUBJECT'				=> 'Otrzymałeś punkt reputacji',
-
-	'RS_RETURN_DETAILS'			=> '%sWróć do szczegółów reputacji%s',
-	'RS_RETURN_POSTDETAILS'		=> '%sWróć do listy reputacji postu%s',
-	'RS_RETURN_USER'			=> '%sWróć do szczegółów użytkownika%s',
 
 	'RS_TOPLIST'			=> 'Top Reputacji',
 	'RS_TOPLIST_EXPLAIN'	=> 'Jesteśmy dumni z',
@@ -130,18 +127,18 @@ $lang = array_merge($lang, array(
 	'LIST_REPUTATION'				=> '1 wpis reputacji',
 	'LIST_REPUTATIONS'				=> '%s wpisy/ów reputacji',
 	'ALL_REPUTATIONS'				=> 'Wszystkie wpisy reputacji',
-	'RS_TO_USER'					=> 'Do',
-	'RS_POINT'						=> 'Punkt',
+
 	'RS_NEW_REP'					=> 'Masz <strong>1 nowy</strong> punkt reputacji',
 	'RS_NEW_REPS'					=> 'Masz <strong>%s nowe/ych</strong> punktów reputacji',
 
-	'RS_POPUP_MORE_DETAILS'			=> '» więcej szczegółów',
+	'RS_MORE_DETAILS'				=> '» więcej szczegółów',
 
 	'RS_HIDE_POST'					=> 'Ten post został napisany przez <strong>%1$s</strong> i został ukrty, bo otrzymał za dużo negatywnych głósów. %2$s',
 	'RS_SHOW_HIDDEN_POST'			=> 'Pokaż ten post',
 	'RS_SHOW_HIDE_HIDDEN_POST'		=> 'Pokaż / Ukryj',
 	'RS_ANTISPAM_INFO'				=> 'Nie możesz przyznać punktów reputacji tak szybko. Wróć później.',
 	'RS_POST_REPUTATION'			=> 'Ocena postu',
+	'RS_USER_REPUTATION'			=> 'Reputacja %s',
 	'RS_YOU_HAVE_VOTED'				=> 'Oceniłeś ten post. Punkty:',
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> 'Pozostało %1$d punktów do wykorzystania z %2$d. Maksimum na głos: %3$d',

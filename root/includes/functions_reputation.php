@@ -54,15 +54,15 @@ class reputation
 		}
 
 		//Decreasing for warnings
-		if ($config['rs_power_loose_warn'] > 0)
+		if ($config['rs_power_lose_warn'] > 0)
 		{
-			$user_power['FOR_WARNINGS'] = -$number_of_active_warnings * $config['rs_power_loose_warn'];
+			$user_power['FOR_WARNINGS'] = -$number_of_active_warnings * $config['rs_power_lose_warn'];
 		}
 
 		//Decreasing for bans
-		if ($config['rs_power_loose_ban'] > 0)
+		if ($config['rs_power_lose_ban'] > 0)
 		{
-			$user_power['FOR_BANS'] = -$number_of_ban_days_in_1year * $config['rs_power_loose_ban'];
+			$user_power['FOR_BANS'] = -$number_of_ban_days_in_1year * $config['rs_power_lose_ban'];
 		}
 
 		$user_max_power = array_sum($user_power);
@@ -167,7 +167,7 @@ class reputation
 			$db->sql_freeresult($result);
 		}
 
-		if ($config['rs_power_loose_ban'] > 0)
+		if ($config['rs_power_lose_ban'] > 0)
 		{
 			//Until what timestamp should we count user bans
 			$bans_timeout = time() - 365 * 24 * 3600;
@@ -247,11 +247,8 @@ class reputation
 		//Post reputation
 		if ($post_id)
 		{
-			$post_rs_count = ($point > 0) ? 1 : -1;
-
 			$sql = 'UPDATE ' . POSTS_TABLE . "
-				SET post_reputation = post_reputation + $point,
-					post_rs_count = post_rs_count + $post_rs_count
+				SET post_reputation = post_reputation + $point
 				WHERE post_id = $post_id";
 			$db->sql_query($sql);
 		}
@@ -417,11 +414,9 @@ class reputation
 
 		if ($row['post_id'])
 		{
-			$post_rs_count = ($row['point'] > 0) ? 1 : -1;
 
 			$sql = 'UPDATE ' . POSTS_TABLE . "
-				SET post_reputation = post_reputation - {$row['point']},
-					post_rs_count = post_rs_count - $post_rs_count
+				SET post_reputation = post_reputation - {$row['point']}
 				WHERE post_id = {$row['post_id']}";
 			$db->sql_query($sql);
 		}

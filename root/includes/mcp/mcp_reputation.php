@@ -106,7 +106,6 @@ class mcp_reputation
 							'ON'	=> 'p.post_id = r.post_id',
 						),
 					),
-					'WHERE'		=> $config['rs_negative_point'] ? '' : 'point > 0',
 					'ORDER_BY'	=> 'r.time DESC',
 				));
 				$result = $db->sql_query_limit($sql, 5);

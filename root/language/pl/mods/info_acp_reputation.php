@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -68,12 +68,8 @@ $lang = array_merge($lang, array(
 	'ACP_RS_TOPLIST'		=> 'Toplist',
 	'ACP_RS_BAN'		 	=> 'Bany',
 
-	'RS_STATUS'			=> 'System Reputacji - stan',
-	'RS_AJAX_STATUS'	=> 'Wykorzystanie AJAX',
+	'RS_ENABLE'		=> 'Włącz System Reputacji',
 
-	'RS_ENABLE'						=> '<span style="color: red;">Włącz System Reputacji</span>',
-	'RS_AJAX_ENABLE'				=> '<span style="color: green;">Włącz AJAX</span>',
-	'RS_AJAX_ENABLE_EXPLAIN'		=> 'Opcja ta umożliwia włączenie funkcji AJAX. Jeżeli występuje konflikt z innymi skryptami jQuery, możesz wyłączyć tą funkcję i korzystać z Systemu Reputacji bez funkcji AJAX.',
 	'RS_NEGATIVE_POINT'				=> 'Włącz negatywne punkty',
 	'RS_NEGATIVE_POINT_EXPLAIN'		=> 'Kiedy wyłączysz, nie będzie możliwości przyznawania negatywnych punktów. Reputacji będzie zbliżona do "Lubię to!" z FB.',
 	'RS_MIN_REP_NEGATIVE'			=> 'Minimalna reputacja dla negatywnych punktów',
@@ -89,25 +85,20 @@ $lang = array_merge($lang, array(
 	'RS_MAX_POINT'					=> 'Maksimum punktów',
 	'RS_MAX_POINT_EXPLAIN'			=> 'Maksymalna liczba punktów, które użytkownik może otrzymać. Ustawienie wartość 0 wyłącza tę funckję.',
 
-	'RS_POINT_TYPE'					=> 'Metoda wyświeltania punktów',
-	'RS_POINT_TYPE_EXPLAIN'			=> 'Tutaj możesz ustawić metodę wyświetlanai punktów',
-	'RS_POINT_VALUE'				=> 'Wartość liczbowa',
-	'RS_POINT_IMG'					=> 'Obrazek',
-	'RS_PER_PAGE'					=> 'Wpisów reputacji na stronę',
-	'RS_PER_PAGE_EXPLAIN'			=> 'Ile wpisów ma być wyświetlanych na stronach z reputacją',
-	'RS_PER_POPUP'					=> 'Wpisów reputacji w okienku popup',
-	'RS_PER_POPUP_EXPLAIN'			=> 'Ile wpisów z wpisów punktów reputacji powinno się wyświetlać w okienki popup (działa, jeżeli funkcja AJAX jest włączona).<br /><em>Możesz ustawić wartość od 1 do 10.</em>',
-	'RS_SORT_MEMBERLIST_BY_REPO'	=> 'Sortuj listę użytkowników na podstawie reputacji',
-	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN' => 'Zmienia domyślny sposób sortowania listy użytkowników uwzględniając reputację a nie nazwę użytkownika.',
+	'RS_PER_PAGE'							=> 'Wpisów reputacji na stronę',
+	'RS_PER_PAGE_EXPLAIN'					=> 'Ile wpisów ma być wyświetlanych na stronach z reputacją',
+	'RS_DISPLAY_AVATAR'						=> 'Wyświetl awatary',
+	'RS_SORT_MEMBERLIST_BY_REPO'			=> 'Sortuj listę użytkowników na podstawie reputacji',
+	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN'	=> 'Zmienia domyślny sposób sortowania listy użytkowników uwzględniając reputację a nie nazwę użytkownika.',
+	'RS_POINT_TYPE'							=> 'Metoda wyświeltania punktów',
+	'RS_POINT_TYPE_EXPLAIN'					=> 'Tutaj możesz ustawić metodę wyświetlanai punktów',
+	'RS_POINT_VALUE'						=> 'Wartość liczbowa',
+	'RS_POINT_IMG'							=> 'Obrazek',
 
 	'RS_POST_RATING'				=> 'Włącz ocenę postu',
 	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Wyślij i włącz reputację na wszystkich forach',
-	'RS_POST_DISPLAY'				=> 'Metoda wyświetlana punktów w postach',
-	'RS_POST_DISPLAY_EXPLAIN'		=> 'Opcja ta umożliwia wybranie zachowania dotyczącego wyświetlania punktów podczas przeglądania postów. Metoda punktów oparta jest na sumie punktów jakie dany post posiada. Metoda użytkowników sumuje użytkowników, którzy oddali głos (głos pozytywny = +1 punkt, głos negatywny = -1 punkt).',
-	'RS_POINT_METHOD'				=> 'Punkty',
-	'RS_USER_METHOD'				=> 'Użytkownicy',
-	'RS_POST_DETAIL'				=> 'Wyświetl szczegóły postu',
-	'RS_POST_DETAIL_EXPLAIN'		=> 'Opcja ta umożliwia wyświetlenie treści postu i podstawowych informacji o użytkowniku podczas oceniania postu.',
+	'RS_HIGHLIGHT_POST'				=> 'Wyróżnij post',
+	'RS_HIGHLIGHT_POST_EXPLAIN'		=> 'Post, którego reputacja jest wyższa niż wartość podana obok, zostanie wyróżniony. Ustawienie wartość 0 wyłącza tę funckję.<br /><em>Uwaga:</em> Możesz zmienić efekt wyróżnienia przez edcyję klasy <strong>highlight</strong> w pliku reputation.css.',
 	'RS_HIDE_POST'					=> 'Ukryj treść postu',
 	'RS_HIDE_POST_EXPLAIN'			=> 'Post, którego reputacja jest niższa niż wartość podana obok, zostanie ukryty. Ustawienie wartość 0 wyłącza tę funckję.',
 	'RS_ANTISPAM'					=> 'Antyspam',
@@ -154,10 +145,10 @@ $lang = array_merge($lang, array(
 	'RS_MEMBERSHIP_DAYS_EXPLAIN'	=> 'Użytkownik będzie otrzymywał większą siłę reputacji co każde x dni.',
 	'RS_POWER_REP_POINT'			=> 'Czynnik punktów reputacji',
 	'RS_POWER_REP_POINT_EXPLAIN'	=> 'Użytkownik będzie otrzymywał większą siłę reputacji co każde x pkt. reputacji.',
-	'RS_LOOSE_POWER_BAN'			=> 'Czynnik banów',
-	'RS_LOOSE_POWER_BAN_EXPLAIN'	=> 'Każdy ban w przeciągu ostatniego roku będzie zmiejszał siłę reputacji o x pkt.<br />Wymaga ustawienia <em>maksymalnej siły reputacji dla banów</em>.',
-	'RS_LOOSE_POWER_WARN'			=> 'Czynnik ostrzeżeń',
-	'RS_LOOSE_POWER_WARN_EXPLAIN'	=> 'Każde ostrzeżęnie będzie zmniejszało siłę reputacji o x pkt.',
+	'RS_LOSE_POWER_BAN'				=> 'Czynnik banów',
+	'RS_LOSE_POWER_BAN_EXPLAIN'		=> 'Każdy ban w przeciągu ostatniego roku będzie zmiejszał siłę reputacji o x pkt.<br />Wymaga ustawienia <em>maksymalnej siły reputacji dla banów</em>.',
+	'RS_LOSE_POWER_WARN'			=> 'Czynnik ostrzeżeń',
+	'RS_LOSE_POWER_WARN_EXPLAIN'	=> 'Każde ostrzeżęnie będzie zmniejszało siłę reputacji o x pkt.',
 	'RS_GROUP_POWER'				=> 'Siła reputacji grupy',
 
 	'RS_RANKS_ENABLE'				=> 'Włącz rangi',
@@ -171,21 +162,24 @@ $lang = array_merge($lang, array(
 	'RS_TL_HORIZONTAL'				=> 'Poziomy',
 	'RS_TL_VERTICAL'				=> 'Pionowy',
 	'RS_TOPLIST_NUM'				=> 'Użytkowników na Topliście',
-	'RS_TOPLIST_NUM_EXPLAIN'	 	=> 'Liczba użytkowników wyświetlanych na topliście',
+	'RS_TOPLIST_NUM_EXPLAIN'		=> 'Liczba użytkowników wyświetlanych na topliście',
 
-	'RS_ENABLE_BAN'					=> 'Włącz bany',
-	'RS_ENABLE_EXPLAIN'				=> 'Opcja ta, umożliwi na automatyczne banowanie użytkowników z niską reputacją.',
-	'RS_BAN_SHIELD'					=> 'Ochrona dla zbanowancyh',
-	'RS_BAN_SHIELD_EXPLAIN'			=> 'Opcja ta chroni uprzednio, automatycznie zbanowanych użytkowników przed kolejnym banem za niską reputację. Taki użytkownik nie będzie mógł być ponownie zbanowany w ustanowionym okresie czasu od wygaśniecia bana.<br />Ustwienie wartość 0 wyłącza tę funkcję.',
-	'RS_BAN_GROUPS'					=> 'Wykluczone grupy',
-	'RS_BAN_GROUPS_EXPLAIN'			=> 'Jeśli nie ma wybranych grup, wszyscy użytkownicy mogą być zbanowani (z wyjątkiem założycieli). W celu zaznaczenia (lub odznaczenia) więcej niż jednej grupy, musisz użyć kombinacji CTRL+LPM (albo CMD-LPM dla Mac) na grupie. Jeżeli zapomnisz przytrzymać CTRL/CMD na wybranej grupie, wszystkie wcześniej wybrane pozycje zostaną odznaczone',
+	'RS_ENABLE_BAN'				=> 'Włącz bany',
+	'RS_ENABLE_BAN_EXPLAIN'		=> 'Opcja ta, umożliwi na automatyczne banowanie użytkowników z niską reputacją.',
+	'RS_BAN_SHIELD'				=> 'Ochrona dla zbanowancyh',
+	'RS_BAN_SHIELD_EXPLAIN'		=> 'Opcja ta chroni uprzednio, automatycznie zbanowanych użytkowników przed kolejnym banem za niską reputację. Taki użytkownik nie będzie mógł być ponownie zbanowany w ustanowionym okresie czasu od wygaśniecia bana.<br />Ustwienie wartość 0 wyłącza tę funkcję.',
+	'RS_BAN_GROUPS'				=> 'Wykluczone grupy',
+	'RS_BAN_GROUPS_EXPLAIN'		=> 'Jeśli nie ma wybranych grup, wszyscy użytkownicy mogą być zbanowani (z wyjątkiem założycieli). W celu zaznaczenia (lub odznaczenia) więcej niż jednej grupy, musisz użyć kombinacji CTRL+LPM (albo CMD-LPM dla Mac) na grupie. Jeżeli zapomnisz przytrzymać CTRL/CMD na wybranej grupie, wszystkie wcześniej wybrane pozycje zostaną odznaczone',
 
 	'RS_SYNC'						=> 'Synchronizacja Systemu Reputacji',
-	'RS_SYNC_EXPLAIN'				=> 'Możesz zsynchronizować System Reputacji po masowym usunięciu postów/tematów/użytkowników, podziale/połączeniu tematów, zmiany autorów postów, konwersji z innych systemów itp. Synchronizacja zajmie chwilę, więc proszę być cierpliwym. Po zakończeniu synchronizacji zostaniesz powiadomiony o tym fakcie.',
-	'RS_SYNC_STEP_DEL'				=> 'Krok 1/4 - usunięcie wpisów (punktów) reputacji nieistniejących użytkowników',
-	'RS_SYNC_STEP_USER'				=> 'Krok 2/4 - synchronizacja punktów reputacji użytkowników',
-	'RS_SYNC_STEP_POST_1'			=> 'Krok 3/4 - synchronizacja reputacji postów (krok 1 z 2)',
-	'RS_SYNC_STEP_POST_2'			=> 'Krok 4/4 - synchronizacja reputacji postów (krok 2 z 2)',
+	'RS_SYNC_EXPLAIN'				=> 'Możesz zsynchronizować System Reputacji po: masowym usunięciu postów/tematów/użytkowników, zmianie ustawień reputacji, zmianie autorów postów, konwersji z innych systemów. Synchronizacja zajmie chwilę, więc proszę być cierpliwym. Po zakończeniu synchronizacji zostaniesz powiadomiony o tym fakcie.<br /><strong>Uwaga!</strong> Podczas synchronizacji zostaną usunięte punkty reputacji, które nie są zgodne z ustawieniami reputacji. Zaleca się wykonanie kopii zapasowej tabeli reputacji.',
+	'RS_SYNC_STEP_DEL'				=> 'Krok 1/6 - usunięcie punktów reputacji nieistniejących użytkowników',
+	'RS_SYNC_STEP_POSTS_DEL'		=> 'Krok 2/6 - usunięcie pnktów reputacji skasowanych postów',
+	'RS_SYNC_STEP_REPS_DEL'			=> 'Krok 3/7 - usunięcie punktów reputacji niezgodnych z ustawieniami reputacji'
+	'RS_SYNC_STEP_POST_AUTHOR'		=> 'Krok 3/6 - sprawdzanie autorów postów i synchronizacji punktów reputacji uwzględniając nowych autorów postów',
+	'RS_SYNC_STEP_FORUM'			=> 'Krok 4/6 - sprawdzanie ustawień for i synchronizacja punktów reputacji zgodnie z ustawieniami forów',
+	'RS_SYNC_STEP_USER'				=> 'Krok 5/6 - synchronizacja punktów reputacji użytkowników',
+	'RS_SYNC_STEP_POSTS'			=> 'Krok 6/6 - synchronizacja punktów reputacji postów',
 	'RS_SYNC_DONE'					=> 'Synchronizacja Systemu Reputacji została zakończona pomyślnie',
 	'RS_RESYNC_REPUTATION_CONFIRM'	=> 'Czy na pewno chcesz przeprowadzić synchronizację reputacji?',
 
@@ -231,7 +225,7 @@ $lang = array_merge($lang, array(
 
 	'LOG_REPUTATION_SETTING'		=> '<strong>Zmieniono ustawienia Systemu Reputacji</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>System Reputacji został zsynchronizowany</strong>',
-	'LOG_REPUTATION_SYNC'			=> '<strong>Wyczyszczono reputację</strong>',
+	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Wyczyszczono reputację</strong>',
 	'LOG_RS_BAN_ADDED'				=> '<strong>Dodano nowy ban za reputację</strong>',
 	'LOG_RS_BAN_REMOVED'			=> '<strong>Usunięto ban za reputację</strong>',
 	'LOG_RS_BAN_UPDATED'			=> '<strong>Zaktualizowano ban za reputację</strong>',
@@ -239,6 +233,7 @@ $lang = array_merge($lang, array(
 	'LOG_RS_RANK_REMOVED'			=> '<strong>Usunięto rangę reputacji</strong><br />» %s',
 	'LOG_RS_RANK_UPDATED'			=> '<strong>Zaktualizowano rangę reputacji</strong><br />» %s',
 	'LOG_USER_REP_DELETE'			=> '<strong>Usunięto punkt reputacji</strong><br />Użytkownik: %s',
+	'LOG_POST_REP_TRUNCATE'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
 
 	'IMG_ICON_RATE_GOOD'			=> 'Oceń pozytywnie',
 	'IMG_ICON_RATE_BAD'				=> 'Oceń negatywnie',
@@ -253,13 +248,13 @@ $lang = array_merge($lang, array(
 
 	//MOD Version Check
 	'ANNOUNCEMENT_TOPIC'		=> 'Ogłoszenie o wydaniu',
-	'CURRENT_VERSION'			=> 'Używana wersja',
+	'CURRENT_VERSION'			=> 'Zainstalowana wersja',
 	'DOWNLOAD_LATEST'			=> 'Pobierz najnowszą wersję',
 	'LATEST_VERSION'			=> 'Najnowsza wersja',
 	'NO_INFO'					=> 'Nie można połączyć się z serwerem',
 	'NOT_UP_TO_DATE'			=> '%s nie jest zaktualizowany',
 	'RELEASE_ANNOUNCEMENT'		=> 'Ogłoszenie',
-	'UP_TO_DATE'				=> '%s jest zakutalizowany',
+	'UP_TO_DATE'				=> 'Korzystasz z najnowszej wersji %s. Aktualizacja nie jest wymagana.',
 	'VERSION_CHECK'				=> 'Sprawdzanie wersji modyfikacji',
 ));
 

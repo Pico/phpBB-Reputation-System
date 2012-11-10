@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -49,10 +49,6 @@ $lang = array_merge($lang, array(
 	'RS_NEW'							=> 'Nowy!',
 	'RS_REPUTATION_GIVEN_LISTS_UCP'		=> 'To jest lista reputacji. Tutaj możesz przeglądać wszystkie punkty jakie przyznałeś/aś innym użytkownikom.',
 	'RS_REPUTATION_SETTINGS_UCP'		=> 'Ustawienia reputacji',
-	'RS_DEFAULT_COMMENT_POS'			=> 'Domyślny pozytywny komentarz',
-	'RS_DEFAULT_COMMENT_POS_EXPLAIN'	=> 'Możesz zdefiniować domyślny komentarz dla pozystywnej oceny postu.',
-	'RS_DEFAULT_COMMENT_NEG'			=> 'Domyślny negatywny komentarz',
-	'RS_DEFAULT_COMMENT_NEG_EXPLAIN'	=> 'Możesz zdefiniować domyślny komentarz dla negatywnej oceny postu.',
 	'RS_DEFAULT_POWER'					=> 'Domyślna siła reputacji',
 	'RS_DEFAULT_POWER_EXPLAIN'			=> 'Możesz ustawić domyślną siłę reputacji',
 	'RS_EMPTY'							=> 'Brak domyślnej',

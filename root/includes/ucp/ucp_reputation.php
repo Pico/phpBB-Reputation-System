@@ -109,7 +109,7 @@ class ucp_reputation
 							'ON'	=> 'p.post_id = r.post_id',
 						),
 					),
-					'WHERE' 	=> 'r.rep_to = ' . $user->data['user_id'] . '' . ($config['rs_negative_point'] ? '' : ' AND point > 0'),
+					'WHERE' 	=> 'r.rep_to = ' . $user->data['user_id'],
 					'ORDER_BY'	=> 'r.time DESC',
 				);
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -249,7 +249,6 @@ class ucp_reputation
 				reputation_sorting($sort_days, $sort_key, $sort_dir, $sort_by_sql, $sort_order_sql, $total, 'list');
 
 				$limit_time_sql = ($sort_days) ? 'AND r.time >= ' . (time() - ($sort_days * 86400)) : '';
-				$where_negative = $config['rs_negative_point'] ? '' : 'AND r.point > 0';
 
 				$sort_order_u = ($sort_order_sql[0] == 'u') ? ' LEFT JOIN ' . USERS_TABLE . ' u ON r.rep_from = u.user_id' : '';
 
@@ -258,7 +257,6 @@ class ucp_reputation
 					' . $sort_order_u . '
 					WHERE r.rep_to = ' . $user->data['user_id'] . '
 						' . $limit_time_sql . '
-						' . $where_negative . '
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
@@ -385,7 +383,6 @@ class ucp_reputation
 				reputation_sorting($sort_days, $sort_key, $sort_dir, $sort_by_sql, $sort_order_sql, $total, 'given');
 
 				$limit_time_sql = ($sort_days) ? 'AND r.time >= ' . (time() - ($sort_days * 86400)) : '';
-				$where_negative = $config['rs_negative_point'] ? '' : 'AND r.point > 0';
 
 				$sort_order_u = ($sort_order_sql[0] == 'u') ? ' LEFT JOIN ' . USERS_TABLE . ' u ON r.rep_from = u.user_id' : '';
 
@@ -394,7 +391,6 @@ class ucp_reputation
 					' . $sort_order_u . '
 					WHERE r.rep_from = ' . $user->data['user_id'] . '
 						' .$limit_time_sql . '
-						' . $where_negative . '
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
@@ -642,7 +638,6 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 	$min_time = ($sort_days) ? time() - ($sort_days * 86400) : 0;
 
 	$where_sql = ($mode == 'list') ? "WHERE r.rep_to = {$user->data['user_id']}" : "WHERE r.rep_from = {$user->data['user_id']}";
-	$where_sql .= $config['rs_negative_point'] ? '' : ' AND r.point > 0';
 	$where_sql .= ($min_time) ? " AND r.time >= $min_time" : '';
 
 	$sql = 'SELECT COUNT(r.rep_id) AS total

@@ -2,7 +2,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -13,7 +13,7 @@
 */
 if (!defined('IN_PHPBB'))
 {
-    exit;
+	exit;
 }
 
 if (empty($lang) || !is_array($lang))
@@ -47,6 +47,7 @@ $lang = array_merge($lang, array(
 	'MCP_RS_GIVE_REP_POINT'			=> 'Przyznaj punkty',
 
 	'LOG_USER_REP_DELETE'			=> '<strong>Usunięto punkt reputacji</strong><br />Użytkownik: %s',
+	'LOG_POST_REP_TRUNCATE'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
 
 	'RS_BEST_REPUTATION'			=> 'Użytkownicy z najlepszą reputacją',
 	'RS_WORST_REPUTATION'			=> 'Użytkownicy z najgorszą reputacją',

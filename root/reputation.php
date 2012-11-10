@@ -178,6 +178,12 @@ switch ($mode)
 			//Calculate how much maximum power a user has
 			$max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
 
+			if ($max_voting_power < 1)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_NO_POWER']));
+				return;
+			}
+
 			$voting_power_left = $max_voting_power - $user_reputation_stats['renewal_time'];
 
 			//Don't allow to vote more than set in ACP per 1 vote
@@ -263,7 +269,7 @@ switch ($mode)
 		$template->assign_vars(array(
 			'POST_ID'					=> $post_id,
 			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
@@ -377,6 +383,12 @@ switch ($mode)
 			//Calculate how much maximum power a user has
 			$max_voting_power = $reputation->get_rep_power($user->data['user_posts'], $user->data['user_regdate'], $user->data['user_reputation'], $user->data['group_id'], $user->data['user_warnings'], $user_reputation_stats['bancounts']);
 
+			if ($max_voting_power < 1)
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_NO_POWER']));
+				return;
+			}
+
 			$voting_power_left = $max_voting_power - $user_reputation_stats['renewal_time'];
 
 			//Don't allow to vote more than set in ACP per 1 vote
@@ -467,7 +479,7 @@ switch ($mode)
 			'USER_ID'					=> $row['user_id'],
 
 			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> $config['rs_power_renewal'] ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
+			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
@@ -559,7 +571,10 @@ switch ($mode)
 			}
 
 			$delete_link = false;
-			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) $delete_link = true;
+			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete')))
+			{
+				$delete_link = true;
+			}
 
 			$template->assign_block_vars('reputation', array(
 				'REP_ID'			=> $row['rep_id'],
@@ -569,7 +584,7 @@ switch ($mode)
 				'COMMENT'			=> $comment,
 				'DELETE'			=> $delete_link,
 				'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
-				'POINT_CLASS'		=> $config['rs_point_type'] ? 'zero' : $point_class,
+				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
 
@@ -666,6 +681,9 @@ switch ($mode)
 			'WHERE'		=> 'r.rep_to = ' . $uid,
 			'ORDER_BY'	=> $order_by
 		);
+
+		$sql_array['WHERE'] .= $config['rs_negative_point'] ? '' : ' AND ((point > 0 AND (action = 1 OR action = 2 OR action = 5)) OR action = 3 OR action = 4)';
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 
@@ -718,7 +736,10 @@ switch ($mode)
 			}
 
 			$delete_link = false;
-			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) $delete_link = true;
+			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete')))
+			{
+				$delete_link = true;
+			}
 
 			$template->assign_block_vars('reputation', array(
 				'REP_ID'			=> $row['rep_id'],
@@ -730,7 +751,7 @@ switch ($mode)
 				'COMMENT'			=> $comment,
 				'DELETE'			=> $delete_link,
 				'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
-				'POINT_CLASS'		=> $config['rs_point_type'] ? 'zero' : $point_class,
+				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
 
@@ -835,12 +856,9 @@ switch ($mode)
 
 		$order_by = $sort_key_sql[$sort_key] . ' ' . (($sort_dir == 'd') ? 'DESC' : 'ASC');
 
-		$where_negative = $config['rs_negative_point'] ? '': 'AND point > 0';
-
 		$sql = 'SELECT COUNT(rep_id) AS total_reps
 			FROM ' . REPUTATIONS_TABLE . "
-			WHERE rep_to = $uid
-				$where_negative";
+			WHERE rep_to = $uid";
 		$result = $db->sql_query($sql);
 		$total_reps = (int) $db->sql_fetchfield('total_reps');
 		$db->sql_freeresult($result);
@@ -858,7 +876,7 @@ switch ($mode)
 					'ON'	=> 'p.post_id = r.post_id',
 				),
 			),
-			'WHERE'		=> 'r.rep_to = ' . $uid . ' ' . $where_negative,
+			'WHERE'		=> 'r.rep_to = ' . $uid,
 			'ORDER_BY'	=> $order_by . ', r.rep_id ASC'
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -913,7 +931,10 @@ switch ($mode)
 			}
 
 			$delete_link = false;
-			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) $delete_link = true;
+			if($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete')))
+			{
+				$delete_link = true;
+			}
 
 			$template->assign_block_vars('reputation', array(
 				'REP_ID'			=> $row['rep_id'],
@@ -925,13 +946,16 @@ switch ($mode)
 				'COMMENT' 			=> $comment,
 				'DELETE' 			=> $delete_link,
 				'POINT_VALUE'		=> $config['rs_point_type'] ? $point_img : $row['point'],
-				'POINT_CLASS'		=> $config['rs_point_type'] ? 'zero' : $point_class,
+				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
 
 		$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
 		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
-		if ($config['rs_ranks']) $reputation->get_rs_rank($user_row['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
+		if ($config['rs_ranks'])
+		{
+			$reputation->get_rs_rank($user_row['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
+		}
 
 		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 
@@ -948,6 +972,7 @@ switch ($mode)
 			FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_to = $uid";
 		$result = $db->sql_query($sql);
+
 		while ($reputation_vote = $db->sql_fetchrow($result))
 		{
 			if ($reputation_vote['point'] > 0)
@@ -993,7 +1018,10 @@ switch ($mode)
 			if ($config['rs_power_renewal'])
 			{
 				$voting_power_left = $user_max_voting_power - $user_reputation_stats['renewal_time'];
-				if ($voting_power_left <= 0) $voting_power_left = 0; 
+				if ($voting_power_left <= 0)
+				{
+					$voting_power_left = 0;
+				}
 			}
 
 			$group_power = $reputation->get_group_power();
@@ -1005,8 +1033,8 @@ switch ($mode)
 				'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
 				'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
 				'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
-				'RS_CFG_LOOSE_WARN'			=> $config['rs_power_loose_warn'] ? true : false,
-				'RS_CFG_LOOSE_BAN'			=> $config['rs_power_loose_ban'] ? true : false,
+				'RS_CFG_LOOSE_WARN'			=> $config['rs_power_lose_warn'] ? true : false,
+				'RS_CFG_LOOSE_BAN'			=> $config['rs_power_lose_ban'] ? true : false,
 				'RS_GROUP_POWER'			=> $group_power ? true : false,
 			));
 
@@ -1064,6 +1092,7 @@ switch ($mode)
 
 	case 'delete':
 	case 'remove':
+
 		$sql_array = array(
 			'SELECT'	=> 'r.rep_from, r.rep_to, r.post_id, u.username, u.user_colour, p.post_username',
 			'FROM'		=> array(
@@ -1168,6 +1197,7 @@ switch ($mode)
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_CANNOT_DELETE']));
 			return;
 		}
+
 	break;
 
 	default:

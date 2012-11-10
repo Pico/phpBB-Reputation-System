@@ -85,7 +85,8 @@ $lang = array_merge($lang, array(
 	'RS_NO_COMMENT'				=> 'You cannot leave the comment field blank.',
 	'RS_NO_ID'					=> 'No ID',
 	'RS_NO_POST_ID'				=> 'There is no such post.',
-	'RS_NO_POWER_LEFT'			=> 'Not enough voting power points.<br/>Wait until they renew.<br/>Your reputation power is %s',
+	'RS_NO_POWER'				=> 'Your reputation power is too low.',
+	'RS_NO_POWER_LEFT'			=> 'Not enough reputation power points.<br/>Wait until they renew.<br/>Your reputation power is %s',
 	'RS_NO_USER_ID'				=> 'The requested user does not exist.',
 	'RS_TOO_LONG_COMMENT'		=> 'Your comment contains %1$d characters. The maximum number of allowed characters is %2$d.',
 	'RS_COMMENT_TOO_LONG'		=> 'Too long comment.<br />Max characters: %s. Your comment:',
@@ -140,7 +141,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_REPUTATION'			=> '%s\'s reputation',
 	'RS_YOU_HAVE_VOTED'				=> 'You have given reputation points. Points:',
 
-	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d reputation power points left of %2$d. Maximum per vote: %3$d',
+	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d reputation power points left of %2$d.<br />Maximum per vote: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d of %2$d',
 
 	'RS_POWER_DETAILS'				=> 'How reputation power should be calculated',

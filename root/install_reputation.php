@@ -499,6 +499,8 @@ $versions = array(
 		'config_add' => array(
 			array('rs_display_avatar', '1', 0),
 			array('rs_post_highlight', '10', 0),
+			array('rs_power_lose_warn', '3', 0),
+			array('rs_power_lose_ban', '7', 0),
 		),
 
 		'config_remove' => array(
@@ -506,6 +508,8 @@ $versions = array(
 			array('rs_per_popup'),
 			array('rs_post_display'),
 			array('rs_post_detail'),
+			array('rs_power_loose_ban'),
+			array('rs_power_loose_warn'),
 		),
 
 		'table_column_remove' => array(

@@ -200,6 +200,44 @@ class acp_reputation
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
+							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_REPS_DEL'],
+						));
+
+						$reps_ids = array();
+
+						$sql = 'SELECT rep_id, action, point
+							FROM ' . REPUTATIONS_TABLE;
+						$result = $db->sql_query($sql);
+
+						while ($row = $db->sql_fetchrow($result))
+						{
+							if (!$config['rs_negative_point'] && ($row['action'] == 1 || $row['action'] == 2 || $row['action'] == 5) && ($row['point'] < 0))
+							{
+								$reps_ids[] = $row['rep_id'];
+							}
+							if (!$config['rs_warning'] && ($row['action'] == 3))
+							{
+								$reps_ids[] = $row['rep_id'];
+							}
+							if (!$config['rs_max_power_ban'] && !$config['rs_enable_ban'] && ($row['action'] == 4))
+							{
+								$reps_ids[] = $row['rep_id'];
+							}
+						}
+
+						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+							WHERE ' . $db->sql_in_set('rep_id', $reps_ids, false, true);
+						$db->sql_query($sql);
+
+						$cache->put('_reputation', 4);
+						meta_refresh(2, append_sid($this->u_action));
+						return;
+					break;
+
+					case '4':
+						$template->assign_vars(array(
+							'S_RS_SYNC'		=> true,
+							'PROGRESS'		=> true,
 							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_AUTHOR'],
 						));
 
@@ -228,12 +266,12 @@ class acp_reputation
 							}
 						}
 
-						$cache->put('_reputation', 4);
+						$cache->put('_reputation', 5);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
 
-					case '4':
+					case '5':
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
@@ -276,12 +314,12 @@ class acp_reputation
 							}
 						}
 
-						$cache->put('_reputation', 5);
+						$cache->put('_reputation', 6);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
 
-					case '5':
+					case '6':
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
@@ -290,12 +328,9 @@ class acp_reputation
 
 						$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
 
-						$where_negative = $config['rs_negative_point'] ? '' : 'AND point > 0';
-
 						$sql = 'SELECT SUM(point) AS rep_points, rep_to
 							FROM ' . REPUTATIONS_TABLE . "
 							WHERE action != 5
-								$where_negative
 							GROUP BY rep_to";
 						$result = $db->sql_query($sql);
 
@@ -317,12 +352,12 @@ class acp_reputation
 							$db->sql_query($sql);
 						}
 
-						$cache->put('_reputation', 6);
+						$cache->put('_reputation', 7);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
 
-					case '6':
+					case '7':
 						$template->assign_vars(array(
 							'S_RS_SYNC'		=> true,
 							'PROGRESS'		=> true,
@@ -331,12 +366,9 @@ class acp_reputation
 
 						$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
 
-						$where_negative = $config['rs_negative_point'] ? '' : 'AND point > 0';
-
 						$sql = 'SELECT SUM(point) AS rep_points, post_id
 							FROM ' . REPUTATIONS_TABLE . "
 							WHERE post_id != 0
-								$where_negative
 							GROUP BY post_id";
 						$result = $db->sql_query($sql);
 
@@ -348,12 +380,12 @@ class acp_reputation
 							$db->sql_query($sql);
 						}
 
-						$cache->put('_reputation', 7);
+						$cache->put('_reputation', 8);
 						meta_refresh(2, append_sid($this->u_action));
 						return;
 					break;
 
-					case '7':
+					case '8':
 						$template->assign_vars(array(
 							'S_RS_SYNC'	=> true,
 							'DONE'		=> true,
@@ -507,8 +539,8 @@ class acp_reputation
 						'rs_total_posts'		=> array('lang' => 'RS_TOTAL_POSTS', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_membership_days'	=> array('lang' => 'RS_MEMBERSHIP_DAYS', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_rep_point'	=> array('lang' => 'RS_POWER_REP_POINT', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
-						'rs_power_loose_warn'	=> array('lang' => 'RS_LOOSE_POWER_WARN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
-						'rs_power_loose_ban'	=> array('lang' => 'RS_LOOSE_POWER_BAN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
+						'rs_power_lose_warn'	=> array('lang' => 'RS_LOSE_POWER_WARN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
+						'rs_power_lose_ban'		=> array('lang' => 'RS_LOSE_POWER_BAN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
 						'legend7'				=> array('lang' => 'ACP_RS_RANKS', 'tab' => 'rank', 'option' => 'rank'),
 						'rs_ranks'				=> array('lang' => 'RS_RANKS_ENABLE', 'validate' => 'bool', 'type' => 'custom', 'method' => 'rank', 'explain' => false),
