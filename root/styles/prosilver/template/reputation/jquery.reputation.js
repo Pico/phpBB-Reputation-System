@@ -43,19 +43,19 @@ var jRS = {
 		submit_action('user', id);
 	},
 	del: function(id) {
-		if(confirm($delete))
+		if(confirm(rsdelete))
 		{
 			submit_action('delete', id);
 		}
 	},
 	remove: function(id) {
-		if(confirm($delete))
+		if(confirm(rsdelete))
 		{
 			submit_action('remove', id);
 		}
 	},
 	truncate: function(id) {
-		if(confirm($truncate))
+		if(confirm(rstruncate))
 		{
 			submit_action('truncate', id);
 		}
@@ -134,7 +134,7 @@ function show_popup(a, b, c, d)
 			if (s.substr(0,1) == '{')
 			{
 				// It's JSON. Probably an error. Let's clean the DIV and show the error there
-				r = jQuery.pa$eJSON(s);
+				r = jQuery.parseJSON(s);
 				response(r, mode);
 				return true;
 			}
@@ -246,7 +246,7 @@ function response(a, b)
 				$('.user-reputation').html(a.user_reputation);
 				$('.reputation-rank').html(a.reputation_rank);
 				$('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-				$('.$-rank-title').text(a.rank_title);
+				$('.rs-rank-title').text(a.rank_title);
 				$('.empty').detach();
 				$('#post-reputation-list').prepend(a.add);
 			break;
