@@ -14,7 +14,7 @@
 				<homepage><![CDATA[http://www.modsteam.tk]]></homepage>
 			</author>
 		</author-group>
-		<mod-version>0.4.3</mod-version>
+		<mod-version>0.6.0</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -26,11 +26,7 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/language/pl/mods/info_acp_reputation.php" to="language/pl/mods/info_acp_reputation.php"/>
-			<file from="root/language/pl/mods/info_mcp_reputation.php" to="language/pl/mods/info_mcp_reputation.php"/>
-			<file from="root/language/pl/mods/info_ucp_reputation.php" to="language/pl/mods/info_ucp_reputation.php"/>
-			<file from="root/language/pl/mods/permissions_reputation.php" to="language/pl/mods/permissions_reputation.php"/>
-			<file from="root/language/pl/mods/reputation_system.php" to="language/pl/mods/reputation_system.php"/>
+			<file from="root/language/pl/mods/*.*" to="language/pl/mods/*.*"/>
 		</copy>
 	</action-group>
 </mod>

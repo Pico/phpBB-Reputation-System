@@ -491,7 +491,12 @@ class reputation
 	*/
 	function obtain_rs_ranks()
 	{
-		global $cache;
+		global $cache, $config;
+
+		if (!$config['rs_enable'] || !$config['rs_ranks'])
+		{
+			return;
+		}
 
 		if (($rs_ranks = $cache->get('_rs_ranks')) === false)
 		{

@@ -41,9 +41,6 @@ $lang = array_merge($lang, array(
 	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
 	'RS_TITLE'			=> 'Reputation System',
 
-	'RS_ADD_POINTS'				=> 'Give positive reputation point',
-	'RS_SUBTRACT_POINTS'		=> 'Give negative reputation point',
-
 	'RS_ACTION'					=> 'Action',
 	'RS_BAN'					=> 'Ban user',
 	'RS_COMMENT'				=> 'Comment',
@@ -67,6 +64,7 @@ $lang = array_merge($lang, array(
 	'RS_POST_RATING'			=> 'Rating post',
 	'RS_ONLYPOST_RATING'		=> 'Evaluating post',
 	'RS_RATE_BUTTON'			=> 'Rate',
+	'RS_RATE_POST'				=> 'Rate post',
 	'RS_RATE_USER'				=> 'Rate user',
 	'RS_RANK'					=> 'Reputation rank',
 	'RS_SENT'					=> 'Your reputation point has been sent successfully',
@@ -139,7 +137,7 @@ $lang = array_merge($lang, array(
 	'RS_ANTISPAM_INFO'				=> 'You cannot give reputation so soon. You may try again later.',
 	'RS_POST_REPUTATION'			=> 'Post reputation',
 	'RS_USER_REPUTATION'			=> '%s\'s reputation',
-	'RS_YOU_HAVE_VOTED'				=> 'You have given reputation points. Points:',
+	'RS_YOU_RATED'					=> 'You rated that post. Points:',
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> '%1$d reputation power points left of %2$d.<br />Maximum per vote: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d of %2$d',

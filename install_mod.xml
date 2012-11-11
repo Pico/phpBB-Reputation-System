@@ -16,7 +16,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 		<author-group>
 			<author>
 				<username><![CDATA[Pico88]]></username>
-				<homepage><![CDATA[http://www.modsteam.tk]]></homepage>
+				<homepage><![CDATA[http://pico88.github.com/phpBB-Reputation-System/]]></homepage>
 			</author>
 			<author>
 				<username><![CDATA[Versusnja]]></username>
@@ -25,7 +25,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.5.1</mod-version>
+		<mod-version>0.6.0</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>900</time>
@@ -160,20 +160,24 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 					<change><![CDATA[FIX non define avatar image variable]]></change>
 				</changelog>
 			</entry>
+			<entry>
+				<date>2012-11-11</date>
+				<rev-version>0.6.0</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[REWRITE mod to work in AJAX]]></change>
+					<change><![CDATA[IMPROVE synchronization]]></change>
+					<change><![CDATA[CHANGE templates]]></change>
+					<change><![CDATA[ADD truncate post reputation]]></change>
+					<change><![CDATA[ADD ajax sorting in popup]]></change>
+					<change><![CDATA[UPDATE jQuery to 1.8.2]]></change>
+				</changelog>
+			</entry>
 		</history>
 		<link-group>
 			<link type="language" href="./contrib/polish.xml" lang="pl">Polish</link>
-			<link type="contrib" href="./contrib/update_0.1.0_to_0.1.1.xml" lang="en">Update from 0.1.0 to 0.1.1</link>
-			<link type="contrib" href="./contrib/update_0.1.1_to_0.1.2.xml" lang="en">Update from 0.1.1 to 0.1.2</link>
-			<link type="contrib" href="./contrib/update_0.1.2_to_0.2.0.xml" lang="en">Update from 0.1.2 to 0.2.0</link>
-			<link type="contrib" href="./contrib/update_0.2.0_to_0.2.2.xml" lang="en">Update from 0.2.0 to 0.2.2</link>
-			<link type="contrib" href="./contrib/update_0.2.2_to_0.2.7.xml" lang="en">Update from 0.2.2 to 0.2.7</link>
-			<link type="contrib" href="./contrib/update_0.2.7_to_0.4.0.xml" lang="en">Update from 0.2.7 to 0.4.0</link>
-			<link type="contrib" href="./contrib/update_0.4.0_to_0.4.1.xml" lang="en">Update from 0.4.0 to 0.4.1</link>
-			<link type="contrib" href="./contrib/update_0.4.1_to_0.4.2.xml" lang="en">Update from 0.4.1 to 0.4.2</link>
-			<link type="contrib" href="./contrib/update_0.4.2_to_0.4.3.xml" lang="en">Update from 0.4.2 to 0.4.3</link>
-			<link type="contrib" href="./contrib/update_0.4.3_to_0.5.0.xml" lang="en">Update from 0.4.3 to 0.5.0</link>
-			<link type="contrib" href="./contrib/update_0.5.0_to_0.5.1.xml" lang="en">Update from 0.5.0 to 0.5.1</link>
+			<link type="contrib" href="./contrib/update_from_0.4.3_to_0.5.0.xml" lang="en">Update from 0.4.3 to 0.5.0</link>
+			<link type="contrib" href="./contrib/update_from_0.5.0_to_0.5.1.xml" lang="en">Update from 0.5.0 to 0.5.1</link>
+			<link type="contrib" href="./contrib/update_from_0.5.1_to_0.6.0.xml" lang="en">Update from 0.5.1 to 0.6.0</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -193,25 +197,10 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 			<file from="root/includes/mcp/info/mcp_reputation.php" to="includes/mcp/info/mcp_reputation.php"/>
 			<file from="root/includes/ucp/ucp_reputation.php" to="includes/ucp/ucp_reputation.php"/>
 			<file from="root/includes/ucp/info/ucp_reputation.php" to="includes/ucp/info/ucp_reputation.php"/>
-			<file from="root/language/en/mods/info_acp_reputation.php" to="language/en/mods/info_acp_reputation.php"/>
-			<file from="root/language/en/mods/info_mcp_reputation.php" to="language/en/mods/info_mcp_reputation.php"/>
-			<file from="root/language/en/mods/info_ucp_reputation.php" to="language/en/mods/info_ucp_reputation.php"/>
-			<file from="root/language/en/mods/permissions_reputation.php" to="language/en/mods/permissions_reputation.php"/>
-			<file from="root/language/en/mods/reputation_system.php" to="language/en/mods/reputation_system.php"/>
-			<file from="root/styles/prosilver/template/reputation/details.html" to="styles/prosilver/template/reputation/details.html"/>
-			<file from="root/styles/prosilver/template/reputation/jquery-1.8.0.min.js" to="styles/prosilver/template/reputation/jquery-1.8.0.min.js"/>
-			<file from="root/styles/prosilver/template/reputation/mcp_front.html" to="styles/prosilver/template/reputation/mcp_front.html"/>
-			<file from="root/styles/prosilver/template/reputation/mcp_give.html" to="styles/prosilver/template/reputation/mcp_give.html"/>
-			<file from="root/styles/prosilver/template/reputation/mcp_list.html" to="styles/prosilver/template/reputation/mcp_list.html"/>
-			<file from="root/styles/prosilver/template/reputation/postdetails.html" to="styles/prosilver/template/reputation/postdetails.html"/>
-			<file from="root/styles/prosilver/template/reputation/ratepost.html" to="styles/prosilver/template/reputation/ratepost.html"/>
-			<file from="root/styles/prosilver/template/reputation/rateuser.html" to="styles/prosilver/template/reputation/rateuser.html"/>
-			<file from="root/styles/prosilver/template/reputation/reputation.js" to="styles/prosilver/template/reputation/reputation.js"/>
-			<file from="root/styles/prosilver/template/reputation/ucp_front.html" to="styles/prosilver/template/reputation/ucp_front.html"/>
-			<file from="root/styles/prosilver/template/reputation/ucp_given.html" to="styles/prosilver/template/reputation/ucp_given.html"/>
-			<file from="root/styles/prosilver/template/reputation/ucp_list.html" to="styles/prosilver/template/reputation/ucp_list.html"/>
-			<file from="root/styles/prosilver/template/reputation/ucp_setting.html" to="styles/prosilver/template/reputation/ucp_setting.html"/>
+			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
+			<file from="root/styles/prosilver/template/reputation/*.*" to="styles/prosilver/template/reputation/*.*"/>
 			<file from="root/styles/prosilver/theme/reputation.css" to="styles/prosilver/theme/reputation.css"/>
+			<file from="root/styles/prosilver/theme/images/*.*" to="styles/prosilver/theme/images/*.*"/>
 		</copy>
 		<open src="memberlist.php">
 			<edit>
@@ -278,8 +267,7 @@ $user->add_lang('mods/reputation_system');
 			<edit>
 				<find><![CDATA[// Grab ranks
 $ranks = $cache->obtain_ranks();]]></find>
-				<action type="after-add"><![CDATA[
-// Grab reputation ranks
+				<action type="after-add"><![CDATA[// Grab reputation ranks
 $rs_ranks = reputation::obtain_rs_ranks();]]></action>
 			</edit>
 			<edit>
@@ -338,11 +326,10 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 				<find><![CDATA[		'post_edit_locked'	=> $row['post_edit_locked'],]]></find>
 				<action type="after-add"><![CDATA[		//Reputation System
 		'post_reputation'	=> $row['post_reputation'],
-		'post_rs_count'		=> $row['post_rs_count'],
 		'rated' 			=> (isset($row['rated'])) ? true : false,
 		'post_vote_class'	=> (isset($row['rated'])) ? ($row['voting_points'] > 0 ? 'rated_good' : 'rated_bad') : '',
 		'voting_points'		=> (isset($row['voting_points'])) ? $row['voting_points'] : 0,
-		'rs_hide_post'		=> (($row['post_reputation'] <= $config['rs_hide_post']) && ($view != 'display' || $post_id != $row['post_id'])) ? true : false,
+		'rs_hide_post'		=> ($row['post_reputation'] <= $config['rs_hide_post']) ? true : false,
 		//Reputation System]]></action>
 			</edit>
 			<edit>
@@ -364,47 +351,34 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 			<edit>
 				<find><![CDATA[			get_user_rank($row['user_rank'], $row['user_posts'], $user_cache[$poster_id]['rank_title'], $user_cache[$poster_id]['rank_image'], $user_cache[$poster_id]['rank_image_src']);]]></find>
 				<action type="after-add"><![CDATA[			//Reputation System
-			if ($config['rs_enable'] && $config['rs_ranks']) reputation::get_rs_rank($user_cache[$poster_id]['reputation'], $user_cache[$poster_id]['rs_rank_title'], $user_cache[$poster_id]['rs_rank_img'], $user_cache[$poster_id]['rs_rank_img_src'], $user_cache[$poster_id]['rs_rank_color']);]]></action>
+			if ($config['rs_enable'] && $config['rs_ranks'])
+			{
+				reputation::get_rs_rank($user_cache[$poster_id]['reputation'], $user_cache[$poster_id]['rs_rank_title'], $user_cache[$poster_id]['rs_rank_img'], $user_cache[$poster_id]['rs_rank_img_src'], $user_cache[$poster_id]['rs_rank_color']);
+			}]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[		!$row['post_edit_locked']
 	)));]]></find>
-				<action type="after-add"><![CDATA[
-	//Reputation System
-	$rs_post_points = ($config['rs_post_display']) ? $row['post_reputation'] : $row['post_rs_count'];
-	$rs_box_color = reputation::get_vote_class($rs_post_points);
-
+				<action type="after-add"><![CDATA[	//Reputation System
+	$rs_box_color = reputation::get_vote_class($row['post_reputation']);
 	//Hide post if it has too low rating?
-	$rs_hide_post = (!empty($config['rs_hide_post']) && ($row['post_reputation'] <= $config['rs_hide_post']) && $view != 'display' && $config['rs_enable']) ? true : false;
-	$hidden_post_message = '';
-	if ($rs_hide_post)
-	{
-		if ($config['rs_ajax_enable'])
-		{
-			$hidden_post_message = '<div>' . sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username']), '<a href="" class="show_hide_post" onclick="return false;">' . $user->lang['RS_SHOW_HIDE_HIDDEN_POST'] . '</a>') . '</div>';
-		}
-		else
-		{
-			$hidden_post_message = (!empty($config['rs_hide_post']) && $row['rs_hide_post'] && $config['rs_enable']) ? sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username']), '<a href="' . $viewtopic_url . "&amp;p={$row['post_id']}&amp;view=display#p{$row['post_id']}" . '">' . $user->lang['RS_SHOW_HIDDEN_POST'] . '</a>') : '';
-		}
-
-	}
+	$rs_hide_post = (!empty($config['rs_hide_post']) && ($row['post_reputation'] <= $config['rs_hide_post']) && $config['rs_enable']) ? true : false;
+	$hidden_post_message = $rs_hide_post ? '<div id="hideshow">' . sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $poster_id, $row['username'], $row['user_colour'], $row['post_username']), '<a href="#" onclick="jRS.showhide(this); return false;">' . $user->lang['RS_SHOW_HIDE_HIDDEN_POST'] . '</a>') . '</div>' : '';
 	//Reputation System]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[		'S_TOPIC_POSTER'	=> ($topic_data['topic_poster'] == $poster_id) ? true : false,]]></find>
 				<action type="after-add"><![CDATA[		// Reputation System
-		'S_GIVE_REPUTATION'	=> ($auth->acl_get('f_rs_give', $forum_id) && $auth->acl_get('u_rs_ratepost') && $poster_id != ANONYMOUS) ? true : false,
-		'S_GIVE_NEGATIVE'	=> ($auth->acl_get('f_rs_give_negative', $forum_id) && $config['rs_negative_point']) ? true : false,
-		'S_RS_HIDE_POST'	=> $rs_hide_post,
-		'L_RS_HIDE_POST'	=> $hidden_post_message,
-		'POST_REPUTATION'	=> $rs_post_points,
-		'RS_BOX_COLOR'		=> $rs_box_color,
-		'U_REPUTATION'		=> $user_cache[$poster_id]['reputation'],
-		'U_VIEW_REP' 		=> ($auth->acl_get('u_rs_view') || $poster_id == $user->data['user_id']) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=postdetails&amp;p=' . $row['post_id']) : '',
-		'U_VIEW_REP_LIST'	=> ($auth->acl_get('u_rs_view')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=details&amp;u=' . $poster_id) : '',
-		'U_ADD_POS' 		=> append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=ratepost&amp;p=' . $row['post_id']),
-		'U_ADD_NEG' 		=> append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=ratepost&amp;p=' . $row['post_id'] . '&amp;point=negative'),
+		'S_VIEW_REP' 			=> ($auth->acl_get('u_rs_view') || $poster_id == $user->data['user_id']) ? true : false,
+		'S_VIEW_REP_LIST'		=> ($auth->acl_get('u_rs_view')) ? true : false,
+		'S_GIVE_REPUTATION'		=> ($auth->acl_get('f_rs_give', $forum_id) && $auth->acl_get('u_rs_ratepost') && $poster_id != ANONYMOUS) ? true : false,
+		'S_GIVE_NEGATIVE'		=> ($auth->acl_get('f_rs_give_negative', $forum_id) && $config['rs_negative_point']) ? true : false,
+		'S_RS_POST_HIGHLIGHT'	=> (!empty($config['rs_post_highlight']) && ($row['post_reputation'] >= $config['rs_post_highlight'])) ? true : false,
+		'S_RS_HIDE_POST'		=> $rs_hide_post,
+		'L_RS_HIDE_POST'		=> $hidden_post_message,
+		'POST_REPUTATION'		=> $row['post_reputation'],
+		'RS_BOX_COLOR'			=> $rs_box_color,
+		'U_REPUTATION'			=> $user_cache[$poster_id]['reputation'],
 		//Own post? Too low rating? Rated_good? Rated_bad?
 		'RS_POST_CLASS'		=> ($user->data['user_id'] == $poster_id ? 'own' : '') . $row['post_vote_class'],
 		'RS_GIVEN_POINT'	=> $row['voting_points'],
@@ -673,28 +647,20 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 				<find><![CDATA[					<!-- IF POSTS_IN_QUEUE and U_MCP_QUEUE --><br />(<a href="{U_MCP_QUEUE}">{L_POSTS_IN_QUEUE}</a>)<!-- ELSEIF POSTS_IN_QUEUE --><br />({L_POSTS_IN_QUEUE})<!-- ENDIF -->
 				</dd>]]></find>
 				<action type="after-add"><![CDATA[			<!-- IF S_REPUTATION -->
-				<dt>{L_REPUTATION}:</dt> <dd><span class="user-reputation"><strong>{REPUTATION}</strong></span></a> <!-- IF U_VIEW_REP_LIST or U_RATE_USER--> [ <!-- IF U_VIEW_REP_LIST --><a href="{U_VIEW_REP_LIST}">{L_RS_VIEW_DETAILS}</a><!-- ENDIF --> <!-- IF U_RATE_USER --><!-- IF U_VIEW_REP_LIST --> | <!-- ENDIF --><a href="{U_RATE_USER}" class="repo-link">{L_RS_RATE_USER}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
+				<dt>{L_REPUTATION}:</dt> <dd><span class="user-reputation"><strong>{REPUTATION}</strong></span></a> <!-- IF U_VIEW_REP_LIST or S_RATE_USER --> [ <!-- IF U_VIEW_REP_LIST --><a href="{U_VIEW_REP_LIST}">{L_RS_VIEW_DETAILS}</a><!-- ENDIF --> <!-- IF S_RATE_USER --><!-- IF U_VIEW_REP_LIST --> | <!-- ENDIF --><a href="#" onclick="jRS.userrating('{USER_ID}', event); return false;">{L_RS_RATE_USER}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
 			<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
+		<open src="styles/prosilver/template/overall_footer.html">
+			<edit>
+				<find><![CDATA[</body>]]></find>
+				<action type="before-add"><![CDATA[<!-- IF S_REPUTATION -->
+<!-- INCLUDE reputation/reputation_footer.html -->
+<!-- ENDIF -->
+]]></action>
+			</edit>
+		</open>
 		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- IF S_REPUTATION and S_RS_AJAX_ENABLE -->
-<script type="text/javascript">
-	// ]]>&lt;![CDATA[<![CDATA[
-		window.jQuery || document.write(unescape('%3Cscript src="{T_SUPER_TEMPLATE_PATH}/reputation/jquery-1.8.0.min.js" type="text/javascript"%3E%3C/script%3E'));
-	// ]]>]]&gt;<![CDATA[
-</script>
-<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/reputation/reputation.js"></script>
-<!-- ENDIF -->]]></action>
-			</edit>
-			<edit>
-				<find><![CDATA[<body id="phpbb" class="section-{SCRIPT_NAME} {S_CONTENT_DIRECTION}">]]></find>
-				<action type="after-add"><![CDATA[<!-- IF S_REPUTATION and S_RS_AJAX_ENABLE -->
-<div id="repo-popup"></div>
-<!-- ENDIF -->]]></action>
-			</edit>
 			<edit>
 				<find><![CDATA[					<a href="{U_SEARCH_SELF}">{L_SEARCH_SELF}</a>
 					<!-- ENDIF -->]]></find>
@@ -706,7 +672,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 				<find><![CDATA[	<div id="p{postrow.POST_ID}" class="post <!-- IF postrow.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF --><!-- IF postrow.S_UNREAD_POST --> unreadpost<!-- ENDIF --><!-- IF postrow.S_POST_REPORTED --> reported<!-- ENDIF --><!-- IF postrow.S_ONLINE and not postrow.S_IGNORE_POST --> online<!-- ENDIF -->">]]></find>
 				<inline-edit>
 					<inline-find><![CDATA[<!-- IF postrow.S_ONLINE and not postrow.S_IGNORE_POST --> online<!-- ENDIF -->]]></inline-find>
-					<inline-action type="after-add"><![CDATA[<!-- IF S_REPUTATION and postrow.S_RS_HIDE_POST --> hidden<!-- ENDIF -->]]></inline-action>
+					<inline-action type="after-add"><![CDATA[<!-- IF S_REPUTATION --><!-- IF postrow.S_RS_POST_HIGHLIGHT --> highlight<!-- ENDIF --><!-- IF postrow.S_RS_HIDE_POST --> hidden<!-- ENDIF --><!-- ENDIF -->]]></inline-action>
 				</inline-edit>
 			</edit>
 			<edit>
@@ -716,12 +682,12 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			<edit>
 				<find><![CDATA[			<div class="content">{postrow.MESSAGE}</div>]]></find>
 				<action type="after-add"><![CDATA[			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->
-			<ul class="post-reputation<!-- IF postrow.RS_POST_CLASS --> {postrow.RS_POST_CLASS}<!-- ENDIF -->">
-				<li class="rate-good-icon"><!-- IF postrow.S_GIVE_REPUTATION --><a href="{postrow.U_ADD_POS}" class="repo-link<!-- IF postrow.RS_GIVEN_POINT gt 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_GIVEN_POINT}"<!-- ELSE -->" title="{L_RS_ADD_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF -->><span>{L_RS_ADD_POINTS}</span></a><!-- ENDIF --></li>
-				<li class="reputation {postrow.RS_BOX_COLOR}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.U_VIEW_REP --><a href="{postrow.U_VIEW_REP}"<!-- IF not S_RS_AJAX_ENABLE --> onclick="popup(this.href, 780, 550); return false;"<!-- ENDIF --> class="repo-link"><!-- ENDIF -->{postrow.POST_REPUTATION}<!-- IF postrow.U_VIEW_REP --></a><!-- ENDIF --></div></li>
-				<!-- IF postrow.S_GIVE_REPUTATION && postrow.S_GIVE_NEGATIVE--><li class="rate-bad-icon"><a href="{postrow.U_ADD_NEG}" class="repo-link <!-- IF postrow.RS_GIVEN_POINT lt 0 --> {postrow.RS_POST_CLASS}" title="{L_RS_YOU_HAVE_VOTED} {postrow.RS_GIVEN_POINT}"<!-- ELSE -->" title="{L_RS_SUBTRACT_POINTS} {L_RS_TO} {postrow.POST_AUTHOR}"<!-- ENDIF --> onclick="return false;"><span>{L_RS_SUBTRACT_POINTS}</span></a></li><!-- ENDIF -->
-			</ul>
-			<br />
+				<ul class="post-reputation<!-- IF postrow.RS_POST_CLASS --> {postrow.RS_POST_CLASS}<!-- ENDIF -->">
+					<li class="rate-good-icon"><!-- IF postrow.S_GIVE_REPUTATION --><a href="#" onclick="jRS.positive('{postrow.POST_ID}', event, this); return false;" <!-- IF postrow.RS_GIVEN_POINT gt 0 -->class="{postrow.RS_POST_CLASS}" title="{L_RS_YOU_RATED} {postrow.RS_GIVEN_POINT}"<!-- ELSE --> title="{L_RS_RATE_POST}"<!-- ENDIF -->><span>{L_RS_ADD_POINTS}</span></a><!-- ENDIF --></li>
+					<li class="reputation {postrow.RS_BOX_COLOR}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.S_VIEW_REP --><a href="#" onclick="jRS.postdetails('{postrow.POST_ID}'); return false;"><!-- ENDIF -->{postrow.POST_REPUTATION}<!-- IF postrow.S_VIEW_REP --></a><!-- ENDIF --></div></li>
+					<!-- IF postrow.S_GIVE_REPUTATION && postrow.S_GIVE_NEGATIVE--><li class="rate-bad-icon"><a href="#" onclick="jRS.negative('{postrow.POST_ID}', event, this); return false;" <!-- IF postrow.RS_GIVEN_POINT lt 0 --> class="{postrow.RS_POST_CLASS}" title="{L_RS_YOU_RATED} {postrow.RS_GIVEN_POINT}"<!-- ELSE --> title="{L_RS_RATE_POST}"<!-- ENDIF --> onclick="return false;"><span>{L_RS_SUBTRACT_POINTS}</span></a></li><!-- ENDIF -->
+				</ul>
+				<br />
 			<!-- ENDIF -->]]></action>
 			</edit>
 			<edit>
@@ -731,7 +697,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			<edit>
 				<find><![CDATA[		<!-- IF postrow.POSTER_FROM --><dd><strong>{L_LOCATION}:</strong> {postrow.POSTER_FROM}</dd><!-- ENDIF -->]]></find>
 				<action type="after-add"><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR -->
-			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.U_VIEW_REP_LIST --><a href="{postrow.U_VIEW_REP_LIST}" class="repo-link"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.U_VIEW_REP_LIST --></a><!-- ENDIF --></dd>
+			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.S_VIEW_REP_LIST --><a href="#" onclick="jRS.userdetails('{postrow.POSTER_ID}'); return false;"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.S_VIEW_REP_LIST --></a><!-- ENDIF --></dd>
 			<!-- IF postrow.RS_RANK_IMG --><dd class="reputation-rank">{postrow.RS_RANK_IMG}</dd><!-- ENDIF -->
 		<!-- ENDIF -->]]></action>
 			</edit>

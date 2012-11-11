@@ -171,7 +171,10 @@ class ucp_reputation
 				$db->sql_freeresult($result);
 
 				$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
-				if ($config['rs_ranks']) $reputation->get_rs_rank($user->data['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
+				if ($config['rs_ranks'])
+				{
+					$reputation->get_rs_rank($user->data['user_reputation'], $rs_rank_title, $rs_rank_img, $rs_rank_img_src, $rs_rank_color);
+				}
 
 				if ($config['rs_enable_power'])
 				{
@@ -194,8 +197,8 @@ class ucp_reputation
 						'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
 						'RS_CFG_MEMBERSHIP_DAYS'	=> $config['rs_membership_days'] ? true : false,
 						'RS_CFG_REP_POINT'			=> $config['rs_power_rep_point'] ? true : false,
-						'RS_CFG_LOOSE_WARN'			=> $config['rs_power_loose_warn'] ? true : false,
-						'RS_CFG_LOOSE_BAN'			=> $config['rs_power_loose_ban'] ? true : false,
+						'RS_CFG_LOOSE_WARN'			=> $config['rs_power_lose_warn'] ? true : false,
+						'RS_CFG_LOOSE_BAN'			=> $config['rs_power_lose_ban'] ? true : false,
 						'RS_GROUP_POWER'			=> $group_power ? true : false,
 					));
 
@@ -260,12 +263,10 @@ class ucp_reputation
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
-				$i = 0;
 				$reputation_ids = array();
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$reputation_ids[] = $row['rep_id'];
-					$row_num[$row['rep_id']] = $i++;
 				}
 				$db->sql_freeresult($result);
 
@@ -394,12 +395,10 @@ class ucp_reputation
 					ORDER BY ' . $sort_order_sql;
 				$result = $db->sql_query_limit($sql, $config['rs_per_page'], $start);
 
-				$i = 0;
 				$reputation_ids = array();
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$reputation_ids[] = $row['rep_id'];
-					$row_num[$row['rep_id']] = $i++;
 				}
 				$db->sql_freeresult($result);
 

@@ -37,12 +37,9 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'REPUTATION'		=> 'Reputacja',
-	
+
 	'RS_DISABLED'		=> 'Przepraszamy, ale administrator wyłączył tą funkcję.',
 	'RS_TITLE'			=> 'System Reputacji',
-	
-	'RS_ADD_POINTS'				=> 'Oceń post pozytywnie (przyznaj punkt)',
-	'RS_SUBTRACT_POINTS'		=> 'Oceń post negatywnie (odejmij punkt)',
 
 	'RS_ACTION'					=> 'Czynność',
 	'RS_BAN'					=> 'Ban',
@@ -67,6 +64,7 @@ $lang = array_merge($lang, array(
 	'RS_POST_RATING'			=> 'Ocenianie postu',
 	'RS_ONLYPOST_RATING'		=> 'Ocena wpisu',
 	'RS_RATE_BUTTON'			=> 'Oceń',
+	'RS_RATE_POST'				=> 'Oceń post',
 	'RS_RATE_USER'				=> 'Oceń użytkownika',
 	'RS_RANK'					=> 'Ranga reputacji',
 	'RS_SENT'					=> 'Punkt reputacji został dodany pomyślnie',
@@ -139,7 +137,7 @@ $lang = array_merge($lang, array(
 	'RS_ANTISPAM_INFO'				=> 'Nie możesz przyznać punktów reputacji tak szybko. Wróć później.',
 	'RS_POST_REPUTATION'			=> 'Ocena postu',
 	'RS_USER_REPUTATION'			=> 'Reputacja %s',
-	'RS_YOU_HAVE_VOTED'				=> 'Oceniłeś ten post. Punkty:',
+	'RS_YOU_RATED'					=> 'Oceniłeś ten post. Punkty:',
 
 	'RS_VOTE_POWER_LEFT_OF_MAX'		=> 'Pozostało %1$d punktów do wykorzystania z %2$d. Maksimum na głos: %3$d',
 	'RS_VOTE_POWER_LEFT'			=> '%1$d z %2$d',
