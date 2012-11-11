@@ -30,8 +30,8 @@ var jRS = {
 	postdetails: function(a) {
 		show_popup('postdetails', a);
 	},
-	userdetails: function(a) {
-		show_popup('userdetails', a);
+	userdetails: function(a, b) {
+		show_popup('userdetails', a, b);
 	},
 	userrating: function(a, b) {
 		show_popup('rate_user', a, b);
@@ -116,7 +116,7 @@ function show_popup(a, b, c, d)
 				case 'userdetails':
 					$('#reputation-popup').addClass('normal-popup');
 					targetleft = ($(window).width() - $('#reputation-popup').width()) / 2;
-					targettop = $('#profile' + b).offset().top;
+					targettop = $('#p' + c).offset().top;
 				break;
 				default:
 					$('#reputation-popup').addClass('small-popup');
