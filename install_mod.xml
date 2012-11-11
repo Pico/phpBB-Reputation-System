@@ -223,9 +223,10 @@ if ($config['rs_sort_memberlist']){
 		));]]></find>
 				<action type="after-add"><![CDATA[		// Reputation System
 		$template->assign_vars(array(
+			'USER_ID'			=> $member['user_id'],
 			'REPUTATION'		=> $member['user_reputation'],
 			'U_VIEW_REP_LIST' 	=> ($auth->acl_get('u_rs_view')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=details&amp;u=' . $user_id) : '',
-			'U_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=rateuser&amp;u=' . $user_id) : '',
+			'S_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? true : false,
 			)
 		);
 		// Reputation System]]></action>

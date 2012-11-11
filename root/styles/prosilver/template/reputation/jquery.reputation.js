@@ -289,7 +289,7 @@ function response(a, b)
 				$('.user-reputation').html(a.user_reputation);
 				$('.reputation-rank').html(a.reputation_rank);
 				$('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-				$('.$-rank-title').text(a.rank_title);
+				$('.rs-rank-title').text(a.rank_title);
 				$('#r' + rep_id).hide(function() {
 					$('#r' + rep_id).detach();
 					if ($('#post-reputation-list .bg1').length == 0 && $('#post-reputation-list .bg2').length == 0 )

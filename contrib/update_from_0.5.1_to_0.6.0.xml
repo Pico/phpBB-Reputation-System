@@ -47,6 +47,27 @@
 			<file from="root/styles/prosilver/theme/reputation.css" to="styles/prosilver/theme/reputation.css"/>
 			<file from="root/styles/prosilver/theme/images/*.*" to="styles/prosilver/theme/images/*.*"/>
 		</copy>
+		<open src="memberlist.php">
+			<edit>
+				<find><![CDATA[		// Reputation System
+		$template->assign_vars(array(
+			'REPUTATION'		=> $member['user_reputation'],
+			'U_VIEW_REP_LIST' 	=> ($auth->acl_get('u_rs_view')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=details&amp;u=' . $user_id) : '',
+			'U_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=rateuser&amp;u=' . $user_id) : '',
+			)
+		);
+		// Reputation System]]></find>
+				<action type="replace-with"><![CDATA[		// Reputation System
+		$template->assign_vars(array(
+			'USER_ID'			=> $member['user_id'],
+			'REPUTATION'		=> $member['user_reputation'],
+			'U_VIEW_REP_LIST' 	=> ($auth->acl_get('u_rs_view')) ? append_sid("{$phpbb_root_path}reputation.$phpEx", '&amp;mode=details&amp;u=' . $user_id) : '',
+			'S_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? true : false,
+			)
+		);
+		// Reputation System]]></action>
+			</edit>
+		</open>
 		<open src="viewtopic.php">
 			<edit>
 				<find><![CDATA[		//Reputation System
