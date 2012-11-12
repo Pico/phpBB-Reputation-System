@@ -214,11 +214,11 @@ class mcp_reputation
 					'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 				);
 
-				if ($sk == 'rf')
+				if ($sk == 'a')
 				{
 					$sql_array['LEFT_JOIN'][] = array('FROM' => array(USERS_TABLE => 'u'), 'ON' => 'r.rep_from = u.user_id');
 				}
-				if ($sk == 'ru')
+				if ($sk == 'b')
 				{
 					$sql_array['LEFT_JOIN'][] = array('FROM' => array(USERS_TABLE => 'ru'), 'ON' => 'r.rep_to = ru.user_id');
 				}
