@@ -31,6 +31,6 @@
 	<a href="#" onclick="sortby.username('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_USERNAME}</a> &bull; 
 	<a href="#" onclick="sortby.time('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_TIME}</a> &bull; 
 	<a href="#" onclick="sortby.points('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_RS_POINTS}</a>
-	<span style="float:right;"><a href="#" onclick="jRS.truncate('{POST_ID}'); return false;">{L_RS_CLEAR_POST}</a></span>
+	<!-- IF S_TRUNCATE --><span style="float:right;"><a href="#" onclick="jRS.truncate('{POST_ID}'); return false;">{L_RS_CLEAR_POST}</a></span><!-- ENDIF -->
 </div>
 <!-- ENDIF -->

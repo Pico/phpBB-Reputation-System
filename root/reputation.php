@@ -610,6 +610,7 @@ switch ($mode)
 
 			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_RS_AVATAR'		=> $config['rs_display_avatar'] ? true : false,
+			'S_TRUNCATE'		=> $auth->acl_gets('m_rs_moderate') ? true : false,
 		));
 
 		$template->set_filenames(array(
