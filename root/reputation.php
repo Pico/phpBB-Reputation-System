@@ -64,7 +64,7 @@ switch ($mode)
 		$db->sql_freeresult($result);
 
 		//Fire error if it's disabled and exit
-		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'ratepostneg' || !$row['enable_reputation'])
+		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'negative' || !$row['enable_reputation'])
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_DISABLED']));
 			return;
@@ -111,14 +111,14 @@ switch ($mode)
 		}
 
 		//Check if user is allowed to vote
-		if (!$auth->acl_get('f_rs_give', $row['forum_id']) || !$auth->acl_get('f_rs_give_negative', $row['forum_id']) && $rpmode == 'ratepostneg' || !$auth->acl_get('u_rs_ratepost'))
+		if (!$auth->acl_get('f_rs_give', $row['forum_id']) || !$auth->acl_get('f_rs_give_negative', $row['forum_id']) && $rpmode == 'negative' || !$auth->acl_get('u_rs_ratepost'))
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_DISABLED']));
 			return;
 		}
 
 		//Check if user reputation is enought to give negative points
-		if ($config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) && $rpmode == 'ratepostneg')
+		if ($config['rs_min_rep_negative'] && ($user->data['user_reputation'] < $config['rs_min_rep_negative']) && $rpmode == 'negative')
 		{
 			echo json_encode(array('error_msg' => sprintf($user->lang['RS_USER_NEGATIVE'], $config['rs_min_rep_negative'])));
 			return;
@@ -166,7 +166,6 @@ switch ($mode)
 			$rep_power = ($rpmode == 'negative') ? -1 : 1;
 		}
 
-		$voting_power_left = $max_voting_allowed = '';
 		// Get reputation power
 		if ($config['rs_enable_power'])
 		{
@@ -197,6 +196,11 @@ switch ($mode)
 				echo json_encode(array('error_msg' => $error_text));
 				return;
 			}
+
+			$template->assign_vars(array(
+				'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
+				'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
+			));
 
 			//Preparing HTML for voting by manual spending of user power
 			for($i = 1; $i <= $max_voting_allowed; ++$i)
@@ -266,10 +270,12 @@ switch ($mode)
 			}
 		}
 
+		$s_hidden_fields = build_hidden_fields(array(
+			'rpmode'	=> $rpmode,
+		));
+
 		$template->assign_vars(array(
 			'POST_ID'					=> $post_id,
-			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
@@ -278,6 +284,7 @@ switch ($mode)
 			'S_RS_COMMENT_TOO_LONG'		=> $config['rs_comment_max_chars'] ? $config['rs_comment_max_chars'] : false,
 			'S_RS_PM_NOTIFY' 			=> $config['rs_pm_notify'] ? true : false,
 			'S_RS_POWER_ENABLE' 		=> $config['rs_enable_power'] ? true : false,
+			'S_HIDDEN_FIELDS'			=> $s_hidden_fields,
 		));
 
 		$template->set_filenames(array(
@@ -371,7 +378,6 @@ switch ($mode)
 			$submit = true;
 		}
 
-		$voting_power_left = $max_voting_allowed = '';
 		// Get reputation power
 		if ($config['rs_enable_power'])
 		{
@@ -403,6 +409,10 @@ switch ($mode)
 				return;
 			}
 
+			$template->assign_vars(array(
+				'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
+				'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
+			));
 			//Preparing HTML for voting by manual spending of user power
 			$startpower = $config['rs_negative_point'] ? -$max_voting_allowed : 1;
 			for($i = $max_voting_allowed; $i >= $startpower; $i--) //from + to -
@@ -477,9 +487,6 @@ switch ($mode)
 
 		$template->assign_vars(array(
 			'USER_ID'					=> $row['user_id'],
-
-			'RS_POWER_POINTS_LEFT'		=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT_OF_MAX'], $voting_power_left, $max_voting_power, $max_voting_allowed) : '',
-			'RS_POWER_PROGRESS_EMPTY'	=> ($config['rs_power_renewal'] && $max_voting_power) ? round((($max_voting_power - $voting_power_left) / $max_voting_power) * 100, 0) : '',
 
 			'RS_COMMENT_TOO_LONG'		=> sprintf($user->lang['RS_COMMENT_TOO_LONG'], $config['rs_comment_max_chars']), 
 
