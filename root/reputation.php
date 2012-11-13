@@ -1221,6 +1221,28 @@ switch ($mode)
 
 	break;
 
+	case 'newpopup':
+
+		$template->assign_vars(array(
+			'NEW_REPUTATIONS'		=> ($user->data['user_rep_new'] == 1) ? $user->lang['RS_NEW_REP'] : sprintf($user->lang['RS_NEW_REPS'], $user->data['user_rep_new']),
+		));
+
+		if ($user->data['user_rep_new'])
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_rep_new = 0
+				WHERE user_id = {$user->data['user_id']}";
+			$db->sql_query($sql);
+		}
+
+		$template->set_filenames(array(
+			'body' => 'reputation/newpopup.html')
+		);
+
+		$template->display('body');
+
+	break;
+
 	default:
 
 		$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");

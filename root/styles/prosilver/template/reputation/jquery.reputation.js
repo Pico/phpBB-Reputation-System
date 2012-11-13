@@ -100,6 +100,9 @@ function show_popup(a, b, c, d)
 		case 'rate_user':
 			data = 'mode=rateuser&u=' + b;
 		break;
+		case 'newpopup':
+			data = 'mode=newpopup';
+		break;
 	}
 
 	$.ajax({
@@ -120,6 +123,11 @@ function show_popup(a, b, c, d)
 					$('#reputation-popup').addClass('normal-popup');
 					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
 					targettop = $('#p' + c).offset().top;
+				break;
+				case 'newpopup':
+					$('#reputation-popup').addClass('new-popup');
+					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
+					targettop = ($(window).height() - $('#reputation-popup').outerHeight()) / 2;
 				break;
 				default:
 					$('#reputation-popup').addClass('small-popup');
@@ -365,4 +373,8 @@ function sort_order_by(a, b, c, d)
 			$('#reputation-popup').empty().append(s);
 		}
 	});
+}
+
+function newpopup() {
+	show_popup('newpopup');
 }

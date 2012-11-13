@@ -33,9 +33,7 @@ function hook_reputation_system()
 	$notification = false;
 	if ($config['rs_notification'] && $user->data['user_rep_new'] && $user->data['user_rs_notification'])
 	{
-		$user->add_lang('mods/reputation_system');
-
-		$notification = $user->data['user_rep_new'] ? ($user->data['user_rep_new'] == 1 ? $user->lang['RS_NEW_REP'] : sprintf($user->lang['RS_NEW_REPS'], $user->data['user_rep_new'])) : false;
+		$notification = true;
 	}
 
 	$template->assign_vars(array(

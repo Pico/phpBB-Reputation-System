@@ -168,6 +168,13 @@ li.reputation {
 	overflow: auto;
 }
 
+.new-popup {
+	width: 400px;
+	/*height: 225px;*/
+	text-align: center;
+	position: fixed !important;
+}
+
 .footer-popup {
 	border-top: 1px solid #CCC;
 	padding: 2px 10px 0 10px;

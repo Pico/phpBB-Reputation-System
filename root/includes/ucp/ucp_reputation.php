@@ -227,14 +227,6 @@ class ucp_reputation
 			break;
 
 			case 'list':
-				if ($user->data['user_id'])
-				{
-					$sql = 'UPDATE ' . USERS_TABLE . "
-						SET user_rep_new = 0
-						WHERE user_id = {$user->data['user_id']}";
-					$db->sql_query($sql);
-				}
-
 				if (isset($_POST['catchup']))
 				{
 					$sql = 'UPDATE ' . USERS_TABLE . "
