@@ -113,20 +113,20 @@ function show_popup(a, b, c, d)
 			{
 				case 'postdetails':
 					$('#reputation-popup').addClass('normal-popup');
-					targetleft = ($(window).width() - $('#reputation-popup').width()) / 2;
+					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
 					targettop = $('#p' + b).offset().top;
 				break;
 				case 'userdetails':
 					$('#reputation-popup').addClass('normal-popup');
-					targetleft = ($(window).width() - $('#reputation-popup').width()) / 2;
+					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
 					targettop = $('#p' + c).offset().top;
 				break;
 				default:
 					$('#reputation-popup').addClass('small-popup');
 					// Center popup relative to clicked coordinate
-					targetleft = c.pageX - $('#reputation-popup').width() / 2;
+					targetleft = c.pageX - $('#reputation-popup').outerWidth() / 2;
 					// Popup can not be too close or behind the right border of the screen
-					targetleft = Math.min (targetleft, $(document).width() - 20 - $('#reputation-popup').width());
+					targetleft = Math.min (targetleft, $(document).width() - 20 - $('#reputation-popup').outerWidth());
 					targetleft = Math.max (targetleft, 20);
 					targettop = c.pageY + 10;
 				break;
