@@ -90,7 +90,7 @@ class mcp_reputation
 				$db->sql_freeresult($result);
 
 				$sql = $db->sql_build_query('SELECT', array(
-					'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, ut.username as username_rep_to, ut.user_colour as user_colour_rep_to, ut.user_reputation, r.*, p.post_subject',
+					'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, ut.username as username_rep_to, ut.user_colour as user_colour_rep_to, ut.user_reputation, r.*, p.post_id AS real_post_id, p.post_subject',
 					'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 					'LEFT_JOIN' => array(
 						array(
@@ -119,8 +119,8 @@ class mcp_reputation
 					$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
 					$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
 
-					$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
-					$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
+					$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
+					$post_link = (!empty($row['real_post_id'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
 
 					if ($row['action'] == 1)
 					{
@@ -258,7 +258,7 @@ class mcp_reputation
 				if (sizeof($reputation_ids))
 				{
 					$sql = $db->sql_build_query('SELECT', array(
-						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, ru.username as username_rep_to, ru.user_colour as user_colour_rep_to, ru.user_reputation, p.post_subject',
+						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, ru.username as username_rep_to, ru.user_colour as user_colour_rep_to, ru.user_reputation, p.post_id AS real_post_id, p.post_subject',
 						'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 						'LEFT_JOIN' => array(
 							array(
@@ -288,8 +288,8 @@ class mcp_reputation
 						$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
 						$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
 
-						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-						$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
+						$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+						$post_link = (!empty($row['real_post_id'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
 
 						if ($row['action'] == 1)
 						{

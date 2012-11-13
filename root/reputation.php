@@ -674,7 +674,7 @@ switch ($mode)
 		$order_by = $sort_key_sql[$sort_key] . ' ' . (($sort_dir == 'd') ? 'DESC' : 'ASC');
 
 		$sql_array = array(
-			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, u.user_reputation, r.*, p.post_subject, p.forum_id',
+			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, u.user_reputation, r.*, p.post_id AS real_post_id, p.forum_id, p.post_subject',
 			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 			'LEFT_JOIN' => array(
 				array(
@@ -704,8 +704,8 @@ switch ($mode)
 			$user_from = get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']);
 			$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 40 : (40 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 40 : (40 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="40px;" height="40px;" alt="" />';
 
-			$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-			$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '- <a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '- ' . $post_subject;
+			$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+			$post_link = (!empty($row['real_post_id'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '- <a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '- ' . $post_subject;
 
 			$go_to_post = '';
 			if ($row['action'] == 1)
@@ -872,7 +872,7 @@ switch ($mode)
 		$db->sql_freeresult($result);
 
 		$sql_array = array(
-			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, u.user_reputation, r.*, p.post_subject, p.forum_id',
+			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, u.user_reputation, r.*, p.post_id AS real_post_id, p.forum_id, p.post_subject',
 			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 			'LEFT_JOIN' => array(
 				array(
@@ -899,8 +899,8 @@ switch ($mode)
 			$user_from = get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']);
 			$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 60 : (60 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 60 : (60 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="60px;" height="60px;" alt="" />';
 
-			$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-			$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '- <a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '- ' . $post_subject;
+			$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+			$post_link = (!empty($row['real_post_id'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '- <a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '- ' . $post_subject;
 
 			$go_to_post = '';
 			if ($row['action'] == 1)

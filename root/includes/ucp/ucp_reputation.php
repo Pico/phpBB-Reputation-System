@@ -97,7 +97,7 @@ class ucp_reputation
 				}
 
 				$sql_array = array(
-					'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, r.*, p.forum_id, p.post_subject',
+					'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, r.*, p.post_id AS real_post_id, p.forum_id, p.post_subject',
 					'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 					'LEFT_JOIN' => array(
 						array(
@@ -123,8 +123,8 @@ class ucp_reputation
 					$time = $user->format_date($row['time']);
 					$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
 
-					$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
-					$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
+					$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'];
+					$post_link = (!empty($row['real_post_id'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
 
 					if ($row['action'] == 1)
 					{
@@ -273,7 +273,7 @@ class ucp_reputation
 				if (sizeof($reputation_ids))
 				{
 					$sql = $db->sql_build_query('SELECT', array(
-						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, p.post_subject',
+						'SELECT'	=> 'r.*, u.username as username_rep_from, u.user_colour as user_colour_rep_from, p.post_id AS real_post_id, p.forum_id, p.post_subject',
 						'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 						'LEFT_JOIN' => array(
 							array(
@@ -298,8 +298,8 @@ class ucp_reputation
 						$time = $user->format_date($row['time']);
 						$user_from = get_username_string('full', $row['rep_from'], $row['username_rep_from'], $row['user_colour_rep_from']);
 
-						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-						$post_link = (!empty($row['post_subject'])) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '<br />' . $post_subject;
+						$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+						$post_link = (!empty($row['real_post_id'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
 
 						$new_rep = ($config['rs_notification'] && $user->data['user_rs_notification'] && ($row['time'] >= $user->data['user_rep_last'])) ? '<span class="new-repo">' . $user->lang['RS_NEW'] . '</span>' : '';
 
@@ -405,7 +405,7 @@ class ucp_reputation
 				if (sizeof($reputation_ids))
 				{
 					$sql = $db->sql_build_query('SELECT', array(
-						'SELECT'	=> 'u.username as username_rep_to, u.user_colour as user_colour_rep_to, r.*, p.forum_id, p.post_subject',
+						'SELECT'	=> 'u.username as username_rep_to, u.user_colour as user_colour_rep_to, r.*, p.post_id AS real_post_id, p.forum_id, p.post_subject',
 						'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 						'LEFT_JOIN' => array(
 							array(
@@ -430,8 +430,8 @@ class ucp_reputation
 						$time = $user->format_date($row['time']);
 						$user_to = get_username_string('full', $row['rep_to'], $row['username_rep_to'], $row['user_colour_rep_to']);
 
-						$post_subject = (empty($row['post_subject'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
-						$post_link = (!empty($row['post_subject'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
+						$post_subject = (empty($row['real_post_id'])) ? '<strong>' . $user->lang['RS_POST_DELETE'] . '</strong>' : $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+						$post_link = (!empty($row['real_post_id'])) ? ($auth->acl_get('f_read', $row['forum_id']) ? '<br /><a href="viewtopic.' . $phpEx . '?p=' . $row['post_id'] . '#p' . $row['post_id'] . '">' . $post_subject . '</a>' : '') : '<br />' . $post_subject;
 
 						if ($row['action'] == 1)
 						{
