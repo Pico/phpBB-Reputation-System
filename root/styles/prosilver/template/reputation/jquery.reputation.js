@@ -60,6 +60,9 @@ var jRS = {
 			submit_action('truncate', id);
 		}
 	},
+	catchup: function() {
+		submit_action('catchup');
+	},
 }
 
 function show_popup(a, b, c, d)
@@ -190,6 +193,9 @@ function submit_action(a, b)
 			case 'truncate':
 				data = 'mode=truncate&p=' + b;
 			break;
+			case 'catchup':
+				data = 'mode=catchup';
+			break;
 		}
 
 		$.ajax({
@@ -313,6 +319,9 @@ function response(a, b)
 				$('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
 				$('#p' + post_id).removeClass('highlight hidden');
 				$('#p' + post_id + ' #hideshow').detach();
+			break;
+			case 'catchup':
+				$('.new-repo').remove();
 			break;
 		}
 	}

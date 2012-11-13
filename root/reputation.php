@@ -1208,6 +1208,19 @@ switch ($mode)
 
 	break;
 
+	case 'catchup':
+
+		$sql = 'UPDATE ' . USERS_TABLE . "
+			SET user_rep_last = " . time() . "
+			WHERE user_id = {$user->data['user_id']}";
+		$db->sql_query($sql);
+
+		//Send empty data
+		echo json_encode('');
+		return;
+
+	break;
+
 	default:
 
 		$meta_info = append_sid("{$phpbb_root_path}index.$phpEx", "");

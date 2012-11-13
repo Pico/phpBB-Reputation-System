@@ -58,17 +58,17 @@
 
 	<!-- ELSE -->
 		<p><strong>{L_RS_EMPTY_DATA}</strong></p>
-	<!-- ENDIF -->		
+	<!-- ENDIF -->
 
 	<span class="corners-bottom"><span></span></span></div>
 </div>
 
+</form>
+
 <!-- IF S_NOTIFICATION -->
 <fieldset class="display-actions">
-	<input class="button2" type="submit" value="{L_RS_CATCHUP}" name="catchup" />
+	<input class="button2" type="submit" value="{L_RS_CATCHUP}" name="catchup" onclick="jRS.catchup(); return false;" />
 </fieldset>
 <!-- ENDIF -->
-
-</form>
 
 <!-- INCLUDE mcp_footer.html -->
