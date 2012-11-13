@@ -506,6 +506,9 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 	$sort_days = request_var('st', 0);
 	$min_time = ($sort_days) ? time() - ($sort_days * 86400) : 0;
 
+	$default_key = 'c';
+	$default_dir = 'd';
+
 	$sql_where = '';
 	$sql_where_array = array();
 	if ($min_time)
@@ -530,8 +533,8 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 		FROM ' . REPUTATIONS_TABLE . " r
 		$sql_where";
 
-	$sort_key = request_var('sk', 'g');
-	$sort_dir = request_var('sd', 'd');
+	$sort_key = request_var('sk', $default_key);
+	$sort_dir = request_var('sd', $default_dir);
 
 	$limit_days = array(0 => $user->lang['ALL_REPUTATIONS'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
 	$sort_by_text = array(
@@ -543,14 +546,18 @@ function reputation_sorting(&$sort_days, &$sort_key, &$sort_dir, &$sort_by_sql, 
 		'f'	=> $user->lang['POST']
 	);
 	$sort_by_sql = array(
-		'a'=> 'u.username_clean',
+		'a'	=> 'u.username_clean',
 		'b'	=> 'ru.username_clean',
-		'c'	=> 'r.time',
+		'c'	=> 'r.rep_id',
 		'd'	=> 'r.point',
 		'e'	=> 'r.action',
-		'f'	=> 'r.post_id',
-		'g'	=> 'r.rep_id'
+		'f'	=> 'r.post_id'
 	);
+
+	if (!isset($sort_by_sql[$sort_key]))
+	{
+		$sort_key = $default_key;
+	}
 
 	$sort_order_sql = $sort_by_sql[$sort_key] . ' ' . (($sort_dir == 'd') ? 'DESC' : 'ASC');
 
