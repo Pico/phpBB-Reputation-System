@@ -110,7 +110,7 @@ function show_popup(a, b, c, d)
 		data: data,
 		dataType: 'html',
 		beforeSend: function() {
-			$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup');
+			$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup new-popup');
 
 			switch(a)
 			{
