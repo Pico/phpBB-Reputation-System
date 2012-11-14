@@ -18,7 +18,7 @@ class ucp_reputation_info
 		return array(
 			'filename'	=> 'ucp_reputation',
 			'title'		=> 'UCP_REPUTATION',
-			'version'	=> '0.6.0',
+			'version'	=> '0.6.1',
 			'modes'		=> array(
 				'front'				=> array('title' => 'UCP_REPUTATION_FRONT', 'auth' => 'cfg_rs_enable', 'cat' => array('UCP_REPUTATION')),
 				'list'				=> array('title' => 'UCP_REPUTATION_LIST', 'auth' => 'cfg_rs_enable', 'cat' => array('UCP_REPUTATION')),
