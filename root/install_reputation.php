@@ -526,6 +526,13 @@ $versions = array(
 			'theme',
 		),
 	),
+
+	'0.6.1' => array(
+		'cache_purge' => array(
+			'template',
+			'theme',
+		),
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest

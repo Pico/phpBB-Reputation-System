@@ -25,97 +25,61 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.6.0</mod-version>
+		<mod-version>0.6.1</mod-version>
 		<installation>
 			<level>easy</level>
-			<time>900</time>
+			<time>600</time>
 			<target-version>3.0.11</target-version>
 		</installation>
 		<history>
 			<entry>
-				<date>2012-02-17</date>
-				<rev-version>0.0.1</rev-version>
+				<date>2012-11-14</date>
+				<rev-version>0.6.1</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[First release for testing]]></change>
+					<change><![CDATA[Fix negative points for posts]]></change>
+					<change><![CDATA[Fix error with missing variables]]></change>
+					<change><![CDATA[Fix reputation sorting and pagination in MCP and UCP]]></change>
+					<change><![CDATA[Hide truncate post link for regular users]]></change>
+					<change><![CDATA[Add AJAX Catch up news]]></change>
+					<change><![CDATA[Improve popup div position]]></change>
+					<change><![CDATA[Change notification about new points]]></change>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-02-20</date>
-				<rev-version>0.1.0</rev-version>
+				<date>2012-11-11</date>
+				<rev-version>0.6.0</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[FIX all known bugs]]></change>
+					<change><![CDATA[REWRITE mod to work in AJAX]]></change>
+					<change><![CDATA[IMPROVE synchronization]]></change>
+					<change><![CDATA[CHANGE templates]]></change>
+					<change><![CDATA[ADD truncate post reputation]]></change>
+					<change><![CDATA[ADD ajax sorting in popup]]></change>
+					<change><![CDATA[UPDATE jQuery to 1.8.2]]></change>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-02-20</date>
-				<rev-version>0.1.1</rev-version>
+				<date>2012-09-23</date>
+				<rev-version>0.5.1</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[FIX permissions]]></change>
+					<change><![CDATA[FIX for sync with APC cache]]></change>
+					<change><![CDATA[FIX UPC - an error during disabled ranks]]></change>
+					<change><![CDATA[Add missing rank image in UCP front]]></change>
+					<change><![CDATA[FIX viewtopic if ranks are enabled]]></change>
+					<change><![CDATA[FIX non define avatar image variable]]></change>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-02-23</date>
-				<rev-version>0.1.2</rev-version>
+				<date>2012-09-17</date>
+				<rev-version>0.5.0</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[FIX synchronization]]></change>
-					<change><![CDATA[FIX SQL error with reputation power]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-02-28</date>
-				<rev-version>0.2.0</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[ADD version check]]></change>
-					<change><![CDATA[ADD MCP reputation module]]></change>
-					<change><![CDATA[FIX template]]></change>
-					<change><![CDATA[CHANGE Beta to RC]]></change>
-					<change><![CDATA[FIX negative point when reputation power is turned off]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-03-07</date>
-				<rev-version>0.2.2</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[ADD ACP give point module]]></change>
-					<change><![CDATA[CHANGE force comments behavior]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-04-03</date>
-				<rev-version>0.2.7</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[CHANGE permissions]]></change>
-					<change><![CDATA[ADD UCP modules]]></change>
-					<change><![CDATA[ADD new features]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-05-18</date>
-				<rev-version>0.4.0</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[ADD AJAX voting]]></change>
-					<change><![CDATA[ADD new functions: hide post, antispam]]></change>
-					<change><![CDATA[FIX small bugs in UCP and MCP]]></change>
-					<change><![CDATA[ADD converters into install file]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-05-24</date>
-				<rev-version>0.4.1</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[IMPROVE AJAX - add refreshibg user reputation]]></change>
-					<change><![CDATA[FIX template for UCP Reputation Setting]]></change>
-					<change><![CDATA[FIX bug with reputation power]]></change>
-				</changelog>
-			</entry>
-			<entry>
-				<date>2012-06-14</date>
-				<rev-version>0.4.2</rev-version>
-				<changelog lang="en">
-					<change><![CDATA[ADD bans for low reputation]]></change>
-					<change><![CDATA[IMPROVE post rating]]></change>
-					<change><![CDATA[FIX problem when moderator warn a user and add reputation points for warning]]></change>
-					<change><![CDATA[ADD new function, which count how much points we spend and how left we have]]></change>
+					<change><![CDATA[ADD ajax user rating]]></change>
+					<change><![CDATA[IMPROVE acp outlook]]></change>
+					<change><![CDATA[ADD truncate function]]></change>
+					<change><![CDATA[REWRITE code is some places to improve functionality]]></change>
+					<change><![CDATA[FIX bug with power explanation]]></change>
+					<change><![CDATA[REWRITE html and css]]></change>
+					<change><![CDATA[ADD charset limit for comments]]></change>
+					<change><![CDATA[ADD support for MOD Version Check]]></change>
 				</changelog>
 			</entry>
 			<entry>
@@ -136,40 +100,89 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-09-17</date>
-				<rev-version>0.5.0</rev-version>
+				<date>2012-06-14</date>
+				<rev-version>0.4.2</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[ADD ajax user rating]]></change>
-					<change><![CDATA[IMPROVE acp outlook]]></change>
-					<change><![CDATA[ADD truncate function]]></change>
-					<change><![CDATA[REWRITE code is some places to improve functionality]]></change>
-					<change><![CDATA[FIX bug with power explanation]]></change>
-					<change><![CDATA[REWRITE html and css]]></change>
-					<change><![CDATA[ADD charset limit for comments]]></change>
-					<change><![CDATA[ADD support for MOD Version Check]]></change>
+					<change><![CDATA[ADD bans for low reputation]]></change>
+					<change><![CDATA[IMPROVE post rating]]></change>
+					<change><![CDATA[FIX problem when moderator warn a user and add reputation points for warning]]></change>
+					<change><![CDATA[ADD new function, which count how much points we spend and how left we have]]></change>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-09-23</date>
-				<rev-version>0.5.1</rev-version>
+				<date>2012-05-24</date>
+				<rev-version>0.4.1</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[FIX for sync with APC cache]]></change>
-					<change><![CDATA[FIX UPC - an error during disabled ranks]]></change>
-					<change><![CDATA[Add missing rank image in UCP front]]></change>
-					<change><![CDATA[FIX viewtopic if ranks are enabled]]></change>
-					<change><![CDATA[FIX non define avatar image variable]]></change>
+					<change><![CDATA[IMPROVE AJAX - add refreshibg user reputation]]></change>
+					<change><![CDATA[FIX template for UCP Reputation Setting]]></change>
+					<change><![CDATA[FIX bug with reputation power]]></change>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2012-11-11</date>
-				<rev-version>0.6.0</rev-version>
+				<date>2012-05-18</date>
+				<rev-version>0.4.0</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[REWRITE mod to work in AJAX]]></change>
-					<change><![CDATA[IMPROVE synchronization]]></change>
-					<change><![CDATA[CHANGE templates]]></change>
-					<change><![CDATA[ADD truncate post reputation]]></change>
-					<change><![CDATA[ADD ajax sorting in popup]]></change>
-					<change><![CDATA[UPDATE jQuery to 1.8.2]]></change>
+					<change><![CDATA[ADD AJAX voting]]></change>
+					<change><![CDATA[ADD new functions: hide post, antispam]]></change>
+					<change><![CDATA[FIX small bugs in UCP and MCP]]></change>
+					<change><![CDATA[ADD converters into install file]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-04-03</date>
+				<rev-version>0.2.7</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[CHANGE permissions]]></change>
+					<change><![CDATA[ADD UCP modules]]></change>
+					<change><![CDATA[ADD new features]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-03-07</date>
+				<rev-version>0.2.2</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[ADD ACP give point module]]></change>
+					<change><![CDATA[CHANGE force comments behavior]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-02-28</date>
+				<rev-version>0.2.0</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[ADD version check]]></change>
+					<change><![CDATA[ADD MCP reputation module]]></change>
+					<change><![CDATA[FIX template]]></change>
+					<change><![CDATA[CHANGE Beta to RC]]></change>
+					<change><![CDATA[FIX negative point when reputation power is turned off]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-02-23</date>
+				<rev-version>0.1.2</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[FIX synchronization]]></change>
+					<change><![CDATA[FIX SQL error with reputation power]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-02-20</date>
+				<rev-version>0.1.1</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[FIX permissions]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-02-20</date>
+				<rev-version>0.1.0</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[FIX all known bugs]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2012-02-17</date>
+				<rev-version>0.0.1</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[First release for testing]]></change>
 				</changelog>
 			</entry>
 		</history>
@@ -178,6 +191,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 			<link type="contrib" href="./contrib/update_from_0.4.3_to_0.5.0.xml" lang="en">Update from 0.4.3 to 0.5.0</link>
 			<link type="contrib" href="./contrib/update_from_0.5.0_to_0.5.1.xml" lang="en">Update from 0.5.0 to 0.5.1</link>
 			<link type="contrib" href="./contrib/update_from_0.5.1_to_0.6.0.xml" lang="en">Update from 0.5.1 to 0.6.0</link>
+			<link type="contrib" href="./contrib/update_from_0.6.0_to_0.6.1.xml" lang="en">Update from 0.6.0 to 0.6.1</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -659,13 +673,6 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 <!-- INCLUDE reputation/reputation_footer.html -->
 <!-- ENDIF -->
 ]]></action>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<find><![CDATA[					<a href="{U_SEARCH_SELF}">{L_SEARCH_SELF}</a>
-					<!-- ENDIF -->]]></find>
-				<action type="after-add"><![CDATA[					<!-- IF S_RS_NOTIFICATION --> &bull; <a href="{U_RS_NOTIFICATION}">{S_RS_NOTIFICATION}</a><!-- ENDIF -->]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/template/viewtopic_body.html">
