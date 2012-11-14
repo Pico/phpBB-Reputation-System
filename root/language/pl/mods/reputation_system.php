@@ -126,8 +126,10 @@ $lang = array_merge($lang, array(
 	'LIST_REPUTATIONS'				=> '%s wpisy/ów reputacji',
 	'ALL_REPUTATIONS'				=> 'Wszystkie wpisy reputacji',
 
+	'RS_NEW_REPUTATIONS'			=> 'Nowe punkty reputacji',
 	'RS_NEW_REP'					=> 'Masz <strong>1 nowy</strong> punkt reputacji',
 	'RS_NEW_REPS'					=> 'Masz <strong>%s nowe/ych</strong> punktów reputacji',
+	'RS_CLICK_TO_VIEW'				=> 'Idź do listy otrzymanych punktów',
 
 	'RS_MORE_DETAILS'				=> '» więcej szczegółów',
 
