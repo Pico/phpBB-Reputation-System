@@ -4,12 +4,12 @@
 		<author>Pico88</author>
 		<title LANG="en">Reputation System</title>
 		<description lang="en">A full reputation system for PHPBB3</description>
-		<download>https://github.com/Pico88/phpBB-Reputation-System/zipball/master</download>
-		<announcement>http://modsteam.tk/viewtopic.php?p=465#p465</announcement>
+		<download>https://github.com/Pico88/phpBB-Reputation-System/archive/0.6.1.zip</download>
+		<announcement>http://pico88.github.com/phpBB-Reputation-System/</announcement>
 		<mod_version>
 			<major>0</major>
 			<minor>6</minor>
-			<revision>0</revision>
+			<revision>1</revision>
 			<release></release>
 		</mod_version>
 		<installation>
