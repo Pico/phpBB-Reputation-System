@@ -11,7 +11,7 @@
 			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del('{reputation.REP_ID}'); return false;">{L_DELETE}</a><!-- ENDIF -->
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
-			<!-- IF S_RS_COMMENT -->
+			<!-- IF S_RS_COMMENT and reputation.COMMENT -->
 			<span>{L_RS_COMMENT}:</span>
 			<div class="comment_message">{reputation.COMMENT}</div>
 			<!-- ENDIF -->
