@@ -12,7 +12,7 @@
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
 			<span>{reputation.ACTION} {reputation.GO_TO_POST}</span><br />
-			<!-- IF S_RS_COMMENT -->
+			<!-- IF S_RS_COMMENT and reputation.COMMENT -->
 			<span>{L_RS_COMMENT}:</span>
 			<div class="comment_message">{reputation.COMMENT}</div>
 			<!-- ENDIF -->
