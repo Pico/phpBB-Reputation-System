@@ -112,7 +112,7 @@ $lang = array_merge($lang, array(
 
 	'RS_USER_RATING'				=> 'Разрешить оценивать пользователей в их профиле',
 	'RS_USER_RATING_GAP'			=> 'Перерыв в оценке',
-	'RS_USER_RATING_GAP_EXPLAIN'	=> 'Time period a user must wait before they can give another rating to a user they have already rated. Setting the value to 0 disables this behaviour and users can rate other users once each.',
+	'RS_USER_RATING_GAP_EXPLAIN'	=> 'Время которое пользователь должен подождать, перед тем, как он сможет дать следующую оценку пользователю, которого он уже оценил. Значение 0 выключает эту возможность и пользователи могут давать друг другу оценку только один раз.',
 
 	'RS_ENABLE_COMMENT'				=> 'Включить комментарии к оценкам',
 	'RS_ENABLE_COMMENT_EXPLAIN'		=> 'Пользователи смогут оставлять комментарии к своим оценкам.',
