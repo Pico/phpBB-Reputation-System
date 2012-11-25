@@ -189,9 +189,9 @@ $lang = array_merge($lang, array(
 	'RS_TRUNCATE_DONE'			=> 'Был выполнен сброс системы репутации.',
 
 	'RS_GIVE_POINT'				=> 'Добавить оценку',
-	'RS_GIVE_POINT_EXPLAIN'		=> 'Here you can give additional reputation points to users.',
+	'RS_GIVE_POINT_EXPLAIN'		=> 'Здесь можно добавить дополнительные оценки пользователям.',
 
-	'RS_RANKS'					=> 'Manage ranks',
+	'RS_RANKS'					=> 'Управлять рангами',
 	'RS_RANKS_EXPLAIN'			=> 'Тут можно управлять рангами, которые рассчитываются на основании репутации пользователя. ',
 	'RS_ADD_RANK'				=> 'Добавить ранг',
 	'RS_MUST_SELECT_RANK'		=> 'Необходимо выбрать ранг',
