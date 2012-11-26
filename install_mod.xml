@@ -25,13 +25,20 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.6.1</mod-version>
+		<mod-version>0.6.2</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
 			<target-version>3.0.11</target-version>
 		</installation>
 		<history>
+			<entry>
+				<date>2012-**-**</date>
+				<rev-version>0.6.2</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[***]]></change>
+				</changelog>
+			</entry>
 			<entry>
 				<date>2012-11-14</date>
 				<rev-version>0.6.1</rev-version>
@@ -193,6 +200,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 			<link type="contrib" href="./contrib/update_from_0.5.0_to_0.5.1.xml" lang="en">Update from 0.5.0 to 0.5.1</link>
 			<link type="contrib" href="./contrib/update_from_0.5.1_to_0.6.0.xml" lang="en">Update from 0.5.1 to 0.6.0</link>
 			<link type="contrib" href="./contrib/update_from_0.6.0_to_0.6.1.xml" lang="en">Update from 0.6.0 to 0.6.1</link>
+			<link type="contrib" href="./contrib/update_from_0.6.1_to_0.6.2.xml" lang="en">Update from 0.6.1 to 0.6.2</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -290,7 +298,7 @@ $rs_ranks = reputation::obtain_rs_ranks();]]></action>
 				<find><![CDATA[	'S_ENABLE_FEEDS_TOPIC'	=> ($config['feed_topic'] && !phpbb_optionget(FORUM_OPTION_FEED_EXCLUDE, $topic_data['forum_options'])) ? true : false,]]></find>
 				<action type="after-add"><![CDATA[	
 	//Reputation System
-	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,
+	'S_FORUM_REPUTATION'	=> ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,
 	//Reputation System]]></action>
 			</edit>
 			<edit>
@@ -385,8 +393,7 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 			<edit>
 				<find><![CDATA[		'S_TOPIC_POSTER'	=> ($topic_data['topic_poster'] == $poster_id) ? true : false,]]></find>
 				<action type="after-add"><![CDATA[		// Reputation System
-		'S_VIEW_REP' 			=> ($auth->acl_get('u_rs_view') || $poster_id == $user->data['user_id']) ? true : false,
-		'S_VIEW_REP_LIST'		=> ($auth->acl_get('u_rs_view')) ? true : false,
+		'S_VIEW_REPUTATION'		=> ($auth->acl_get('u_rs_view')) ? true : false,
 		'S_GIVE_REPUTATION'		=> ($auth->acl_get('f_rs_give', $forum_id) && $auth->acl_get('u_rs_ratepost') && $poster_id != ANONYMOUS) ? true : false,
 		'S_GIVE_NEGATIVE'		=> ($auth->acl_get('f_rs_give_negative', $forum_id) && $config['rs_negative_point']) ? true : false,
 		'S_RS_POST_HIGHLIGHT'	=> (!empty($config['rs_post_highlight']) && ($row['post_reputation'] >= $config['rs_post_highlight'])) ? true : false,
@@ -690,10 +697,10 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[			<div class="content">{postrow.MESSAGE}</div>]]></find>
-				<action type="after-add"><![CDATA[			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->
+				<action type="after-add"><![CDATA[			<!-- IF S_REPUTATION and S_FORUM_REPUTATION -->
 				<ul class="post-reputation<!-- IF postrow.RS_POST_CLASS --> {postrow.RS_POST_CLASS}<!-- ENDIF -->">
 					<li class="rate-good-icon"><!-- IF postrow.S_GIVE_REPUTATION --><a href="#" onclick="jRS.positive('{postrow.POST_ID}', event, this); return false;" <!-- IF postrow.RS_GIVEN_POINT gt 0 -->class="{postrow.RS_POST_CLASS}" title="{L_RS_YOU_RATED} {postrow.RS_GIVEN_POINT}"<!-- ELSE --> title="{L_RS_RATE_POST}"<!-- ENDIF -->><span>{L_RS_ADD_POINTS}</span></a><!-- ENDIF --></li>
-					<li class="reputation {postrow.RS_BOX_COLOR}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.S_VIEW_REP --><a href="#" onclick="jRS.postdetails('{postrow.POST_ID}'); return false;"><!-- ENDIF -->{postrow.POST_REPUTATION}<!-- IF postrow.S_VIEW_REP --></a><!-- ENDIF --></div></li>
+					<li class="reputation {postrow.RS_BOX_COLOR}"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.S_VIEW_REPUTATION --><a href="#" onclick="jRS.postdetails('{postrow.POST_ID}'); return false;"><!-- ENDIF -->{postrow.POST_REPUTATION}<!-- IF postrow.S_VIEW_REPUTATION --></a><!-- ENDIF --></div></li>
 					<!-- IF postrow.S_GIVE_REPUTATION && postrow.S_GIVE_NEGATIVE--><li class="rate-bad-icon"><a href="#" onclick="jRS.negative('{postrow.POST_ID}', event, this); return false;" <!-- IF postrow.RS_GIVEN_POINT lt 0 --> class="{postrow.RS_POST_CLASS}" title="{L_RS_YOU_RATED} {postrow.RS_GIVEN_POINT}"<!-- ELSE --> title="{L_RS_RATE_POST}"<!-- ENDIF --> onclick="return false;"><span>{L_RS_SUBTRACT_POINTS}</span></a></li><!-- ENDIF -->
 				</ul>
 				<br />
@@ -706,7 +713,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			<edit>
 				<find><![CDATA[		<!-- IF postrow.POSTER_FROM --><dd><strong>{L_LOCATION}:</strong> {postrow.POSTER_FROM}</dd><!-- ENDIF -->]]></find>
 				<action type="after-add"><![CDATA[		<!-- IF S_REPUTATION and postrow.U_POST_AUTHOR -->
-			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.S_VIEW_REP_LIST --><a href="#" onclick="jRS.userdetails('{postrow.POSTER_ID}', '{postrow.POST_ID}'); return false;"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.S_VIEW_REP_LIST --></a><!-- ENDIF --></dd>
+			<dd class="user-reputation"><strong>{L_REPUTATION}:</strong> <!-- IF postrow.S_VIEW_REPUTATION --><a href="#" onclick="jRS.userdetails('{postrow.POSTER_ID}', '{postrow.POST_ID}'); return false;"><!-- ENDIF --><strong>{postrow.U_REPUTATION}</strong><!-- IF postrow.S_VIEW_REPUTATION --></a><!-- ENDIF --></dd>
 			<!-- IF postrow.RS_RANK_IMG --><dd class="reputation-rank">{postrow.RS_RANK_IMG}</dd><!-- ENDIF -->
 		<!-- ENDIF -->]]></action>
 			</edit>
