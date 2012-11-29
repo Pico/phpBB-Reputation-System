@@ -1,4 +1,6 @@
 <h3>{L_RS_POST_REPUTATION} - {POST_SUBJECT}</h3>
+<p class="author">{L_POST_BY_AUTHOR} {POST_AUTHOR}</p>
+<hr />
 
 <div id="post-reputation-list">
 	<!-- IF .reputation -->
@@ -8,7 +10,7 @@
 			<div class="reputation-avatar">{reputation.AVATAR_IMG}</div>
 		<!-- ENDIF -->
 		<div style="padding-left: 5px;">
-			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del('{reputation.REP_ID}'); return false;">{L_DELETE}</a><!-- ENDIF -->
+			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'post'); return false;">{L_DELETE}</a><!-- ENDIF -->
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
 			<!-- IF S_RS_COMMENT and reputation.COMMENT -->
@@ -31,6 +33,6 @@
 	<a href="#" onclick="sortby.username('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_USERNAME}</a> &bull; 
 	<a href="#" onclick="sortby.time('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_TIME}</a> &bull; 
 	<a href="#" onclick="sortby.points('post','{POST_ID}','{V_SORT_DIR}'); return false;">{L_RS_POINTS}</a>
-	<!-- IF S_TRUNCATE --><span style="float:right;"><a href="#" onclick="jRS.truncate('{POST_ID}'); return false;">{L_RS_CLEAR_POST}</a></span><!-- ENDIF -->
+	<!-- IF S_TRUNCATE --><span style="float:right;"><a href="#" onclick="jRS.clear({POST_ID}, 'post'); return false;">{L_RS_CLEAR_POST}</a></span><!-- ENDIF -->
 </div>
 <!-- ENDIF -->

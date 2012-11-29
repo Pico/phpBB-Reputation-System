@@ -30,6 +30,7 @@
 			<!-- ENDIF -->
 			<dt style="width: 50%;">{L_RS_POSITIVE_COUNT}:</dt> <dd style="width: 45%;">{POSITIVE_COUNT}</dd>
 			<dt style="width: 50%;">{L_RS_NEGATIVE_COUNT}:</dt> <dd style="width: 45%;">{NEGATIVE_COUNT}</dd>
+			<!-- IF S_TRUNCATE --><dt style="width: 50%;">&nbsp;</dt> <dd style="width: 45%;">[ <a href="#" onclick="jRS.clear({USER_ID}, 'user', 'detail'); return false;">{L_RS_CLEAR_USER}</a> ]</dd><!-- ENDIF -->
 		</dl>
 
 		<span class="corners-bottom"><span></span></span></div>
@@ -101,7 +102,7 @@
 			<div class="reputation-avatar-big">{reputation.AVATAR_IMG}</div>
 		<!-- ENDIF -->
 		<div style="padding-left: 5px;">
-			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.remove('{reputation.REP_ID}'); return false;">{L_DELETE}</a><!-- ENDIF -->
+			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'user'); return false;">{L_DELETE}</a><!-- ENDIF -->
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
 			<span>{reputation.ACTION} {reputation.GO_TO_POST}</span><br />

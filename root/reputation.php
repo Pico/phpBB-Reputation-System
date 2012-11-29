@@ -19,8 +19,8 @@ include($phpbb_root_path . '/includes/functions_reputation.' . $phpEx);
 
 $reputation = new reputation();
 
-// Start session management
-$user->session_begin();
+// Start session management, do not update session page.
+$user->session_begin(false);
 $auth->acl($user->data);
 $user->setup(array('mods/reputation_system', 'memberlist'));
 
@@ -63,21 +63,17 @@ switch ($mode)
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		//Fire error if it's disabled and exit
-		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'negative' || !$row['enable_reputation'])
-		{
-			echo json_encode(array('error_msg' => $user->lang['RS_DISABLED']));
-			return;
-		}
-
-		$notify = request_var('notify_user', '');
-		$comment = utf8_normalize_nfc(request_var('comment', '', true));
-		$rep_power = request_var('rep_power', '');
-
 		//We couldn't find this post. May be it was deleted while user voted?
 		if (!$row)
 		{
 			echo json_encode(array('error_msg' => $user->lang['RS_NO_POST']));
+			return;
+		}
+
+		//Fire error if it's disabled and exit
+		if (!$config['rs_post_rating'] || !$config['rs_negative_point'] && $rpmode == 'negative' || !$row['enable_reputation'])
+		{
+			echo json_encode(array('error_msg' => $user->lang['RS_DISABLED']));
 			return;
 		}
 
@@ -152,6 +148,10 @@ switch ($mode)
 			echo json_encode(array('error_msg' => $user->lang['RS_USER_BANNED']));
 			return;
 		}
+
+		$notify = request_var('notify_user', '');
+		$comment = utf8_normalize_nfc(request_var('comment', '', true));
+		$rep_power = request_var('rep_power', '');
 
 		// Submit vote
 		$submit = false;
@@ -518,6 +518,27 @@ switch ($mode)
 			return;
 		}
 
+		$sql_array = array(
+			'SELECT'	=> 'p.poster_id, p.post_subject, u.username, u.user_colour',
+			'FROM'		=> array(
+				POSTS_TABLE => 'p',
+				USERS_TABLE => 'u'
+			),
+			'WHERE'		=> 'p.post_id = ' . $post_id . '
+				AND p.poster_id = u.user_id',
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$post_row = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
+		//We couldn't find this post. May be it was deleted while user voted?
+		if (!$post_row)
+		{
+			echo json_encode(array('error_msg' => $user->lang['RS_NO_POST']));
+			return;
+		}
+
 		if (!function_exists('get_user_avatar'))
 		{
 			include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
@@ -594,22 +615,17 @@ switch ($mode)
 				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
-
-		$sql = 'SELECT post_subject
-			FROM ' . POSTS_TABLE . "
-			WHERE post_id = $post_id";
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
 		$template->assign_vars(array(
 			'POST_ID'			=> $post_id,
-			'POST_SUBJECT'		=> $row['post_subject'],
+			'POST_SUBJECT'		=> $post_row['post_subject'],
+			'POST_AUTHOR'		=> get_username_string('full', $post_row['poster_id'], $post_row['username'], $post_row['user_colour']),
 
 			'V_SORT_DIR'		=> ($sort_dir == 'd') ? 'a' : 'd',
 
-			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_RS_AVATAR'		=> $config['rs_display_avatar'] ? true : false,
+			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_TRUNCATE'		=> $auth->acl_gets('m_rs_moderate') ? true : false,
 		));
 
@@ -690,8 +706,6 @@ switch ($mode)
 			'ORDER_BY'	=> $order_by
 		);
 
-		$sql_array['WHERE'] .= $config['rs_negative_point'] ? '' : ' AND ((point > 0 AND (action = 1 OR action = 2 OR action = 5)) OR action = 3 OR action = 4)';
-
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 
@@ -762,6 +776,7 @@ switch ($mode)
 				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
+		$db->sql_freeresult($result);
 
 		$template->assign_vars(array(
 			'USER_ID'			=> $uid,
@@ -772,8 +787,9 @@ switch ($mode)
 
 			'V_SORT_DIR'		=> ($sort_dir == 'd') ? 'a' : 'd',
 
-			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_RS_AVATAR'		=> $config['rs_display_avatar'] ? true : false,
+			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
+			'S_TRUNCATE'		=> $auth->acl_gets('m_rs_moderate') ? true : false,
 		));
 
 		$template->set_filenames(array(
@@ -957,6 +973,7 @@ switch ($mode)
 				'POINT_CLASS'		=> $config['rs_point_type'] ? '' : $point_class,
 			));
 		}
+		$db->sql_freeresult($result);
 
 		$rank_title = $rank_img = $rank_img_src = $rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
 		get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
@@ -1016,6 +1033,7 @@ switch ($mode)
 				}
 			}
 		}
+		$db->sql_freeresult($result);
 
 		if ($config['rs_enable_power'])
 		{
@@ -1088,6 +1106,7 @@ switch ($mode)
 			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_RS_NEGATIVE'		=> $config['rs_negative_point'] ? true : false,
 			'S_RS_POWER_ENABLE'	=> $config['rs_enable_power'] ? true : false,
+			'S_TRUNCATE'		=> $auth->acl_gets('m_rs_moderate') ? true : false,
 		 ));
 
 		$template->set_filenames(array(
@@ -1099,7 +1118,8 @@ switch ($mode)
 	break;
 
 	case 'delete':
-	case 'remove':
+
+		$del_mode = request_var('dm', '');
 
 		$sql_array = array(
 			'SELECT'	=> 'r.rep_from, r.rep_to, r.post_id, u.username, u.user_colour, p.post_username',
@@ -1129,7 +1149,7 @@ switch ($mode)
 			$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 			$json_data = array();
 
-			if ($mode == 'delete')
+			if ($del_mode == 'post')
 			{
 				$post_reputation = $reputation->get_post_reputation($row['post_id']);
 				$json_data = array(
@@ -1146,7 +1166,7 @@ switch ($mode)
 					'hidemessage'			=> '<div id="hideshow">' . sprintf($user->lang['RS_HIDE_POST'], get_username_string('full', $row['rep_to'], $row['username'], $row['user_colour'], $row['post_username']), '<a href="#" onclick="jRS.showhide(this); return false;">' . $user->lang['RS_SHOW_HIDE_HIDDEN_POST'] . '</a>') . '</div>',
 				);
 			}
-			else
+			else if ($del_mode == 'user')
 			{
 				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
 				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
@@ -1171,31 +1191,83 @@ switch ($mode)
 
 	break;
 
-	case 'truncate':
+	case 'clear':
+
+		$clear_mode = request_var('cm', '');
+		$clear_page = request_var('cp', '');
 
 		if ($auth->acl_gets('m_rs_moderate'))
 		{
-			$sql = 'SELECT rep_to, post_id
-				FROM ' . REPUTATIONS_TABLE . "
-				WHERE post_id = $post_id";
-			$result = $db->sql_query($sql);
-			$row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
+			if ($clear_mode == 'post')
+			{
+				$sql = 'SELECT rep_to, post_id
+					FROM ' . REPUTATIONS_TABLE . "
+					WHERE post_id = $post_id";
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$db->sql_freeresult($result);
 
-			$reputation->truncate($post_id);
+				$reputation->clear_reputation('post', $post_id);
 
-			$user_reputation = $reputation->get_user_reputation($row['rep_to']);
-			$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
-			$post_reputation = $reputation->get_post_reputation($post_id);
+				$user_reputation = $reputation->get_user_reputation($row['rep_to']);
+				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 
-			$json_data = array(
-				'post_id'				=> $post_id,
-				'poster_id'				=> $row['rep_to'],
-				'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
-				'reputation_rank'		=> $reputation_rank,
-				'post_reputation'		=> $post_reputation,
-				'reputation_class'		=> $reputation->get_vote_class($post_reputation),
-			);
+				$json_data = array(
+					'post_id'				=> $post_id,
+					'poster_id'				=> $row['rep_to'],
+					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
+					'reputation_rank'		=> $reputation_rank,
+					'post_reputation'		=> 0,
+					'reputation_class'		=> 'zero',
+				);
+			}
+			else if ($clear_mode == 'user' && $clear_page == 'topic')
+			{
+				$post_ids = array();
+
+				$sql = 'SELECT post_id
+					FROM ' . REPUTATIONS_TABLE . "
+					WHERE rep_to = $uid
+					GROUP BY post_id";
+				$result = $db->sql_query($sql);
+
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$post_ids[] = $row['post_id'];
+				}
+				$db->sql_freeresult($result);
+
+				$reputation->clear_reputation('user', $uid, $post_ids);
+
+				$user_reputation = $reputation->get_user_reputation($uid);
+				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
+
+				$json_data = array(
+					'post_ids'				=> $post_ids,
+					'poster_id'				=> $uid,
+					'user_reputation'		=> '<strong>0</strong>',
+					'reputation_rank'		=> $reputation_rank,
+					'post_reputation'		=> 0,
+					'reputation_class'		=> 'zero',
+				);
+			}
+			else if ($clear_mode == 'user' && $clear_page == 'detail')
+			{
+				$reputation->clear_reputation('user', $uid);
+
+				$user_reputation = $reputation->get_user_reputation($uid);
+				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
+				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
+				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
+
+				$json_data = array(
+					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
+					'reputation_class'		=> $reputation_color,
+					'reputation_rank'		=> $reputation_rank,
+					'rank_title'			=> $reputation_title,
+					'empty'					=> '<div class="reputation-list empty bg3"><span>' . $user->lang['RS_EMPTY_DATA'] . '</span></div>',
+				);
+			}
 
 			echo json_encode($json_data);
 			return;

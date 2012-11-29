@@ -233,7 +233,8 @@ $lang = array_merge($lang, array(
 	'LOG_RS_RANK_REMOVED'			=> '<strong>Removed reputation rank</strong><br />» %s',
 	'LOG_RS_RANK_UPDATED'			=> '<strong>Updated reputation rank</strong><br />» %s',
 	'LOG_USER_REP_DELETE'			=> '<strong>Reputation point has been deleted</strong><br />User: %s',
-	'LOG_POST_REP_TRUNCATE'			=> '<strong>Cleared post reputation</strong><br />Post: %s',
+	'LOG_CLEAR_POST_REP'			=> '<strong>Cleared post reputation</strong><br />Post: %s',
+	'LOG_CLEAR_USER_REP'			=> '<strong>Cleared user reputation</strong><br />User: %s',
 
 	'IMG_ICON_RATE_GOOD'		=> 'Rate good',
 	'IMG_ICON_RATE_BAD'			=> 'Rate bad',
