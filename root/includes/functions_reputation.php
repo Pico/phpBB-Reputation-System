@@ -389,7 +389,7 @@ class reputation
 	*/
 	function delete($id)
 	{
-		global $db, $user, $uid;
+		global $db;
 
 		if (empty($id))
 		{
@@ -438,51 +438,91 @@ class reputation
 		return true;
 	}
 
-	/** Function responsible for truncate post reputation
-	* @param int $id post ID
+	/** Function responsible for clearing user or post reputation
+	* @param string $mode user or post
+	* @param int $id post or user ID
+	* @param array $post_ids posts ID for post mode
 	* @return bool
 	*/
-	function truncate($post_id)
+	function clear_reputation($mode, $id, $post_ids = array())
 	{
-		global $db, $user, $uid;
+		global $db;
 
-		if (empty($post_id))
+		if (empty($id))
 		{
 			return false;
 		}
 
-		$sql = 'SELECT SUM(point) AS user_points, rep_to
-			FROM ' . REPUTATIONS_TABLE . "
-			WHERE action != 5
-				AND post_id = $post_id";
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+		if ($mode == 'post')
+		{
+			$sql = 'SELECT SUM(point) AS user_points, rep_to
+				FROM ' . REPUTATIONS_TABLE . "
+				WHERE action != 5
+					AND post_id = $id";
+			$result = $db->sql_query($sql);
+			$point = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
 
-		$sql = 'UPDATE ' . USERS_TABLE . "
-			SET user_reputation = user_reputation - {$row['user_points']}
-			WHERE user_id = {$row['rep_to']}";
-		$db->sql_query($sql);
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = user_reputation - {$point['user_points']}
+				WHERE user_id = {$point['rep_to']}";
+			$db->sql_query($sql);
 
-		unset($row);
+			$sql = 'SELECT  topic_id, forum_id, post_subject
+				FROM ' . POSTS_TABLE . "
+				WHERE post_id = $id";
+			$result = $db->sql_query($sql);
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
 
-		$sql = 'SELECT  topic_id, forum_id, post_subject
-			FROM ' . POSTS_TABLE . "
-			WHERE post_id = $post_id";
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+			$sql = 'UPDATE ' . POSTS_TABLE . "
+				SET post_reputation = 0
+				WHERE post_id = $id";
+			$db->sql_query($sql);
 
-		$sql = 'UPDATE ' . POSTS_TABLE . "
-			SET post_reputation = 0
-			WHERE post_id = $post_id";
-		$db->sql_query($sql);
+			$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
+				WHERE post_id = $id";
+			$db->sql_query($sql);
 
-		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
-			WHERE post_id = $post_id";
-		$db->sql_query($sql);
+			$log_forum = $row['forum_id'];
+			$log_topic = $row['topic_id'];
+			$log_clear_data = $row['post_subject'];
+			$log_clear_action = 'LOG_CLEAR_POST_REP';
+		}
+		else if ($mode == 'user')
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = 0
+				WHERE user_id = $id";
+			$db->sql_query($sql);
 
-		add_log('mod', $row['topic_id'], $row['forum_id'], 'LOG_POST_REP_TRUNCATE', $row['post_subject']);
+			$sql = 'UPDATE ' . POSTS_TABLE . '
+				SET post_reputation = 0
+				WHERE ' . $db->sql_in_set('post_id', $post_ids, false, true);
+			$db->sql_query($sql);
+
+			$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
+				WHERE rep_to = $id";
+			$db->sql_query($sql);
+
+			$sql = 'SELECT  username
+				FROM ' . USERS_TABLE . "
+				WHERE user_id = $id";
+			$result = $db->sql_query($sql);
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+
+			$log_topic = '';
+			$log_forum = '';
+			$log_clear_action = 'LOG_CLEAR_USER_REP';
+			$log_clear_data = $row['username'];
+		}
+		else
+		{
+			return false;
+		}
+
+		add_log('mod', $log_forum,  $log_topic, $log_clear_action, $log_clear_data);
 
 		return true;
 	}
@@ -679,7 +719,7 @@ class reputation
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 
-		$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 60 : (60 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 60 : (60 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="40px;" height="40px;" alt="" />';
+		$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 60 : (60 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 60 : (60 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="60px;" height="60px;" alt="" />';
 
 		if ($row['point'] < 0)
 		{
@@ -698,7 +738,7 @@ class reputation
 		$tr_reputation .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
 		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="reputation-avatar-big">' . $avatar_img . '</div>' : '';
 		$tr_reputation .= '<div style="padding-left: 5px;">';
-		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.remove(\'' . $row['rep_id'] . '\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
+		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del(' . $row['rep_id'] . ', \'user\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
 		$tr_reputation .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
 		$tr_reputation .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
 		$tr_reputation .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';

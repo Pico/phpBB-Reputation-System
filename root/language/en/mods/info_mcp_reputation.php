@@ -47,7 +47,8 @@ $lang = array_merge($lang, array(
 	'MCP_RS_GIVE_REP_POINT'			=> 'Give reputation points',
 
 	'LOG_USER_REP_DELETE'			=> '<strong>Reputation point has been deleted</strong><br />User: %s',
-	'LOG_POST_REP_TRUNCATE'			=> '<strong>Cleared post reputation</strong><br />Post: %s',
+	'LOG_CLEAR_POST_REP'			=> '<strong>Cleared post reputation</strong><br />Post: %s',
+	'LOG_CLEAR_USER_REP'			=> '<strong>Cleared user reputation</strong><br />User: %s',
 
 	'RS_BEST_REPUTATION'			=> 'Users with the best reputation',
 	'RS_WORST_REPUTATION'			=> 'Users with the worst reputation',

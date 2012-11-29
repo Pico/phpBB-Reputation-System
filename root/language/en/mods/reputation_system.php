@@ -107,8 +107,10 @@ $lang = array_merge($lang, array(
 	'RS_DELETE_POINTS_CONFIRM'	=> 'Do you really want to delete these reputation points?',
 	'RS_POINTS_DELETED'			=> 'The reputation points have been deleted.',
 	'NO_REPUTATION_SELECTED'	=> 'You did not select reputation point.',
-	'RS_TRUNCATE_POST_CONFIRM'	=> 'Do you really want to delete all reputation points of that post?',
+	'RS_CLEAR_POST_CONFIRM'		=> 'Do you really want to delete all reputation points of that post?',
+	'RS_CLEAR_USER_CONFIRM'		=> 'Do you really want to delete all reputation points of that user?',
 	'RS_CLEAR_POST'				=> 'Clear post reputation',
+	'RS_CLEAR_USER'				=> 'Clear user reputation',
 
 	'RS_PM_BODY'				=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Click %shere%s to view the post.',
 	'RS_PM_BODY_COMMENT'		=> 'You received a point from the sender of this message. <br />Points: [b]%s&nbsp;[/b] <br />Comment: [i]%s&nbsp;[/i] <br />Click %shere%s to view the post.',

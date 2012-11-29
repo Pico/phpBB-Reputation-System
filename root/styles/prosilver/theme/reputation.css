@@ -153,6 +153,11 @@ li.reputation {
 	text-transform: none;
 	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	margin: 0;
+	border: none;
+}
+
+#reputation-popup p {
+	padding: 0 10px;
 }
 
 .small-popup {
