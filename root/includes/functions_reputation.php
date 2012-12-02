@@ -222,12 +222,13 @@ class reputation
 			$action = 5;
 		}
 
-		//Prepare comment text for storage
-		$text = utf8_normalize_nfc($comment);
-		$uid = $bitfield = $options = '';
-		$allow_bbcode = $allow_urls = $allow_smilies = true;
-		generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+		include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
+		//Prepare comment for storage
+		$message_parser = new parse_message($comment);
+
+		$allow_bbcode = $allow_urls = $allow_smilies = true;
+		$message_parser->parse($allow_bbcode, $allow_urls, $allow_smilies, false, false, false, false, true, 'comment');
 		//Now we are ready to save the vote itself
 		$sql_data = array(
 			'rep_from'			=> $user->data['user_id'],
@@ -236,13 +237,15 @@ class reputation
 			'action'			=> $action,
 			'post_id'			=> $post_id,
 			'point'				=> $point,
-			'comment'			=> $text,
-			'bbcode_bitfield'	=> $bitfield,
-			'bbcode_uid'		=> $uid,
+			'comment'			=> (string) $message_parser->message,
+			'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
+			'bbcode_uid'		=> (string) $message_parser->bbcode_uid,
 		);
 
 		//Saving the vote. Used for post rating calculation. Not for user rating calculation
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
+
+		unset($message_parser);
 
 		//Post reputation
 		if ($post_id)
