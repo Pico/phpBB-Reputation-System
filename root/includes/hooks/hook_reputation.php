@@ -48,7 +48,7 @@ function hook_reputation_system()
 function hook_rs_copyright()
 {
 	global $template;
-	
+
 	$copy_string = '<a href="http://pico88.github.com/phpBB-Reputation-System/" title="Reputation System">Reputation System</a> &copy;';
 	if (!isset($template->_tpldata['.'][0]['CREDIT_LINE']))
 	{
