@@ -44,13 +44,6 @@ ul.post-reputation li.rate-bad-icon a { background-image: url("{IMG_ICON_RATE_BA
 ul.post-reputation li.rate-good-icon a:hover,
 ul.post-reputation li.rate-bad-icon a:hover { background-position: center bottom }
 
-ul.profile-icons li.like-icon { width: {IMG_ICON_LIKE_WIDTH}px; height: {IMG_ICON_LIKE_HEIGHT}px; }
-
-ul.profile-icons li.like-icon a.like { background-image: url("{IMG_ICON_LIKE_SRC}"); }
-ul.profile-icons li.like-icon a.unlike { background-image: url("{IMG_ICON_UNLIKE_SRC}"); }
-
-ul.profile-icons li.like-icon a:hover { background-position: center bottom }
-
 .reputation.zero a {
 	color: #6E6E6E;
 	text-decoration: none;
