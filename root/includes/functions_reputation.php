@@ -226,9 +226,9 @@ class reputation
 
 		//Prepare comment for storage
 		$message_parser = new parse_message($comment);
-
 		$allow_bbcode = $allow_urls = $allow_smilies = true;
 		$message_parser->parse($allow_bbcode, $allow_urls, $allow_smilies, false, false, false, false, true, 'comment');
+
 		//Now we are ready to save the vote itself
 		$sql_data = array(
 			'rep_from'			=> $user->data['user_id'],
@@ -301,7 +301,6 @@ class reputation
 		if ($notify && $config['rs_pm_notify'])
 		{
 			include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
-			include_once($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
 			$message_parser = new parse_message();
 
@@ -364,7 +363,7 @@ class reputation
 	* @param int $user_id user ID
 	* @param string $mode max or min
 	*/
-	function check_point($user_id, $mode)
+	private function check_point($user_id, $mode)
 	{
 		global $config, $db;
 
@@ -378,7 +377,7 @@ class reputation
 			$point = $config['rs_min_point'];
 			$sql_where = 'user_reputation < ' . $config['rs_min_point'];
 		}
-		
+
 		$sql = 'UPDATE ' . USERS_TABLE . "
 			SET user_reputation = $point
 			WHERE $sql_where
@@ -679,7 +678,7 @@ class reputation
 		{
 			$return_rank = $rs_rank_title;
 		}
-		elseif ($color)
+		else if ($color)
 		{
 			$return_rank = $rs_rank_color;
 		}
@@ -755,7 +754,7 @@ class reputation
 	/** Ban user by minimum reputation
 	* @param $user_id user ID
 	*/
-	function ban_user($user_id)
+	private function ban_user($user_id)
 	{
 		global $config, $db, $cache;
 
