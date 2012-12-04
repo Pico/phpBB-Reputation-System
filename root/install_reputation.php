@@ -533,13 +533,6 @@ $versions = array(
 			'theme',
 		),
 	),
-
-	'0.6.2' => array(
-		'cache_purge' => array(
-			'template',
-			'theme',
-		),
-	),
 );
 
 // Include the UMIL Auto file, it handles the rest
@@ -624,12 +617,12 @@ function convert($action)
 				generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
 				$sql_data = array(
-					'rep_from'			=> $row['poster_id'],
-					'rep_to'			=> $row['user_id'],
+					'rep_from'			=> $row['user_id'],
+					'rep_to'			=> $row['poster_id'],
 					'time'				=> $row['karma_time'],
 					'action'			=> 1,
 					'post_id'			=> $row['post_id'],
-					'point'				=> ($row['karma_action'] == '-') ? -$row['karma_power'] : $row['karma_power'],
+					'point'				=> 1,
 					'comment'			=> $text,
 					'bbcode_uid'		=> $uid,
 					'bbcode_bitfield'	=> $bitfield,
