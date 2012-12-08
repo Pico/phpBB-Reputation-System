@@ -191,6 +191,11 @@ class mcp_reputation
 					$result = $db->sql_query($sql);
 					$row_from = $db->sql_fetchrow($result);
 					$db->sql_freeresult($result);
+
+					if (!$row_from)
+					{
+						trigger_error('NO_USER');
+					}
 				}
 
 				if (!empty($search_user_to))
@@ -202,6 +207,11 @@ class mcp_reputation
 					$result = $db->sql_query($sql);
 					$row_to = $db->sql_fetchrow($result);
 					$db->sql_freeresult($result);
+
+					if (!$row_to)
+					{
+						trigger_error('NO_USER');
+					}
 				}
 
 				$sort_days = $total = 0;
@@ -222,16 +232,18 @@ class mcp_reputation
 				{
 					$sql_array['LEFT_JOIN'][] = array('FROM' => array(USERS_TABLE => 'ru'), 'ON' => 'r.rep_to = ru.user_id');
 				}
+
 				$sql_where = array();
+
 				if ($sort_days)
 				{
 					$sql_where[] = 'r.time >= ' . (time() - ($sort_days * 86400));
 				}
-				if (!empty($search_user_from) && !empty($row_from))
+				if (!empty($search_user_from) && $row_from['user_id'])
 				{
 					$sql_where[] = 'r.rep_from = ' . $row_from['user_id'];
 				}
-				if (!empty($search_user_to) && !empty($row_to))
+				if (!empty($search_user_to) && $row_to['user_id'])
 				{
 					$sql_where[] = 'r.rep_to = ' . $row_to['user_id'];
 				}
@@ -336,6 +348,7 @@ class mcp_reputation
 						));
 					}
 					$db->sql_freeresult($result);
+
 					unset($reputation_ids, $row);
 				}
 
