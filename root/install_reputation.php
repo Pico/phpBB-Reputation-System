@@ -50,13 +50,9 @@ $mod_name = 'REPUTATION_SYSTEM';
 $version_config_name = 'rs_version';
 
 /*
-* The array of versions and actions within each.
-* You do not need to order it a specific way (it will be sorted automatically), however, you must enter every version, even if no actions are done for it.
-*
-* You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
-* The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
+* Reputation System requires 2 icons to be displayed.
+* If the style does not have them, warn the user about that.
 */
-
 if (!isset($config['rs_version']))
 {
 	$error = array();
@@ -85,7 +81,7 @@ if (!isset($config['rs_version']))
 	if ($error)
 	{
 		$user->add_lang('mods/info_acp_reputation');
-		
+
 		$error_msg = implode('<br/>', $error);
 		$error_msg = sprintf($user->lang['FILES_NOT_EXIST'], $error_msg);
 		$template->assign_vars(array(
@@ -93,8 +89,24 @@ if (!isset($config['rs_version']))
 			'ERROR_MSG'	=> $error_msg,
 		));
 	}
+}
 
-	$options = array();
+/*
+* The additional options for a conversion to Reputation System
+* The following modifications can be converted to Reputation System:
+* - Thanks for posts
+* - Karma MOD
+* - HelpMod
+* - phpBB Ajax Like
+* - Thank You Mod
+*/
+$options = array();
+
+if (!isset($config['rs_version']))
+{
+	$options = array(
+		'legend2'	=> 'CONVERTER',
+	);
 
 	if (isset($config['thanks_mod_version']))
 	{
@@ -116,10 +128,37 @@ if (!isset($config['rs_version']))
 			'helpmod'	=> array('lang' => 'CONVERT_HELPMOD', 'type' => 'radio:yes_no', 'default' => false),
 		);
 	}
+
+	if (isset($config['ajaxlike_version']))
+	{
+		$options += array(
+			'like'	=> array('lang' => 'CONVERT_LIKE', 'type' => 'radio:yes_no', 'default' => false),
+		);
+	}
+
+	if (isset($config['thank_you_version']))
+	{
+		$options += array(
+			'like'	=> array('lang' => 'CONVERT_THANK', 'type' => 'radio:yes_no', 'default' => false),
+		);
+	}
 }
 
+$options += array(
+	'legend3'	=> 'ACP_SUBMIT_CHANGES',
+);
+
+// Try to override some limits - maybe it helps some...
 @set_time_limit(1200);
 @set_time_limit(0);
+
+/*
+* The array of versions and actions within each.
+* You do not need to order it a specific way (it will be sorted automatically), however, you must enter every version, even if no actions are done for it.
+*
+* You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
+* The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
+*/
 
 $versions = array(
 	'0.4.0' => array(
@@ -314,8 +353,6 @@ $versions = array(
 				),
 			),
 		),
-
-		'custom' => 'convert',
 
 		'cache_purge' => array(
 			'auth',
@@ -533,6 +570,10 @@ $versions = array(
 			'theme',
 		),
 	),
+
+	'0.6.2' => array(
+		'custom' => 'convert',
+	),
 );
 
 // Include the UMIL Auto file, it handles the rest
@@ -568,7 +609,7 @@ function update_rs_table($action)
 
 function convert($action)
 {
-	global $db, $table_prefix;
+	global $cache, $db, $table_prefix;
 
 	if ($action == 'install')
 	{
@@ -581,27 +622,11 @@ function convert($action)
 
 			while ($row = $db->sql_fetchrow($result))
 			{
-				$text = '';
-				$uid = $bitfield = $options = '';
-				$allow_bbcode = $allow_urls = $allow_smilies = true;
-				generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
-
-				$sql_data = array(
-					'rep_from'			=> $row['user_id'],
-					'rep_to'			=> $row['poster_id'],
-					'time'				=> $row['thanks_time'],
-					'action'			=> 1,
-					'post_id'			=> $row['post_id'],
-					'point'				=> 1,
-					'comment'			=> $text,
-					'bbcode_uid'		=> $uid,
-					'bbcode_bitfield'	=> $bitfield,
-				);
-
-				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
+				convert_data($row['user_id'], $row['poster_id'], $row['thanks_time'], 1, $row['post_id'], 1);
 			}
+			$db->sql_freeresult($result);
 
-			$convert_data .= ($convert_data == '') ? 'Thanks for posts' : ', Thanks for posts';
+			$convert_data .= ($convert_data == '') ? '' : ', ' . 'Thanks for posts';
 		}
 
 		if (request_var('karma', false))
@@ -611,27 +636,18 @@ function convert($action)
 
 			while ($row = $db->sql_fetchrow($result))
 			{
-				$text = utf8_normalize_nfc($row['comment_text']);
+				$point = ($row['karma_action'] == '-') ? -$row['karma_power'] : $row['karma_power'];
+
+				$comment = utf8_normalize_nfc($row['comment_text']);
 				$uid = $bitfield = $options = '';
 				$allow_bbcode = $allow_urls = $allow_smilies = true;
-				generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+				generate_text_for_storage($comment, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
-				$sql_data = array(
-					'rep_from'			=> $row['user_id'],
-					'rep_to'			=> $row['poster_id'],
-					'time'				=> $row['karma_time'],
-					'action'			=> 1,
-					'post_id'			=> $row['post_id'],
-					'point'				=> 1,
-					'comment'			=> $text,
-					'bbcode_uid'		=> $uid,
-					'bbcode_bitfield'	=> $bitfield,
-				);
-
-				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
+				convert_data($row['poster_id'], $row['user_id'], $row['karma_time'], 1, $row['post_id'], $point, $comment, $uid, $bitfield);
 			}
-			
-			$convert_data .= ($convert_data == '') ? 'Karma MOD' : ', Karma MOD';
+			$db->sql_freeresult($result);
+
+			$convert_data .= ($convert_data == '') ? '' : ', ' . 'Karma MOD';
 		}
 
 		if (request_var('helpmod', false))
@@ -641,31 +657,56 @@ function convert($action)
 
 			while ($row = $db->sql_fetchrow($result))
 			{
-				$text = utf8_normalize_nfc($row['help_reason']);
+				$comment = utf8_normalize_nfc($row['help_reason']);
 				$uid = $bitfield = $options = '';
 				$allow_bbcode = $allow_urls = $allow_smilies = true;
-				generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+				generate_text_for_storage($comment, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
-				$sql_data = array(
-					'rep_from'			=> $row['help_from'],
-					'rep_to'			=> $row['help_to'],
-					'time'				=> $row['help_time'],
-					'action'			=> 1,
-					'post_id'			=> $row['post_id'],
-					'point'				=> 1,
-					'comment'			=> $text,
-					'bbcode_uid'		=> $uid,
-					'bbcode_bitfield'	=> $bitfield,
-				);
-
-				$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
+				convert_data($row['help_from'], $row['help_to'], $row['help_time'], 1, $row['post_id'], 1, $comment, $uid, $bitfield);
 			}
+			$db->sql_freeresult($result);
 
-			$convert_data .= ($convert_data == '') ? 'HelpMod' : ', HelpMod';
+			$convert_data .= ($convert_data == '') ? '' : ', ' . 'HelpMod';
+		}
+
+		if (request_var('like', false))
+		{
+			$sql = 'SELECT * FROM ' . $table_prefix . 'likes';
+			$result = $db->sql_query($sql);
+
+			while ($row = $db->sql_fetchrow($result))
+			{
+				convert_data($row['user_id'], $row['poster_id'], $row['like_date'], 1, $row['post_id'], 1);
+			}
+			$db->sql_freeresult($result);
+
+			$convert_data .= ($convert_data == '') ? '' : ', ' . 'phpBB Ajax Like';
+		}
+
+		if (request_var('thank', false))
+		{
+			$sql = 'SELECT * FROM ' . $table_prefix . 'thank_you_list';
+			$result = $db->sql_query($sql);
+
+			while ($row = $db->sql_fetchrow($result))
+			{
+				convert_data($row['user_id'], $row['poster_id'], $row['submited_time'], 1, $row['post_id'], 1);
+			}
+			$db->sql_freeresult($result);
+
+			$convert_data .= ($convert_data == '') ? '' : ', ' . 'Thank You Mod';
 		}
 
 		if (!empty($convert_data))
 		{
+			// Reputation System will be automatically resynchronise after viewing its overview page in ACP. 
+			$cache->put('_reputation', 1);
+
+			// Enable Reputation System in all forums.
+			$sql = 'UPDATE ' . FORUMS_TABLE . "
+				SET enable_reputation = 1";
+			$db->sql_query($sql);
+
 			return array(
 				'command'	=> array(
 					'CONVERT_DATA',
@@ -675,6 +716,25 @@ function convert($action)
 			);
 		}
 	}
+}
+
+function convert_data($user_from, $user_to, $time, $action, $post_id, $point, $comment = '', $uid = '', $bitfield  = '')
+{
+	global $db, $table_prefix;
+
+	$sql_data = array(
+		'rep_from'			=> $user_from,
+		'rep_to'			=> $user_to,
+		'time'				=> $time,
+		'action'			=> $action,
+		'post_id'			=> $post_id,
+		'point'				=> $point,
+		'comment'			=> $comment,
+		'bbcode_uid'		=> $uid,
+		'bbcode_bitfield'	=> $bitfield,
+	);
+
+	$db->sql_query('INSERT INTO ' . $table_prefix . 'reputations ' . $db->sql_build_array('INSERT', $sql_data));
 }
 
 ?>
