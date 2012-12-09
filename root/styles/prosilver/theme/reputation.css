@@ -126,7 +126,6 @@ li.reputation {
 
 #reputation-popup {
 	font-size: 0.9em;
-	position: absolute;
 	z-index: 500;
 	display: none;
 	background: white;
@@ -154,10 +153,12 @@ li.reputation {
 }
 
 .small-popup {
+	position: absolute;
 	width: 300px;
 }
 
 .normal-popup {
+	position: fixed;
 	width: 570px;
 }
 
@@ -167,6 +168,7 @@ li.reputation {
 }
 
 .new-popup {
+	position: fixed;
 	width: 400px;
 	height: 115px;
 	text-align: center;

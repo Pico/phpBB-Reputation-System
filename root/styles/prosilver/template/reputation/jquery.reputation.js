@@ -106,18 +106,24 @@ function show_popup(a, b, c, d)
 		dataType: 'html',
 		beforeSend: function() {
 			$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup new-popup');
+		},
+		success: function(s) {
+			$('#reputation-popup').append(s).fadeIn();
+			if (s.substr(0,1) == '{')
+			{
+				// It's JSON. Probably an error. Let's clean the DIV and show the error there
+				r = jQuery.parseJSON(s);
+				response(r, mode);
+				return true;
+			}
 
 			switch(a)
 			{
 				case 'postdetails':
-					$('#reputation-popup').addClass('normal-popup');
-					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
-					targettop = $('#p' + b).offset().top;
-				break;
 				case 'userdetails':
 					$('#reputation-popup').addClass('normal-popup');
 					targetleft = ($(window).width() - $('#reputation-popup').outerWidth()) / 2;
-					targettop = $('#p' + c).offset().top;
+					targettop = ($(window).height() - $('#reputation-popup').outerHeight()) / 2;
 				break;
 				case 'newpopup':
 					$('#reputation-popup').addClass('new-popup');
@@ -134,18 +140,7 @@ function show_popup(a, b, c, d)
 					targettop = c.pageY + 10;
 				break;
 			}
-		},
-		success: function(s) {
-			$('#reputation-popup').append(s).css({'top': targettop + 'px', 'left': targetleft + 'px'});
-			if (s.substr(0,1) == '{')
-			{
-				// It's JSON. Probably an error. Let's clean the DIV and show the error there
-				r = jQuery.parseJSON(s);
-				response(r, mode);
-				return true;
-			}
-
-			$('#reputation-popup').fadeIn();
+			$('#reputation-popup').css({'top': targettop + 'px', 'left': targetleft + 'px'})
 		}
 	});
 }
