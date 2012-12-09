@@ -241,9 +241,12 @@ $lang = array_merge($lang, array(
 
 	//Installation
 	'FILES_NOT_EXIST'		=> 'The rating icons:<br />%s<br /> were not found.<br /><br /><strong>Before continuing, you have to copy the rating icons from the <em>contrib/images</em> folder to the imageset folders of the styles you are using. Then refresh this page.</strong>',
-	'CONVERT_THANKS'		=> 'Convert Thanks for posts to Reputation System?',
-	'CONVERT_KARMA'			=> 'Convert Karma MOD to Reputation System?',
-	'CONVERT_HELPMOD'		=> 'Convert HelpMOD to Reputation System?',
+	'CONVERTER'				=> 'Converter',
+	'CONVERT_THANKS'		=> 'Convert Thanks for posts to Reputation System',
+	'CONVERT_KARMA'			=> 'Convert Karma MOD to Reputation System',
+	'CONVERT_HELPMOD'		=> 'Convert HelpMOD to Reputation System',
+	'CONVERT_LIKE'			=> 'Convert phpBB Ajax Like to Reputation System',
+	'CONVERT_THANK'			=> 'Convert Thank You Mod to Reputation System',
 	'CONVERT_DATA'			=> 'Converted MOD: %1$s.<br />Now, you can uninstall %2$s. Go to the ACP and resynchronise Reputation System.',
 	'UPDATE_RS_TABLE'		=> 'Reputation table was successfully updated.',
 
