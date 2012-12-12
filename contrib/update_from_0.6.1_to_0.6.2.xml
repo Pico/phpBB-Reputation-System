@@ -40,8 +40,8 @@
 		</copy>
 		<open src="viewtopic.php">
 			<edit>
-				<find><![CDATA[	'S_ENABLE_REPUTATION'  => ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,]]></find>
-				<action type="replace-with"><![CDATA[	'S_FORUM_REPUTATION'  => ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,]]></action>
+				<find><![CDATA[	'S_ENABLE_REPUTATION'	=> ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL) ? true : false,]]></find>
+				<action type="replace-with"><![CDATA[	'S_FORUM_REPUTATION'	=> ($topic_data['enable_reputation'] && $topic_data['topic_type'] != POST_GLOBAL && $config['rs_post_rating']) ? true : false,]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[		'S_VIEW_REP' 			=> ($auth->acl_get('u_rs_view') || $poster_id == $user->data['user_id']) ? true : false,
@@ -50,10 +50,6 @@
 			</edit>
 		</open>
 		<open src="styles/prosilver/template/viewtopic_body.html">
-			<edit>
-				<find><![CDATA[			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->]]></find>
-				<action type="replace-with"><![CDATA[			<!-- IF S_REPUTATION and S_FORUM_REPUTATION -->]]></action>
-			</edit>
 			<edit>
 				<find><![CDATA[			<!-- IF S_REPUTATION and S_ENABLE_REPUTATION -->]]></find>
 				<action type="replace-with"><![CDATA[			<!-- IF S_REPUTATION and S_FORUM_REPUTATION -->]]></action>
