@@ -47,7 +47,8 @@ $lang = array_merge($lang, array(
 	'MCP_RS_GIVE_REP_POINT'			=> 'Przyznaj punkty',
 
 	'LOG_USER_REP_DELETE'			=> '<strong>Usunięto punkt reputacji</strong><br />Użytkownik: %s',
-	'LOG_POST_REP_TRUNCATE'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
+	'LOG_CLEAR_POST_REP'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
+	'LOG_CLEAR_USER_REP'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Użytkownik: %s',
 
 	'RS_BEST_REPUTATION'			=> 'Użytkownicy z najlepszą reputacją',
 	'RS_WORST_REPUTATION'			=> 'Użytkownicy z najgorszą reputacją',

@@ -233,7 +233,8 @@ $lang = array_merge($lang, array(
 	'LOG_RS_RANK_REMOVED'			=> '<strong>Usunięto rangę reputacji</strong><br />» %s',
 	'LOG_RS_RANK_UPDATED'			=> '<strong>Zaktualizowano rangę reputacji</strong><br />» %s',
 	'LOG_USER_REP_DELETE'			=> '<strong>Usunięto punkt reputacji</strong><br />Użytkownik: %s',
-	'LOG_POST_REP_TRUNCATE'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
+	'LOG_CLEAR_POST_REP'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Post: %s',
+	'LOG_CLEAR_USER_REP'			=> '<strong>Wyczyszczono punkty reputacji</strong><br />Użytkownik: %s',
 
 	'IMG_ICON_RATE_GOOD'			=> 'Oceń pozytywnie',
 	'IMG_ICON_RATE_BAD'				=> 'Oceń negatywnie',
@@ -243,6 +244,8 @@ $lang = array_merge($lang, array(
 	'CONVERT_THANKS'				=> 'Konwertuj Thanks for posts do Systemu Reputacji',
 	'CONVERT_KARMA'					=> 'Konwertuj Karma MOD do Systemu Reputacji',
 	'CONVERT_HELPMOD'				=> 'Konwertuj HelpMOD do Systemu Reputacji',
+	'CONVERT_LIKE'					=> 'Konwertuj phpBB Ajax Like do Systemu Reputacji',
+	'CONVERT_THANK'					=> 'Konwertuj Thank You Mod do Systemu Reputacji',
 	'CONVERT_DATA'					=> 'Skonwertowane modyfikacje: %1$s.<br />Teraz możesz odinstalować %2$s. Przejdź do Panelu administracji i wykonaj synchronizację Systemu Reputacji.',
 	'UPDATE_RS_TABLE'				=> 'Tabela reputacji została zaktualizowana pomyślnie.',
 
