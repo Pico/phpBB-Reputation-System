@@ -107,8 +107,10 @@ $lang = array_merge($lang, array(
 	'RS_DELETE_POINTS_CONFIRM'	=> 'Czy na pewno chcesz usunąć te punkty reputacji?',
 	'RS_POINTS_DELETED'			=> 'Punkty reputacji zostały usunięte',
 	'NO_REPUTATION_SELECTED'	=> 'Nie wybrano punktu reputacji.',
-	'RS_TRUNCATE_POST_CONFIRM'	=> 'Czy na pewno chcesz skasować wszystkie punkt reputacji tego postu?',
+	'RS_CLEAR_POST_CONFIRM'		=> 'Czy na pewno chcesz skasować wszystkie punkt reputacji tego postu?',
+	'RS_CLEAR_USER_CONFIRM'		=> 'Czy na pewno chcesz skasować wszystkie punkt reputacji tego użytkownika?',
 	'RS_CLEAR_POST'				=> 'Wyczyść reputację postu',
+	'RS_CLEAR_USER'				=> 'Wyczyść reputację użytkownika',
 
 	'RS_PM_BODY'				=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
 	'RS_PM_BODY_COMMENT'		=> 'Otrzymałeś punkt reputacji od autora tej wiadomości. <br />Punkty: [b]%s&nbsp;[/b] <br />Komentarz: [i]%s&nbsp;[/i] <br />By zobaczyć post, za który został przyznany punkt reputacji, proszę kliknąć w ten %slink%s.',
