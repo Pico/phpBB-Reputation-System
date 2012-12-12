@@ -572,6 +572,12 @@ $versions = array(
 	),
 
 	'0.6.2' => array(
+		'cache_purge' => array(
+			'template',
+			'theme',
+		),
+
+		// Convert should be at the end of action list
 		'custom' => 'convert',
 	),
 );
