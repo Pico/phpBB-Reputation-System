@@ -109,13 +109,6 @@ function show_popup(a, b, c, d)
 		},
 		success: function(s) {
 			$('#reputation-popup').append(s).fadeIn();
-			if (s.substr(0,1) == '{')
-			{
-				// It's JSON. Probably an error. Let's clean the DIV and show the error there
-				r = jQuery.parseJSON(s);
-				response(r, mode);
-				return true;
-			}
 
 			switch(a)
 			{
@@ -140,7 +133,15 @@ function show_popup(a, b, c, d)
 					targettop = c.pageY + 10;
 				break;
 			}
+
 			$('#reputation-popup').css({'top': targettop + 'px', 'left': targetleft + 'px'})
+
+			if (s.substr(0,1) == '{')
+			{
+				// It's JSON. Probably an error. Let's clean the DIV and show the error there
+				r = jQuery.parseJSON(s);
+				response(r, mode);
+			}
 		}
 	});
 }
