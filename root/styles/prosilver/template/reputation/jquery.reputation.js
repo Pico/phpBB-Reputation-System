@@ -134,7 +134,7 @@ function show_popup(a, b, c, d)
 				break;
 			}
 
-			$('#reputation-popup').css({'top': targettop + 'px', 'left': targetleft + 'px'})
+			$('#reputation-popup').css({'top': targettop + 'px', 'left': targetleft + 'px'});
 
 			if (s.substr(0,1) == '{')
 			{
