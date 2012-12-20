@@ -166,14 +166,15 @@ class acp_reputation
 						$posts_ids = array();
 
 						$sql_array = array(
-							'SELECT'	=> 'r.post_id AS post_to_check, p.post_id AS post_exist',
-							'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' => array(
+							'SELECT'		=> 'r.post_id AS post_to_check, p.post_id AS post_exist',
+							'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
+							'LEFT_JOIN' 	=> array(
 								array(
 									'FROM'	=> array(POSTS_TABLE => 'p'),
 									'ON'	=> 'r.post_id = p.post_id',
 								),
 							),
+							'WHERE'			=> 'r.action = 1 OR r.action = 5',
 							'GROUP_BY'		=> 'r.post_id',
 						);
 						$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -242,15 +243,15 @@ class acp_reputation
 						));
 
 						$sql_array = array(
-							'SELECT'	=> 'r.rep_id, r.rep_to, p.poster_id',
-							'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' => array(
+							'SELECT'		=> 'r.rep_id, r.rep_to, p.poster_id',
+							'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
+							'LEFT_JOIN'		=> array(
 								array(
 									'FROM'	=> array(POSTS_TABLE => 'p'),
 									'ON'	=> 'r.post_id = p.post_id',
 								),
 							),
-							'WHERE'		=> 'r.post_id IS NOT NULL',
+							'WHERE'			=> 'r.post_id != 0 AND (r.action = 1 OR r.action = 5)',
 						);
 						$sql = $db->sql_build_query('SELECT', $sql_array);
 						$result = $db->sql_query($sql);
@@ -291,7 +292,7 @@ class acp_reputation
 									'ON'	=> 'p.forum_id = f.forum_id',
 								),
 							),
-							'WHERE'		=> 'r.post_id IS NOT NULL',
+							'WHERE'		=> 'r.post_id != 0',
 						);
 						$sql = $db->sql_build_query('SELECT', $sql_array);
 						$result = $db->sql_query($sql);
