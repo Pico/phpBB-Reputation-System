@@ -576,7 +576,9 @@ $versions = array(
 			'template',
 			'theme',
 		),
+	),
 
+	'0.6.3' => array(
 		// Convert should be at the end of action list
 		'custom' => 'convert',
 	),
