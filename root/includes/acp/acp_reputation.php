@@ -80,7 +80,6 @@ class acp_reputation
 						case 'truncate':
 							$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
 							$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
-							$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_rs_count = 0');
 							$db->sql_query('TRUNCATE ' . REPUTATIONS_TABLE);
 
 							add_log('admin', 'LOG_REPUTATION_TRUNCATE');
