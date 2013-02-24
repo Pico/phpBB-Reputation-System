@@ -152,6 +152,16 @@ li.reputation {
 	padding: 0 10px;
 }
 
+#post-reputation-list {
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+}
+
+#user-reputation-list {
+	float: right;
+	width: 58%;
+}
+
 .small-popup {
 	position: absolute;
 	width: 300px;
@@ -162,7 +172,7 @@ li.reputation {
 	width: 570px;
 }
 
-.normal-popup #post-reputation-list{
+.normal-popup #post-reputation-list {
 	max-height: 350px;
 	overflow: auto;
 }
@@ -176,7 +186,6 @@ li.reputation {
 }
 
 .footer-popup {
-	border-top: 1px solid #CCC;
 	padding: 2px 10px 0 10px;
 }
 .vote_status_positive, .vote_status_negative {

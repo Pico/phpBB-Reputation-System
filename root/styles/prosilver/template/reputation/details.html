@@ -94,45 +94,66 @@
 
 </div>
 
-<div id="post-reputation-list" style="float: right; width: 58%;">
-	<!-- IF .reputation -->
-	<!-- BEGIN reputation -->
-	<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.REP_ID}">
-		<!-- IF S_RS_AVATAR -->
-			<div class="reputation-avatar-big">{reputation.AVATAR_IMG}</div>
-		<!-- ENDIF -->
-		<div style="padding-left: 5px;">
-			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'user'); return false;">{L_DELETE}</a><!-- ENDIF -->
-			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
-			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
-			<span>{reputation.ACTION} {reputation.GO_TO_POST}</span><br />
-			<!-- IF S_RS_COMMENT and reputation.COMMENT -->
-			<span>{L_RS_COMMENT}:</span>
-			<div class="comment_message">{reputation.COMMENT}</div>
-			<!-- ENDIF -->
-		</div>
-	</div>
-	<!-- END reputation -->
-	<!-- ELSE -->
-	<div class="reputation-list empty bg3">
-		<span>{L_RS_EMPTY_DATA}</span>
-	</div>
-	<!-- ENDIF -->
+<div id="user-reputation-list">
 
 	<!-- IF .reputation -->
 	<ul class="linklist">
-		<label>{L_SORT_BY}:</label>
-		<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
-		<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
-		<a href="{U_SORT_POINTS}" >{L_RS_POINTS}</a> &bull; 
-		<a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a> &bull; 
-		<a href="{U_SORT_POSTS}" >{L_POST}</a>
-		<li class="rightside pagination">
+		<li>
+			<label>{L_SORT_BY}:</label>
+			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
+			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
+			<a href="{U_SORT_POINTS}" >{L_RS_POINTS}</a> &bull; 
+			<a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a> &bull; 
+			<a href="{U_SORT_POSTS}" >{L_POST}</a>
+		</li>
+		<li class="rightside">
+			<!-- IF TOTAL -->{TOTAL_REPS}<!-- ENDIF -->
+			<!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF -->
+		</li>
+	</ul>
+	<!-- ENDIF -->
+
+	<div id="post-reputation-list">
+		<!-- IF .reputation -->
+		<!-- BEGIN reputation -->
+		<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.REP_ID}">
+			<!-- IF S_RS_AVATAR -->
+				<div class="reputation-avatar-big">{reputation.AVATAR_IMG}</div>
+			<!-- ENDIF -->
+			<div style="padding-left: 5px;">
+				<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'user'); return false;">{L_DELETE}</a><!-- ENDIF -->
+				<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
+				<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
+				<span>{reputation.ACTION} {reputation.GO_TO_POST}</span><br />
+				<!-- IF S_RS_COMMENT and reputation.COMMENT -->
+				<span>{L_RS_COMMENT}:</span>
+				<div class="comment_message">{reputation.COMMENT}</div>
+				<!-- ENDIF -->
+			</div>
+		</div>
+		<!-- END reputation -->
+		<!-- ELSE -->
+		<div class="reputation-list empty bg3">
+			<span>{L_RS_EMPTY_DATA}</span>
+		</div>
+		<!-- ENDIF -->
+	</div>
+
+	<!-- IF .reputation -->
+	<ul class="linklist">
+		<li>
+			<label>{L_SORT_BY}:</label>
+			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
+			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
+			<a href="{U_SORT_POINTS}" >{L_RS_POINTS}</a> &bull; 
+			<a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a> &bull; 
+			<a href="{U_SORT_POSTS}" >{L_POST}</a>
+		</li>
+		<li class="rightside">
 			<!-- IF TOTAL -->{TOTAL_REPS}<!-- ENDIF -->
 			<!-- IF PAGINATION --> &bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{PAGINATION}</span><!-- ELSE --> &bull; {PAGE_NUMBER}<!-- ENDIF --></li>
 	</ul>
 	<!-- ENDIF -->
-
 </div>
 
 <br class="clear">
