@@ -224,9 +224,12 @@ class reputation
 
 		include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
 
+		$message_parser = new parse_message();
+
 		//Prepare comment for storage
-		$message_parser = new parse_message($comment);
 		$allow_bbcode = $allow_urls = $allow_smilies = true;
+
+		$message_parser->message = $comment;
 		$message_parser->parse($allow_bbcode, $allow_urls, $allow_smilies, false, false, false, false, true, 'comment');
 
 		//Now we are ready to save the vote itself
@@ -238,14 +241,12 @@ class reputation
 			'post_id'			=> $post_id,
 			'point'				=> $point,
 			'comment'			=> (string) $message_parser->message,
-			'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
 			'bbcode_uid'		=> (string) $message_parser->bbcode_uid,
+			'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
 		);
 
 		//Saving the vote. Used for post rating calculation. Not for user rating calculation
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
-
-		unset($message_parser);
 
 		//Post reputation
 		if ($post_id)
@@ -272,7 +273,11 @@ class reputation
 			$new_points = ', user_rep_new = user_rep_new + 1' . $rep_last_time;
 		}
 
-		if ($mode == 'onlypost') $point = 0;
+		if ($mode == 'onlypost')
+		{
+			$point = 0;
+		}
+
 		//Caching user reputation
 		$sql = 'UPDATE ' . USERS_TABLE . "
 			SET user_reputation = user_reputation + $point
@@ -301,8 +306,6 @@ class reputation
 		if ($notify && $config['rs_pm_notify'])
 		{
 			include_once($phpbb_root_path . 'includes/functions_privmsgs.' . $phpEx);
-
-			$message_parser = new parse_message();
 
 			//Select receiver language
 			$user_data['user_lang'] = (file_exists($phpbb_root_path . 'language/' . $user_data['user_lang'] . '/mods/reputation_system.' .$phpEx)) ? $user_data['user_lang'] : $config['default_lang'];
@@ -416,7 +419,6 @@ class reputation
 
 		if ($row['post_id'])
 		{
-
 			$sql = 'UPDATE ' . POSTS_TABLE . "
 				SET post_reputation = post_reputation - {$row['point']}
 				WHERE post_id = {$row['post_id']}";
@@ -443,32 +445,34 @@ class reputation
 	/** Function responsible for clearing user or post reputation
 	* @param string $mode user or post
 	* @param int $id post or user ID
-	* @param array $post_ids posts ID for post mode
+	* @param array $post_ids post IDs for user with post mode
 	* @return bool
 	*/
 	function clear_reputation($mode, $id, $post_ids = array())
 	{
 		global $db;
 
-		if (empty($id))
+		if (empty($mode) || empty($id))
 		{
-			return false;
+			return;
 		}
 
 		if ($mode == 'post')
 		{
-			$sql = 'SELECT SUM(point) AS user_points, rep_to
+			$sql = 'SELECT SUM(point) AS user_points, rep_to, action
 				FROM ' . REPUTATIONS_TABLE . "
-				WHERE action != 5
-					AND post_id = $id";
+				WHERE post_id = $id";
 			$result = $db->sql_query($sql);
 			$point = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
 
-			$sql = 'UPDATE ' . USERS_TABLE . "
-				SET user_reputation = user_reputation - {$point['user_points']}
-				WHERE user_id = {$point['rep_to']}";
-			$db->sql_query($sql);
+			if ($point['action'] != 5)
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = user_reputation - {$point['user_points']}
+					WHERE user_id = {$point['rep_to']}";
+				$db->sql_query($sql);
+			}
 
 			$sql = 'SELECT  topic_id, forum_id, post_subject
 				FROM ' . POSTS_TABLE . "
@@ -521,12 +525,10 @@ class reputation
 		}
 		else
 		{
-			return false;
+			return;
 		}
 
 		add_log('mod', $log_forum,  $log_topic, $log_clear_action, $log_clear_data);
-
-		return true;
 	}
 
 	/** Obtain reputation ranks
@@ -570,6 +572,7 @@ class reputation
 	{
 		global $rs_ranks, $config, $phpbb_root_path, $user;
 
+		//Don't display reputation ranks for guests, bots
 		if (!$user->data['is_registered'])
 		{
 			return;
@@ -577,7 +580,7 @@ class reputation
 
 		if (empty($rs_ranks))
 		{
-			$rs_ranks = $this->obtain_rs_ranks();
+			$rs_ranks = self::obtain_rs_ranks();
 		}
 
 		$rs_rank_title = $rs_rank_img = $rs_rank_img_src = $rs_rank_color = '';
@@ -659,7 +662,7 @@ class reputation
 
 		if (empty($rs_ranks))
 		{
-			$rs_ranks = $this->obtain_rs_ranks();
+			$rs_ranks = self::obtain_rs_ranks();
 		}
 
 		$rs_rank_img = $rs_rank_title = $rs_rank_color = '';
@@ -738,7 +741,7 @@ class reputation
 		$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 
 		$tr_reputation .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
-		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="reputation-avatar-big">' . $avatar_img . '</div>' : '';
+		$tr_reputation .= $config['rs_display_avatar'] ? '<div class="reputation-avatar-big">' . $avatar_img . '</div>' : '';
 		$tr_reputation .= '<div style="padding-left: 5px;">';
 		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del(' . $row['rep_id'] . ', \'user\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
 		$tr_reputation .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
