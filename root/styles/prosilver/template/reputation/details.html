@@ -118,9 +118,9 @@
 		<!-- BEGIN reputation -->
 		<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.REP_ID}">
 			<!-- IF S_RS_AVATAR -->
-				<div class="reputation-avatar-big">{reputation.AVATAR_IMG}</div>
+				<div class="reputation-avatar">{reputation.AVATAR_IMG}</div>
 			<!-- ENDIF -->
-			<div style="padding-left: 5px;">
+			<div class="reputation-detail"<!-- IF S_RS_AVATAR --> style="margin-left: 72px;"<!-- ENDIF -->>
 				<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'user'); return false;">{L_DELETE}</a><!-- ENDIF -->
 				<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 				<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />
