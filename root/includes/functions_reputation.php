@@ -706,8 +706,6 @@ class reputation
 			include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 		}
 
-		$tr_reputation = '';
-
 		$sql_array = array(
 			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, r.*',
 			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
@@ -740,18 +738,19 @@ class reputation
 		$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
 		$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 
-		$tr_reputation .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
-		$tr_reputation .= $config['rs_display_avatar'] ? '<div class="reputation-avatar-big">' . $avatar_img . '</div>' : '';
-		$tr_reputation .= '<div style="padding-left: 5px;">';
-		$tr_reputation .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del(' . $row['rep_id'] . ', \'user\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
-		$tr_reputation .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
-		$tr_reputation .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
-		$tr_reputation .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';
-		$tr_reputation .= $config['rs_enable_comment'] ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
-		$tr_reputation .= $config['rs_enable_comment'] ? '<div class="comment_message">' . $comment . '</div>' : '';
-		$tr_reputation .= '</div>';
+		$detail_row = '';
+		$detail_row .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
+		$detail_row .= $config['rs_display_avatar'] ? '<div class="reputation-avatar">' . $avatar_img . '</div>' : '';
+		$detail_row .= '<div class="reputation-detail"' . ($config['rs_display_avatar'] ? ' style="margin-left: 72px;"' : '') . '>';
+		$detail_row .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del(' . $row['rep_id'] . ', \'user\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
+		$detail_row .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
+		$detail_row .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
+		$detail_row .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';
+		$detail_row .= $config['rs_enable_comment'] ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
+		$detail_row .= $config['rs_enable_comment'] ? '<div class="comment_message">' . $comment . '</div>' : '';
+		$detail_row .= '</div>';
 
-		return $tr_reputation;
+		return $detail_row;
 	}
 
 	/** Ban user by minimum reputation
