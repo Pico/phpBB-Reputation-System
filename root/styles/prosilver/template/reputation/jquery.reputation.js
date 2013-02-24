@@ -113,7 +113,7 @@ function show_popup(a, b, c, d)
 				$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup new-popup');
 			},
 			success: function(s) {
-				$('#reputation-popup').append(s).fadeIn();
+				$('#reputation-popup').append(s).fadeIn('fast');
 
 				switch(a)
 				{
