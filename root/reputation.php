@@ -1221,7 +1221,7 @@ switch ($mode)
 					'reputation_class'		=> 'zero',
 				);
 			}
-			else if ($clear_mode == 'user' && $clear_page == 'topic')
+			else if ($clear_mode == 'user')
 			{
 				$post_ids = array();
 
@@ -1242,31 +1242,30 @@ switch ($mode)
 				$user_reputation = $reputation->get_user_reputation($uid);
 				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 
-				$json_data = array(
-					'post_ids'				=> $post_ids,
-					'poster_id'				=> $uid,
-					'user_reputation'		=> '<strong>0</strong>',
-					'reputation_rank'		=> $reputation_rank,
-					'post_reputation'		=> 0,
-					'reputation_class'		=> 'zero',
-				);
-			}
-			else if ($clear_mode == 'user' && $clear_page == 'detail')
-			{
-				$reputation->clear_reputation('user', $uid);
+				if ($clear_page == 'topic')
+				{
+					$json_data = array(
+						'post_ids'				=> $post_ids,
+						'poster_id'				=> $uid,
+						'user_reputation'		=> '<strong>0</strong>',
+						'reputation_rank'		=> $reputation_rank,
+						'post_reputation'		=> 0,
+						'reputation_class'		=> 'zero',
+					);
+				}
+				else if ($clear_page == 'detail')
+				{
+					$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
+					$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
 
-				$user_reputation = $reputation->get_user_reputation($uid);
-				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
-				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
-				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
-
-				$json_data = array(
-					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
-					'reputation_class'		=> $reputation_color,
-					'reputation_rank'		=> $reputation_rank,
-					'rank_title'			=> $reputation_title,
-					'empty'					=> '<div class="reputation-list empty bg3"><span>' . $user->lang['RS_EMPTY_DATA'] . '</span></div>',
-				);
+					$json_data = array(
+						'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
+						'reputation_class'		=> $reputation_color,
+						'reputation_rank'		=> $reputation_rank,
+						'rank_title'			=> $reputation_title,
+						'empty'					=> '<div class="reputation-list empty bg3"><span>' . $user->lang['RS_EMPTY_DATA'] . '</span></div>',
+					);
+				}
 			}
 
 			echo json_encode($json_data);
