@@ -7,7 +7,7 @@
 		<!-- IF S_RS_AVATAR -->
 			<div class="reputation-avatar">{reputation.AVATAR_IMG}</div>
 		<!-- ENDIF -->
-		<div style="padding-left: 5px;">
+		<div class="reputation-detail"<!-- IF S_RS_AVATAR --> style="margin-left: 52px;"<!-- ENDIF -->>
 			<!-- IF reputation.DELETE --><a href="#" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del({reputation.REP_ID}, 'post'); return false;">{L_DELETE}</a><!-- ENDIF -->
 			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
 			<span class="reputation-rating {reputation.POINT_CLASS}">{reputation.POINT_VALUE}</span><br />

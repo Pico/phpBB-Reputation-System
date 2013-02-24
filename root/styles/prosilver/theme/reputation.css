@@ -244,23 +244,22 @@ div.online.hidden {
 	text-align: center;
 }
 
+.reputation-detail {
+	padding-left: 5px;
+}
+
 .reputation-avatar {
-	width: 40px;
-	height: 40px;
-}
-
-.reputation-avatar-big {
-	width: 60px;
-	height: 60px;
-}
-
-.reputation-avatar, .reputation-avatar-big {
 	float: left;
-	padding: 1px;
-	margin-right: 5px;
+	padding: 2px;
 	background-color: white;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
+	border: 1px solid #D5D5D5;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.reputation-avatar  img{
+	display: block !important;
 }
 
 .reputation-rating {
