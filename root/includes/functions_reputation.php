@@ -222,7 +222,10 @@ class reputation
 			$action = 5;
 		}
 
-		include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+		if (!class_exists('parse_message'))
+		{
+			include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+		}
 
 		$message_parser = new parse_message();
 
