@@ -126,8 +126,8 @@
 <!-- BEGIN options -->
 	<!-- IF options.S_LEGEND -->
 		<!-- IF not options.S_FIRST_ROW -->
-			</fieldset>
-		</div>
+		</fieldset>
+	</div>
 
 	<span class="corners-bottom"><span></span></span>
 </div>
@@ -144,8 +144,9 @@
 			</dl>
 	<!-- ENDIF -->
 <!-- END options -->
-			</fieldset>
-		</div>
+
+		</fieldset>
+	</div>
 
 	<span class="corners-bottom"><span></span></span>
 </div>
@@ -293,85 +294,6 @@
 </fieldset>
 
 <!-- ENDIF -->
-</form>
-<!-- ENDIF -->
-
-<!-- IF S_RS_BANS -->
-<h1>{L_RS_BANS}</h1>
-
-<p>{L_RS_BANS_EXPLAIN}</p>
-
-<form id="acp_reputation" method="post" action="{U_ACTION}">
-
-<!-- IF S_EDIT -->
-
-<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
-
-<p>&nbsp;</p>
-
-<fieldset>
-	<legend>{L_ACP_RANKS}</legend>
-	<dl>
-		<dt><label for="point">{L_RS_BAN_POINT}:</label></dt>
-		<dd><input name="point" type="text" id="point" value="{POINT}" maxlength="11" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="banlength">{L_BAN_LENGTH}:</label></dt>
-		<dd><select name="banlength" id="banlength" onchange="if(this.value==-1){document.getElementById('banlengthother').style.display = 'block';}else{document.getElementById('banlengthother').style.display='none';}">{S_BAN_END_OPTIONS}</select></label></dd>
-		<dd id="banlengthother" <!-- IF S_BAN_LENGTH -->style="display: none;"<!-- ENDIF -->><input type="text" name="banlengthother" value="{BAN_LENGTH}" />&nbsp;<select name="bantype">{S_BAN_TYPE}</select></dd>
-	</dl>
-	<dl>
-		<dt><label for="banreason">{L_BAN_REASON}:</label></dt>
-		<dd><input name="banreason" id="banreason" type="text" value="{BAN_REASON}" maxlength="255" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="bangivereason">{L_BAN_GIVE_REASON}:</label></dt>
-		<dd><input name="bangivereason" id="bangivereason" type="text" value="{BAN_GIVE_REASON}" maxlength="255" /></dd>
-	</dl>
-
-	<p class="submit-buttons">
-		<input type="hidden" name="action" value="save" />
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		{S_FORM_TOKEN}
-	</p>
-</fieldset>
-
-<!-- ELSE -->
-
-<fieldset class="tabulated">
-	<legend>{L_ACP_MANAGE_BANS}</legend>
-
-	<table cellspacing="1">
-		<thead>
-		<tr>
-			<th>{L_RS_BAN_POINT}</th>
-			<th>{L_BAN_LENGTH}</th>
-			<th>{L_BAN_REASON}</th>
-			<th>{L_BAN_GIVE_REASON}</th>
-			<th>{L_ACTION}</th>
-		</tr>
-		</thead>
-		<tbody>
-		<!-- BEGIN bans -->
-		<!-- IF bans.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-			<td style="text-align: center;">{bans.POINT}</td>
-			<td style="text-align: center;">{bans.BAN_TIME}</td>
-			<td style="text-align: center;">{bans.BAN_REASON}</td>
-			<td style="text-align: center;">{bans.BAN_GIVE_REASON}</td>
-			<td style="text-align: center;"><a href="{bans.U_EDIT}">{ICON_EDIT}</a> <a href="{bans.U_DELETE}">{ICON_DELETE}</a></td>
-		</tr>
-		<!-- END bans -->
-		</tbody>
-	</table>
-
-	<p class="quick">
-		<input class="button2" name="add" type="submit" value="{L_RS_ADD_BAN}" />
-		{S_FORM_TOKEN}
-	</p>
-</fieldset>
-<!-- ENDIF -->
-
 </form>
 <!-- ENDIF -->
 

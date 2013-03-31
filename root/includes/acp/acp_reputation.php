@@ -492,7 +492,6 @@ class acp_reputation
 			break;
 
 			case 'settings':
-
 				$display_vars = array(
 					'title'	=> 'ACP_REPUTATION_SETTINGS',
 					'vars'	=> array(
@@ -550,11 +549,6 @@ class acp_reputation
 						'rs_enable_toplist'		=> array('lang' => 'RS_ENABLE_TOPLIST', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist', 'explain' => true),
 						'rs_toplist_direction'	=> array('lang' => 'RS_TOPLIST_DIRECTION', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist_direction', 'explain' => true),
 						'rs_toplist_num'		=> array('lang' => 'RS_TOPLIST_NUM', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
-
-						'legend9'				=> array('lang' => 'ACP_RS_BAN', 'tab' => 'ban', 'option' => 'ban'),
-						'rs_enable_ban'			=> array('lang' => 'RS_ENABLE_BAN', 'validate' => 'bool', 'type' => 'custom', 'method' => 'ban', 'explain' => true),
-						'rs_ban_shield'			=> array('lang' => 'RS_BAN_SHIELD', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['DAYS']),
-						'rs_ban_groups'			=> array('lang' => 'RS_BAN_GROUPS', 'validate' => 'string', 'type' => 'custom', 'method' => 'group_exclude', 'explain' => true),
 					),
 				);
 
@@ -642,8 +636,7 @@ class acp_reputation
 							'LEGEND'		=> (isset($user->lang[$vars['lang']])) ? $user->lang[$vars['lang']] : $vars['lang'],
 							'TAB'			=> $vars['tab'],
 							'OPTION'		=> isset($vars['option']) ? $vars['option'] : ''
-							)
-						);
+						));
 
 						continue;
 					}
@@ -673,8 +666,7 @@ class acp_reputation
 						'S_EXPLAIN'		=> $vars['explain'],
 						'TITLE_EXPLAIN'	=> $l_explain,
 						'CONTENT'		=> $content,
-						)
-					);
+					));
 
 					unset($display_vars['vars'][$config_key]);
 				}
@@ -930,211 +922,6 @@ class acp_reputation
 				}
 				$db->sql_freeresult($result);
 			break;
-
-			case 'bans':
-				$user->add_lang(array('acp/ban', 'acp/users'));
-
-				$action = (isset($_POST['add'])) ? 'add' : $action;
-				$action = (isset($_POST['save'])) ? 'save' : $action;
-				$ban_id = request_var('id', 0);
-				$point = request_var('point', '');
-				$ban_len = request_var('banlength', 0);
-				$ban_len_other = request_var('banlengthother', '');
-				$ban_reason = utf8_normalize_nfc(request_var('banreason', '', true));
-				$ban_give_reason = utf8_normalize_nfc(request_var('bangivereason', '', true));
-				$ban_type = utf8_normalize_nfc(request_var('bantype','m', true));
-
-				$template->assign_var('S_RS_BANS', true);
-
-				switch ($action)
-				{
-					case 'save':
-
-						if (!check_form_key($form_key) || ($point > -1))
-						{
-							trigger_error($user->lang['FORM_INVALID']. adm_back_link($this->u_action), E_USER_WARNING);
-						}
-
-						$sql = 'SELECT ban_id
-							FROM ' . REPUTATIONS_BANS_TABLE . "
-							WHERE point = $point";
-						$result = $db->sql_query($sql);
-						$check_value = $db->sql_fetchrow($result);
-						$db->sql_freeresult($result);
-
-						if ($check_value && !$ban_id)
-						{
-							trigger_error($user->lang['FORM_INVALID']. adm_back_link($this->u_action), E_USER_WARNING);
-						}
-
-						if ($ban_type == 'h') $ban_len_other = $ban_len_other * 60;
-						if ($ban_type == 'd') $ban_len_other = $ban_len_other * 1440;
-
-						$sql_ary = array(
-							'point'				=> $point,
-							'ban_time'			=> ($ban_len == -1) ? $ban_len_other : $ban_len,
-							'ban_type'			=> ($ban_len == -1) ? $ban_type : 0,
-							'ban_reason'		=> $ban_reason,
-							'ban_give_reason'	=> $ban_give_reason
-						);
-
-						if ($ban_id)
-						{
-							$sql = 'UPDATE ' . REPUTATIONS_BANS_TABLE . '
-								SET ' . $db->sql_build_array('UPDATE', $sql_ary) . "
-								WHERE ban_id = $ban_id";
-							$message = $user->lang['RS_BAN_UPDATED'];
-
-							add_log('admin', 'LOG_RS_BAN_UPDATED');
-						}
-						else
-						{
-							$sql = 'INSERT INTO ' . REPUTATIONS_BANS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary);
-							$message = $user->lang['RS_BAN_ADDED'];
-
-							add_log('admin', 'LOG_RS_BAN_ADDED');
-						}
-						$db->sql_query($sql);
-
-						set_config('rs_ban_type', $ban_type);
-
-						trigger_error($message . adm_back_link($this->u_action));
-
-						break;
-
-					case 'delete':
-
-						if (!$ban_id)
-						{
-							trigger_error($user->lang['RS_MUST_SELECT_BAN'] . adm_back_link($this->u_action), E_USER_WARNING);
-						}
-
-						if (confirm_box(true))
-						{
-							$sql = 'DELETE FROM ' . REPUTATIONS_BANS_TABLE . "
-								WHERE ban_id = $ban_id";
-							$db->sql_query($sql);
-
-							add_log('admin', 'LOG_RS_BAN_REMOVED');
-						}
-						else
-						{
-							confirm_box(false, $user->lang['CONFIRM_OPERATION'], build_hidden_fields(array(
-								'i'			=> $id,
-								'mode'		=> $mode,
-								'rank_id'	=> $ban_id,
-								'action'	=> 'delete',
-							)));
-						}
-
-						break;
-
-					case 'edit':
-					case 'add':
-
-						if ($action == 'edit')
-						{
-							$sql = 'SELECT *
-								FROM ' . REPUTATIONS_BANS_TABLE . "
-								WHERE ban_id = $ban_id";
-							$result = $db->sql_query($sql);
-							$row = $db->sql_fetchrow($result);
-							$db->sql_freeresult($result);
-						}
-
-						$ban_end_options = '';
-						$ban_end_text = array(0 => $user->lang['PERMANENT'], 30 => $user->lang['30_MINS'], 60 => $user->lang['1_HOUR'], 360 => $user->lang['6_HOURS'], 1440 => $user->lang['1_DAY'], 10080 => $user->lang['7_DAYS'], 20160 => $user->lang['2_WEEKS'], 40320 => $user->lang['1_MONTH']);
-
-						foreach ($ban_end_text as $length => $text)
-						{
-							$ban_length_check = (isset($row['ban_time']) && ($row['ban_time'] == $length) && ($row['ban_type'] == '0')) ? 'selected="selected"' : '';
-							$ban_end_options .= '<option value="' . $length . '"' . $ban_length_check .'>' . $text . '</option>';
-						}
-
-						$ban_end_time = array(0, 30, 60, 360, 1440, 10080, 20160, 40320);
-						$ban_length_check_other = (isset($row['ban_time']) && !in_array($row['ban_time'], $ban_end_time)) ? 'selected="selected"' : '';
-						$ban_end_options .= '<option value="-1"' . $ban_length_check_other .'>' . $user->lang['RS_OTHER'] . '</option>';
-
-						$s_ban_type = '';
-						$types = array('m' => 'RS_MINUTES', 'h' => 'RS_HOURS', 'd' => 'RS_DAYS');
-						foreach ($types as $type => $lang)
-						{
-							$selected = (isset($row['ban_type']) && $row['ban_type'] == $type) ? ' selected="selected"' : '';
-							$s_ban_type .= '<option value="' . $type . '"' . $selected . '>' . $user->lang[$lang] . '</option>';
-						}
-
-						$ban_len_other = isset($row['ban_time']) ? $row['ban_time'] : '';
-						if (isset($row['ban_type']) && ($row['ban_type'] == 'h')) $ban_len_other = $row['ban_time'] / 60;
-						if (isset($row['ban_type']) && ($row['ban_type'] == 'd')) $ban_len_other = $row['ban_time'] / 1440;
-
-						$template->assign_vars(array(
-							'S_EDIT'			=> true,
-							'U_BACK'			=> $this->u_action,
-							'U_ACTION'			=> $this->u_action . '&amp;id=' . $ban_id,
-							'POINT'				=> (isset($row['point'])) ? $row['point'] : '',
-							'BAN_LENGTH'		=> (isset($row['ban_time']) && ($row['ban_type'] != '0')) ? $ban_len_other : '',
-							'BAN_REASON'		=> (isset($row['ban_reason'])) ? $row['ban_reason'] : $user->lang['RS_AUTO_BAN_REASON'],
-							'BAN_GIVE_REASON'	=> (isset($row['ban_give_reason'])) ? $row['ban_give_reason'] : '',
-							'S_BAN_END_OPTIONS'	=> $ban_end_options,
-							'S_BAN_TYPE'		=> $s_ban_type,
-							'S_BAN_LENGTH'	 	=> empty($ban_length_check_other) ? true : false,
-						));
-
-						return;
-
-						break;
-				}
-
-				$this->page_title = 'ACP_REPUTATION_BANS';
-
-				$template->assign_vars(array(
-					'U_ACTION'		=> $this->u_action,
-				));
-
-				$sql = 'SELECT *
-					FROM ' . REPUTATIONS_BANS_TABLE . '
-					ORDER BY point DESC';
-				$result = $db->sql_query($sql);
-
-				while ($row = $db->sql_fetchrow($result))
-				{
-					$ban_time = $row['ban_time'];
-					if ($row['ban_type'] == '0')
-					{
-						if ($row['ban_time'] == '0') $ban_time = $user->lang['PERMANENT'];
-						if ($row['ban_time'] == '30') $ban_time = $user->lang['30_MINS'];
-						if ($row['ban_time'] == '60') $ban_time = $user->lang['1_HOUR'];
-						if ($row['ban_time'] == '360') $ban_time = $user->lang['6_HOURS'];
-						if ($row['ban_time'] == '1440') $ban_time = $user->lang['1_DAY'];
-						if ($row['ban_time'] == '10080') $ban_time = $user->lang['7_DAYS'];
-						if ($row['ban_time'] == '20160') $ban_time = $user->lang['2_WEEKS'];
-						if ($row['ban_time'] == '40320') $ban_time = $user->lang['1_MONTH'];
-					}
-
-					$ban_type = '';
-					if ($row['ban_type'] == 'm') $ban_type = '&nbsp;' . $user->lang['RS_MINUTES'];
-					if ($row['ban_type'] == 'h')
-					{
-						$ban_type = '&nbsp;' . $user->lang['RS_HOURS'];
-						$ban_time = $row['ban_time'] / 60;
-					}
-					if ($row['ban_type'] == 'd')
-					{
-						$ban_type = '&nbsp;' . $user->lang['RS_DAYS'];
-						$ban_time = $row['ban_time'] / 1440;
-					}
-
-					$template->assign_block_vars('bans', array(
-						'POINT'				=> $row['point'],
-						'BAN_TIME'			=> $ban_time . $ban_type,
-						'BAN_REASON'		=> $row['ban_reason'],
-						'BAN_GIVE_REASON'	=> $row['ban_give_reason'],
-						'U_EDIT'			=> $this->u_action . '&amp;action=edit&amp;id=' . $row['ban_id'],
-						'U_DELETE'			=> $this->u_action . '&amp;action=delete&amp;id=' . $row['ban_id'],
-					));
-				}
-				$db->sql_freeresult($result);
-			break;
 		}
 	}
 
@@ -1201,17 +988,6 @@ class acp_reputation
 		$radio_ary = array(1 => 'YES', 0 => 'NO');
 
 		$option = $this->h_rsradio('config[rs_enable_toplist]', $radio_ary, $value, 'toplist', $key, 'init_check(\'toplist\')');
-
-		return $option;
-	}
-
-	function ban($value, $key)
-	{
-		global $user;
-
-		$radio_ary = array(1 => 'YES', 0 => 'NO');
-
-		$option = $this->h_rsradio('config[rs_enable_ban]', $radio_ary, $value, 'ban', $key, 'init_check(\'ban\')');
 
 		return $option;
 	}
@@ -1288,29 +1064,6 @@ class acp_reputation
 		$radio_text = h_radio('config[rs_toplist_direction]', $radio_ary, $value, 'rs_toplist_direction', $key);
 
 		return $radio_text;
-	}
-
-	function group_exclude($value, $key)
-	{
-		global $config, $user, $db;
-
-		$select_id = explode(',', $config['rs_ban_groups']);
-
-		$sql = 'SELECT group_id, group_name, group_type
-			FROM ' . GROUPS_TABLE . '
-			ORDER BY group_type DESC, group_name ASC';
-		$result = $db->sql_query($sql);
-
-		$group_options = '<select id="' . $key . '" name="' . $key . '[]" multiple="multiple">';
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$selected = (is_array($select_id)) ? ((in_array($row['group_id'], $select_id)) ? ' selected="selected"' : '') : (($row['group_id'] == $select_id) ? ' selected="selected"' : '');
-			$group_options .= '<option value="' . $row['group_id'] . '"' . $selected . '>' . ucfirst(strtolower((($row['group_type'] == GROUP_SPECIAL) ? $user->lang['G_' . $row['group_name']] : $row['group_name']))) . '</option>';
-		}
-		$db->sql_freeresult($result);
-		$group_options .= '</select>';
-
-		return $group_options;
 	}
 
 	function h_rsradio($name, $input_ary, $input_default = false, $id = false, $key = false, $onclick = false, $separator = '')

@@ -300,11 +300,6 @@ class reputation
 			$this->check_point($to, 'min');
 		}
 
-		if ($config['rs_enable_ban'] && $mode != 'ban')
-		{
-			$this->ban_user($to);
-		}
-
 		//If config allows and we are told so, we should send a private message to a user, who received the vote
 		if ($notify && $config['rs_pm_notify'])
 		{
@@ -576,7 +571,7 @@ class reputation
 		global $rs_ranks, $config, $phpbb_root_path, $user;
 
 		//Don't display reputation ranks for guests, bots
-		if (!$user->data['is_registered'])
+		if ($user->data['is_bot'])
 		{
 			return;
 		}
@@ -696,7 +691,7 @@ class reputation
 		return $return_rank;
 	}
 
-	/** Return user rating row.
+	/** Return user rating row
 	* @param $user_id user ID
 	*/
 	function get_row($user_id)
@@ -739,7 +734,6 @@ class reputation
 			$point_class = 'positive';
 		}
 		$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
-		$comment = (!empty($row['comment'])) ? generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) : $user->lang['RS_NA'];
 
 		$detail_row = '';
 		$detail_row .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
@@ -749,76 +743,11 @@ class reputation
 		$detail_row .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
 		$detail_row .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
 		$detail_row .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';
-		$detail_row .= $config['rs_enable_comment'] ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
-		$detail_row .= $config['rs_enable_comment'] ? '<div class="comment_message">' . $comment . '</div>' : '';
+		$detail_row .= ($config['rs_enable_comment'] && !empty($row['comment'])) ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
+		$detail_row .= ($config['rs_enable_comment'] && !empty($row['comment'])) ? '<div class="comment_message">' . generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) . '</div>' : '';
 		$detail_row .= '</div>';
 
 		return $detail_row;
-	}
-
-	/** Ban user by minimum reputation
-	* @param $user_id user ID
-	*/
-	private function ban_user($user_id)
-	{
-		global $config, $db, $cache;
-
-		//Get data for ban
-		$sql = 'SELECT user_type, group_id, username, user_reputation, user_last_rep_ban
-			FROM ' . USERS_TABLE . "
-			WHERE user_id = $user_id";
-		$result = $db->sql_query($sql);
-		$user_row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
-
-		//Prevent ban founder
-		if ($user_row['user_type'] == USER_FOUNDER)
-		{
-			return;
-		}
-
-		//Check user group if it is excluded
-		$groups_id = explode(',', $config['rs_ban_groups']);
-		$group_id = (is_array($groups_id)) ? (in_array($user_row['group_id'], $groups_id) ? true : false) : (($user_row['group_id'] == $groups_id) ? true : false);
-		if ($group_id)
-		{
-			return;
-		}
-		
-		//Shield for banned user - cannot be banned in that period
-		if (time() < $user_row['user_last_rep_ban'])
-		{
-			return;
-		}
-
-		$sql = 'SELECT *
-			FROM ' . REPUTATIONS_BANS_TABLE . '
-			ORDER BY point ASC';
-		$result = $db->sql_query($sql);
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			if ($user_row['user_reputation'] <= $row['point'])
-			{
-				//Now, let's ban the user
-				if (!function_exists('user_ban'))
-				{
-					global $phpbb_root_path, $phpEx;
-					include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
-				}
-				user_ban('user', $user_row['username'], $row['ban_time'], '', 0, $row['ban_reason'], $row['ban_give_reason']);
-
-				//Shield for banned, why not
-				$next_ban_time = time() + ($row['ban_time'] * 60) + ($config['rs_ban_shield'] * 86400);
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_last_rep_ban = $next_ban_time
-					WHERE user_id = $user_id";
-				$db->sql_query($sql);
-
-				break;
-			}
-		}
-		$db->sql_freeresult($result);
 	}
 }
 
