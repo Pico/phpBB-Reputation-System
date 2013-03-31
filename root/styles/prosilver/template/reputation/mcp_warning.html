@@ -1,0 +1,27 @@
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_MCP_RS_ADD_WARNING}</h3>
+	<p>{L_MCP_RS_ADD_WARNING_EXPLAIN}</p>
+
+	<fieldset>
+		<dl>
+			<dt><label>{L_MCP_RS_POINTS}</label></dt>
+			<dd><select name="points" id="points">
+				<!-- BEGIN reputation -->
+					{reputation.REPUTATION_POWER}
+				<!-- END reputation -->
+				</select></dd>
+		</dl>
+		<dl class="comment">
+			<dt><label>{L_MCP_RS_COMMENT}</label></dt>
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3"></textarea>
+		</dl>
+		<dl class="panel">
+			<dt>&nbsp;</dt>
+			<dd><label><input type="checkbox" name="reputation" /> {L_MCP_RS_GIVE_REP_POINT}</label></dd>
+		</dl>
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>

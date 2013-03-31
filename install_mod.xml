@@ -25,7 +25,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>0.6.3</mod-version>
+		<mod-version>0.7.0</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -204,6 +204,13 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				<rev-version>0.6.3</rev-version>
 				<changelog lang="en">
 					<change><![CDATA[FIX synchronization]]></change>
+				</changelog>
+			</entry>
+			<entry>
+				<date>2013-04-01</date>
+				<rev-version>0.7.0</rev-version>
+				<changelog lang="en">
+					<change><![CDATA[Will be filled in the future]]></change>
 				</changelog>
 			</entry>
 		</history>
@@ -540,73 +547,93 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		<open src="includes/mcp/mcp_warn.php">
 			<edit>
 				<find><![CDATA[		$warning = utf8_normalize_nfc(request_var('warning', '', true));]]></find>
-				<action type="after-add"><![CDATA[		$rep_point = (isset($_REQUEST['rep_point'])) ? true : false;
-		$rep_power = request_var('rep_power', '');]]></action>
+				<action type="after-add"><![CDATA[
+		// Reputation System - warnings
+		$reputation = (isset($_REQUEST['reputation'])) ? true : false;
+		$comment = utf8_normalize_nfc(request_var('comment', '', true));
+		$points = request_var('points', '');
+]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[			$notify = false;]]></find>
-				<action type="after-add"><![CDATA[		}
-		$rp_power = '';
+				<find><![CDATA[		// Prevent against clever people
+		if ($notify && !$s_can_notify)
+		{
+			$notify = false;
+		}]]></find>
+				<action type="after-add"><![CDATA[
+		// Reputation System - warnings
+		$voting_power_pulldown = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
-			$rp_power = '<option value="-' . $i . '"> (-' . $i . ') </option>';
+			$voting_power_pulldown = '<option value="-' . $i . '"> (-' . $i . ') </option>';
 			$template->assign_block_vars('reputation', array(
-				'REPUTATION_POWER'	=> $rp_power)
-			);]]></action>
+				'REPUTATION_POWER'	=> $voting_power_pulldown)
+			);
+		}
+		// Reputation System - warnings
+]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[				add_warning($user_row, $warning, $notify, $post_id);]]></find>
-				<inline-edit>
-					<inline-find><![CDATA[				add_warning($user_row, $warning, $notify, $post_id]]></inline-find>
-					<inline-action type="after-add"><![CDATA[, $rep_point, $rep_power]]></inline-action>
-				</inline-edit>
+				<find><![CDATA[				$msg = $user->lang['USER_WARNING_ADDED'];]]></find>
+				<action type="after-add"><![CDATA[
+				// Reputation System - warnings
+				if ($config['rs_warning'] && $reputation)
+				{
+					include_once($phpbb_root_path . 'includes/functions_reputation.' . $phpEx);
+
+					reputation::give_point($user_id, $post_id, $comment, false, $points, 'warning');
+				}
+				// Reputation System - warnings]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[			'L_WARNING_POST_DEFAULT'	=> sprintf($user->lang['WARNING_POST_DEFAULT'], generate_board_url() . "/viewtopic.$phpEx?f=$forum_id&amp;p=$post_id#p$post_id"),]]></find>
-				<action type="after-add"><![CDATA[			'S_RS_WARNING'		=> ($config['rs_warning'] && $config['rs_max_power_warning']) ? true : false,]]></action>
+				<find><![CDATA[			'S_CAN_NOTIFY'		=> $s_can_notify,]]></find>
+				<action type="after-add"><![CDATA[			// Reputation System - warnings
+			'S_RS_WARNING'		=> ($config['rs_warning'] && $config['rs_max_power_warning']) ? true : false,]]></action>
 			</edit>
 			<edit>
 				<find><![CDATA[		$warning = utf8_normalize_nfc(request_var('warning', '', true));]]></find>
-				<action type="after-add"><![CDATA[		$rep_point = (isset($_REQUEST['rep_point'])) ? true : false;
-		$rep_power = request_var('rep_power', '');]]></action>
+				<action type="after-add"><![CDATA[
+		// Reputation System - warnings
+		$reputation = (isset($_REQUEST['reputation'])) ? true : false;
+		$comment = utf8_normalize_nfc(request_var('comment', '', true));
+		$points = request_var('points', '');
+]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[			$notify = false;]]></find>
-				<action type="after-add"><![CDATA[		}
-		$rp_power = '';
+				<find><![CDATA[		// Prevent against clever people
+		if ($notify && !$s_can_notify)
+		{
+			$notify = false;
+		}]]></find>
+				<action type="after-add"><![CDATA[
+		// Reputation System - warnings
+		$voting_power_pulldown = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
-			$rp_power = '<option value="-' . $i . '"> (-' . $i . ') </option>';
+			$voting_power_pulldown = '<option value="-' . $i . '"> (-' . $i . ') </option>';
 			$template->assign_block_vars('reputation', array(
-				'REPUTATION_POWER'	=> $rp_power)
-			);]]></action>
+				'REPUTATION_POWER'	=> $voting_power_pulldown)
+			);
+		}
+		// Reputation System - warnings
+]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[				add_warning($user_row, $warning, $notify);]]></find>
-				<inline-edit>
-					<inline-find><![CDATA[				add_warning($user_row, $warning, $notify]]></inline-find>
-					<inline-action type="after-add"><![CDATA[, 0, $rep_point, $rep_power]]></inline-action>
-				</inline-edit>
+				<find><![CDATA[				$msg = $user->lang['USER_WARNING_ADDED'];]]></find>
+				<action type="after-add"><![CDATA[
+				// Reputation System - warnings
+				if ($config['rs_warning'] && $reputation)
+				{
+					include_once($phpbb_root_path . 'includes/functions_reputation.' . $phpEx);
+
+					reputation::give_point($user_id, 0, $comment, false, $points, 'warning');
+				}
+				// Reputation System - wa]]></action>
 			</edit>
 			<edit>
-				<find><![CDATA[			'RANK_IMG'			=> $rank_img,]]></find>
-				<action type="after-add"><![CDATA[			'S_RS_WARNING'		=> ($config['rs_warning'] && $config['rs_max_power_warning']) ? true : false,]]></action>
-			</edit>
-			<edit>
-				<find><![CDATA[function add_warning($user_row, $warning, $send_pm = true, $post_id = 0)]]></find>
-				<inline-edit>
-					<inline-find><![CDATA[function add_warning($user_row, $warning, $send_pm = true, $post_id = 0]]></inline-find>
-					<inline-action type="after-add"><![CDATA[, $rep_point = false, $rep_power]]></inline-action>
-				</inline-edit>
-			</edit>
-			<edit>
-				<find><![CDATA[	$db->sql_query('INSERT INTO ' . WARNINGS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_ary));]]></find>
-				<action type="after-add"><![CDATA[	if ($rep_point)
-	{
-		include_once($phpbb_root_path . 'includes/functions_reputation.' . $phpEx);
-		$reputation = new reputation();
-		$reputation->give_point($user_row['user_id'], $post_id, $warning, false, $rep_power, 'warning');
-	}]]></action>
+				<find><![CDATA[			'S_CAN_NOTIFY'		=> $s_can_notify,]]></find>
+				<action type="after-add"><![CDATA[			// Reputation System - warnings
+			'S_RS_WARNING'		=> ($config['rs_warning'] && $config['rs_max_power_warning']) ? true : false,]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/imageset/imageset.cfg">
@@ -628,42 +655,20 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 		</open>
 		<open src="styles/prosilver/template/mcp_warn_post.html">
 			<edit>
-				<find><![CDATA[			<dd><label><input type="checkbox" name="notify_user" checked="checked" /> {L_NOTIFY_USER_WARN}</label></dd>]]></find>
-				<action type="after-add"><![CDATA[		</dl>
-		<!-- ENDIF -->
-		<!-- IF S_REPUTATION and S_RS_WARNING -->
-		<br /><br />
-		<dl class="panel">
-			<dt><label>{L_MCP_RS_REP_POINT}</label></dt>
-			<dd><select name="rep_power" id="rep_power">
-				<!-- BEGIN reputation -->
-					{reputation.REPUTATION_POWER}
-				<!-- END reputation -->
-				</select></dd>
-		</dl>
-		<dl class="panel">
-			<dt>&nbsp;</dt>
-			<dd><label><input type="checkbox" name="rep_point" /> {L_MCP_RS_GIVE_REP_POINT}</label></dd>]]></action>
+				<find><![CDATA[<fieldset class="submit-buttons">]]></find>
+				<action type="before-add"><![CDATA[<!-- IF S_REPUTATION and S_RS_WARNING -->
+<!-- INCLUDE reputation/mcp_warning.html -->
+<!-- ENDIF -->
+]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/template/mcp_warn_user.html">
 			<edit>
-				<find><![CDATA[			<dd><label><input type="checkbox" name="notify_user" checked="checked" /> {L_NOTIFY_USER_WARN}</label></dd>]]></find>
-				<action type="after-add"><![CDATA[		</dl>
-		<!-- ENDIF -->
-		<!-- IF S_REPUTATION and S_RS_WARNING -->
-		<br /><br />
-		<dl class="panel">
-			<dt><label>{L_MCP_RS_REP_POINT}</label></dt>
-			<dd><select name="rep_power" id="rep_power">
-				<!-- BEGIN reputation -->
-					{reputation.REPUTATION_POWER}
-				<!-- END reputation -->
-				</select></dd>
-		</dl>
-		<dl class="panel">
-			<dt>&nbsp;</dt>
-			<dd><label><input type="checkbox" name="rep_point" /> {L_MCP_RS_GIVE_REP_POINT}</label></dd>]]></action>
+				<find><![CDATA[<fieldset class="submit-buttons">]]></find>
+				<action type="before-add"><![CDATA[<!-- IF S_REPUTATION and S_RS_WARNING -->
+<!-- INCLUDE reputation/mcp_warning.html -->
+<!-- ENDIF -->
+]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/template/memberlist_body.html">
@@ -740,6 +745,7 @@ img_icon_rate_bad = icon_rate_bad.gif*20*20]]></action>
 			</edit>
 		</open>
 		<php-installer><![CDATA[install_reputation.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[After installation, go to ACP and enable Reputation System.]]></diy-instructions>
+		<diy-instructions lang="en"><![CDATA[After installation, go to ACP and enable Reputation System.
+Don't forget to enable post and/or user rating.]]></diy-instructions>
 	</action-group>
 </mod>
