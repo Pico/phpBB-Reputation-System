@@ -402,6 +402,7 @@ class acp_reputation
 				$errno = 0;
 				$return_version = true;
 				$mod_version = '0.0.0';
+				$data = array();
 
 				if (file_exists($phpbb_root_path . 'adm/mods/reputation_system_version.' . $phpEx))
 				{
@@ -445,6 +446,10 @@ class acp_reputation
 								'download'		=> $row->download,
 								'announcement'	=> $row->announcement,
 							);
+						}
+						else
+						{
+							$return_version = true;
 						}
 					}
 				}
@@ -503,6 +508,8 @@ class acp_reputation
 						'rs_pm_notify'			=> array('lang' => 'RS_PM_NOTIFY', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_min_point'			=> array('lang' => 'RS_MIN_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_max_point'			=> array('lang' => 'RS_MAX_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
+						'rs_prevent_perc'		=> array('lang' => 'RS_PREVENT_OVERRATING', 'validate' => 'int:0:99', 'type' => 'false', 'method' => 'false', 'explain' => false),
+						'rs_prevent_num'		=> array('lang' => 'RS_PREVENT_OVERRATING', 'validate' => 'int:0', 'type' => 'custom:0:99', 'method' => 'overrating', 'explain' => true, 'append' => ' %'),
 
 						'legend2'				=> array('lang' => 'ACP_RS_DISPLAY', 'tab' => 'display'),
 						'rs_per_page'			=> array('lang' => 'RS_PER_PAGE', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
@@ -1013,6 +1020,13 @@ class acp_reputation
 		$radio_text = h_radio('config[rs_point_type]', $radio_ary, $value, 'rs_point_type', $key);
 
 		return $radio_text;
+	}
+
+	function overrating($value, $key = '')
+	{
+		global $user;
+
+		return $user->lang['RS_PREVENT_NUM'] . '&nbsp;<input id="' . $key . '" type="text" size="3" maxlength="3" name="config[rs_prevent_num]" value="' . $value . '" /> ' . $user->lang['RS_PREVENT_PERC'] . '&nbsp;<input type="text" size="3" maxlength="3" name="config[rs_prevent_perc]" value="' . $this->new_config['rs_prevent_perc'] . '" />';
 	}
 
 	function antimethod($value, $key)

@@ -222,19 +222,6 @@ class reputation
 			$action = 5;
 		}
 
-		if (!class_exists('parse_message'))
-		{
-			include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
-		}
-
-		$message_parser = new parse_message();
-
-		//Prepare comment for storage
-		$allow_bbcode = $allow_urls = $allow_smilies = true;
-
-		$message_parser->message = $comment;
-		$message_parser->parse($allow_bbcode, $allow_urls, $allow_smilies, false, false, false, false, true, 'comment');
-
 		//Now we are ready to save the vote itself
 		$sql_data = array(
 			'rep_from'			=> $user->data['user_id'],
@@ -243,12 +230,31 @@ class reputation
 			'action'			=> $action,
 			'post_id'			=> $post_id,
 			'point'				=> $point,
-			'comment'			=> (string) $message_parser->message,
-			'bbcode_uid'		=> (string) $message_parser->bbcode_uid,
-			'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
 		);
 
-		//Saving the vote. Used for post rating calculation. Not for user rating calculation
+		//We can also add comment if it exists
+		if ($config['rs_enable_comment'] && !empty($comment))
+		{
+			if (!class_exists('parse_message'))
+			{
+				include($phpbb_root_path . 'includes/message_parser.' . $phpEx);
+			}
+
+			$message_parser = new parse_message();
+
+			//Prepare comment for storage
+			$allow_bbcode = $allow_urls = $allow_smilies = true;
+
+			$message_parser->message = $comment;
+			$message_parser->parse($allow_bbcode, $allow_urls, $allow_smilies, false, false, false, false, true, 'comment');
+
+			$sql_data += array(
+				'comment'			=> (string) $message_parser->message,
+				'bbcode_uid'		=> (string) $message_parser->bbcode_uid,
+				'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
+			);
+		}
+
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
 
 		//Post reputation
@@ -400,7 +406,7 @@ class reputation
 		}
 
 		$sql_array = array(
-			'SELECT'	=> 'r.rep_to, r.action, r.post_id, r.point, u.username',
+			'SELECT'	=> 'r.rep_to, r.action, r.time, r.post_id, r.point, u.username, u.user_rep_last',
 			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
 			'LEFT_JOIN'	=> array(
 				array(
@@ -434,6 +440,23 @@ class reputation
 		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_id = $id";
 		$db->sql_query($sql);
+
+		//Update new status field
+		if ($row['time'] >= $row['user_rep_last'])
+		{
+			$sql = 'SELECT COUNT(rep_id) AS new_reps
+				FROM ' . REPUTATIONS_TABLE . "
+				WHERE rep_to = {$row['rep_to']}
+					AND time >= {$row['user_rep_last']}";
+			$result = $db->sql_query($sql);
+			$new = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_rep_new = {$new['new_reps']}
+				WHERE user_id = {$row['rep_to']}";
+			$db->sql_query($sql);
+		}
 
 		add_log('mod', '', '', 'LOG_USER_REP_DELETE', $row['username']);
 
@@ -691,64 +714,46 @@ class reputation
 		return $return_rank;
 	}
 
-	/** Return user rating row
+	/** Prevent overrating a same user by another user
 	* @param $user_id user ID
 	*/
-	function get_row($user_id)
+	function prevent_rating($user_id)
 	{
-		global $auth, $config, $db, $user;
-		global $phpbb_root_path, $phpEx;
+		global $config, $db, $user;
 
-		if (!function_exists('get_user_avatar'))
+		if (!$config['rs_prevent_num'] || !$config['rs_prevent_perc'])
 		{
-			include_once($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+			return false;
 		}
 
-		$sql_array = array(
-			'SELECT'	=> 'u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, r.*',
-			'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-			'LEFT_JOIN' => array(
-				array(
-					'FROM'	=> array(USERS_TABLE => 'u'),
-					'ON'	=> 'r.rep_from = u.user_id',
-				),
-			),
-			'WHERE'		=> 'r.rep_to = ' . $user_id,
-			'ORDER_BY'	=> 'r.rep_id DESC'
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$total_reps = $same_user = 0;
+
+		$sql = 'SELECT rep_from
+			FROM ' . REPUTATIONS_TABLE . "
+			WHERE rep_to = $user_id
+				AND (action = 1 OR action = 2)";
 		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
 
-		$avatar_img = $row['user_avatar'] ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], ($row['user_avatar_width'] > $row['user_avatar_height']) ? 60 : (60 / $row['user_avatar_height']) * $row['user_avatar_width'], ($row['user_avatar_height'] > $row['user_avatar_width']) ? 60 : (60 / $row['user_avatar_width']) * $row['user_avatar_height']) : '<img src="./' . $phpbb_root_path . 'styles/' . rawurlencode($user->theme['theme_path']) . '/theme/images/no_avatar.gif" width="60px;" height="60px;" alt="" />';
-
-		if ($row['point'] < 0)
+		while ($row = $db->sql_fetchrow($result))
 		{
-			$point_img = '<img src="' . $phpbb_root_path . 'images/reputation/neg.png" alt="" title="' . $user->lang['RS_POINTS'] . ': ' . $row['point'] . '" />';
-			$point_class = 'negative';
-		}
+			$total_reps++;
 
-		if ($row['point'] > 0)
+			if ($row['rep_from'] == $user->data['user_id'])
+			{
+				$same_user++;
+			}
+		}
+		$db->sql_freeresult($result);
+
+		if (($total_reps >= $config['rs_prevent_num']) && ($same_user / $total_reps * 100 >= $config['rs_prevent_perc']))
 		{
-			$point_img = '<img src="' . $phpbb_root_path . 'images/reputation/pos.png" alt="" title="' . $user->lang['RS_POINTS'] . ': ' . $row['point'] . '" />';
-			$point_class = 'positive';
+			return true;
 		}
-		$row['bbcode_options'] = OPTION_FLAG_BBCODE + OPTION_FLAG_SMILIES + OPTION_FLAG_LINKS;
-
-		$detail_row = '';
-		$detail_row .= '<div class="reputation-list bg2" id="r' . $row['rep_id'] . '">';
-		$detail_row .= $config['rs_display_avatar'] ? '<div class="reputation-avatar">' . $avatar_img . '</div>' : '';
-		$detail_row .= '<div class="reputation-detail"' . ($config['rs_display_avatar'] ? ' style="margin-left: 72px;"' : '') . '>';
-		$detail_row .= ($auth->acl_get('m_rs_moderate') || ($row['rep_from'] == $user->data['user_id'] && $auth->acl_get('u_rs_delete'))) ? '<a href="#" class="reputation-delete" title="{L_DELETE}" class="reputation-delete post" onclick="jRS.del(' . $row['rep_id'] . ', \'user\'); return false;">' . $user->lang['DELETE'] . '</a>' : '';
-		$detail_row .= '<span style="float: left;"><strong>' . get_username_string('full', $row['rep_from'], $row['username'], $row['user_colour']) . '</strong> &raquo; ' . $user->format_date($row['time']) . '</span>';
-		$detail_row .= '<span class="reputation-rating ' . $point_class . '">' . ($config['rs_point_type'] ? $point_img : $row['point']) . '</span><br />';
-		$detail_row .= '<span>' . $user->lang['RS_USER_RATING'] . '</span><br />';
-		$detail_row .= ($config['rs_enable_comment'] && !empty($row['comment'])) ? '<span>' . $user->lang['RS_COMMENT'] . '</span>' : '';
-		$detail_row .= ($config['rs_enable_comment'] && !empty($row['comment'])) ? '<div class="comment_message">' . generate_text_for_display($row['comment'], $row['bbcode_uid'], $row['bbcode_bitfield'], $row['bbcode_options']) . '</div>' : '';
-		$detail_row .= '</div>';
-
-		return $detail_row;
+		else
+		{
+			return false;
+		}
 	}
-}
 
+}
 ?>
