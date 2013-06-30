@@ -243,6 +243,13 @@ switch ($mode)
 				return;
 			}
 
+			//Prevent overrating one user by another
+			if ($reputation->prevent_rating($row['poster_id']))
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_ANTISPAM_INFO']));
+				return;
+			}
+
 			$post_rating_mode = ($row['enable_reputation'] == 1) ? 'post' : 'onlypost';
 			if ($reputation->give_point($row['poster_id'], $post_id, $comment, $notify, $rep_power, $post_rating_mode))
 			{
@@ -443,6 +450,10 @@ switch ($mode)
 			{
 				$rs_power .= '<option value="-1">' . $user->lang['RS_NEGATIVE'] . '</option>';
 			}
+			else if ($config['rs_enable_comment'])
+			{
+				$rep_power = 1;
+			}
 			else
 			{
 				$submit = true;
@@ -463,21 +474,18 @@ switch ($mode)
 				return;
 			}
 
+			if ($reputation->prevent_rating($row['user_id']))
+			{
+				echo json_encode(array('error_msg' => $user->lang['RS_SAME_USER']));
+				return;
+			}
+
 			if ($reputation->give_point($row['user_id'], $post_id, $comment, $notify, $rep_power, $mode))
 			{
-				$rs_ranks = reputation::obtain_rs_ranks();
-
 				// If it's an AJAX request, generate JSON reply
 				$user_reputation = $reputation->get_user_reputation($row['user_id']);
-				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
-				$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
-				$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
 				$json_data = array(
 					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
-					'reputation_class'		=> $reputation_color,
-					'reputation_rank'		=> $reputation_rank,
-					'rank_title'			=> $reputation_title,
-					'add'					=> $reputation->get_row($row['user_id']),
 				);
 				echo json_encode($json_data);
 				return;
@@ -1293,6 +1301,25 @@ switch ($mode)
 	break;
 
 	case 'newpopup':
+
+		/*$sql = 'SELECT COUNT(rep_id) as new_reps
+			FROM ' . REPUTATIONS_TABLE . "
+			WHERE rep_to = {$user->data['user_id']}
+				AND time >= {$user->data['user_rep_last']}";
+		$result = $db->sql_query($sql);
+
+		$num_new = 0;
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$num_new += (int) $row['new_reps'];
+		}
+		$db->sql_freeresult($result);
+
+		if ($num_new == 0)
+		{
+			//return;
+			echo json_encode('newpopup_close();');
+		}*/
 
 		$template->assign_vars(array(
 			'NEW_REPUTATIONS'		=> ($user->data['user_rep_new'] == 1) ? $user->lang['RS_NEW_REP'] : sprintf($user->lang['RS_NEW_REPS'], $user->data['user_rep_new']),

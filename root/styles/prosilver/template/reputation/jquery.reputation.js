@@ -9,7 +9,10 @@
 
 $(document).ready(function() {
 	$("body").click(function(){
-		$("#reputation-popup").fadeOut('fast');
+		if (!requestSent)
+		{
+			$("#reputation-popup").fadeOut('fast');
+		}
 	});
 
 	$("#reputation-popup").click(function(e){
@@ -58,7 +61,7 @@ var jRS = {
 				confirm_clear = rsclearuser;
 			break;
 		}
-		if(confirm(confirm_clear))
+		if (confirm(confirm_clear))
 		{
 			submit_action('clear', id, mode, page);
 		}
@@ -113,7 +116,11 @@ function show_popup(a, b, c, d)
 				$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup new-popup');
 			},
 			success: function(s) {
-				$('#reputation-popup').append(s).fadeIn('fast');
+				// Fix - do not display empty popup when comment and reputation power are disabled
+				if (s.substr(0,1) != '{')
+				{
+					$('#reputation-popup').append(s).fadeIn('fast');
+				}
 
 				switch(a)
 				{
@@ -149,7 +156,10 @@ function show_popup(a, b, c, d)
 				}
 			},
 			complete: function() {
-				setTimeout('timeout_popup()', 750);
+				if (a != 'newpopup')
+				{
+					setTimeout('timeout_popup()', 750);
+				}
 			}
 		});
 	}
@@ -245,7 +255,7 @@ function response(a, b, c, d)
 				var post_id = a.post_id;
 				var poster_id = a.poster_id;
 
-				$('#reputation-popup').removeClass('small-popup').fadeOut('fast').empty();
+				$('#reputation-popup').fadeOut('fast').empty();
 				$('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
 				$('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
 				$('#p' + post_id + ' .reputation a').text(a.post_reputation);
@@ -270,11 +280,6 @@ function response(a, b, c, d)
 			case 'user':
 				$('#reputation-popup').fadeOut('fast').empty();
 				$('.user-reputation').html(a.user_reputation);
-				$('.reputation-rank').html(a.reputation_rank);
-				$('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-				$('.rs-rank-title').text(a.rank_title);
-				$('.empty').detach();
-				$('#post-reputation-list').prepend(a.add);
 			break;
 			case 'delete':
 				switch (c)
@@ -313,20 +318,7 @@ function response(a, b, c, d)
 						}
 					break;
 					case 'user':
-						var rep_id = a.rep_id;
-
-						$('.user-reputation').html(a.user_reputation);
-						$('.reputation-rank').html(a.reputation_rank);
-						$('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-						$('.rs-rank-title').text(a.rank_title);
-						$('#r' + rep_id).hide(function() {
-							$('#r' + rep_id).detach();
-							if ($('#post-reputation-list .bg1').length == 0 && $('#post-reputation-list .bg2').length == 0 )
-							{
-								$('#post-reputation-list').append(a.empty);
-								$('#user-reputation-list .linklist').detach();
-							}
-						});
+						location.reload();
 					break;
 				}
 			break;
@@ -389,6 +381,18 @@ function response(a, b, c, d)
 	}
 }
 
+function newpopup()
+{
+	show_popup('newpopup');
+}
+
+function newpopup_close()
+{
+	requestSent = false;
+
+	$('#reputation-popup').fadeOut('fast');
+}
+
 var sortby = {
 	username: function(a, b, c) {
 		sort_order_by(a, b, c, 'a');
@@ -427,8 +431,4 @@ function sort_order_by(a, b, c, d)
 			$('#reputation-popup').empty().append(s);
 		}
 	});
-}
-
-function newpopup() {
-	show_popup('newpopup');
 }
