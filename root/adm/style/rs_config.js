@@ -20,6 +20,9 @@ function swap_options(cat)
 	old_tab.className = old_tab.className.replace(/\ activetab/g, '');
 	new_tab.className = new_tab.className + ' activetab';
 
+	// save active tab to cookie
+	document.cookie = "rs_config=" + cat + "; max-age=" + 120;
+
 	if (cat == active_option)
 	{
 		return;
@@ -62,4 +65,34 @@ function init_checked()
 			tab.className = 'permissions-preset-no';
 		}
 	}
+}
+
+function readCookie(name)
+{
+	var nameEQ = name + '=';
+	var ca = document.cookie.split(';');
+
+	for (var i = 0; i < ca.length; i++)
+	{
+		var c = ca[i];
+
+		while (c.charAt(0) == ' ')
+		{
+			c = c.substring(1, c.length);
+		}
+
+		if (c.indexOf(nameEQ) == 0)
+		{
+			return c.substring(nameEQ.length, c.length);
+		}
+	}
+
+	return null;
+}
+
+function load_last_active_tab()
+{
+	var cookie = readCookie('rs_config');
+	var title = cookie ? cookie : 'main';
+	swap_options(title);
 }
