@@ -878,6 +878,7 @@ switch ($mode)
 			'e'	=> 'r.post_id',
 			'f'	=> 'r.rep_id'
 		);
+
 		$pagination_url = append_sid("{$phpbb_root_path}reputation.$phpEx", implode('&amp;', $params));
 		$sort_url = append_sid("{$phpbb_root_path}reputation.$phpEx", implode('&amp;', $sort_params));
 
@@ -993,15 +994,17 @@ switch ($mode)
 		$avatar_img = get_user_avatar($user_row['user_avatar'], $user_row['user_avatar_type'], $user_row['user_avatar_width'], $user_row['user_avatar_height']);
 
 		$positive_count = $negative_count = 0;
+		$positive_sum = $negative_sum = 0;
 		$positive_week = $negative_week = 0;
 		$positive_month = $negative_month = 0;
 		$positive_6months = $negative_6months = 0;
+		$post_count = $user_count = 0;
 
 		$last_week = time() - 604800;
 		$last_month = time() - 2678400;
 		$last_6months = time() - 16070400;
 
-		$sql = 'SELECT time, point
+		$sql = 'SELECT action, time, point
 			FROM ' . REPUTATIONS_TABLE . "
 			WHERE rep_to = $uid";
 		$result = $db->sql_query($sql);
@@ -1011,6 +1014,7 @@ switch ($mode)
 			if ($reputation_vote['point'] > 0)
 			{
 				$positive_count++;
+				$positive_sum += $reputation_vote['point'];
 				if ($reputation_vote['time'] >= $last_week)
 				{
 					$positive_week++;
@@ -1027,6 +1031,7 @@ switch ($mode)
 			else if ($reputation_vote['point'] < 0)
 			{
 				$negative_count++;
+				$negative_sum += $reputation_vote['point'];
 				if ($reputation_vote['time'] >= $last_week)
 				{
 					$negative_week++;
@@ -1039,6 +1044,15 @@ switch ($mode)
 				{
 					$negative_6months++;
 				}
+			}
+
+			if ($reputation_vote['action'] == 1)
+			{
+				$post_count += $reputation_vote['point'];
+			}
+			else if ($reputation_vote['action'] == 2)
+			{
+				$user_count += $reputation_vote['point'];
 			}
 		}
 		$db->sql_freeresult($result);
@@ -1061,7 +1075,7 @@ switch ($mode)
 			$group_power = $reputation->get_group_power();
 
 			$template->assign_vars(array(
-				'S_RS_POWER_EXPLAIN'			=> $config['rs_power_explain'] ? true : false,
+				'S_RS_POWER_EXPLAIN'		=> $config['rs_power_explain'] ? true : false,
 				'RS_POWER'					=> $user_max_voting_power,
 				'RS_POWER_LEFT'				=> $config['rs_power_renewal'] ? sprintf($user->lang['RS_VOTE_POWER_LEFT'], $voting_power_left, $user_max_voting_power) : '',
 				'RS_CFG_TOTAL_POSTS'		=> $config['rs_total_posts'] ? true : false,
@@ -1100,16 +1114,21 @@ switch ($mode)
 			'U_SORT_ACTION'		=> $sort_url . '&amp;sk=d&amp;sd=' . (($sort_key == 'd' && $sort_dir == 'a') ? 'd' : 'a'),
 			'U_SORT_POSTS'		=> $sort_url . '&amp;sk=e&amp;sd=' . (($sort_key == 'e' && $sort_dir == 'a') ? 'd' : 'a'),
 
+			'POST_COUNT'		=> $post_count,
+			'USER_COUNT'		=> $user_count,
 			'POSITIVE_COUNT'	=> $positive_count,
+			'POSITIVE_SUM'		=> $positive_sum,
 			'POSITIVE_WEEK'		=> $positive_week,
 			'POSITIVE_MONTH'	=> $positive_month,
 			'POSITIVE_6MONTHS'	=> $positive_6months,
 			'NEGATIVE_COUNT'	=> $negative_count,
+			'NEGATIVE_SUM'		=> $negative_sum,
 			'NEGATIVE_WEEK'		=> $negative_week,
 			'NEGATIVE_MONTH'	=> $negative_month,
 			'NEGATIVE_6MONTHS'	=> $negative_6months,
 
-			'S_RATE_USER' 		=> ($config['rs_user_rating'] && $auth->acl_get('u_rs_give')) ? true : false,
+			'S_RS_POST_RATING' 	=> $config['rs_post_rating'] ? true : false,
+			'S_RS_USER_RATING' 	=> $config['rs_user_rating'] ? true : false,
 			'S_RS_AVATAR'		=> $config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 			'S_RS_NEGATIVE'		=> $config['rs_negative_point'] ? true : false,
@@ -1250,30 +1269,14 @@ switch ($mode)
 				$user_reputation = $reputation->get_user_reputation($uid);
 				$reputation_rank = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation) : '';
 
-				if ($clear_page == 'topic')
-				{
-					$json_data = array(
-						'post_ids'				=> $post_ids,
-						'poster_id'				=> $uid,
-						'user_reputation'		=> '<strong>0</strong>',
-						'reputation_rank'		=> $reputation_rank,
-						'post_reputation'		=> 0,
-						'reputation_class'		=> 'zero',
-					);
-				}
-				else if ($clear_page == 'detail')
-				{
-					$reputation_title = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, true) : '';
-					$reputation_color = $config['rs_ranks'] ? $reputation->get_rs_new_rank($user_reputation, false, true) : $reputation->get_vote_class($user_reputation);
-
-					$json_data = array(
-						'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
-						'reputation_class'		=> $reputation_color,
-						'reputation_rank'		=> $reputation_rank,
-						'rank_title'			=> $reputation_title,
-						'empty'					=> '<div class="reputation-list empty bg3"><span>' . $user->lang['RS_EMPTY_DATA'] . '</span></div>',
-					);
-				}
+				$json_data = array(
+					'post_ids'				=> $post_ids,
+					'poster_id'				=> $uid,
+					'user_reputation'		=> '<strong>0</strong>',
+					'reputation_rank'		=> $reputation_rank,
+					'post_reputation'		=> 0,
+					'reputation_class'		=> 'zero',
+				);
 			}
 
 			echo json_encode($json_data);
@@ -1301,25 +1304,6 @@ switch ($mode)
 	break;
 
 	case 'newpopup':
-
-		/*$sql = 'SELECT COUNT(rep_id) as new_reps
-			FROM ' . REPUTATIONS_TABLE . "
-			WHERE rep_to = {$user->data['user_id']}
-				AND time >= {$user->data['user_rep_last']}";
-		$result = $db->sql_query($sql);
-
-		$num_new = 0;
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$num_new += (int) $row['new_reps'];
-		}
-		$db->sql_freeresult($result);
-
-		if ($num_new == 0)
-		{
-			//return;
-			echo json_encode('newpopup_close();');
-		}*/
 
 		$template->assign_vars(array(
 			'NEW_REPUTATIONS'		=> ($user->data['user_rep_new'] == 1) ? $user->lang['RS_NEW_REP'] : sprintf($user->lang['RS_NEW_REPS'], $user->data['user_rep_new']),
