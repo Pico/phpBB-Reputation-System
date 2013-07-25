@@ -16,7 +16,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 		<author-group>
 			<author>
 				<username><![CDATA[Pico88]]></username>
-				<homepage><![CDATA[http://pico88.github.com/phpBB-Reputation-System/]]></homepage>
+				<homepage><![CDATA[http://pico88.github.io/phpBB-Reputation-System/]]></homepage>
 			</author>
 			<author>
 				<username><![CDATA[Versusnja]]></username>
@@ -207,10 +207,19 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 				</changelog>
 			</entry>
 			<entry>
-				<date>2013-04-01</date>
+				<date>2013-07-31</date>
 				<rev-version>0.7.0</rev-version>
 				<changelog lang="en">
-					<change><![CDATA[Will be filled in the future]]></change>
+					<change><![CDATA[FIX clear reputation sql error]]></change>
+					<change><![CDATA[ADD prevent double click action]]></change>
+					<change><![CDATA[IMPROVE avatar displaying]]></change>
+					<change><![CDATA[IMPROVE reputation with warnings]]></change>
+					<change><![CDATA[REMOVE bans for reputations]]></change>
+					<change><![CDATA[UPDATE jQuery]]></change>
+					<change><![CDATA[IMPROVE synchronisation]]></change>
+					<change><![CDATA[ADD save last active tab in ACP reputation settings]]></change>
+					<change><![CDATA[ADD section in ACP reputation settings tabs]]></change>
+					<change><![CDATA[ADD new reputation stats in details]]></change>
 				</changelog>
 			</entry>
 		</history>
@@ -223,6 +232,7 @@ Special thanks to Versusnja, who present me how AJAX works.]]></author-notes>
 			<link type="contrib" href="./contrib/update_from_0.6.0_to_0.6.1.xml" lang="en">Update from 0.6.0 to 0.6.1</link>
 			<link type="contrib" href="./contrib/update_from_0.6.1_to_0.6.2.xml" lang="en">Update from 0.6.1 to 0.6.2</link>
 			<link type="contrib" href="./contrib/update_from_0.6.2_to_0.6.3.xml" lang="en">Update from 0.6.2 to 0.6.3</link>
+			<link type="contrib" href="./contrib/update_from_0.6.3_to_0.7.0.xml" lang="en">Update from 0.6.3 to 0.7.0</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -460,13 +470,8 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 			<edit>
 				<find><![CDATA[// Additional tables]]></find>
 				<action type="after-add"><![CDATA[//Reputation System
-define('RS_COMMENT_OFF', 0);
-define('RS_COMMENT_BOTH', 1);
-define('RS_COMMENT_POST', 2);
-define('RS_COMMENT_USER', 3);
 define('REPUTATIONS_TABLE',			$table_prefix . 'reputations');
-define('REPUTATIONS_RANKS_TABLE',	$table_prefix . 'reputations_ranks');
-define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action>
+define('REPUTATIONS_RANKS_TABLE',	$table_prefix . 'reputations_ranks');]]></action>
 			</edit>
 		</open>
 		<open src="includes/functions_user.php">
@@ -479,9 +484,8 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			<edit>
 				<find><![CDATA[		$db->sql_multi_insert(BANLIST_TABLE, $sql_ary);]]></find>
 				<action type="after-add"><![CDATA[		//Reputation System
-		if ($mode == 'user' && !$ban_exclude && $config['rs_max_power_ban'])
+		if ($mode == 'user' && !$ban_exclude && $config['rs_max_power_ban'] > 0)
 		{
-			$ban_id = $db->sql_nextid();
 			$ban_time = round(($ban_end - $current_time) / 3600);
 			$ban_point = round($config['rs_max_power_ban'] * $ban_time / 672);
 			$ban_points = ($ban_end == 0) ? -$config['rs_max_power_ban'] : -min($config['rs_max_power_ban'],($ban_point == 0 ? 1 : $ban_point));
@@ -547,8 +551,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		<open src="includes/mcp/mcp_warn.php">
 			<edit>
 				<find><![CDATA[		$warning = utf8_normalize_nfc(request_var('warning', '', true));]]></find>
-				<action type="after-add"><![CDATA[
-		// Reputation System - warnings
+				<action type="after-add"><![CDATA[		// Reputation System - warnings
 		$reputation = (isset($_REQUEST['reputation'])) ? true : false;
 		$comment = utf8_normalize_nfc(request_var('comment', '', true));
 		$points = request_var('points', '');
@@ -560,8 +563,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		{
 			$notify = false;
 		}]]></find>
-				<action type="after-add"><![CDATA[
-		// Reputation System - warnings
+				<action type="after-add"><![CDATA[		// Reputation System - warnings
 		$voting_power_pulldown = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
@@ -575,8 +577,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			</edit>
 			<edit>
 				<find><![CDATA[				$msg = $user->lang['USER_WARNING_ADDED'];]]></find>
-				<action type="after-add"><![CDATA[
-				// Reputation System - warnings
+				<action type="after-add"><![CDATA[				// Reputation System - warnings
 				if ($config['rs_warning'] && $reputation)
 				{
 					include_once($phpbb_root_path . 'includes/functions_reputation.' . $phpEx);
@@ -592,8 +593,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			</edit>
 			<edit>
 				<find><![CDATA[		$warning = utf8_normalize_nfc(request_var('warning', '', true));]]></find>
-				<action type="after-add"><![CDATA[
-		// Reputation System - warnings
+				<action type="after-add"><![CDATA[		// Reputation System - warnings
 		$reputation = (isset($_REQUEST['reputation'])) ? true : false;
 		$comment = utf8_normalize_nfc(request_var('comment', '', true));
 		$points = request_var('points', '');
@@ -605,8 +605,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 		{
 			$notify = false;
 		}]]></find>
-				<action type="after-add"><![CDATA[
-		// Reputation System - warnings
+				<action type="after-add"><![CDATA[		// Reputation System - warnings
 		$voting_power_pulldown = '';
 		for($i = 1; $i <= $config['rs_max_power_warning']; ++$i)
 		{
@@ -620,8 +619,7 @@ define('REPUTATIONS_BANS_TABLE',	$table_prefix . 'reputations_bans');]]></action
 			</edit>
 			<edit>
 				<find><![CDATA[				$msg = $user->lang['USER_WARNING_ADDED'];]]></find>
-				<action type="after-add"><![CDATA[
-				// Reputation System - warnings
+				<action type="after-add"><![CDATA[				// Reputation System - warnings
 				if ($config['rs_warning'] && $reputation)
 				{
 					include_once($phpbb_root_path . 'includes/functions_reputation.' . $phpEx);
