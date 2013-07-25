@@ -17,8 +17,10 @@
 				<dt>{L_RS_POWER}:</dt> <dd>{RS_POWER}</dd>
 				<!-- IF RS_POWER_LEFT --><dt>{L_RS_VOTING_POWER}:</dt> <dd>{RS_POWER_LEFT}</dd><!-- ENDIF -->
 			<!-- ENDIF -->
-			<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT}</dd>
-			<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT}</dd>
+			<!-- IF S_RS_POST_RATING --><dt>{L_RS_POST_COUNT}:</dt> <dd>{POST_COUNT}</dd><!-- ENDIF -->
+			<!-- IF S_RS_USER_RATING --><dt>{L_RS_USER_COUNT}:</dt> <dd>{USER_COUNT}</dd><!-- ENDIF -->
+			<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT} ({L_RS_POINTS}: {POSITIVE_SUM})</dd>
+			<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT} ({L_RS_POINTS}: {NEGATIVE_SUM})</dd>
 		</dl>
 	<!-- IF RS_POWER and RS_POWER_EXPLAIN-->
 	</div>
