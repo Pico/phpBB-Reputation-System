@@ -47,15 +47,17 @@ class ucp_reputation
 				$reputation = new reputation();
 
 				$positive_count = $negative_count = 0;
-				$positive_week = $negative_week  = 0;
+				$positive_sum = $negative_sum = 0;
+				$positive_week = $negative_week = 0;
 				$positive_month = $negative_month = 0;
 				$positive_6months = $negative_6months = 0;
+				$post_count = $user_count = 0;
 
 				$last_week = time() - 604800;
 				$last_month = time() - 2678400;
 				$last_6months = time() - 16070400;
 
-				$sql = 'SELECT time, point
+				$sql = 'SELECT action, time, point
 					FROM ' . REPUTATIONS_TABLE . "
 					WHERE rep_to = {$user->data['user_id']}";
 				$result = $db->sql_query($sql);
@@ -65,6 +67,7 @@ class ucp_reputation
 					if ($reputation_vote['point'] > 0)
 					{
 						$positive_count++;
+						$positive_sum += $reputation_vote['point'];
 						if ($reputation_vote['time'] >= $last_week)
 						{
 							$positive_week++;
@@ -81,6 +84,7 @@ class ucp_reputation
 					else if ($reputation_vote['point'] < 0)
 					{
 						$negative_count++;
+						$negative_sum += $reputation_vote['point'];
 						if ($reputation_vote['time'] >= $last_week)
 						{
 							$negative_week++;
@@ -94,7 +98,17 @@ class ucp_reputation
 							$negative_6months++;
 						}
 					}
+
+					if ($reputation_vote['action'] == 1)
+					{
+						$post_count += $reputation_vote['point'];
+					}
+					else if ($reputation_vote['action'] == 2)
+					{
+						$user_count += $reputation_vote['point'];
+					}
 				}
+				$db->sql_freeresult($result);
 
 				$sql_array = array(
 					'SELECT'	=> 'u.username as username_rep_from, u.user_colour as user_colour_rep_from, r.*, p.post_id AS real_post_id, p.forum_id, p.post_subject',
@@ -210,16 +224,23 @@ class ucp_reputation
 					'RS_RANK_TITLE'		=> $rs_rank_title,
 					'RS_RANK_IMG'		=> $rs_rank_img,
 					'REPUTATION_BOX'	=> $config['rs_ranks'] ? $rs_rank_color : (($user->data['user_reputation'] == 0) ? 'zero' : (($user->data['user_reputation'] > 0) ? 'positive' : 'negative')),
+
+					'POST_COUNT'		=> $post_count,
+					'USER_COUNT'		=> $user_count,
 					'POSITIVE_COUNT'	=> $positive_count,
+					'POSITIVE_SUM'		=> $positive_sum,
 					'POSITIVE_WEEK'		=> $positive_week,
 					'POSITIVE_MONTH'	=> $positive_month,
 					'POSITIVE_6MONTHS'	=> $positive_6months,
 					'NEGATIVE_COUNT'	=> $negative_count,
+					'NEGATIVE_SUM'		=> $negative_sum,
 					'NEGATIVE_WEEK'		=> $negative_week,
 					'NEGATIVE_MONTH'	=> $negative_month,
 					'NEGATIVE_6MONTHS'	=> $negative_6months,
 
-					'S_RS_COMMENT'			=> $config['rs_enable_comment'] ? true : false,
+					'S_RS_POST_RATING' 	=> $config['rs_post_rating'] ? true : false,
+					'S_RS_USER_RATING' 	=> $config['rs_user_rating'] ? true : false,
+					'S_RS_COMMENT'		=> $config['rs_enable_comment'] ? true : false,
 					'S_RS_NEGATIVE'		=> $config['rs_negative_point'] ? true : false,
 				));
 
