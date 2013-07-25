@@ -578,7 +578,38 @@ $versions = array(
 		),
 	),
 
-	'0.6.3' => array(
+	'0.6.3' => array(),
+
+	'0.7.0' => array(
+		'config_remove' => array(
+			array('rs_enable_ban'),
+			array('rs_ban_shield'),
+			array('rs_ban_groups'),
+		),
+
+		'config_add' => array(
+			array('rs_prevent_perc', '80', 0),
+			array('rs_prevent_num', '20', 0),
+			array('rs_sync_step', '0', 1),
+		),
+
+		'table_column_remove' => array(
+			array('phpbb_users', 'user_last_rep_ban'),
+		),
+
+		'module_remove' => array(
+			array('acp', 'ACP_REPUTATION_SYSTEM', 'ACP_REPUTATION_BANS'),
+		),
+
+		'table_remove' => array(
+			array('phpbb_reputations_bans'),
+		),
+
+		'cache_purge' => array(
+			'template',
+			'theme',
+		),
+
 		// Convert should be at the end of action list
 		'custom' => 'convert',
 	),
@@ -707,9 +738,6 @@ function convert($action)
 
 		if (!empty($convert_data))
 		{
-			// Reputation System will be automatically resynchronise after viewing its overview page in ACP. 
-			$cache->put('_reputation', 1);
-
 			// Enable Reputation System in all forums.
 			$sql = 'UPDATE ' . FORUMS_TABLE . "
 				SET enable_reputation = 1";
