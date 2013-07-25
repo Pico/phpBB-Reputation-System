@@ -1,7 +1,7 @@
 /**
 *
 * @package	Reputation System
-* @author	Pico88 (http://www.modsteam.tk)
+* @author	Pico88 (https://github.com/Pico88)
 * @copyright (c) 2012
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -9,7 +9,7 @@
 
 /* Highlight class - can be modified as you wish*/
 .highlight {
-	background-color: #d4f0cc;
+	background-color: #d4f0cc !important;
 }
 
 ul.post-reputation {
@@ -132,11 +132,17 @@ li.reputation {
 	box-shadow: 2px 2px 4px #555555;
 	border-radius: 11px;
 	padding: 5px;
+	border: 5px solid #12A3EB;
 }
 
 #reputation-popup div.error {
 	text-align: center;
 	font-size: 1.2em;
+}
+
+/* Fix - do not show white space at the bottom of reputation popup */
+#reputation-popup div.panel {
+	margin-bottom: 0px;
 }
 
 #reputation-popup h3 {
