@@ -22,6 +22,8 @@ if (!defined('IN_PHPBB'))
 class acp_reputation
 {
 	var $u_action;
+	var $max_rep_id;
+	var $step = 1000;
 
 	function main($id, $mode)
 	{
@@ -43,7 +45,387 @@ class acp_reputation
 				$template->assign_var('S_RS_OVERVIEW', true);
 
 				$reputation_enable = request_var('reputation_enable', $config['rs_enable']);
-				$step_sync = $cache->get('_reputation');
+				$step_sync = $config['rs_sync_step'];
+
+				if ($action == 'resync')
+				{
+					$start = request_var('start', 0);
+
+					$this->max_rep_id = $this->get_max_rep_id();
+
+					switch ($step_sync)
+					{
+						case '1':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_DEL'],
+							));
+
+							$users_to_ids = $users_from_ids = array();
+
+							$sql_array = array(
+								'SELECT'	=> 'r.rep_to AS user_to_check, u.user_id AS user_exist',
+								'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
+								'LEFT_JOIN' => array(
+									array(
+										'FROM'	=> array(USERS_TABLE => 'u'),
+										'ON'	=> 'r.rep_to = u.user_id',
+									),
+								),
+								'GROUP_BY'		=> 'r.rep_to',
+							);
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							$result = $db->sql_query($sql);
+
+							while ($row = $db->sql_fetchrow($result))
+							{
+								if (empty($row['user_exist']))
+								{
+									$users_to_ids[] = $row['user_to_check'];
+								}
+							}
+							$db->sql_freeresult($result);
+							unset($row);
+
+							$sql_array = array(
+								'SELECT'	=> 'r.rep_from AS user_from_check, u.user_id AS user_exist',
+								'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
+								'LEFT_JOIN' => array(
+									array(
+										'FROM'	=> array(USERS_TABLE => 'u'),
+										'ON'	=> 'r.rep_from = u.user_id',
+									),
+								),
+								'GROUP_BY'		=> 'r.rep_from',
+							);
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							$result = $db->sql_query($sql);
+
+							while ($row = $db->sql_fetchrow($result))
+							{
+								if (empty($row['user_exist']))
+								{
+									$users_from_ids[] = $row['user_from_check'];
+								}
+							}
+							$db->sql_freeresult($result);
+							unset($row);
+
+							$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+								WHERE ' . $db->sql_in_set('rep_to', $users_to_ids, false, true) . '
+									OR ' . $db->sql_in_set('rep_from', $users_from_ids, false, true);
+							$db->sql_query($sql);
+
+							set_config('rs_sync_step', 2, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '2':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS_DEL'],
+							));
+
+							$posts_ids = array();
+
+							$sql_array = array(
+								'SELECT'		=> 'r.post_id AS post_to_check, p.post_id AS post_exist',
+								'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
+								'LEFT_JOIN' 	=> array(
+									array(
+										'FROM'	=> array(POSTS_TABLE => 'p'),
+										'ON'	=> 'r.post_id = p.post_id',
+									),
+								),
+								'WHERE'			=> 'r.action = 1 OR r.action = 5',
+								'GROUP_BY'		=> 'r.post_id',
+							);
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							$result = $db->sql_query($sql);
+
+							while ($row = $db->sql_fetchrow($result))
+							{
+								if (empty($row['post_exist']))
+								{
+									$posts_ids[] = $row['post_to_check'];
+								}
+							}
+							$db->sql_freeresult($result);
+
+							$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+								WHERE ' . $db->sql_in_set('post_id', $posts_ids, false, true);
+							$db->sql_query($sql);
+
+							set_config('rs_sync_step', 3, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '3':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_REPS_DEL'],
+							));
+
+							$reps_ids = array();
+
+							$sql = 'SELECT rep_id, action, point
+								FROM ' . REPUTATIONS_TABLE;
+							$result = $db->sql_query($sql);
+
+							while ($row = $db->sql_fetchrow($result))
+							{
+								if (!$config['rs_negative_point'] && ($row['action'] == 1 || $row['action'] == 2 || $row['action'] == 5) && ($row['point'] < 0))
+								{
+									$reps_ids[] = $row['rep_id'];
+								}
+								if (!$config['rs_warning'] && ($row['action'] == 3))
+								{
+									$reps_ids[] = $row['rep_id'];
+								}
+								if (!$config['rs_max_power_ban'] && !$config['rs_enable_ban'] && ($row['action'] == 4))
+								{
+									$reps_ids[] = $row['rep_id'];
+								}
+							}
+							$db->sql_freeresult($result);
+
+							$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
+								WHERE ' . $db->sql_in_set('rep_id', $reps_ids, false, true);
+							$db->sql_query($sql);
+
+							set_config('rs_sync_step', 4, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '4':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_AUTHOR'],
+							));
+
+							while (still_on_time() && $start <= $this->max_rep_id)
+							{
+								$sql_array = array(
+									'SELECT'		=> 'r.rep_id, r.rep_to, p.poster_id',
+									'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
+									'LEFT_JOIN'		=> array(
+										array(
+											'FROM'	=> array(POSTS_TABLE => 'p'),
+											'ON'	=> 'r.post_id = p.post_id',
+										),
+									),
+									'WHERE'			=> 'r.post_id != 0 AND (r.action = 1 OR r.action = 5) AND r.rep_to >= ' . ($start + 1) . ' AND r.rep_to <= ' . ($start + $this->step),
+								);
+								$sql = $db->sql_build_query('SELECT', $sql_array);
+								$result = $db->sql_query($sql);
+
+								while ($row = $db->sql_fetchrow($result))
+								{
+									if ($row['rep_to'] != $row['poster_id'])
+									{
+										$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
+											SET rep_to = {$row['poster_id']}
+											WHERE rep_id = {$row['rep_id']}";
+										$db->sql_query($sql);
+									}
+								}
+								$db->sql_freeresult($result);
+
+								$start += $this->step;
+							}
+
+							if ($start <= $this->max_rep_id)
+							{
+								meta_refresh(1, append_sid($this->u_action . '&amp;action=resync&amp;start=' . $start));
+								return;
+							}
+
+							set_config('rs_sync_step', 5, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '5':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_FORUM'],
+							));
+
+							$reps_1_ids = array();
+							$reps_5_ids = array();
+
+							$sql_array = array(
+								'SELECT'	=> 'r.rep_id, r.action, f.enable_reputation',
+								'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
+								'LEFT_JOIN' => array(
+									array(
+										'FROM'	=> array(POSTS_TABLE => 'p'),
+										'ON'	=> 'r.post_id = p.post_id',
+									),
+									array(
+										'FROM'	=> array(FORUMS_TABLE => 'f'),
+										'ON'	=> 'p.forum_id = f.forum_id',
+									),
+								),
+								'WHERE'		=> 'r.post_id != 0',
+							);
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							$result = $db->sql_query($sql);
+
+							while ($row = $db->sql_fetchrow($result))
+							{
+								if (($row['enable_reputation'] == 2) && ($row['action'] == 1))
+								{
+									$reps_1_ids[] = $row['rep_id'];
+								}
+								else if (($row['enable_reputation'] == 1) && ($row['action'] == 5))
+								{
+									$reps_5_ids[] = $row['rep_id'];
+								}
+							}
+							$db->sql_freeresult($result);
+
+							$sql = 'UPDATE ' . REPUTATIONS_TABLE . '
+								SET action = 5
+								WHERE ' . $db->sql_in_set('rep_id', $reps_1_ids, false, true);
+							$db->sql_query($sql);
+
+							$sql = 'UPDATE ' . REPUTATIONS_TABLE . '
+								SET action = 1
+								WHERE ' . $db->sql_in_set('rep_id', $reps_5_ids, false, true);
+							$db->sql_query($sql);
+
+							set_config('rs_sync_step', 6, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '6':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_USERS'],
+							));
+
+							if ($start == 0) $db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
+
+							while (still_on_time() && $start <= $this->max_rep_id)
+							{
+								$sql = 'SELECT SUM(point) AS total_points, rep_to
+									FROM ' . REPUTATIONS_TABLE . '
+									WHERE action != 5
+										AND rep_to >= ' . ($start + 1) . '
+										AND rep_to <= ' . ($start + $this->step) . '
+									GROUP BY rep_to';
+								$result = $db->sql_query($sql);
+
+								if ($row = $db->sql_fetchrow($result))
+								{
+									do
+									{
+										if ($row['total_points'] > 0)
+										{
+											$user_point = ($config['rs_max_point'] && ($row['total_points'] > $config['rs_max_point'])) ? $config['rs_max_point'] : $row['total_points'];
+										}
+										else if ($row['total_points'] < 0)
+										{
+											$user_point = ($config['rs_min_point'] && ($row['total_points'] < $config['rs_min_point'])) ? $config['rs_min_point'] : $row['total_points'];
+										}
+
+										if ($user_point != 0)
+										{
+											$sql = 'UPDATE ' . USERS_TABLE . "
+												SET user_reputation = user_reputation + $user_point
+												WHERE user_id = {$row['rep_to']}";
+											$db->sql_query($sql);
+										}
+									}
+									while ($row = $db->sql_fetchrow($result));
+								}
+								$db->sql_freeresult($result);
+
+								$start += $this->step;
+							}
+
+							if ($start <= $this->max_rep_id)
+							{
+								meta_refresh(1, append_sid($this->u_action . '&amp;action=resync&amp;start=' . $start));
+								return;
+							}
+
+							set_config('rs_sync_step', 7, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '7':
+							$template->assign_vars(array(
+								'S_RS_SYNC'		=> true,
+								'PROGRESS'		=> true,
+								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS'],
+							));
+
+							if ($start == 0) $db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
+
+							while (still_on_time() && $start <= $this->max_rep_id)
+							{
+								$sql = 'SELECT SUM(point) AS post_reputation, post_id
+									FROM ' . REPUTATIONS_TABLE . '
+									WHERE post_id != 0
+										AND rep_id >= ' . ($start + 1) . '
+										AND rep_id <= ' . ($start + $this->step) . '
+									GROUP BY post_id';
+								$result = $db->sql_query($sql);
+								
+								if ($row = $db->sql_fetchrow($result))
+								{
+									do
+									{
+										$sql = 'UPDATE ' . POSTS_TABLE . "
+											SET post_reputation = post_reputation + {$row['post_reputation']}
+											WHERE post_id = {$row['post_id']}";
+										$db->sql_query($sql);
+									}
+									while ($row = $db->sql_fetchrow($result));
+								}
+								$db->sql_freeresult($result);
+
+								$start += $this->step;
+							}
+
+							if ($start <= $this->max_rep_id)
+							{
+								meta_refresh(1, append_sid($this->u_action . '&amp;action=resync&amp;start=' . $start));
+								return;
+							}
+
+							set_config('rs_sync_step', 8, true);
+							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
+							return;
+						break;
+
+						case '8':
+							$template->assign_vars(array(
+								'S_RS_SYNC'	=> true,
+								'DONE'		=> true,
+							));
+
+							set_config('rs_sync_step', 0, true);
+
+							add_log('admin', 'LOG_REPUTATION_SYNC');
+							meta_refresh(3, append_sid($this->u_action));
+							return;
+						break;
+					}
+				}
 
 				if (!confirm_box(true))
 				{
@@ -52,7 +434,7 @@ class acp_reputation
 					{
 						case 'sync':
 							$confirm = true;
-							$confirm_lang = 'RS_RESYNC_REPUTATION_CONFIRM';
+							$confirm_lang = 'RS_SYNC_REPUTATION_CONFIRM';
 						break;
 
 						case 'truncate':
@@ -64,6 +446,7 @@ class acp_reputation
 					if ($confirm)
 					{
 						confirm_box(false, $user->lang[$confirm_lang], build_hidden_fields(array(
+							'i'			=> $id,
 							'mode'		=> $mode,
 							'action'	=> $action,
 					)));
@@ -74,9 +457,10 @@ class acp_reputation
 					switch ($action)
 					{
 						case 'sync':
-							$cache->put('_reputation', $step_sync = 1);
+							set_config('rs_sync_step', 1, true);
+							meta_refresh(0, append_sid($this->u_action . '&amp;action=resync&amp;'));
 						break;
-						
+
 						case 'truncate':
 							$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
 							$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
@@ -88,315 +472,7 @@ class acp_reputation
 					}
 				}
 
-				switch ($step_sync)
-				{
-					case '1':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_DEL'],
-						));
-
-						$users_to_ids = $users_from_ids = array();
-
-						$sql_array = array(
-							'SELECT'	=> 'r.rep_to AS user_to_check, u.user_id AS user_exist',
-							'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' => array(
-								array(
-									'FROM'	=> array(USERS_TABLE => 'u'),
-									'ON'	=> 'r.rep_to = u.user_id',
-								),
-							),
-							'GROUP_BY'		=> 'r.rep_to',
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if (empty($row['user_exist']))
-							{
-								$users_to_ids[] = $row['user_to_check'];
-							}
-						}
-						unset($row);
-
-						$sql_array = array(
-							'SELECT'	=> 'r.rep_from AS user_from_check, u.user_id AS user_exist',
-							'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' => array(
-								array(
-									'FROM'	=> array(USERS_TABLE => 'u'),
-									'ON'	=> 'r.rep_from = u.user_id',
-								),
-							),
-							'GROUP_BY'		=> 'r.rep_from',
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if (empty($row['user_exist']))
-							{
-								$users_from_ids[] = $row['user_from_check'];
-							}
-						}
-						unset($row);
-
-						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
-							WHERE ' . $db->sql_in_set('rep_to', $users_to_ids, false, true) . '
-								OR ' . $db->sql_in_set('rep_from', $users_from_ids, false, true);
-						$db->sql_query($sql);
-
-						$cache->put('_reputation', 2);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '2':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS_DEL'],
-						));
-
-						$posts_ids = array();
-
-						$sql_array = array(
-							'SELECT'		=> 'r.post_id AS post_to_check, p.post_id AS post_exist',
-							'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' 	=> array(
-								array(
-									'FROM'	=> array(POSTS_TABLE => 'p'),
-									'ON'	=> 'r.post_id = p.post_id',
-								),
-							),
-							'WHERE'			=> 'r.action = 1 OR r.action = 5',
-							'GROUP_BY'		=> 'r.post_id',
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if (empty($row['post_exist']))
-							{
-								$posts_ids[] = $row['post_to_check'];
-							}
-						}
-
-						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
-							WHERE ' . $db->sql_in_set('post_id', $posts_ids, false, true);
-						$db->sql_query($sql);
-
-						$cache->put('_reputation', 3);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '3':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_REPS_DEL'],
-						));
-
-						$reps_ids = array();
-
-						$sql = 'SELECT rep_id, action, point
-							FROM ' . REPUTATIONS_TABLE;
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if (!$config['rs_negative_point'] && ($row['action'] == 1 || $row['action'] == 2 || $row['action'] == 5) && ($row['point'] < 0))
-							{
-								$reps_ids[] = $row['rep_id'];
-							}
-							if (!$config['rs_warning'] && ($row['action'] == 3))
-							{
-								$reps_ids[] = $row['rep_id'];
-							}
-							if (!$config['rs_max_power_ban'] && !$config['rs_enable_ban'] && ($row['action'] == 4))
-							{
-								$reps_ids[] = $row['rep_id'];
-							}
-						}
-
-						$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . '
-							WHERE ' . $db->sql_in_set('rep_id', $reps_ids, false, true);
-						$db->sql_query($sql);
-
-						$cache->put('_reputation', 4);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '4':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_AUTHOR'],
-						));
-
-						$sql_array = array(
-							'SELECT'		=> 'r.rep_id, r.rep_to, p.poster_id',
-							'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN'		=> array(
-								array(
-									'FROM'	=> array(POSTS_TABLE => 'p'),
-									'ON'	=> 'r.post_id = p.post_id',
-								),
-							),
-							'WHERE'			=> 'r.post_id != 0 AND (r.action = 1 OR r.action = 5)',
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if ($row['rep_to'] != $row['poster_id'])
-							{
-								$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
-									SET rep_to = {$row['poster_id']}
-									WHERE rep_id = {$row['rep_id']}";
-								$db->sql_query($sql);
-							}
-						}
-
-						$cache->put('_reputation', 5);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '5':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_FORUM'],
-						));
-
-						$sql_array = array(
-							'SELECT'	=> 'r.rep_id, r.action, f.enable_reputation',
-							'FROM'		=> array(REPUTATIONS_TABLE => 'r'),
-							'LEFT_JOIN' => array(
-								array(
-									'FROM'	=> array(POSTS_TABLE => 'p'),
-									'ON'	=> 'r.post_id = p.post_id',
-								),
-								array(
-									'FROM'	=> array(FORUMS_TABLE => 'f'),
-									'ON'	=> 'p.forum_id = f.forum_id',
-								),
-							),
-							'WHERE'		=> 'r.post_id != 0',
-						);
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							if (($row['enable_reputation'] == 2) && ($row['action'] == 1))
-							{
-								$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
-									SET action = 5
-									WHERE rep_id = {$row['rep_id']}";
-								$db->sql_query($sql);
-							}
-							else if (($row['enable_reputation'] == 1) && ($row['action'] == 5))
-							{
-								$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
-									SET action = 1
-									WHERE rep_id = {$row['rep_id']}";
-								$db->sql_query($sql);
-							}
-						}
-
-						$cache->put('_reputation', 6);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '6':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_USER'],
-						));
-
-						$db->sql_query('UPDATE ' . USERS_TABLE . ' SET user_reputation = 0');
-
-						$sql = 'SELECT SUM(point) AS rep_points, rep_to
-							FROM ' . REPUTATIONS_TABLE . "
-							WHERE action != 5
-							GROUP BY rep_to";
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							$user_point = 0;
-							if ($row['rep_points'] > 0)
-							{
-								$user_point = ($config['rs_max_point'] && ($row['rep_points'] > $config['rs_max_point'])) ? $config['rs_max_point'] : $row['rep_points'];
-							}
-							else if ($row['rep_points'] < 0)
-							{
-								$user_point =($config['rs_min_point'] && ($row['rep_points'] < $config['rs_min_point'])) ? $config['rs_min_point'] : $row['rep_points'];
-							}
-
-							$sql = 'UPDATE ' . USERS_TABLE . "
-								SET user_reputation = $user_point
-								WHERE user_id = {$row['rep_to']}";
-							$db->sql_query($sql);
-						}
-
-						$cache->put('_reputation', 7);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '7':
-						$template->assign_vars(array(
-							'S_RS_SYNC'		=> true,
-							'PROGRESS'		=> true,
-							'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POSTS'],
-						));
-
-						$db->sql_query('UPDATE ' . POSTS_TABLE . ' SET post_reputation = 0');
-
-						$sql = 'SELECT SUM(point) AS rep_points, post_id
-							FROM ' . REPUTATIONS_TABLE . "
-							WHERE post_id != 0
-							GROUP BY post_id";
-						$result = $db->sql_query($sql);
-
-						while ($row = $db->sql_fetchrow($result))
-						{
-							$sql = 'UPDATE ' . POSTS_TABLE . "
-								SET post_reputation = {$row['rep_points']}
-								WHERE post_id = {$row['post_id']}";
-							$db->sql_query($sql);
-						}
-
-						$cache->put('_reputation', 8);
-						meta_refresh(2, append_sid($this->u_action));
-						return;
-					break;
-
-					case '8':
-						$template->assign_vars(array(
-							'S_RS_SYNC'	=> true,
-							'DONE'		=> true,
-						));
-						$cache->destroy('_reputation');
-
-						add_log('admin', 'LOG_REPUTATION_SYNC');
-						meta_refresh(3, append_sid($this->u_action));
-						return;
-					break;
-				}
+				
 
 				$errstr = '';
 				$errno = 0;
@@ -433,8 +509,6 @@ class acp_reputation
 
 					if ($file)
 					{
-						// let's not stop the page from loading if a mod author messed up their mod check file
-						// also take care of one of the easiest ways to mess up an xml file: "&"
 						$mod = @simplexml_load_string(str_replace('&', '&amp;', $file));
 						if (isset($mod->$var['tag']))
 						{
@@ -506,18 +580,23 @@ class acp_reputation
 						'rs_warning'			=> array('lang' => 'RS_WARNING', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_notification'		=> array('lang' => 'RS_NOTIFICATION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_pm_notify'			=> array('lang' => 'RS_PM_NOTIFY', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+
+						'section11'				=> array('lang' => ''),
 						'rs_min_point'			=> array('lang' => 'RS_MIN_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_max_point'			=> array('lang' => 'RS_MAX_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
+
+						'section12'				=> array('lang' => ''),
 						'rs_prevent_perc'		=> array('lang' => 'RS_PREVENT_OVERRATING', 'validate' => 'int:0:99', 'type' => 'false', 'method' => 'false', 'explain' => false),
 						'rs_prevent_num'		=> array('lang' => 'RS_PREVENT_OVERRATING', 'validate' => 'int:0', 'type' => 'custom:0:99', 'method' => 'overrating', 'explain' => true, 'append' => ' %'),
 
-						'legend2'				=> array('lang' => 'ACP_RS_DISPLAY', 'tab' => 'display'),
+						//Display section
+						'section13'				=> array('lang' => 'ACP_RS_DISPLAY'),
 						'rs_per_page'			=> array('lang' => 'RS_PER_PAGE', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_display_avatar'		=> array('lang' => 'RS_DISPLAY_AVATAR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_sort_memberlist'	=> array('lang' => 'RS_SORT_MEMBERLIST_BY_REPO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 						'rs_point_type'			=> array('lang' => 'RS_POINT_TYPE', 'validate' => 'bool', 'type' => 'custom', 'method' => 'point_type', 'explain' => true),
 
-						'legend3'				=> array('lang' => 'ACP_RS_POSTS_RATING', 'tab' => 'post_rating', 'option' => 'post_rating'),
+						'legend2'				=> array('lang' => 'ACP_RS_POSTS_RATING', 'tab' => 'post_rating', 'option' => 'post_rating'),
 						'rs_post_rating'		=> array('lang' => 'RS_POST_RATING', 'validate' => 'bool', 'type' => 'custom', 'method' => 'post_rating', 'explain' => false),
 						'rs_post_highlight'		=> array('lang' => 'RS_HIGHLIGHT_POST', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_hide_post'			=> array('lang' => 'RS_HIDE_POST', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
@@ -525,34 +604,38 @@ class acp_reputation
 						'rs_anti_post'			=> array('lang' => 'RS_ANTISPAM', 'validate' => 'int:0', 'type' => 'custom:0:180', 'method' => 'antispam', 'explain' => true),
 						'rs_anti_method'		=> array('lang' => 'RS_ANTISPAM_METHOD', 'validate' => 'bool', 'type' => 'custom', 'method' => 'antimethod', 'explain' => true),
 
-						'legend4'				=> array('lang' => 'ACP_RS_USERS_RATING', 'tab' => 'user_rating', 'option' => 'user_rating'),
+						'legend3'				=> array('lang' => 'ACP_RS_USERS_RATING', 'tab' => 'user_rating', 'option' => 'user_rating'),
 						'rs_user_rating'		=> array('lang' => 'RS_USER_RATING', 'validate' => 'bool', 'type' => 'custom', 'method' => 'user_rating', 'explain' => false),
 						'rs_user_rating_gap'	=> array('lang' => 'RS_USER_RATING_GAP', 'validate' => 'string', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['DAYS']),
 
-						'legend5'				=> array('lang' => 'ACP_RS_COMMENT', 'tab' => 'comment', 'option' => 'comment'),
+						'legend4'				=> array('lang' => 'ACP_RS_COMMENT', 'tab' => 'comment', 'option' => 'comment'),
 						'rs_enable_comment'		=> array('lang' => 'RS_ENABLE_COMMENT', 'validate' => 'bool', 'type' => 'custom', 'method' => 'comment', 'explain' => true),
 						'rs_force_comment'		=> array('lang' => 'RS_FORCE_COMMENT', 'validate' => 'int:0:3', 'type' => 'custom', 'method' => 'select_comment', 'explain' => true),
 						'rs_comment_max_chars'	=> array('lang' => 'RS_COMMEN_LENGTH', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
-						'legend6'				=> array('lang' => 'ACP_RS_POWER', 'tab' => 'power', 'option' => 'power'),
+						'legend5'				=> array('lang' => 'ACP_RS_POWER', 'tab' => 'power', 'option' => 'power'),
 						'rs_enable_power'		=> array('lang' => 'RS_ENABLE_POWER', 'validate' => 'bool', 'type' => 'custom', 'method' => 'power', 'explain' => true),
+
+						'section51'				=> array('lang' => ''),
 						'rs_power_renewal'		=> array('lang' => 'RS_POWER_RENEWAL', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true, 'append' => ' ' . $user->lang['HOURS']),
 						'rs_min_power'			=> array('lang' => 'RS_MIN_POWER', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_max_power'			=> array('lang' => 'RS_MAX_POWER', 'validate' => 'int:1:20', 'type' => 'text:4:5', 'explain' => true),
 						'rs_max_power_warning'	=> array('lang' => 'RS_MAX_POWER_WARNING', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_max_power_ban'		=> array('lang' => 'RS_MAX_POWER_BAN', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_explain'		=> array('lang' => 'RS_POWER_EXPLAIN', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+
+						'section52'				=> array('lang' => ''),
 						'rs_total_posts'		=> array('lang' => 'RS_TOTAL_POSTS', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_membership_days'	=> array('lang' => 'RS_MEMBERSHIP_DAYS', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_rep_point'	=> array('lang' => 'RS_POWER_REP_POINT', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_lose_warn'	=> array('lang' => 'RS_LOSE_POWER_WARN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 						'rs_power_lose_ban'		=> array('lang' => 'RS_LOSE_POWER_BAN', 'validate' => 'int:0', 'type' => 'text:4:5', 'explain' => true),
 
-						'legend7'				=> array('lang' => 'ACP_RS_RANKS', 'tab' => 'rank', 'option' => 'rank'),
+						'legend6'				=> array('lang' => 'ACP_RS_RANKS', 'tab' => 'rank', 'option' => 'rank'),
 						'rs_ranks'				=> array('lang' => 'RS_RANKS_ENABLE', 'validate' => 'bool', 'type' => 'custom', 'method' => 'rank', 'explain' => false),
 						'rs_ranks_path'			=> array('lang' => 'RS_RANKS_PATH', 'validate' => 'rpath', 'type' => 'text:20:255', 'explain' => true),
 
-						'legend8'				=> array('lang' => 'ACP_RS_TOPLIST', 'tab' => 'toplist', 'option' => 'toplist'),
+						'legend7'				=> array('lang' => 'ACP_RS_TOPLIST', 'tab' => 'toplist', 'option' => 'toplist'),
 						'rs_enable_toplist'		=> array('lang' => 'RS_ENABLE_TOPLIST', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist', 'explain' => true),
 						'rs_toplist_direction'	=> array('lang' => 'RS_TOPLIST_DIRECTION', 'validate' => 'bool', 'type' => 'custom', 'method' => 'toplist_direction', 'explain' => true),
 						'rs_toplist_num'		=> array('lang' => 'RS_TOPLIST_NUM', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
@@ -643,6 +726,16 @@ class acp_reputation
 							'LEGEND'		=> (isset($user->lang[$vars['lang']])) ? $user->lang[$vars['lang']] : $vars['lang'],
 							'TAB'			=> $vars['tab'],
 							'OPTION'		=> isset($vars['option']) ? $vars['option'] : ''
+						));
+
+						continue;
+					}
+
+					if (strpos($config_key, 'section') !== false)
+					{
+						$template->assign_block_vars('options', array(
+							'S_SECTION'		=> true,
+							'LEGEND'		=> (isset($user->lang[$vars['lang']])) ? $user->lang[$vars['lang']] : $vars['lang']
 						));
 
 						continue;
@@ -930,6 +1023,19 @@ class acp_reputation
 				$db->sql_freeresult($result);
 			break;
 		}
+	}
+
+	function get_max_rep_id()
+	{
+		global $db;
+
+		$sql = 'SELECT MAX(rep_id) as max_rep_id
+			FROM ' . REPUTATIONS_TABLE;
+		$result = $db->sql_query($sql);
+		$max_rep_id = (int) $db->sql_fetchfield('max_rep_id');
+		$db->sql_freeresult($result);
+
+		return $max_rep_id;
 	}
 
 	function post_rating($value, $key)
