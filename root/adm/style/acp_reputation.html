@@ -9,8 +9,8 @@
 
 <fieldset>
 	<!-- IF PROGRESS -->
-	<div class="errorbox">
-		<h3>{L_WARNING}</h3>
+	<div class="successbox">
+		<h3>{L_NOTIFY}</h3>
 		<img src="images/progress_bar.gif" alt="{L_PROGRESS}" />
 		<p>{L_PROGRESS}</p>
 	</div>
@@ -138,6 +138,10 @@
 
 	<div class="tablewrap">
 		<fieldset>
+	<!-- ELSEIF options.S_SECTION -->
+		</fieldset>
+		<fieldset>
+		<legend>{options.LEGEND}</legend>
 	<!-- ELSE -->
 			<dl>
 				<dt><label for="{options.KEY}" >{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
