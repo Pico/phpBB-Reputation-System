@@ -261,15 +261,17 @@ function response(a, b, c, d)
 				$('#p' + post_id + ' .reputation a').text(a.post_reputation);
 				$('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
 				$('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad').addClass(a.reputation_vote);
-				
+
 				if (a.highlight)
 				{
 					$('#p' + post_id).removeClass('highlight hidden').addClass('highlight');
 				}
+
 				if (a.hidden)
 				{
 					$('#p' + post_id + ' #hideshow').detach();
 				}
+
 				if (a.hidepost)
 				{
 					$('#p' + post_id + ' #hideshow').detach();
@@ -306,10 +308,12 @@ function response(a, b, c, d)
 						{
 							$('#p' + post_id).removeClass('highlight');
 						}
+
 						if (a.hidden)
 						{
 							$('#p' + post_id + ' #hideshow').detach();
 						}
+
 						if (a.hidepost)
 						{
 							$('#p' + post_id + ' #hideshow').detach();
@@ -329,7 +333,7 @@ function response(a, b, c, d)
 						var post_id = a.post_id;
 						var poster_id = a.poster_id;
 
-						$('.reputation-list').hide('slow', function() {
+						$('.reputation-list').slideUp(function() {
 							$('#reputation-popup').fadeOut('fast').empty();
 						});
 						$('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
@@ -346,7 +350,7 @@ function response(a, b, c, d)
 							var post_ids = a.post_ids;
 							var poster_id = a.poster_id;
 
-							$('.reputation-list').hide('slow', function() {
+							$('.reputation-list').slideUp(function() {
 								$('#reputation-popup').fadeOut('fast').empty();
 							});
 							$('#profile' + poster_id + ' .user-reputation a').html(a.user_reputation);
@@ -362,14 +366,7 @@ function response(a, b, c, d)
 						}
 						else if (d == 'detail')
 						{
-							$('.user-reputation').html(a.user_reputation);
-							$('.reputation-rank').html(a.reputation_rank);
-							$('.reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-							$('.rs-rank-title').text(a.rank_title);
-							$('.reputation-list').hide('slow', function() {
-								$('#post-reputation-list').empty().append(a.empty);
-								$('#user-reputation-list .linklist').detach();
-							});
+							location.reload();
 						}
 					break;
 				}
