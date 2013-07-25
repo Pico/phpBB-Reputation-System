@@ -16,6 +16,11 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+define('RS_COMMENT_OFF', 0);
+define('RS_COMMENT_BOTH', 1);
+define('RS_COMMENT_POST', 2);
+define('RS_COMMENT_USER', 3);
+
 class reputation
 {
 	private $power;
@@ -254,6 +259,12 @@ class reputation
 				'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
 			);
 		}
+		/*else
+		{
+			$sql_data += array(
+				'comment'			=> $comment
+			);
+		}*/
 
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
 
@@ -294,17 +305,8 @@ class reputation
 			WHERE user_id = $to";
 		$db->sql_query($sql);
 
-		//Max user reputation
-		if ($config['rs_max_point'] && ($config['rs_max_point'] < ($user_data['user_reputation'] + $point)))
-		{
-			$this->check_point($to, 'max');
-		}
-
-		//Min user reputation
-		if ($config['rs_min_point'] && ($config['rs_min_point'] > ($user_data['user_reputation'] + $point)))
-		{
-			$this->check_point($to, 'min');
-		}
+		///Check max/min points
+		$this->check_point($to);
 
 		//If config allows and we are told so, we should send a private message to a user, who received the vote
 		if ($notify && $config['rs_pm_notify'])
@@ -368,28 +370,40 @@ class reputation
 
 	/**
 	* @param int $user_id user ID
-	* @param string $mode max or min
 	*/
-	private function check_point($user_id, $mode)
+	private function check_point($user_id)
 	{
 		global $config, $db;
 
-		if ($mode == 'max')
+		if (!$config['rs_max_point'] || !$config['rs_min_point'])
 		{
-			$point = $config['rs_max_point'];
-			$sql_where = 'user_reputation > ' . $config['rs_max_point'];
-		}
-		else if ($mode == 'min')
-		{
-			$point = $config['rs_min_point'];
-			$sql_where = 'user_reputation < ' . $config['rs_min_point'];
+			return;
 		}
 
-		$sql = 'UPDATE ' . USERS_TABLE . "
-			SET user_reputation = $point
-			WHERE $sql_where
-				AND user_id = $user_id";
-		$db->sql_query($sql);
+		$sql = 'SELECT SUM(point) AS points
+			FROM ' . REPUTATIONS_TABLE . "
+			WHERE action != 5
+				AND rep_to = $user_id";
+		$result = $db->sql_query($sql);
+		$points = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+
+		//Max user reputation
+		if ($config['rs_max_point'] && ($config['rs_max_point'] < $points['points']))
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = {$config['rs_max_point']}
+				WHERE user_id = $user_id";
+			$db->sql_query($sql);
+		}
+		//Min user reputation
+		if ($config['rs_min_point'] && ($config['rs_min_point'] > $points['points']))
+		{
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = {$config['rs_min_point']}
+				WHERE user_id = $user_id";
+			$db->sql_query($sql);
+		}
 	}
 
 	/** Function responsible for deleting reputation
@@ -429,17 +443,20 @@ class reputation
 			$db->sql_query($sql);
 		}
 
+		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
+			WHERE rep_id = $id";
+		$db->sql_query($sql);
+
 		if ($row['action'] != 5)
 		{
 			$sql = 'UPDATE ' . USERS_TABLE . "
 				SET user_reputation = user_reputation - {$row['point']}
 				WHERE user_id = {$row['rep_to']}";
 			$db->sql_query($sql);
-		}
 
-		$sql = 'DELETE FROM ' . REPUTATIONS_TABLE . "
-			WHERE rep_id = $id";
-		$db->sql_query($sql);
+			//Check max/min points
+			$this->check_point($row['rep_to']);
+		}
 
 		//Update new status field
 		if ($row['time'] >= $row['user_rep_last'])
@@ -487,21 +504,6 @@ class reputation
 			$point = $db->sql_fetchrow($result);
 			$db->sql_freeresult($result);
 
-			if ($point['action'] != 5)
-			{
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_reputation = user_reputation - {$point['user_points']}
-					WHERE user_id = {$point['rep_to']}";
-				$db->sql_query($sql);
-			}
-
-			$sql = 'SELECT  topic_id, forum_id, post_subject
-				FROM ' . POSTS_TABLE . "
-				WHERE post_id = $id";
-			$result = $db->sql_query($sql);
-			$row = $db->sql_fetchrow($result);
-			$db->sql_freeresult($result);
-
 			$sql = 'UPDATE ' . POSTS_TABLE . "
 				SET post_reputation = 0
 				WHERE post_id = $id";
@@ -511,10 +513,28 @@ class reputation
 				WHERE post_id = $id";
 			$db->sql_query($sql);
 
+			if ($point['action'] != 5)
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = user_reputation - {$point['user_points']}
+					WHERE user_id = {$point['rep_to']}";
+				$db->sql_query($sql);
+
+				//Check max/min points
+				$this->check_point($point['rep_to']);
+			}
+
+			$sql = 'SELECT  topic_id, forum_id, post_subject
+				FROM ' . POSTS_TABLE . "
+				WHERE post_id = $id";
+			$result = $db->sql_query($sql);
+			$row = $db->sql_fetchrow($result);
+			$db->sql_freeresult($result);
+
 			$log_forum = $row['forum_id'];
 			$log_topic = $row['topic_id'];
-			$log_clear_data = $row['post_subject'];
 			$log_clear_action = 'LOG_CLEAR_POST_REP';
+			$log_clear_data = $row['post_subject'];
 		}
 		else if ($mode == 'user')
 		{
