@@ -3,7 +3,7 @@
 *
 * @package	Reputation System
 * @author	Pico88 (https://github.com/Pico88)
-* @copyright (c) 2012
+* @copyright (c) 2013
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
