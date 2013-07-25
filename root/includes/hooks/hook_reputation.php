@@ -49,7 +49,7 @@ function hook_rs_copyright()
 {
 	global $template;
 
-	$copy_string = '<a href="http://pico88.github.com/phpBB-Reputation-System/" title="Reputation System">Reputation System</a> &copy;';
+	$copy_string = 'Powered by <a href="http://pico88.github.com/phpBB-Reputation-System/" title="Reputation System">Reputation System</a> &copy; Pico88';
 	if (!isset($template->_tpldata['.'][0]['CREDIT_LINE']))
 	{
 		$template->_tpldata['.'][0]['CREDIT_LINE'] = '';
