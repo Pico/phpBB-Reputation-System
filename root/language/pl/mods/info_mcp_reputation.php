@@ -43,7 +43,10 @@ $lang = array_merge($lang, array(
 	'MCP_REPUTATION_LIST'			=> 'Lista reputacji',
 	'MCP_REPUTATION_GIVE'			=> 'Przyznaj punkt',
 
-	'MCP_RS_REP_POINT'				=> 'Punkty reputacji za ostrzeżenie',
+	'MCP_RS_ADD_WARNING'			=> 'Punkty reputacji za ostrzeżenie',
+	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'Możesz przyznać negatywne punkty reputacji temu użytkownikowi np. za złe zachowanie.',
+	'MCP_RS_POINTS'					=> 'Punkty',
+	'MCP_RS_COMMENT'				=> 'Komentarz',
 	'MCP_RS_GIVE_REP_POINT'			=> 'Przyznaj punkty',
 
 	'LOG_USER_REP_DELETE'			=> '<strong>Usunięto punkt reputacji</strong><br />Użytkownik: %s',

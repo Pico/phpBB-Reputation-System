@@ -3,7 +3,7 @@
 *
 * @package	Reputation System
 * @author	Pico88 (https://github.com/Pico88)
-* @copyright (c) 2012
+* @copyright (c) 2013
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -47,7 +47,6 @@ $lang = array_merge($lang, array(
 	'ACP_REPUTATION_SETTINGS_EXPLAIN'	=> 'Tutaj można skonfigurować System Reputacji do własnych potrzeb.',
 	'ACP_REPUTATION_GIVE'				=> 'Przyznaj punkt',
 	'ACP_REPUTATION_RANKS'				=> 'Rangi',
-	'ACP_REPUTATION_BANS'				=> 'Bany',
 	'MCP_REPUTATION'					=> 'Reputacja',
 	'MCP_REPUTATION_FRONT'				=> 'Przegląd',
 	'MCP_REPUTATION_LIST'				=> 'Lista',
@@ -66,7 +65,6 @@ $lang = array_merge($lang, array(
 	'ACP_RS_POWER'			=> 'Siła reputacji',
 	'ACP_RS_RANKS'			=> 'Rangi',
 	'ACP_RS_TOPLIST'		=> 'Toplist',
-	'ACP_RS_BAN'		 	=> 'Bany',
 
 	'RS_ENABLE'		=> 'Włącz System Reputacji',
 
@@ -84,6 +82,10 @@ $lang = array_merge($lang, array(
 	'RS_MIN_POINT_EXPLAIN'			=> 'Minimalna liczba punktów, które użytkownik może otrzymać. Ustawienie wartość 0 wyłącza tę funckję.',
 	'RS_MAX_POINT'					=> 'Maksimum punktów',
 	'RS_MAX_POINT_EXPLAIN'			=> 'Maksymalna liczba punktów, które użytkownik może otrzymać. Ustawienie wartość 0 wyłącza tę funckję.',
+	'RS_PREVENT_OVERRATING'			=> 'Ograniczenie oceniania',
+	'RS_PREVENT_OVERRATING_EXPLAIN'	=> 'Możesz uniemożliwić użytkownikowi ocenę tego samego użytkownika.<br /><em>Np.:</em> jeżeli użytkownik A ma więcej niż 10 wpisów reputacji (oddanych głosów) i 85% z nich pochodzi od użytkownika B, to ten użytkownik B nie może ocenić użytkownika A dopóki przedmiotowy współczynik jest większy niż 85%.<br />Ustwienie wartość 0 dla jednego lub obu pół wyłącza tą funkcję.',
+	'RS_PREVENT_NUM'				=> 'Suma wpisów reputacji (oddanych głosów) użykownika A jest równa, bądź większa niż',
+	'RS_PREVENT_PERC'				=> '<br />a współczyników głosów użytkownika B jest równy, bądź wyższy niż',
 
 	'RS_PER_PAGE'							=> 'Wpisów reputacji na stronę',
 	'RS_PER_PAGE_EXPLAIN'					=> 'Ile wpisów ma być wyświetlanych na stronach z reputacją',
@@ -164,15 +166,9 @@ $lang = array_merge($lang, array(
 	'RS_TOPLIST_NUM'				=> 'Użytkowników na Topliście',
 	'RS_TOPLIST_NUM_EXPLAIN'		=> 'Liczba użytkowników wyświetlanych na topliście',
 
-	'RS_ENABLE_BAN'				=> 'Włącz bany',
-	'RS_ENABLE_BAN_EXPLAIN'		=> 'Opcja ta, umożliwi na automatyczne banowanie użytkowników z niską reputacją.',
-	'RS_BAN_SHIELD'				=> 'Ochrona dla zbanowancyh',
-	'RS_BAN_SHIELD_EXPLAIN'		=> 'Opcja ta chroni uprzednio, automatycznie zbanowanych użytkowników przed kolejnym banem za niską reputację. Taki użytkownik nie będzie mógł być ponownie zbanowany w ustanowionym okresie czasu od wygaśniecia bana.<br />Ustwienie wartość 0 wyłącza tę funkcję.',
-	'RS_BAN_GROUPS'				=> 'Wykluczone grupy',
-	'RS_BAN_GROUPS_EXPLAIN'		=> 'Jeśli nie ma wybranych grup, wszyscy użytkownicy mogą być zbanowani (z wyjątkiem założycieli). W celu zaznaczenia (lub odznaczenia) więcej niż jednej grupy, musisz użyć kombinacji CTRL+LPM (albo CMD-LPM dla Mac) na grupie. Jeżeli zapomnisz przytrzymać CTRL/CMD na wybranej grupie, wszystkie wcześniej wybrane pozycje zostaną odznaczone',
-
 	'RS_SYNC'						=> 'Synchronizacja Systemu Reputacji',
 	'RS_SYNC_EXPLAIN'				=> 'Możesz zsynchronizować System Reputacji po: masowym usunięciu postów/tematów/użytkowników, zmianie ustawień reputacji, zmianie autorów postów, konwersji z innych systemów. Synchronizacja zajmie chwilę, więc proszę być cierpliwym. Po zakończeniu synchronizacji zostaniesz powiadomiony o tym fakcie.<br /><strong>Uwaga!</strong> Podczas synchronizacji zostaną usunięte punkty reputacji, które nie są zgodne z ustawieniami reputacji. Zaleca się wykonanie kopii zapasowej tabeli reputacji przed synchronizacją.',
+	'RS_SYNC_REPUTATION_CONFIRM'	=> 'Czy na pewno chcesz przeprowadzić synchronizację reputacji?',
 	'RS_SYNC_STEP_DEL'				=> 'Krok 1/7 - usunięcie punktów reputacji nieistniejących użytkowników',
 	'RS_SYNC_STEP_POSTS_DEL'		=> 'Krok 2/7 - usunięcie pnktów reputacji skasowanych postów',
 	'RS_SYNC_STEP_REPS_DEL'			=> 'Krok 3/7 - usunięcie punktów reputacji niezgodnych z ustawieniami reputacji',
@@ -181,7 +177,6 @@ $lang = array_merge($lang, array(
 	'RS_SYNC_STEP_USER'				=> 'Krok 6/7 - synchronizacja punktów reputacji użytkowników',
 	'RS_SYNC_STEP_POSTS'			=> 'Krok 7/7 - synchronizacja punktów reputacji postów',
 	'RS_SYNC_DONE'					=> 'Synchronizacja Systemu Reputacji została zakończona pomyślnie',
-	'RS_RESYNC_REPUTATION_CONFIRM'	=> 'Czy na pewno chcesz przeprowadzić synchronizację reputacji?',
 
 	'RS_TRUNCATE'				=> 'Wyczyść reputację',
 	'RS_TRUNCATE_EXPLAIN'		=> 'Ta procedura wyszyści tabelę z reputacją.<br /><strong>Czynności tej nie można odwrócić!</strong>',
@@ -192,7 +187,7 @@ $lang = array_merge($lang, array(
 	'RS_GIVE_POINT_EXPLAIN'			=> 'Tutaj możesz przyznać punkt reputacji innemu użytkownikowi.',
 
 	'RS_RANKS'						=> 'Zarządzanie rangami',
-	'RS_RANKS_EXPLAIN'				=> 'Tutaj możesz dodać, edytować, usuwać rangi bazowane na punktach reputacji.',
+	'RS_RANKS_EXPLAIN'				=> 'Tutaj możesz dodać, edytować, usuwać rangi oparte na punktach reputacji.',
 	'RS_ADD_RANK'					=> 'Dodaj rangę',
 	'RS_MUST_SELECT_RANK'			=> 'Musisz wybrać rangę',
 	'RS_NO_RANK_TITLE'				=> 'Musisz określić tytuł rangi',
@@ -205,18 +200,7 @@ $lang = array_merge($lang, array(
 	'RS_IMAGE_IN_USE'				=> '(w użyciu)',
 	'RS_RANKS_ON'					=> '<span style="color:green;">Rangi reputacji są włączone.</span>',
 	'RS_RANKS_OFF'					=> '<span style="color:red;">Rangi reputacji są wyłączone.</span>',
-
-	'RS_BANS'						=> 'Zarządzanie banami za reputację',
-	'RS_BANS_EXPLAIN'				=> 'Tutaj możesz dodać, edytować, usuwać bany bazowane na punktach reputacji.',
-	'RS_BAN_POINT'					=> 'Punkty do bana',
-	'RS_AUTO_BAN_REASON'			=> 'Auto-ban za niską reputację',
-	'RS_ADD_BAN'					=> 'Dodaj ban',
-	'RS_BAN_ADDED'					=> 'Ban został dodany pomyślnie.',
-	'RS_BAN_UPDATED'				=> 'Ban został zaktualizowany pomyślnie.',
-	'RS_OTHER'						=> 'Inny',
-	'RS_MINUTES'					=> 'minuty',
-	'RS_HOURS'						=> 'godziny',
-	'RS_DAYS'						=> 'dni',
+	'RS_NO_RANKS'					=> 'Nie ma żadnych rang reputacji',
 
 	'RS_FORUM_REPUTATION'			=> 'Włącz reputację',
 	'RS_FORUM_REPUTATION_EXPLAIN'	=> 'Zezwól użytkownikom na ocenę postów. Możesz wybrać, czy ocenianie postu ma wpływać na reputację użytkownika.',
@@ -226,9 +210,6 @@ $lang = array_merge($lang, array(
 	'LOG_REPUTATION_SETTING'		=> '<strong>Zmieniono ustawienia Systemu Reputacji</strong>',
 	'LOG_REPUTATION_SYNC'			=> '<strong>System Reputacji został zsynchronizowany</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Wyczyszczono reputację</strong>',
-	'LOG_RS_BAN_ADDED'				=> '<strong>Dodano nowy ban za reputację</strong>',
-	'LOG_RS_BAN_REMOVED'			=> '<strong>Usunięto ban za reputację</strong>',
-	'LOG_RS_BAN_UPDATED'			=> '<strong>Zaktualizowano ban za reputację</strong>',
 	'LOG_RS_RANK_ADDED'				=> '<strong>Dodano nowę rangę reputacji</strong><br />» %s',
 	'LOG_RS_RANK_REMOVED'			=> '<strong>Usunięto rangę reputacji</strong><br />» %s',
 	'LOG_RS_RANK_UPDATED'			=> '<strong>Zaktualizowano rangę reputacji</strong><br />» %s',
@@ -240,7 +221,8 @@ $lang = array_merge($lang, array(
 	'IMG_ICON_RATE_BAD'				=> 'Oceń negatywnie',
 
 	//Installation
-	'FILES_NOT_EXIST'				=> 'Ikony oceniania:<br />%s<br /> nie istnieją.<br /><br /><strong>Zanim zaczniejsz instlację Ssytemu Reputacji, skopiuj ikony oceniania z <em>contrib/images</em> do folderów imageset styli, których używasz. Następnie odśwież tą stronę.</strong>',
+	'FILES_NOT_EXIST'				=> 'Ikony oceniania:<br />%s<br /> nie istnieją.<br /><br /><strong>Zanim zaczniejsz instlację Systemu Reputacji, skopiuj ikony oceniania z <em>contrib/images</em> do folderów imageset styli, których używasz. Następnie odśwież tę stronę.</strong>',
+	'CONVERTER'						=> 'Konwerter',
 	'CONVERT_THANKS'				=> 'Konwertuj Thanks for posts do Systemu Reputacji',
 	'CONVERT_KARMA'					=> 'Konwertuj Karma MOD do Systemu Reputacji',
 	'CONVERT_HELPMOD'				=> 'Konwertuj HelpMOD do Systemu Reputacji',

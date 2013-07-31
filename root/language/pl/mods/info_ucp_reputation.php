@@ -55,7 +55,7 @@ $lang = array_merge($lang, array(
 	'RS_DEF_POINT'						=> 'punkt',
 	'RS_DEF_POINTS'						=> 'punkty',
 	'RS_NOTIFICATION'					=> 'Powiadomienia',
-	'RS_NOTIFICATION_EXPLAIN'			=> 'Włącz powiadomienia o nowych punktach reputacji (opcja ta nie ma wpływu na powiadomienia w prywatnych wiadomościach).',
+	'RS_NOTIFICATION_EXPLAIN'			=> 'Włącz powiadomienia o nowych punktach reputacji (opcja ta nie ma wpływu na powiadomienia za pośrednictwem prywatnych wiadomości).',
 	'RS_DISPLAY_REPUTATIONS'			=> 'Wyświetl punkty nie starsze niż',
 ));
 
