@@ -210,42 +210,31 @@ class acp_reputation
 								'L_PROGRESS'	=> $user->lang['RS_SYNC_STEP_POST_AUTHOR'],
 							));
 
-							while (still_on_time() && $start <= $this->max_rep_id)
-							{
-								$sql_array = array(
-									'SELECT'		=> 'r.rep_id, r.rep_to, p.poster_id',
-									'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
-									'LEFT_JOIN'		=> array(
-										array(
-											'FROM'	=> array(POSTS_TABLE => 'p'),
-											'ON'	=> 'r.post_id = p.post_id',
-										),
+							$sql_array = array(
+								'SELECT'		=> 'r.rep_id, r.rep_to, p.poster_id',
+								'FROM'			=> array(REPUTATIONS_TABLE => 'r'),
+								'LEFT_JOIN'		=> array(
+									array(
+										'FROM'	=> array(POSTS_TABLE => 'p'),
+										'ON'	=> 'r.post_id = p.post_id',
 									),
-									'WHERE'			=> 'r.post_id != 0 AND (r.action = 1 OR r.action = 5) AND r.rep_to >= ' . ($start + 1) . ' AND r.rep_to <= ' . ($start + $this->step),
-								);
-								$sql = $db->sql_build_query('SELECT', $sql_array);
-								$result = $db->sql_query($sql);
+								),
+								'WHERE'			=> 'r.post_id != 0 AND (r.action = 1 OR r.action = 5)',
+							);
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							$result = $db->sql_query($sql);
 
-								while ($row = $db->sql_fetchrow($result))
-								{
-									if ($row['rep_to'] != $row['poster_id'])
-									{
-										$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
-											SET rep_to = {$row['poster_id']}
-											WHERE rep_id = {$row['rep_id']}";
-										$db->sql_query($sql);
-									}
-								}
-								$db->sql_freeresult($result);
-
-								$start += $this->step;
-							}
-
-							if ($start <= $this->max_rep_id)
+							while ($row = $db->sql_fetchrow($result))
 							{
-								meta_refresh(1, append_sid($this->u_action . '&amp;action=resync&amp;start=' . $start));
-								return;
+								if ($row['rep_to'] != $row['poster_id'])
+								{
+									$sql = 'UPDATE ' . REPUTATIONS_TABLE . "
+										SET rep_to = {$row['poster_id']}
+										WHERE rep_id = {$row['rep_id']}";
+									$db->sql_query($sql);
+								}
 							}
+							$db->sql_freeresult($result);
 
 							set_config('rs_sync_step', 5, true);
 							meta_refresh(3, append_sid($this->u_action . '&amp;action=resync'));
