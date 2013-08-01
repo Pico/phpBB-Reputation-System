@@ -302,7 +302,11 @@ function response(a, b, c, d)
 						$('#profile' + poster_id + ' .reputation-rank').html(a.reputation_rank);
 						$('#p' + post_id + ' .reputation a').text(a.post_reputation);
 						$('#p' + post_id + ' .reputation').removeClass('zero negative positive').addClass(a.reputation_class);
-						$('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+
+						if (a.own_vote)
+						{
+							$('#p' + post_id + ' .post-reputation').removeClass('rated_good rated_bad');
+						}
 
 						if (a.highlight)
 						{

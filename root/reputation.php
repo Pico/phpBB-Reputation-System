@@ -1186,6 +1186,7 @@ switch ($mode)
 					'user_reputation'		=> '<strong>' . $user_reputation . '</strong>',
 					'reputation_rank'		=> $reputation_rank,
 					'post_reputation'		=> $post_reputation,
+					'own_vote'				=> ($row['rep_from'] == $user->data['user_id']) ? true : false,
 					'reputation_class'		=> $reputation->get_vote_class($post_reputation),
 					'highlight'				=> (!empty($config['rs_post_highlight']) && ($post_reputation < $config['rs_post_highlight'])) ? true : false,
 					'hidden'				=> (!empty($config['rs_hide_post']) && ($post_reputation > $config['rs_hide_post'])) ? true : false,
