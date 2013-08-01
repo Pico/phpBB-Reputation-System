@@ -70,10 +70,16 @@ class reputation
 			$user_power['FOR_BANS'] = -$number_of_ban_days_in_1year * $config['rs_power_lose_ban'];
 		}
 
-		$user_max_power = array_sum($user_power);
-
-		//Starting power
-		$user_max_power = $user_max_power + $config['rs_min_power'];
+		//Max user power
+		if (empty($user_power))
+		{
+			$user_max_power = $config['rs_max_power'];
+		}
+		else
+		{
+			$user_max_power = array_sum($user_power);
+			$user_max_power = $user_max_power + $config['rs_min_power'];
+		}
 
 		//Check min power - if it is set, inform about it
 		if ($config['rs_min_power'])
