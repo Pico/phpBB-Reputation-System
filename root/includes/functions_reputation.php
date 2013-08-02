@@ -312,10 +312,7 @@ class reputation
 		$db->sql_query($sql);
 
 		///Check max/min points
-		if ($config['rs_max_point'] || $config['rs_min_point'])
-		{
-			$this->check_point($to);
-		}
+		$this->check_point($to);
 
 		//If config allows and we are told so, we should send a private message to a user, who received the vote
 		if ($notify && $config['rs_pm_notify'])
@@ -384,6 +381,11 @@ class reputation
 	{
 		global $config, $db;
 
+		if (!$config['rs_max_point'] || !$config['rs_min_point'])
+		{
+			return;
+		}
+
 		$sql = 'SELECT SUM(point) AS points
 			FROM ' . REPUTATIONS_TABLE . "
 			WHERE action != 5
@@ -400,7 +402,6 @@ class reputation
 				WHERE user_id = $user_id";
 			$db->sql_query($sql);
 		}
-
 		//Min user reputation
 		if ($config['rs_min_point'] && ($config['rs_min_point'] > $points['points']))
 		{
@@ -459,13 +460,8 @@ class reputation
 				WHERE user_id = {$row['rep_to']}";
 			$db->sql_query($sql);
 
-			global $config;
-
 			//Check max/min points
-			if ($config['rs_max_point'] || $config['rs_min_point'])
-			{
-				$this->check_point($row['rep_to']);
-			}
+			$this->check_point($row['rep_to']);
 		}
 
 		//Update new status field
@@ -530,13 +526,8 @@ class reputation
 					WHERE user_id = {$point['rep_to']}";
 				$db->sql_query($sql);
 
-				global $config;
-
 				//Check max/min points
-				if ($config['rs_max_point'] || $config['rs_min_point'])
-				{
-					$this->check_point($point['rep_to']);
-				}
+				$this->check_point($point['rep_to']);
 			}
 
 			$sql = 'SELECT  topic_id, forum_id, post_subject
