@@ -291,7 +291,7 @@ class reputation
 		$user_data = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		//Nofity user about the point
+		//Notify user about the point
 		$new_points = '';
 		if ($config['rs_notification'])
 		{
@@ -312,7 +312,10 @@ class reputation
 		$db->sql_query($sql);
 
 		///Check max/min points
-		$this->check_point($to);
+		if ($config['rs_max_point'] || $config['rs_min_point'])
+		{
+			$this->check_max_min($to);
+		}
 
 		//If config allows and we are told so, we should send a private message to a user, who received the vote
 		if ($notify && $config['rs_pm_notify'])
@@ -374,44 +377,6 @@ class reputation
 		return true;
 	}
 
-	/**
-	* @param int $user_id user ID
-	*/
-	private function check_point($user_id)
-	{
-		global $config, $db;
-
-		if (!$config['rs_max_point'] || !$config['rs_min_point'])
-		{
-			return;
-		}
-
-		$sql = 'SELECT SUM(point) AS points
-			FROM ' . REPUTATIONS_TABLE . "
-			WHERE action != 5
-				AND rep_to = $user_id";
-		$result = $db->sql_query($sql);
-		$points = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
-
-		//Max user reputation
-		if ($config['rs_max_point'] && ($config['rs_max_point'] < $points['points']))
-		{
-			$sql = 'UPDATE ' . USERS_TABLE . "
-				SET user_reputation = {$config['rs_max_point']}
-				WHERE user_id = $user_id";
-			$db->sql_query($sql);
-		}
-		//Min user reputation
-		if ($config['rs_min_point'] && ($config['rs_min_point'] > $points['points']))
-		{
-			$sql = 'UPDATE ' . USERS_TABLE . "
-				SET user_reputation = {$config['rs_min_point']}
-				WHERE user_id = $user_id";
-			$db->sql_query($sql);
-		}
-	}
-
 	/** Function responsible for deleting reputation
 	* @param int $id reputation ID
 	* @return bool
@@ -460,8 +425,13 @@ class reputation
 				WHERE user_id = {$row['rep_to']}";
 			$db->sql_query($sql);
 
+			global $config;
+
 			//Check max/min points
-			$this->check_point($row['rep_to']);
+			if ($config['rs_max_point'] || $config['rs_min_point'])
+			{
+				$this->check_max_min($row['rep_to']);
+			}
 		}
 
 		//Update new status field
@@ -526,8 +496,13 @@ class reputation
 					WHERE user_id = {$point['rep_to']}";
 				$db->sql_query($sql);
 
+				global $config;
+
 				//Check max/min points
-				$this->check_point($point['rep_to']);
+				if ($config['rs_max_point'] || $config['rs_min_point'])
+				{
+					$this->check_max_min($point['rep_to']);
+				}
 			}
 
 			$sql = 'SELECT  topic_id, forum_id, post_subject
@@ -576,6 +551,63 @@ class reputation
 		}
 
 		add_log('mod', $log_forum,  $log_topic, $log_clear_action, $log_clear_data);
+	}
+
+	/**
+	* @param int $user_id user ID
+	*/
+	private function check_max_min($user_id)
+	{
+		global $config, $db;
+
+		$sql = 'SELECT SUM(point) AS points
+			FROM ' . REPUTATIONS_TABLE . "
+			WHERE action != 5
+				AND rep_to = $user_id";
+		$result = $db->sql_query($sql);
+		$points = $db->sql_fetchfield('points');
+		$db->sql_freeresult($result);
+
+		//Choose mode
+		$mode = ($points > 0) ? 'max' : 'min';
+
+		//Max user reputation
+		if ($mode == 'max' && $config['rs_max_point'])
+		{
+			if ($points > $config['rs_max_point'])
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = {$config['rs_max_point']}
+					WHERE user_id = $user_id";
+				$db->sql_query($sql);
+			}
+			else
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = $points
+					WHERE user_id = $user_id";
+				$db->sql_query($sql);
+			}
+		}
+
+		//Min user reputation
+		if ($mode == 'min' && $config['rs_min_point'])
+		{
+			if ($points < $config['rs_min_point'])
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = {$config['rs_min_point']}
+					WHERE user_id = $user_id";
+				$db->sql_query($sql);
+			}
+			else
+			{
+				$sql = 'UPDATE ' . USERS_TABLE . "
+					SET user_reputation = $points
+					WHERE user_id = $user_id";
+				$db->sql_query($sql);
+			}
+		}
 	}
 
 	/** Obtain reputation ranks
@@ -740,7 +772,7 @@ class reputation
 		return $return_rank;
 	}
 
-	/** Prevent overrating a same user by another user
+	/** Prevent overrating one user by another user
 	* @param $user_id user ID
 	*/
 	function prevent_rating($user_id)
