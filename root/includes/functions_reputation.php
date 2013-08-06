@@ -265,12 +265,12 @@ class reputation
 				'bbcode_bitfield'	=> $message_parser->bbcode_bitfield,
 			);
 		}
-		/*else
+		else
 		{
 			$sql_data += array(
 				'comment'			=> $comment
 			);
-		}*/
+		}
 
 		$db->sql_query('INSERT INTO ' . REPUTATIONS_TABLE . ' ' . $db->sql_build_array('INSERT', $sql_data));
 
