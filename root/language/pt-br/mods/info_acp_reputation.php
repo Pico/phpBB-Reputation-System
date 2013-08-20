@@ -176,11 +176,11 @@ $lang = array_merge($lang, array(
 	'RS_SYNC_STEP_USER'				=> 'Step 6/7 - synchronisation of users reputations',
 	'RS_SYNC_STEP_POSTS'			=> 'Step 7/7 - synchronisation of posts reputations',
 	'RS_SYNC_DONE'					=> 'Reputation System synchronisation has finished successfully',
-	'RS_RESYNC_REPUTATION_CONFIRM'	=> 'Are you sure you wish to resynchronise reputations?',
+	'RS_RESYNC_REPUTATION_CONFIRM'	=> 'Você tem certeza que quer resincronizar as reputações?',
 
-	'RS_TRUNCATE'				=> 'Clear Reputation System',
-	'RS_TRUNCATE_EXPLAIN'		=> 'This procedure completely removes all data.<br /><strong>Action is not reversible!</strong>',
-	'RS_TRUNCATE_CONFIRM'		=> 'Are you sure you wish to clear Reputation System?',
+	'RS_TRUNCATE'				=> 'Limpar o Sistema de Reputação',
+	'RS_TRUNCATE_EXPLAIN'		=> 'Este procedimento remove todo o conteúdo.<br /><strong>Esta ação não é reversível!</strong>',
+	'RS_TRUNCATE_CONFIRM'		=> 'Você tem certeza que quer limpar o Sistema de Reputação?',
 	'RS_TRUNCATE_DONE'			=> 'Reputações foram limpas.',
 
 	'RS_GIVE_POINT'				=> 'Enviar pontos de reputação',
