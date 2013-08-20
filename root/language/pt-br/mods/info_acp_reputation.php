@@ -93,7 +93,7 @@ $lang = array_merge($lang, array(
 	'RS_SORT_MEMBERLIST_BY_REPO'			=> 'Ordenar a lista de membros por reputação',
 	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN'	=> 'Quando a lista de membros está sendo ordenada por reputação é mais sensato checar ela regularmente para ver como tudo está andando. Você pode voltar esta configuração para 'off' ( desligado ) para voltar ao padrão que é ordenar por nome de usuário.',
 	'RS_POINT_TYPE'							=> 'Método para mostrar os pontos',
-	'RS_POINT_TYPE_EXPLAIN'					=> 'Viewing reputation points can be displayed as either the exact value of reputation points a user gave or as an image showing a plus or minus for positive or negative points. The Image method is useful if you set up reputation points so that one rating always equals to one point.',
+	'RS_POINT_TYPE_EXPLAIN'					=> 'A visualização dos pontos de reputação pode ser feita a partir do valor exato de pontos de reputação que o usuário recebeu ou uma imagem mostrando mais ou menos para ponto positivos ou negativos. O método de imagem é mais usual se você configurou o envio dos pontos de reputação de para um ( ou seja, um ponto por vez ).',
 	'RS_POINT_VALUE'						=> 'Valor',
 	'RS_POINT_IMG'							=> 'Imagem',
 
@@ -101,7 +101,7 @@ $lang = array_merge($lang, array(
 	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Submeter e habilitar o Sistema de Reputação em todos os forums',
 	'RS_HIGHLIGHT_POST'				=> 'Destacando um post',
 	'RS_HIGHLIGHT_POST_EXPLAIN'		=> 'Post with rating higer than the number set here will be highlighted. Setting the value to 0 disables this behaviour.<br /><em>Note:</em> You can modify default highlighting by editing <strong>highlight</strong> class in reputation.css.',
-	'RS_HIDE_POST'					=> 'Hide posts with low ratings',
+	'RS_HIDE_POST'					=> 'Esconder posts com poucas avaliações',
 	'RS_HIDE_POST_EXPLAIN'			=> 'Posts with a rating less than the number set here will be hidden by default (users have the option to unhide them if they choose). After a post has earned a rating greater than this value, it will no longer be hidden by default. Setting the value to 0 disables this behaviour.',
 	'RS_ANTISPAM'					=> 'Anti-Spam',
 	'RS_ANTISPAM_EXPLAIN'			=> 'Block users from rating any more posts after they have rated the defined number of posts within the defined number of hours. To disable this feature set one or both values to 0.',
