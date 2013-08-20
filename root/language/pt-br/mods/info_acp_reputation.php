@@ -97,9 +97,9 @@ $lang = array_merge($lang, array(
 	'RS_POINT_VALUE'						=> 'Valor',
 	'RS_POINT_IMG'							=> 'Imagem',
 
-	'RS_POST_RATING'				=> 'Enable post rating',
-	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Submit and enable Reputation System in all forums',
-	'RS_HIGHLIGHT_POST'				=> 'Highlighting a post',
+	'RS_POST_RATING'				=> 'Habilitar avaliação de posts',
+	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Submeter e habilitar o Sistema de Reputação em todos os forums',
+	'RS_HIGHLIGHT_POST'				=> 'Destacando um post',
 	'RS_HIGHLIGHT_POST_EXPLAIN'		=> 'Post with rating higer than the number set here will be highlighted. Setting the value to 0 disables this behaviour.<br /><em>Note:</em> You can modify default highlighting by editing <strong>highlight</strong> class in reputation.css.',
 	'RS_HIDE_POST'					=> 'Hide posts with low ratings',
 	'RS_HIDE_POST_EXPLAIN'			=> 'Posts with a rating less than the number set here will be hidden by default (users have the option to unhide them if they choose). After a post has earned a rating greater than this value, it will no longer be hidden by default. Setting the value to 0 disables this behaviour.',

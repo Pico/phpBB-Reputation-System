@@ -154,7 +154,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_BANS'			=> 'Por número de banimentos no último ano',
 	'RS_POWER_DETAIL_MIN'			=> 'Mínima força de reputação para todos os usuários',
 	'RS_POWER_DETAIL_MAX'			=> 'Poder de reputação limitado a máxima permitida',
-	'RS_GROUP_POWER'				=> 'Poder de reputação baseado no grupo de usuários,
+	'RS_GROUP_POWER'				=> 'Poder de reputação baseado no grupo de usuários',
 
 	'RS_USER_GAP'					=> 'Você não pode avaliar o mesmo usuário tão rápido. Tente novamente em %s.',
 ));
