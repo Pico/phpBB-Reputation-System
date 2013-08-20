@@ -156,7 +156,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_MAX'			=> 'Reputation power capped at maximum allowed',
 	'RS_GROUP_POWER'				=> 'Reputation power based on usergroup',
 
-	'RS_USER_GAP'					=> 'You cannot rate the same user so soon. You can try again in %s.',
+	'RS_USER_GAP'					=> 'Você não pode avaliar o mesmo usuário tão rápido. Tente novamente em %s.',
 ));
 
 ?>
