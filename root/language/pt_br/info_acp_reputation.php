@@ -82,7 +82,7 @@ $lang = array_merge($lang, array(
 	'RS_MIN_POINT_EXPLAIN'			=> 'Limita o mínimo de pontos de reputação que um usuário vai receber. Configurar este valor em 0 desabilita este comportamento.',
 	'RS_MAX_POINT'					=> 'Máximo de pontos',
 	'RS_MAX_POINT_EXPLAIN'			=> 'Limita o máximo de pontos que um usuário pode receber. Configurar este valor em 0 desabilita este comportamento.',
-	'RS_PREVENT_OVERRATING'			=> 'Prevenindo o 'overrating' ( super avalição do usuário )',
+	'RS_PREVENT_OVERRATING'			=> 'Prevenindo o overrating ( super avalição do usuário )',
 	'RS_PREVENT_OVERRATING_EXPLAIN'	=> 'Bloquear usuários a avaliar o mesmo usuário.<br /><em>Exemplo:</em> se o usuário A tem mais de 10 pontos de reputação e 85% vem do usuário B, o usuário B não pode qualificar este usuário enquanto sua relação de votos for maior que 85%.<br />Para desabilitar esta função é só configurar um ou todos os valores como 0.',
 	'RS_PREVENT_NUM'				=> 'O total de entradas de reputação do usuário A é igual ou maior que',
 	'RS_PREVENT_PERC'				=> '<br />e a relalão dos votos do usuário B é igual ou maior a',
@@ -91,7 +91,7 @@ $lang = array_merge($lang, array(
 	'RS_PER_PAGE_EXPLAIN'					=> 'Quantas linhas nós devemos mostrar na sua tabela de reputações ?',
 	'RS_DISPLAY_AVATAR'						=> 'Mostrar avatares',
 	'RS_SORT_MEMBERLIST_BY_REPO'			=> 'Ordenar a lista de membros por reputação',
-	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN'	=> 'Quando a lista de membros está sendo ordenada por reputação é mais sensato checar ela regularmente para ver como tudo está andando. Você pode voltar esta configuração para 'off' ( desligado ) para voltar ao padrão que é ordenar por nome de usuário.',
+	'RS_SORT_MEMBERLIST_BY_REPO_EXPLAIN'	=> 'Quando a lista de membros está sendo ordenada por reputação é mais sensato checar ela regularmente para ver como tudo está andando. Você pode voltar esta configuração para off ( desligado ) para voltar ao padrão que é ordenar por nome de usuário.',
 	'RS_POINT_TYPE'							=> 'Método para mostrar os pontos',
 	'RS_POINT_TYPE_EXPLAIN'					=> 'A visualização dos pontos de reputação pode ser feita a partir do valor exato de pontos de reputação que o usuário recebeu ou uma imagem mostrando mais ou menos para ponto positivos ou negativos. O método de imagem é mais usual se você configurou o envio dos pontos de reputação de para um ( ou seja, um ponto por vez ).',
 	'RS_POINT_VALUE'						=> 'Valor',
@@ -227,7 +227,7 @@ $lang = array_merge($lang, array(
 	'CONVERT_KARMA'			=> 'Converter o karma MOD para o sistema de reputação',
 	'CONVERT_HELPMOD'		=> 'Converter o HelpMOD para o sistema de reputação',
 	'CONVERT_LIKE'			=> 'Converter o phpBB Ajax Like para o sistema de reputação',
-	'CONVERT_THANK'			=> 'Converter o módulo 'Thank You' para o sistema de Reputação',
+	'CONVERT_THANK'			=> 'Converter o módulo Thank You para o sistema de Reputação',
 	'CONVERT_DATA'			=> 'MOD convertido: %1$s.<br />Agora, você pode desinstalar %2$s. Vá ao ACP e efetue a resincronização do sistema de reputação.',
 	'UPDATE_RS_TABLE'		=> 'A tabela de reputação foi atualizada.', 
 
