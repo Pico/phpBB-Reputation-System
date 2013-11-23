@@ -1,7 +1,7 @@
 Reputation System
 =================
 
-A full reputation system for phpBB3, with adjustable reputation settings. It allows forum users to rate posts or users, view rating statistics, reputation rankings. Users can write a short comment with giving reputation.
+An extension for phpBB 3.1 that will add the full reputation system for phpBB 3.1, with adjustable reputation settings. It allows forum users to rate posts or users, view rating statistics, reputation rankings. Users can write a short comment with giving reputation.
 
 Features
 --------
