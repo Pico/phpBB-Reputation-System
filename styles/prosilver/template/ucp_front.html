@@ -1,0 +1,119 @@
+<!-- INCLUDE ucp_header.html -->
+
+<h2>{L_UCP_REPUTATION_FRONT}</h2>
+
+<div style="float: left; width: 69%;">
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<!-- IF RS_POWER and RS_POWER_EXPLAIN-->
+	<div class="column1">
+	<!-- ENDIF -->
+
+		<h3>{L_RS_DETAILS}</h3>
+		<dl class="details">
+			<dt>{L_REPUTATION}:</dt> <dd><div class="reputation {REPUTATION_BOX}"><span>{REPUTATIONS}<!-- IF RS_RANK_TITLE --><br />{RS_RANK_TITLE}<!-- ENDIF --></span></div></dd>
+			<!-- IF RS_RANK_IMG --><dt>&nbsp;</dt><dd>{RS_RANK_IMG}</dd><!-- ENDIF -->
+			<!-- IF RS_POWER -->
+				<dt>{L_RS_POWER}:</dt> <dd>{RS_POWER}</dd>
+				<!-- IF RS_POWER_LEFT --><dt>{L_RS_VOTING_POWER}:</dt> <dd>{RS_POWER_LEFT}</dd><!-- ENDIF -->
+			<!-- ENDIF -->
+			<!-- IF S_RS_POST_RATING --><dt>{L_RS_POST_COUNT}:</dt> <dd>{POST_COUNT}</dd><!-- ENDIF -->
+			<!-- IF S_RS_USER_RATING --><dt>{L_RS_USER_COUNT}:</dt> <dd>{USER_COUNT}</dd><!-- ENDIF -->
+			<dt>{L_RS_POSITIVE_COUNT}:</dt> <dd>{POSITIVE_COUNT} ({L_RS_POINTS}: {POSITIVE_SUM})</dd>
+			<dt>{L_RS_NEGATIVE_COUNT}:</dt> <dd>{NEGATIVE_COUNT} ({L_RS_POINTS}: {NEGATIVE_SUM})</dd>
+		</dl>
+	<!-- IF RS_POWER and RS_POWER_EXPLAIN-->
+	</div>
+
+	<div class="column2">
+
+		<h3>{L_RS_POWER_DETAILS}</h3>
+
+		<dl class="left-box details" style="width: 100%;">
+			<!-- IF not RS_GROUP_POWER -->
+				<!-- IF RS_CFG_MEMBERSHIP_DAYS --><dt style="width: 50%">{L_RS_POWER_DETAIL_AGE}:</dt> <dd style="width: 45%">{FOR_USER_AGE}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_TOTAL_POSTS --><dt style="width: 50%">{L_RS_POWER_DETAIL_POSTS}:</dt> <dd style="width: 45%">{FOR_NUMBER_OF_POSTS}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_REP_POINT --><dt style="width: 50%">{L_RS_POWER_DETAIL_REPUTAION}:</dt> <dd style="width: 45%">{FOR_REPUTATION}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_LOOSE_WARN --><dt style="width: 50%">{L_RS_POWER_DETAIL_WARNINGS}:</dt> <dd style="width: 45%">{FOR_WARNINGS}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_LOOSE_BAN --><dt style="width: 50%">{L_RS_POWER_DETAIL_BANS}:</dt> <dd style="width: 45%">{FOR_BANS}</dd><!-- ENDIF -->
+				<!-- IF MINIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MIN}:</dt> <dd style="width: 45%">{MINIMUM_VOTING_POWER}</dd><!-- ENDIF -->
+				<!-- IF MAXIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MAX}:</dt> <dd style="width: 45%">{MAXIMUM_VOTING_POWER}</dd><!-- ENDIF -->
+			<!-- ENDIF -->
+			<!-- IF RS_GROUP_POWER --><dt style="width: 50%">{L_RS_GROUP_POWER}:</dt> <dd style="width: 45%">{GROUP_VOTING_POWER}</dd><!-- ENDIF -->
+		</dl>
+	</div>
+	<!-- ENDIF -->
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</div>
+
+<div style="float: right; width: 30%;">
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+	<h3>{L_RS_STATS}</h3>
+	<table cellspacing="1" width="100%">
+		<tr>
+			<th>&nbsp;</th>
+			<th align="center"><span class="positive">{L_RS_POSITIVE}</span></th>
+			<!-- IF S_RS_NEGATIVE --><th align="center"><span class="negative">{L_RS_NEGATIVE}</span></th><!-- ENDIF -->
+		</tr>
+		<tr class="bg1">
+			<td>{L_RS_WEEK}</td>
+			<td align="center">{POSITIVE_WEEK}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_WEEK}</td><!-- ENDIF -->
+		</tr>
+		<tr class="bg2">
+			<td>{L_RS_MONTH}</td>
+			<td align="center">{POSITIVE_MONTH}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_MONTH}</td><!-- ENDIF -->
+		</tr>
+		<tr class="bg1">
+			<td>{L_RS_6MONTHS}</td>
+			<td align="center">{POSITIVE_6MONTHS}</td>
+			<!-- IF S_RS_NEGATIVE --><td align="center">{NEGATIVE_6MONTHS}</td><!-- ENDIF -->
+		</tr>
+	</table>
+		
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</div>
+
+<br class="clear">
+
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_RS_LATEST_REPUTATIONS}</h3>
+	
+	<table class="table1" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name">{L_RS_FROM}</th>
+		<th class="name">{L_RS_ACTION}</th>
+		<th class="name">{L_RS_DATE}</th>
+		<!-- IF S_RS_COMMENT --><th class="name">{L_RS_COMMENT}</th><!-- ENDIF -->
+		<th class="name">{L_RS_POINTS}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- IF .reputation -->
+	<!-- BEGIN reputation -->
+	<tr class="<!-- IF reputation.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+		<td class="name">{reputation.USERNAME}</td>
+		<td class="name">{reputation.ACTION}</td>
+		<td class="name">{reputation.TIME}</td>
+		<!-- IF S_RS_COMMENT --><td class="info">{reputation.COMMENT}</td><!-- ENDIF -->
+		<td style="text-align: center;" class="vote_status_{reputation.POINT_CLASS}">{reputation.POINT_VALUE}</td>
+	</tr>
+	<!-- END reputation -->
+	<!-- ELSE -->
+		<tr class="bg1" align="center">
+			<td colspan="6">{L_RS_EMPTY_DATA}</td>
+		</tr>
+	<!-- ENDIF -->
+	</tbody>
+	</table>
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+
+<!-- INCLUDE ucp_footer.html -->

@@ -1,0 +1,108 @@
+imports:
+    - { resource: tables.yml }
+    - { resource: notifications.yml }
+
+services:
+    reputation.listener:
+        class: pico88\reputation\event\listener
+        arguments:
+            - @auth
+            - @cache.driver
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @template
+            - @user
+            - @reputation.display
+            - %core.root_path%
+            - %tables.reputations%
+        tags:
+            - { name: event.listener }
+
+    reputation.display:
+        class: pico88\reputation\core\display
+        arguments:
+            - @auth
+            - @cache.driver
+            - @config
+            - @dbal.conn
+            - @template
+            - @user
+            - %core.root_path%
+            - %core.php_ext%
+            - @reputation.helper
+
+    reputation.helper:
+        class: pico88\reputation\core\helper
+        arguments:
+            - @config
+            - @controller.helper
+            - %core.root_path%
+            - %core.php_ext%
+
+    reputation.manager:
+        class: pico88\reputation\core\manager
+        arguments:
+            - %core.root_path%
+            - %core.php_ext%
+            - @config
+            - @dbal.conn
+            - @user
+            - @auth
+            - @template
+            - @cache.driver
+            - @service_container
+            - %tables.reputations%
+
+    reputation.power:
+        class: pico88\reputation\core\power
+        arguments:
+            - @config
+            - @dbal.conn
+            - %tables.reputations%
+
+    reputation.details.controller:
+        class: pico88\reputation\controller\details
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @reputation.display
+            - @reputation.helper
+            - @reputation.power
+            - %core.root_path%
+            - %core.php_ext%
+            - %tables.reputations%
+
+    reputation.rating.controller:
+        class: pico88\reputation\controller\rating
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @reputation.display
+            - @reputation.helper
+            - @reputation.manager
+            - @reputation.power
+            - %tables.reputations%
+
+    reputation.delete.controller:
+        class: pico88\reputation\controller\delete
+        arguments:
+            - %core.root_path%
+            - %core.php_ext%
+            - @service_container
+            - @auth
+            - @config
+            - @dbal.conn
+            - @template
+            - @user
+            - @controller.helper

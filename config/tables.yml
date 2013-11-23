@@ -1,0 +1,2 @@
+parameters:
+    tables.reputations: %core.table_prefix%reputations

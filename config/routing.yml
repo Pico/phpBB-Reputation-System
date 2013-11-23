@@ -1,0 +1,51 @@
+reputation_details_controller:
+    pattern: /reputation/{uid}/{sort_key}/{sort_dir}/{page}
+    defaults: { _controller: reputation.details.controller:main, sort_key: id, sort_dir: dsc, page: 1 }
+    requirements:
+        uid: \d+
+        sort_key: id|username|time|point|action|post
+        sort_dir: asc|dsc
+        page: \d+
+
+reputation_postdetails_controller:
+    pattern: /reputation/details/post/{post_id}/{sort_key}/{sort_dir}
+    defaults: { _controller: reputation.details.controller:postdetails, sort_key: id, sort_dir: dsc }
+    requirements:
+        post_id: \d+
+        sort_key: id|username|time|point
+        sort_dir: asc|dsc
+
+reputation_userdetails_controller:
+    pattern: /reputation/details/user/{uid}/{sort_key}/{sort_dir}
+    defaults: { _controller: reputation.details.controller:userdetails, sort_key: id, sort_dir: dsc }
+    requirements:
+        uid: \d+
+        sort_key: id|username|time|point||action|post
+        sort_dir: asc|dsc
+
+reputation_postrating_controller:
+    pattern: /reputation/rate/post/{mode}/{post_id}
+    defaults: { _controller: reputation.rating.controller:post }
+    requirements:
+        mode: positive|negative
+        post_id: \d+
+
+reputation_userrating_controller:
+    pattern: /reputation/rate/user/{uid}
+    defaults: { _controller: reputation.rating.controller:user }
+    requirements:
+        uid:  \d+
+
+reputation_delete_controller:
+    pattern: /reputation/delete/{mode}/{rep_id}
+    defaults: { _controller: reputation.delete.controller:delete }
+    requirements:
+        mode: post|user
+        rep_id: \d+
+
+reputation_clear_controller:
+    pattern: /reputation/clear/{mode}/{id}
+    defaults: { _controller: reputation.delete.controller:delete }
+    requirements:
+        mode: post|user
+        id: \d+

@@ -1,0 +1,22 @@
+{
+	"name": "pico88/reputation",
+	"type": "phpbb-extension",
+	"description": "An extension for phpBB 3.1 that add reputation (karma) to your board.",
+	"homepage": "https://github.com/Pico88/phpBB-Reputation-System",
+	"version": "0.7.0",
+	"time": "2013-11-09",
+	"licence": "GPLv2",
+	"authors": [
+		{
+			"name": "Pico88",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"phpbb/phpbb": "3.1.*@dev",
+		"php": ">= 5.3"
+	},
+	"extra": {
+		"display-name": "Reputation System"
+	}
+}

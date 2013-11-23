@@ -1,0 +1,33 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<h1>{L_RS_GIVE_POINT}</h1>
+
+<p>{L_RS_GIVE_POINT_EXPLAIN}</p>
+
+<form id="acp_reputation" method="post" action="{U_ACTION}">
+<fieldset>
+	<dl>
+		<dt><label for="username">{L_ENTER_USERNAME}:</label></dt>
+		<dd><input class="text medium" type="text" id="username" name="username" /></dd>
+		<dd>[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_RS_POINTS}<label></dt>
+		<dd><input name="points" type="text" class="text small" maxlength="100" id="points" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_RS_COMMENT}<label></dt>
+		<dd><textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 99%;"></textarea></dd>
+	</dl>
+
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

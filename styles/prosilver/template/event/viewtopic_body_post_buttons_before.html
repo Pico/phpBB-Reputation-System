@@ -1,0 +1,5 @@
+<!-- IF S_REPUTATION and S_FORUM_REPUTATION-->
+	<!-- IF postrow.S_GIVE_REPUTATION --><li class="rate-good-icon<!-- IF postrow.RS_VOTE_CLASS --> {postrow.RS_VOTE_CLASS}<!-- ENDIF -->" data-skip-responsive="true"><a href="{postrow.U_RATE_POST_POSITIVE}" title="{L_RS_RATE_POST}"><span>{L_RS_RATE_POST}</span></a></li><!-- ENDIF -->
+	<li class="post-reputation {postrow.RS_BOX_COLOR}" data-skip-responsive="true"><div title="{L_RS_POST_REPUTATION}"><!-- IF postrow.S_VIEW_REPUTATION --><a href="{postrow.U_VIEW_POST_REPUTATION}"><!-- ENDIF --><span>{postrow.POST_REPUTATION}</span><!-- IF postrow.S_VIEW_REPUTATION --></a><!-- ENDIF --></div></li>
+	<!-- IF postrow.S_GIVE_REPUTATION and postrow.S_GIVE_NEGATIVE--><li class="rate-bad-icon<!-- IF postrow.RS_VOTE_CLASS --> {postrow.RS_VOTE_CLASS}<!-- ENDIF -->" data-skip-responsive="true"><a href="{postrow.U_RATE_POST_NEGATIVE}" title="{L_RS_RATE_POST}"><span>{L_RS_RATE_POST}</span></a></li><!-- ENDIF -->
+<!-- ENDIF -->
