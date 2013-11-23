@@ -82,7 +82,7 @@ class details
 		$this->php_ext = $php_ext;
 		$this->reputations_table = $reputations_table;
 
-		if (!function_exists('get_user_avatar'))
+		if (!function_exists('get_user_avatar') || !function_exists('get_user_rank'))
 		{
 			include($phpbb_root_path . 'includes/functions_display.' . $this->php_ext);
 		}
