@@ -40,10 +40,10 @@ $lang = array_merge($lang, array(
 	'REPUTATION_SYSTEM'				=> 'Reputation System',
 
 	'ACP_REPUTATION_SYSTEM'				=> 'Reputation System',
-	'ACP_REPUTATION_SYSTEM_EXPLAIN'		=> 'From here you can reach all settings and functions of the Reputation System which are needed to manage it.',
+	'ACP_REPUTATION_SYSTEM_EXPLAIN'		=> 'Here you can manage all settings and functions of the Reputation System.',
 	'ACP_REPUTATION_OVERVIEW'			=> 'Overview',
 	'ACP_REPUTATION_SETTINGS'			=> 'Settings',
-	'ACP_REPUTATION_SETTINGS_EXPLAIN'	=> 'On this page you can configure Reputation System’s settings. They are divided into groups.',
+	'ACP_REPUTATION_SETTINGS_EXPLAIN'	=> 'Here you can configure Reputation System’s settings. They are divided into groups.',
 	'ACP_REPUTATION_GIVE'				=> 'Give point',
 	'ACP_REPUTATION_RANKS'				=> 'Ranks',
 	'MCP_REPUTATION'					=> 'Reputation',
@@ -58,8 +58,8 @@ $lang = array_merge($lang, array(
 
 	'ACP_RS_MAIN'			=> 'General',
 	'ACP_RS_DISPLAY'		=> 'Display',
-	'ACP_RS_POSTS_RATING'	=> 'Posts rating',
-	'ACP_RS_USERS_RATING'	=> 'Users rating',
+	'ACP_RS_POSTS_RATING'	=> 'Post ratings',
+	'ACP_RS_USERS_RATING'	=> 'User ratings',
 	'ACP_RS_COMMENT'		=> 'Comments',
 	'ACP_RS_POWER'			=> 'Reputation power',
 	'ACP_RS_RANKS'			=> 'Ranks',
@@ -72,15 +72,15 @@ $lang = array_merge($lang, array(
 	'RS_MIN_REP_NEGATIVE'			=> 'Minimum reputation for negative voting',
 	'RS_MIN_REP_NEGATIVE_EXPLAIN'	=> 'How much reputation is required to give negative points. Setting the value to 0 disables this behaviour.',
 	'RS_NOTIFICATION'				=> 'Enable notifications',
-	'RS_NOTIFICATION_EXPLAIN'		=> 'This option enables notification of new reputation points.',
+	'RS_NOTIFICATION_EXPLAIN'		=> 'This option enables notifications of new reputation points.',
 	'RS_MIN_POINT'					=> 'Minimum points',
 	'RS_MIN_POINT_EXPLAIN'			=> 'Limits the minimum reputation points a user can receive. Setting the value to 0 disables this behaviour.',
 	'RS_MAX_POINT'					=> 'Maximum points',
 	'RS_MAX_POINT_EXPLAIN'			=> 'Limits the maximum reputation points a user can receive. Setting the value to 0 disables this behaviour.',
 	'RS_PREVENT_OVERRATING'			=> 'Prevent overrating',
 	'RS_PREVENT_OVERRATING_EXPLAIN'	=> 'Block users from rating the same user.<br /><em>Example:</em> if user A has more than 10 reputation entries and 85% of them come from user B, user B can not rate that user until his votes ratio is higher than 85%.<br />To disable this feature set one or both values to 0.',
-	'RS_PREVENT_NUM'				=> 'Total reputation entries of user A is equal or higher than',
-	'RS_PREVENT_PERC'				=> '<br />and ratio of user B votes is equal or higher than',
+	'RS_PREVENT_NUM'				=> 'Total reputation entries of user A is equal to or higher than',
+	'RS_PREVENT_PERC'				=> '<br />and ratio of user B votes is equal to or higher than',
 
 	'RS_PER_PAGE'							=> 'Reputations per page',
 	'RS_PER_PAGE_EXPLAIN'					=> 'How many rows should we display in tables of reputation points?',
@@ -149,7 +149,7 @@ $lang = array_merge($lang, array(
 	'RS_TOPLIST_NUM_EXPLAIN'		=> 'Number of users displayed on the toplist.',
 
 	'RS_SYNC'						=> 'Synchronise Reputation System',
-	'RS_SYNC_EXPLAIN'				=> 'You can synchronise reputation points after a mass removal of posts/topics/users, changing reputation settings, changing post authors, conversions from others systems. This may take a while. You will be notified when the process is completed.<br /><strong>Warning!</strong> All reputation points, that do not match the reputation settings, will be deleted during synchronization . It is recommended to make backup of the reputation table (DB) before synchronisation.',
+	'RS_SYNC_EXPLAIN'				=> 'You can synchronise reputation points after a mass removal of posts/topics/users, changing reputation settings, changing post authors, conversions from others systems. This may take a while. You will be notified when the process is completed.<br /><strong>Warning!</strong> All reputation points that do not match the reputation settings will be deleted during synchronization . It is recommended to make backup of the reputation table (DB) before synchronisation.',
 	'RS_SYNC_REPUTATION_CONFIRM'	=> 'Are you sure you wish to synchronise reputations?',
 	'RS_SYNC_STEP_DEL'				=> 'Step 1/7 - removing reputation points of non-existent users',
 	'RS_SYNC_STEP_POSTS_DEL'		=> 'Step 2/7 - removing reputation points of deleted posts',
@@ -224,5 +224,3 @@ $lang = array_merge($lang, array(
 	'UP_TO_DATE'				=> '%s is up to date',
 	'VERSION_CHECK'				=> 'MOD Version Check',
 ));
-
-?>

@@ -84,18 +84,18 @@ $lang = array_merge($lang, array(
 	'RS_NO_POWER'				=> 'Your reputation power is too low.',
 	'RS_NO_POWER_LEFT'			=> 'Not enough reputation power points.<br/>Wait until they renew.<br/>Your reputation power is %s',
 	'RS_NO_USER_ID'				=> 'The requested user does not exist.',
-	'RS_COMMENT_TOO_LONG'		=> 'Your comment contains %1$s characters and it is too long.<br />The maximum allowed characters: %2$s.',
+	'RS_COMMENT_TOO_LONG'		=> 'Your comment contains %1$s characters and is too long.<br />The maximum allowed characters: %2$s.',
 
 	'RS_NO_POST'				=> 'There is no such post.',
 	'RS_SAME_POST'				=> 'You have already rated this post.<br />You gave %s reputation points.',
-	'RS_SAME_USER'				=> 'You have already given reputation to this user.',
-	'RS_SELF'					=> 'You cannot give reputation to yourself.',
+	'RS_SAME_USER'				=> 'You have already given reputation points to this user.',
+	'RS_SELF'					=> 'You cannot give reputation points to yourself.',
 	'RS_USER_ANONYMOUS'			=> 'You are not allowed to give reputation points to anonymous users.',
 	'RS_USER_BANNED'			=> 'You are not allowed to give reputation points to banned users.',
 	'RS_USER_CANNOT_DELETE'		=> 'You do not have permission to delete points.',
 	'RS_USER_DISABLED'			=> 'You are not allowed to give reputation point.',
-	'RS_USER_NEGATIVE'			=> 'You are not allowed to give negative reputation point.<br />Your reputation has to be higher than %s.',
-	'RS_VIEW_DISALLOWED'		=> 'You are not allowed to view the reputation points.',
+	'RS_USER_NEGATIVE'			=> 'You are not allowed to give negative reputation points.<br />Your reputation has to be higher than %s.',
+	'RS_VIEW_DISALLOWED'		=> 'You are not allowed to view reputation points.',
 
 	'RS_DELETE_POINTS'			=> array(
 		1	=> 'Delete point',
@@ -110,8 +110,8 @@ $lang = array_merge($lang, array(
 		2	=> 'The reputation points have been deleted.',
 	),
 	'NO_REPUTATION_SELECTED'	=> 'You did not select reputation point.',
-	'RS_CLEAR_POST_CONFIRM'		=> 'Do you really want to delete all reputation points of that post?',
-	'RS_CLEAR_USER_CONFIRM'		=> 'Do you really want to delete all reputation points of that user?',
+	'RS_CLEAR_POST_CONFIRM'		=> 'Do you really want to delete all reputation points for that post?',
+	'RS_CLEAR_USER_CONFIRM'		=> 'Do you really want to delete all reputation points for that user?',
 	'RS_CLEAR_POST'				=> 'Clear post reputation',
 	'RS_CLEAR_USER'				=> 'Clear user reputation',
 
@@ -130,7 +130,7 @@ $lang = array_merge($lang, array(
 
 	'RS_MORE_DETAILS'				=> '» more details',
 
-	'RS_ANTISPAM_INFO'				=> 'You cannot give reputation so soon. You may try again later.',
+	'RS_ANTISPAM_INFO'				=> 'You cannot give reputation points so soon. You may try again later.',
 	'RS_USER_REPUTATION'			=> '%s\'s reputation',
 	'RS_YOU_RATED'					=> 'You rated that post. Points:',
 
@@ -148,5 +148,3 @@ $lang = array_merge($lang, array(
 	'RS_USER_GAP'					=> 'You cannot rate the same user so soon. You can try again in %s.',
 	'RS_VOTE_SAVED'					=> 'Vote saved',
 ));
-
-?>

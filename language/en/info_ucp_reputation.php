@@ -39,8 +39,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'UCP_REPUTATION'				=> 'Reputation',
 	'UCP_REPUTATION_FRONT'			=> 'Front page',
-	'UCP_REPUTATION_LIST'			=> 'Received points',
-	'UCP_REPUTATION_GIVEN'			=> 'Given points',
+	'UCP_REPUTATION_LIST'			=> 'Points received',
+	'UCP_REPUTATION_GIVEN'			=> 'Points given',
 	'UCP_REPUTATION_SETTING'		=> 'Preferences',
 
 	'RS_CATCHUP'						=> 'Catchup new tags',
@@ -55,5 +55,3 @@ $lang = array_merge($lang, array(
 	'RS_DEF_POINTS'						=> 'points',
 	'RS_DISPLAY_REPUTATIONS'			=> 'Display reputation points from previous',
 ));
-
-?>

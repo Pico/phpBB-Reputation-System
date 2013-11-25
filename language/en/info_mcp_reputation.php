@@ -44,7 +44,7 @@ $lang = array_merge($lang, array(
 	'MCP_REPUTATION_GIVE'			=> 'Give point',
 
 	'MCP_RS_ADD_WARNING'			=> 'Reputation points for warning',
-	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'You can give negative reputation points to this user for a bad behaviour etc. This will only work if you have checked the checkbox below.',
+	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'You can give negative reputation points to this user for bad behaviour etc. This will only work if you have checked the checkbox below.',
 	'MCP_RS_POINTS'					=> 'Points',
 	'MCP_RS_COMMENT'				=> 'Comment',
 	'MCP_RS_GIVE_REP_POINT'			=> 'Give reputation points',
@@ -60,5 +60,3 @@ $lang = array_merge($lang, array(
 	'RS_SEARCH_TO'				  	=> 'Search reputation points received by',
 	'RS_DISPLAY_REPUTATIONS'		=> 'Display reputation points from previous',
 ));
-
-?>
