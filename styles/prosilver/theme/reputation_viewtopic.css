@@ -1,0 +1,31 @@
+.rate-good-icon a:before { background-position: 0 0; }
+.rate-bad-icon a:before { background-position: -15px 0; }
+
+.rate-good-icon a:hover:before { background-position: 0 -21px; }
+
+.rate-bad-icon a:hover:before  { background-position: -15px -21px; }
+
+.rate-good-icon a:before, .rate-bad-icon a:before { background-image: url("./images/icons_rating.png"); }
+
+li.own,
+li.rate-good-icon.rated_bad,
+li.rate-bad-icon.rated_good { display: none; }
+
+.rate-good-icon.rated_good a:before{ background-position: 0 -21px; }
+
+.rate-bad-icon.rated_bad a:before { background-position: -15px -21px; }
+
+.post-reputation {
+	padding-bottom: 0;
+	height: 16px;
+}
+
+.post-reputation:hover { text-shadow: 0 0 #fff; }
+
+.post-reputation.positive span, .post-reputation.negative span { color: #fff; }
+
+.post-reputation.positive { background: #6F8F52; }
+
+.post-reputation.negative { background: #B82929; }
+
+.post-reputation.neutral span { color: #666666; }

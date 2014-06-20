@@ -1,0 +1,216 @@
+#reputation-popup {
+	font-size: 0.9em;
+	z-index: 500;
+	display: none;
+	background: white;
+	box-shadow: 2px 2px 4px #555555;
+	border-radius: 11px;
+	padding: 5px;
+	border: 5px solid #12A3EB;
+}
+
+#reputation-popup div.error {
+	text-align: center;
+	font-size: 1.2em;
+}
+
+/* Fix - do not show white space at the bottom of reputation popup */
+#reputation-popup div.panel {
+	margin-bottom: 0px;
+}
+
+#reputation-popup h3 {
+	font-size: 1.4em;
+	padding-left: 10px;
+	text-transform: none;
+	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
+	margin: 0;
+	border: none;
+}
+
+#reputation-popup p {
+	padding: 0 10px;
+}
+
+#post-reputation-list {
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+}
+
+#user-reputation-list {
+	float: right;
+	width: 58%;
+}
+
+.small-popup {
+	position: absolute;
+	width: 300px;
+}
+
+.normal-popup {
+	position: fixed;
+	width: 570px;
+}
+
+.normal-popup #post-reputation-list {
+	max-height: 350px;
+	overflow: auto;
+}
+
+.footer-popup {
+	padding: 2px 10px 0 10px;
+}
+
+.clear-reputation {
+	float: right;
+}
+
+.progress-bar {
+	width: 100%;
+	height: 10px;
+	border-radius: 3px;
+	border: 1px solid #a4bdcb;
+	background: #a4bdcb;
+	background: -moz-linear-gradient(left,  #dc4a5b 0%, #ffb489 8%, #fcfaba 18%, #54d077 70%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#dc4a5b), color-stop(8%,#ffb489), color-stop(18%,#fcfaba), color-stop(70%,#54d077));
+	background: -webkit-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: -o-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: -ms-linear-gradient(left,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	background: linear-gradient(to right,  #dc4a5b 0%,#ffb489 8%,#fcfaba 18%,#54d077 70%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dc4a5b', endColorstr='#54d077',GradientType=1 );
+}
+
+.empty-progress {
+	background: white;
+	height: 10px;
+	float: right;
+}
+
+.reputation-list {
+	border: 1px #dadada solid;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	display: block;
+	margin: 5px;
+	padding: 6px;
+	overflow: hidden;
+}
+
+.empty {
+	text-align: center;
+}
+
+.reputation-detail {
+	padding-left: 5px;
+}
+
+.reputation-avatar {
+	float: left;
+	padding: 2px;
+	margin-right: 12px;
+	background-color: white;
+	border-radius: 5px;
+	border: 1px solid #D5D5D5;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.reputation-avatar  img{
+	display: block !important;
+}
+
+.reputation-rating {
+	display: block;
+	float: right;
+	font-weight: bold;
+	font-size: 1.4em;
+	padding-right: 10px;
+}
+
+.reputation-rating.positive.image,
+.reputation-rating.negative.image {
+	background-repeat: no-repeat;
+	font-size: 0px;
+	width: 16px;
+	height: 16px;
+}
+
+.reputation-rating.positive.image {
+	background-image: url("./images/pos.png");
+}
+
+.reputation-rating.negative.image {
+	background-image: url("./images/neg.png");
+}
+
+.comment_message {
+	border: 1px #dadada solid;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	display: block;
+	margin: 5px;
+	background-color: white;
+	padding: 5px;
+	overflow: hidden;
+}
+
+.reputation-delete {
+	background-image: url("./images/reputation_delete.png");
+	background-repeat: no-repeat;
+	font-size: 0px;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	float: right;
+	opacity: 0.3;
+}
+
+.reputation-delete:hover {
+	opacity: 1.0;
+}
+
+.sorting {
+	float: left;
+}
+
+.stats-positive,
+.stats-negative { font-weight: bold; }
+
+.reputation-rating.positive,
+.stats-positive {
+	color: #6F8F52;
+}
+
+.reputation-rating.negative,
+.stats-negative {
+	color: #B82929;
+}
+
+.reputation {
+	display: inline-block;
+	padding: 2px 6px;
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.reputation.positive { background: #6F8F52; }
+
+.reputation.negative { background: #B82929; }
+
+.reputation.neutral { background: #fff;}
+
+.reputation.positive, .reputation.negative { color: #fff; }
+
+#post-reputation-list::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	-webkit-appearance: none;
+	background: rgba(0, 0, 0, .1);
+	border-radius: 3px;
+}
+
+#post-reputation-list::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}

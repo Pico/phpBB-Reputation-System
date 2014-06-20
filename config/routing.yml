@@ -1,0 +1,12 @@
+reputation_details_controller:
+    pattern: /reputation/{uid}/{sort_key}/{sort_dir}/{page}
+    defaults: { _controller: pico.reputation.details.controller:details, sort_key: id, sort_dir: dsc, page: 1 }
+    requirements:
+        uid: \d+
+        sort_key: id|username|time|point|action
+        sort_dir: asc|dsc
+        
+
+reputation_main_controller:
+    pattern: /reputation.php
+    defaults: { _controller: pico.reputation.main.controller:display }

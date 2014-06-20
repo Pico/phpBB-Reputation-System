@@ -1,0 +1,42 @@
+<!-- INCLUDE overall_header.html -->
+
+<a name="maincontent"></a>
+
+<h1>{L_ACP_REPUTATION_RATE}</h1>
+
+<p>{L_ACP_REPUTATION_RATE_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="rate" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<dl>
+		<dt><label for="username">{L_ENTER_USERNAME}{L_COLON}</label></dt>
+		<dd><input class="text medium" type="text" id="username" name="username" value="{RS_USERNAME}" /></dd>
+		<dd>[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_RS_POINTS}{L_COLON}<label></dt>
+		<dd><input name="points" type="text" class="text small" maxlength="100" id="points" value="{RS_POINTS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_RS_COMMENT}{L_COLON}<label></dt>
+		<dd><textarea name="comment" id="comment" class="inputbox" rows="3" cols="70">{RS_COMMENT}</textarea></dd>
+	</dl>
+
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->

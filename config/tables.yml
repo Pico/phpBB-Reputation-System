@@ -1,0 +1,3 @@
+parameters:
+    tables.reputations: %core.table_prefix%reputations
+    tables.reputation_types: %core.table_prefix%reputation_types

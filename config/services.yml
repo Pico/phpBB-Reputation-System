@@ -1,0 +1,94 @@
+imports:
+    - { resource: tables.yml }
+
+services:
+    pico.reputation.acp.controller:
+        class: pico\reputation\controller\acp_controller
+        arguments:
+            - @config
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.manager
+            - %tables.reputations%
+            - %core.root_path%
+            - %core.adm_relative_path%
+            - %core.php_ext%
+
+    pico.reputation.details.controller:
+        class: pico\reputation\controller\details_controller
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @pagination
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - @pico.reputation.power
+            - %tables.reputations%
+            - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.main.controller:
+        class: pico\reputation\controller\main_controller
+        arguments:
+            - @request
+            - @service_container
+
+    pico.reputation.rating.controller:
+        class: pico\reputation\controller\rating_controller
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - @pico.reputation.power
+            - %tables.reputations%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.helper:
+        class: pico\reputation\core\reputation_helper
+
+    pico.reputation.listener:
+        class: pico\reputation\event\listener
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.helper
+            - %tables.reputations%
+        tags:
+            - { name: event.listener }
+
+    pico.reputation.manager:
+        class: pico\reputation\core\reputation_manager
+        arguments:
+            - @cache
+            - @config
+            - @dbal.conn
+            - @user
+            - %tables.reputations%
+            - %tables.reputation_types%
+
+    pico.reputation.power:
+        class: pico\reputation\core\reputation_power
+        arguments:
+            - @config
+            - @dbal.conn
+            - %tables.reputations%

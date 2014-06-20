@@ -1,0 +1,39 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_REPUTATION_SYSTEM}</h1>
+
+<form id="acp_reputation" method="post" action="{U_ACTION}">
+<fieldset>
+	<dl>
+		<dt><label for="repuation_enable">{L_RS_ENABLE}</label></dt>
+		<dd><label><input type="radio" class="radio" id="reputation_enable" name="reputation_enable" value="1"<!-- IF S_REPUTATION_ENABLED --> checked="checked"<!-- ENDIF --> /> {L_ENABLED}</label>
+			<label><input type="radio" class="radio" name="reputation_enable" value="0"<!-- IF not S_REPUTATION_ENABLED --> checked="checked"<!-- ENDIF --> /> {L_DISABLED}</label></dd>
+	</dl>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<fieldset>
+	<form id="action_sync" method="post" action="{U_ACTION}">
+	<dl>
+		<dt><label for="action_sync">{L_RS_SYNC}</label><br />{L_RS_SYNC_EXPLAIN}</dt>
+		<dd><input type="hidden" name="action" value="sync" /><input class="button2" type="submit" id="action_sync" name="action_sync" value="{L_RUN}" /></dd>
+	</dl>
+	</form>
+	<!-- IF S_FOUNDER -->
+	<form id="action_truncate" method="post" action="{U_ACTION}" data-ajax="true">
+	<dl>
+		<dt><label for="action_truncate">{L_RS_TRUNCATE}</label><br /><span>{L_RS_TRUNCATE_EXPLAIN}</span></dt>
+		<dd><input type="hidden" name="action" value="truncate" /><input class="button2" type="submit" id="action_truncate" name="action_truncate" value="{L_RUN}" /></dd>
+	</dl>
+	</form>
+	<!-- ENDIF -->
+</fieldset>
+
+<!-- INCLUDE overall_footer.html -->

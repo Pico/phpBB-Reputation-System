@@ -1,0 +1,86 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_REPUTATION_SETTINGS}</h1>
+
+<p>{L_ACP_REPUTATION_SETTINGS_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="manage_settings" method="post" action="{U_ACTION}">
+
+<script type="text/javascript">
+// <![CDATA[
+	var active_cat = 'main';
+	var id = 'main';
+	var options = [<!-- BEGIN options --><!-- IF options.OPTION -->"{options.OPTION}",<!-- ENDIF --><!-- END options -->];
+// ]]>
+</script>
+
+<div class="clearfix"></div>
+
+<fieldset class="permissions">
+
+<div class="permissions-category">
+	<ul>
+	<!-- BEGIN options -->
+		<!-- IF options.S_LEGEND -->
+			<li class="permissions-preset-yes<!-- IF options.S_FIRST_ROW --> activetab<!-- ENDIF -->" id="tab_{options.TAB}"><a href="#" onclick="swap_options('{options.TAB}'); return false;"><span class="tabbg"><span class="colour"></span>{options.LEGEND}</span></a></li>
+		<!-- ENDIF -->
+	<!-- END options -->
+	</ul>
+</div>
+
+<!-- BEGIN options -->
+	<!-- IF options.S_LEGEND -->
+		<!-- IF not options.S_FIRST_ROW -->
+		</fieldset>
+	</div>
+
+	<span class="corners-bottom"><span></span></span>
+</div>
+		<!-- ENDIF -->
+<div class="permissions-panel" id="options{options.TAB}" <!-- IF not options.S_FIRST_ROW -->style="display: none;"<!-- ENDIF -->>
+	<span class="corners-top"><span></span></span>
+
+	<div class="tablewrap">
+		<fieldset>
+	<!-- ELSEIF options.S_SECTION -->
+		</fieldset>
+		<fieldset>
+		<legend>{options.LEGEND}</legend>
+	<!-- ELSE -->
+			<dl>
+				<dt><label for="{options.KEY}" >{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+				<dd>{options.CONTENT}</dd>
+			</dl>
+	<!-- ENDIF -->
+<!-- END options -->
+
+		</fieldset>
+	</div>
+
+	<span class="corners-bottom"><span></span></span>
+</div>
+
+</fieldset>
+
+<fieldset>
+	<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDEJS reputation_tabs.js -->
+
+<!-- INCLUDE overall_footer.html -->
