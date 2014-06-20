@@ -3,8 +3,7 @@ phpBB-Reputation-System
 
 A full reputation (karma) system for phpBB3.1, with adjustable reputation settings.
 
-Features
---------
+## Features
 * AJAX post rating
 * AJAX user rating
 * posibility to choose reputation power during giving a reputation point
@@ -27,6 +26,15 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
 2. Look for `Reputation System` under the Enabled Extensions list, and click its `Disable` link.
 3. To permanently uninstall, click `Delete Data` and then delete the `/ext/pico/reputation` folder.
+
+## To-Do List
+- [] Link to post on details pages
+- [] Group reputation power
+- [] Delete reputation
+- [] Clear user/post reputation
+- [] ACP Synchronization functions
+- [] MCP reputation modules
+- [] UPC reputation modules
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
