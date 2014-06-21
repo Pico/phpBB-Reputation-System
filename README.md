@@ -35,6 +35,8 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 - [ ] ACP Synchronization functions
 - [ ] MCP reputation modules
 - [ ] UPC reputation modules
+- [ ] Notifications
+- [ ] Responsive design
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
