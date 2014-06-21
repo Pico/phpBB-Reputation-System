@@ -15,9 +15,7 @@
 }
 
 /* Fix - do not show white space at the bottom of reputation popup */
-#reputation-popup div.panel {
-	margin-bottom: 0px;
-}
+#reputation-popup div.panel { margin-bottom: 0px; }
 
 #reputation-popup h3 {
 	font-size: 1.4em;
@@ -28,9 +26,7 @@
 	border: none;
 }
 
-#reputation-popup p {
-	padding: 0 10px;
-}
+#reputation-popup p { padding: 0 10px; }
 
 #post-reputation-list {
 	border-top: 1px solid #CCC;
@@ -57,13 +53,9 @@
 	overflow: auto;
 }
 
-.footer-popup {
-	padding: 2px 10px 0 10px;
-}
+.footer-popup { padding: 2px 10px 0 10px; }
 
-.clear-reputation {
-	float: right;
-}
+.clear-reputation { float: right; }
 
 .progress-bar {
 	width: 100%;
@@ -96,13 +88,9 @@
 	overflow: hidden;
 }
 
-.empty {
-	text-align: center;
-}
+.empty { text-align: center; }
 
-.reputation-detail {
-	padding-left: 5px;
-}
+.reputation-detail { padding-left: 5px; }
 
 .reputation-avatar {
 	float: left;
@@ -114,9 +102,7 @@
 	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
-.reputation-avatar  img{
-	display: block !important;
-}
+.reputation-avatar  img{ display: block !important; }
 
 .reputation-rating {
 	display: block;
@@ -134,23 +120,29 @@
 	height: 16px;
 }
 
-.reputation-rating.positive.image {
-	background-image: url("./images/pos.png");
+.reputation-rating.positive.image { background-image: url("./images/pos.png"); }
+
+.reputation-rating.negative.image { background-image: url("./images/neg.png"); }
+
+.reputation-action {
+	margin-bottom: 5px;
+	margin-top: 3px;
 }
 
-.reputation-rating.negative.image {
-	background-image: url("./images/neg.png");
-}
+.type-title { font-weight: bold; }
 
 .comment_message {
+	float: left;
+	display: block;
+}
+
+.comment_message div {
 	border: 1px #dadada solid;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	display: block;
 	margin: 5px;
 	background-color: white;
 	padding: 5px;
-	overflow: hidden;
 }
 
 .reputation-delete {
@@ -164,13 +156,9 @@
 	opacity: 0.3;
 }
 
-.reputation-delete:hover {
-	opacity: 1.0;
-}
+.reputation-delete:hover { opacity: 1.0; }
 
-.sorting {
-	float: left;
-}
+.sorting { float: left; }
 
 .stats-positive,
 .stats-negative { font-weight: bold; }

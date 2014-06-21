@@ -14,11 +14,13 @@
 		<!-- ENDIF -->
 		<div class="reputation-detail">
 			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_DELETE_POINTS_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
-			<span style="float: left;"><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</span>
-			<span class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</span><br />
-			<!-- IF S_RS_COMMENT and reputation.COMMENT -->
-			<span>{L_RS_COMMENT}:</span>
-			<div class="comment_message">{reputation.COMMENT}</div>
+			<div class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</div>
+			<div><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</div>
+			<!-- IF S_RS_COMMENT and reputation.S_COMMENT -->
+			<div class="comment_message">
+				<span>{L_RS_COMMENT}:</span>
+				<div>{reputation.COMMENT}</div>
+			</div>
 			<!-- ENDIF -->
 		</div>
 	</div>

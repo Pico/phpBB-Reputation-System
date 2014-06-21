@@ -17,6 +17,9 @@ namespace pico\reputation\core;
 */
 class reputation_manager implements reputation_manager_interface
 {
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\cache\service */
 	protected $cache;
 
@@ -25,6 +28,9 @@ class reputation_manager implements reputation_manager_interface
 
 	/** @var \phpbb\db\driver\driver */
 	protected $db;
+
+	/** @var \phpbb\template\template */
+	protected $template;
 
 	/** @var \phpbb\user */
 	protected $user;
@@ -35,24 +41,39 @@ class reputation_manager implements reputation_manager_interface
 	/** @var string The database table the reputation types are stored */
 	protected $reputation_types_table;
 
+	/** @var string phpBB root path */
+	protected $root_path;
+
+	/** @var string phpEx */
+	protected $php_ext;
+
 	/**
 	* Constructor
 	*
-	* @param \phpbb\cache\service $cache		Cache object
-	* @param \phpbb\config\config $config		Config object
-	* @param \phpbb\db\driver\driver $db		Database object
-	* @param \phpbb\user $user					User object
-	* @param string $reputations_table			Name of the table used to store reputations data
-	* @param string $reputation_types_table		Name of the table used to store reputation types data
+	* @param \phpbb\auth\auth $auth					Auth object
+	* @param \phpbb\cache\service $cache			Cache object
+	* @param \phpbb\config\config $config			Config object
+	* @param \phpbb\db\driver\driver $db			Database object
+	* @param \phpbb\template\template $template		Template object
+	* @param \phpbb\user $user						User object
+	* @param string $reputations_table				Name of the table used to store reputations data
+	* @param string $reputation_types_table			Name of the table used to store reputation types data
+	* @param string $root_path						phpBB root path
+	* @param string $php_ext						phpEx
+	* @access public
 	*/
-	public function __construct(\phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\user $user, $reputations_table, $reputation_types_table)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
 	{
+		$this->auth = $auth;
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
+		$this->template = $template;
 		$this->user = $user;
 		$this->reputations_table = $reputations_table;
 		$this->reputation_types_table = $reputation_types_table;
+		$this->root_path = $root_path;
+		$this->php_ext = $php_ext;
 	}
 
 	/**
@@ -362,5 +383,36 @@ class reputation_manager implements reputation_manager_interface
 		}
 
 		return false;
+	}
+
+	/**
+	*
+	*/
+	public function generate_post_link($row)
+	{
+		$post_subject = $post_url = '';
+
+		// Post was deleted
+		if (!isset($row['post_subject']) && !isset($row['post_id']))
+		{
+			$post_subject = $this->user->lang('RS_POST_DELETE');
+		}
+
+		// Post exists
+		if (isset($row['post_id']))
+		{
+			// Check forum read permission
+			if ($this->auth->acl_get('f_read', $row['forum_id']))
+			{
+				$post_subject = $row['post_subject'] . ' [#p' . $row['post_id'] . ']';
+				$post_url = append_sid("{$this->root_path}viewtopic.$this->php_ext", 'f=' . $row['forum_id'] . '&amp;p=' . $row['post_id'] . '#p' . $row['post_id']);
+			}
+		}
+
+		$this->template->assign_block_vars('reputation.post', array(
+			'POST_SUBJECT'	=> $post_subject,
+			'U_POST'		=> $post_url,
+			'S_POST'		=> $row['reputation_type_id'] == $this->get_reputation_type_id('post'),
+		));
 	}
 }

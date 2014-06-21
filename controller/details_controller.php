@@ -83,7 +83,7 @@ class details_controller
 	* @param string $reputation_types_table				Name of the table used to store reputation types data
 	* @param string $root_path							phpBB root path
 	* @param string $php_ext							phpEx
-	* @return \pico\reputation\controller\rating_controller
+	* @return \pico\reputation\controller\details_controller
 	* @access public
 	*/
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\db\driver\driver $db, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_helper $reputation_helper, \pico\reputation\core\reputation_manager $reputation_manager, \pico\reputation\core\reputation_power $reputation_power, $reputations_table, $reputation_types_table, $root_path, $php_ext)
@@ -220,12 +220,14 @@ class details_controller
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
 				// ToDo
-				//'U_POST'		=> '',
 				//'U_DELETE'	=> '',
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
 			));
+
+			// Generate post url
+			$this->reputation_manager->generate_post_link($row);
 		}
 		$this->db->sql_freeresult($result);
 
@@ -659,12 +661,14 @@ class details_controller
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
 				// ToDo
-				//'U_POST'		=> '',
 				//'U_DELETE'	=> '',
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
 			));
+
+			// Generate post url
+			$this->reputation_manager->generate_post_link($row);
 		}
 		$this->db->sql_freeresult($result);
 

@@ -79,12 +79,16 @@ services:
     pico.reputation.manager:
         class: pico\reputation\core\reputation_manager
         arguments:
+            - @auth
             - @cache
             - @config
             - @dbal.conn
+            - @template
             - @user
             - %tables.reputations%
             - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
 
     pico.reputation.power:
         class: pico\reputation\core\reputation_power
