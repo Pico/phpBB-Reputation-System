@@ -88,6 +88,9 @@ class listener implements EventSubscriberInterface
 			// ACP events
 			'core.acp_manage_forums_request_data'	=> 'forum_reputation_request',
 			'core.acp_manage_forums_display_form'	=> 'forum_display_reputation',
+			'core.acp_manage_group_request_data'	=> 'group_request_data',
+			'core.acp_manage_group_initialise_data'	=> 'group_initialise_data',
+			'core.acp_manage_group_display_form'	=> 'group_display_form',
 			'core.permissions'						=> 'add_reputation_permissions',
 
 			// Index event
@@ -137,7 +140,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Add reputation request data
+	* Add reputation forum request data
 	*
 	* @param object $event The event object
 	* @return null
@@ -151,7 +154,7 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Assign reputation data to template
+	* Assign reputation data to forum template
 	*
 	* @param object $event The event object
 	* @return null
@@ -162,6 +165,54 @@ class listener implements EventSubscriberInterface
 		$template_data = $event['template_data'];
 		$template_data['S_ENABLE_REPUTATION'] = $event['forum_data']['reputation_enabled'];
 		$event['template_data'] = $template_data;
+	}
+
+	/**
+	* Add reputation group request data
+	*
+	* @param object $event The event object
+	* @return null
+	* @access public
+	*/
+	public function group_request_data($event)
+	{
+		$submit_ary = $event['submit_ary'];
+		$submit_ary['reputation_power'] = $this->request->variable('group_reputation_power', 0);
+		$event['submit_ary'] = $submit_ary;
+
+		$validation_checks = $event['validation_checks'];
+		$validation_checks['reputation_power'] = array('num', false, 0, 999);
+		$event['validation_checks'] = $validation_checks;
+	}
+
+	/**
+	* Add group test variable
+	*
+	* @param object $event The event object
+	* @return null
+	* @access public
+	*/
+	public function group_initialise_data($event)
+	{
+		$test_variables = $event['test_variables'];
+		$test_variables['reputation_power'] = 'int';
+		$event['test_variables'] = $test_variables;
+	}
+
+	/**
+	* Assign reputation data to group template
+	*
+	* @param object $event The event object
+	* @return null
+	* @access public
+	*/
+	public function group_display_form($event)
+	{
+		$group_row = $event['group_row'];
+
+		$this->template->assign_vars(array(
+			'GROUP_REPUTATION_POWER' => (isset($group_row['group_reputation_power'])) ? $group_row['group_reputation_power'] : 0,
+		));
 	}
 
 	/**

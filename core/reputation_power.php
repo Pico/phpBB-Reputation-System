@@ -48,10 +48,11 @@ class reputation_power implements reputation_power_interface
 	* @param timestamp $regdate User registration date
 	* @param int $reputation User reputation
 	* @param int $warnings User warnings
+	* @param int $user_group_id User group ID
 	* @return int User power reputation
 	* @access public
 	*/
-	public function get($posts, $regdate, $reputation, $warnings)
+	public function get($posts, $regdate, $reputation, $warnings, $user_group_id)
 	{
 		$now = time();
 		$user_power = array();
@@ -110,8 +111,26 @@ class reputation_power implements reputation_power_interface
 			$user_max_power = min($this->config['rs_max_power'], $user_max_power);
 		}
 
-		// ToDo
 		// Group reputation power
+		// Calculating group power, if necessary
+		if ($user_group_id)
+		{
+			$sql = 'SELECT group_reputation_power
+				FROM ' . GROUPS_TABLE . "
+				WHERE group_id = $user_group_id";
+			$result = $this->db->sql_query($sql);
+			$group_power = (int)$this->db->sql_fetchfield('group_reputation_power');
+			$this->db->sql_freeresult($result);
+
+			if (!empty($group_power))
+			{
+				unset($user_power);
+
+				$user_power = array();
+
+				$user_max_power = $user_power['GROUP_VOTING_POWER'] = $group_power;
+			}
+		}
 
 		// Put the structure of the user power into $this->explanation
 		$this->explanation = $user_power;

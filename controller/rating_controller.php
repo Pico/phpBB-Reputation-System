@@ -362,7 +362,7 @@ class rating_controller
 			$used_power = $this->reputation_power->used($this->user->data['user_id']);
 
 			// Calculate how much maximum power the user has
-			$max_voting_power = $this->reputation_power->get($this->user->data['user_posts'], $this->user->data['user_regdate'], $this->user->data['user_reputation'], $this->user->data['user_warnings']);
+			$max_voting_power = $this->reputation_power->get($this->user->data['user_posts'], $this->user->data['user_regdate'], $this->user->data['user_reputation'], $this->user->data['user_warnings'], $this->user->data['group_id']);
 
 			if ($max_voting_power < 1)
 			{
@@ -714,7 +714,7 @@ class rating_controller
 			$used_power = $this->reputation_power->used($this->user->data['user_id']);
 
 			//Calculate how much maximum power a user has
-			$max_voting_power = $this->reputation_power->get($this->user->data['user_posts'], $this->user->data['user_regdate'], $this->user->data['user_reputation'], $this->user->data['user_warnings']);
+			$max_voting_power = $this->reputation_power->get($this->user->data['user_posts'], $this->user->data['user_regdate'], $this->user->data['user_reputation'], $this->user->data['user_warnings'], $this->user->data['group_id']);
 
 			if ($max_voting_power < 1)
 			{

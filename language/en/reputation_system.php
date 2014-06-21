@@ -117,4 +117,6 @@ $lang = array_merge($lang, array(
 	'RS_POWER_DETAIL_WARNINGS'		=> 'By warnings',
 	'RS_POWER_DETAIL_MIN'			=> 'Minimum reputation power for all users',
 	'RS_POWER_DETAIL_MAX'			=> 'Reputation power capped at maximum allowed',
+	'RS_POWER_DETAIL_GROUP_POWER'	=> 'Reputation power based on user group',
+	'RS_GROUP_POWER'				=> 'Reputation power based on user group',
 ));

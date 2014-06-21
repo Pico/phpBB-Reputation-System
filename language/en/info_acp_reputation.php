@@ -49,6 +49,9 @@ $lang = array_merge($lang, array(
 	'RS_FORUM_REPUTATION'			=> 'Enable post rating (reputation)',
 	'RS_FORUM_REPUTATION_EXPLAIN'	=> 'Allow members to rate posts made by other users in that forum.',
 
+	'RS_GROUP_POWER'				=> 'Group reputation power',
+	'RS_GROUP_POWER_EXPLAIN'		=> 'If this field is filled, the reputation power of members will be overwritten and will not be based on posts etc.',
+
 	'RS_ENABLE'						=> 'Enable Reputation System',
 
 	'RS_SYNC'						=> 'Synchronise Reputation System',

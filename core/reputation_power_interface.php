@@ -22,10 +22,11 @@ interface reputation_power_interface
 	* @param timestamp $regdate User registration date
 	* @param int $reputation User reputation
 	* @param int $warnings User warnings
+	* @param int $user_group_id User group ID
 	* @return int User power reputation
 	* @access public
 	*/
-	public function get($posts, $regdate, $reputation, $warnings);
+	public function get($posts, $regdate, $reputation, $warnings, $user_group_id);
 
 	/**
 	* Function returns an array explaining structure of the user reputation power

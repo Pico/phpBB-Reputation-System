@@ -29,7 +29,7 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 
 ## To-Do List
 - [x] Link to post on details pages
-- [ ] Group reputation power
+- [x] Group reputation power
 - [ ] Delete reputation
 - [ ] Clear user/post reputation
 - [ ] ACP Synchronization functions

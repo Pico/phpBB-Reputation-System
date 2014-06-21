@@ -172,7 +172,7 @@ class details_controller
 		$post_type_id = (int) $this->reputation_manager->get_reputation_type_id('post');
 
 		$sql_array = array(
-			'SELECT'	=> 'r.*, rt.reputation_type_name, u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, p.post_id, p.forum_id, p.post_subject',
+			'SELECT'	=> 'r.*, rt.reputation_type_name, u.group_id, u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, p.post_id, p.forum_id, p.post_subject',
 			'FROM'		=> array(
 				$this->reputations_table => 'r',
 				$this->reputation_types_table => 'rt',
@@ -306,7 +306,7 @@ class details_controller
 		if ($this->config['rs_enable_power'])
 		{
 			$used_power = $this->reputation_power->used($user_row['user_id']);
-			$user_max_voting_power = $this->reputation_power->get($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['user_warnings']);
+			$user_max_voting_power = $this->reputation_power->get($user_row['user_posts'], $user_row['user_regdate'], $user_row['user_reputation'], $user_row['user_warnings'], $user_row['group_id']);
 			$user_power_explain = $this->reputation_power->explain();
 			$voting_power_left = '';
 
@@ -322,6 +322,8 @@ class details_controller
 
 			$this->template->assign_vars(array(
 				'S_RS_POWER_EXPLAIN'		=> $this->config['rs_power_explain'] ? true : false,
+				'S_RS_GROUP_POWER'			=> (isset($user_power_explain['GROUP_VOTING_POWER'])) ? true : false,
+
 				'RS_POWER'					=> $user_max_voting_power,
 				'RS_POWER_LEFT'				=> $this->config['rs_power_renewal'] ? $this->user->lang('RS_VOTE_POWER_LEFT', $voting_power_left, $user_max_voting_power) : '',
 				'RS_CFG_TOTAL_POSTS'		=> $this->config['rs_total_posts'] ? true : false,
