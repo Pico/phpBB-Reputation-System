@@ -386,7 +386,11 @@ class reputation_manager implements reputation_manager_interface
 	}
 
 	/**
+	* Generet post URL
 	*
+	* @param array $row Array with data
+	* @access public
+	* @return null
 	*/
 	public function generate_post_link($row)
 	{
