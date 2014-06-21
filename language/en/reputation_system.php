@@ -72,17 +72,11 @@ $lang = array_merge($lang, array(
 
 	'NO_REPUTATION_SELECTED'	=> 'You did not select reputation point.',
 
-	'RS_DELETE_POINTS'			=> array(
-		1	=> 'Delete point',
-		2	=> 'Delete points'
-	),
-	'RS_DELETE_POINTS_CONFIRM'	=> array(
-		1	=> 'Do you really want to delete this reputation point?',
-		2	=> 'Do you really want to delete these reputation points?',
-	),
+	'RS_REPUTATION_DELETE_CONFIRM'	=> 'Do you really want to delete this reputation?',
+	'RS_REPUTATIONS_DELETE_CONFIRM'	=> 'Do you really want to delete these reputation?',
 	'RS_POINTS_DELETED'			=> array(
-		1	=> 'The reputation point has been deleted.',
-		2	=> 'The reputation points have been deleted.',
+		1	=> 'The reputation has been deleted.',
+		2	=> 'The reputations have been deleted.',
 	),
 
 	'RS_CLEAR_POST'				=> 'Clear post reputation',

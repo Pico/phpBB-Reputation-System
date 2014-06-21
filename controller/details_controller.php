@@ -45,18 +45,10 @@ class details_controller
 	/** @ \pico\reputation\core\reputation_power */
 	protected $reputation_power;
 
-	/**
-	* The database table the reputations are stored in
-	*
-	* @var string
-	*/
+	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
-	/**
-	* The database table the reputation types are stored
-	*
-	* @var string
-	*/
+	/** @var string The database table the reputation types are stored */
 	protected $reputation_types_table;
 
 	/** @var string phpBB root path */
@@ -173,11 +165,11 @@ class details_controller
 
 		$sql_array = array(
 			'SELECT'	=> 'r.*, rt.reputation_type_name, u.group_id, u.username, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, p.post_id, p.forum_id, p.post_subject',
-			'FROM'		=> array(
+			'FROM'	=> array(
 				$this->reputations_table => 'r',
 				$this->reputation_types_table => 'rt',
 			),
-			'LEFT_JOIN' => array(
+			'LEFT_JOIN'	=> array(
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),
 					'ON'	=> 'r.user_id_from = u.user_id ',
@@ -188,7 +180,7 @@ class details_controller
 						AND r.reputation_type_id = ' . $post_type_id,
 				),
 			),
-			'WHERE'		=> 'r.user_id_to = ' . $uid . '
+			'WHERE'	=> 'r.user_id_to = ' . $uid . '
 				AND r.reputation_type_id = rt.reputation_type_id',
 			'ORDER_BY'	=> $order_by
 		);
@@ -220,7 +212,7 @@ class details_controller
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
 				// ToDo
-				//'U_DELETE'	=> '',
+				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
@@ -507,8 +499,7 @@ class details_controller
 				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				// ToDo
-				//'U_DELETE'	'',
+				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
@@ -662,8 +653,7 @@ class details_controller
 				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				// ToDo
-				//'U_DELETE'	=> '',
+				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,

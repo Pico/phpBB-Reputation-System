@@ -29,3 +29,8 @@ li.rate-bad-icon.rated_good { display: none; }
 .post-reputation.negative { background: #B82929; }
 
 .post-reputation.neutral span { color: #666666; }
+
+.user-reputation span {
+	color: #536482;
+	font-weight: normal;
+}

@@ -30,7 +30,7 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 ## To-Do List
 - [x] Link to post on details pages
 - [x] Group reputation power
-- [ ] Delete reputation
+- [x] Delete reputation
 - [ ] Clear user/post reputation
 - [ ] ACP Synchronization functions
 - [ ] MCP reputation modules

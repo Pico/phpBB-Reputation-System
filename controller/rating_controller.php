@@ -474,7 +474,7 @@ class rating_controller
 				'post_id'				=> $post_id,
 				'poster_id'				=> $row['poster_id'],
 				'post_reputation'		=> $post_reputation,
-				'user_reputation'		=> '<strong>' . $this->reputation_manager->get_user_reputation($row['poster_id']) . '</strong>',
+				'user_reputation'		=> $this->reputation_manager->get_user_reputation($row['poster_id']),
 				'reputation_class'		=> $this->reputation_helper->reputation_class($post_reputation),
 				'reputation_vote'		=> ($points > 0) ? 'rated_good' : 'rated_bad',
 				'success_msg'			=> $message,

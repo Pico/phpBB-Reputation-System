@@ -43,6 +43,20 @@ class main_controller
 	*/
 	public function display()
 	{
+		if ($this->request->is_set('action'))
+		{
+			$action_mode = $this->request->variable('action', '', true);
+			$action = $this->phpbb_container->get('pico.reputation.action.controller');
+
+			switch ($action_mode)
+			{
+				case 'delete':
+					$rid = $this->request->variable('r', 0);
+					return $action->delete($rid);
+				break;
+			}
+		}
+
 		if ($this->request->is_set('rate'))
 		{
 			$rate_mode = $this->request->variable('rate', '', true);

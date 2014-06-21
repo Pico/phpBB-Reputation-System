@@ -12,7 +12,7 @@
 		<div class="reputation-avatar"><!-- IF reputation.AVATAR -->{reputation.AVATAR}<!-- ELSE --><img src="{T_THEME_PATH}/images/no_avatar.gif" width="{reputation.AVATAR_DIM}px;" height="{reputation.AVATAR_DIM}px;"alt="" /><!-- ENDIF --></div>
 		<!-- ENDIF -->
 		<div class="reputation-detail">
-			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_DELETE_POINTS_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
+			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
 			<div class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</div>
 			<div><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</div>
 			<div class="reputation-action">

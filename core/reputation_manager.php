@@ -29,6 +29,9 @@ class reputation_manager implements reputation_manager_interface
 	/** @var \phpbb\db\driver\driver */
 	protected $db;
 
+	/** @var \phpbb\log\log */
+	protected $log;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -54,6 +57,7 @@ class reputation_manager implements reputation_manager_interface
 	* @param \phpbb\cache\service $cache			Cache object
 	* @param \phpbb\config\config $config			Config object
 	* @param \phpbb\db\driver\driver $db			Database object
+	* @param \phpbb\log\log\ $log					Log object
 	* @param \phpbb\template\template $template		Template object
 	* @param \phpbb\user $user						User object
 	* @param string $reputations_table				Name of the table used to store reputations data
@@ -62,12 +66,13 @@ class reputation_manager implements reputation_manager_interface
 	* @param string $php_ext						phpEx
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\log\log $log, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
+		$this->log = $log;
 		$this->template = $template;
 		$this->user = $user;
 		$this->reputations_table = $reputations_table;
@@ -417,6 +422,77 @@ class reputation_manager implements reputation_manager_interface
 			'POST_SUBJECT'	=> $post_subject,
 			'U_POST'		=> $post_url,
 			'S_POST'		=> $row['reputation_type_id'] == $this->get_reputation_type_id('post'),
+		));
+	}
+
+	/**
+	* Delete single reputation
+	*
+	* @param array $data Reputation data
+	* @access public
+	* @return null
+	*/
+	public function delete_reputation($data)
+	{
+		/*$sql_array = array(
+			'SELECT'	=> 'r.*, rt.reputation_type_name',
+			'FROM'		=> array(
+				$this->reputations_table => 'r',
+				$this->reputation_types_table => 'rt',
+			),
+			'WHERE'		=> 'r.reputation_type_id = rt.reputation_type_id
+				AND r.reputation_id = ' . $rid
+		);
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+		$result = $this->db->sql_query($sql);
+		$data = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);*/
+
+		$fields = array(
+			'user_id_from',
+			'user_id_to',
+			'reputation_item_id',
+			'reputation_points',
+			'reputation_type_name',
+		);
+
+		foreach ($fields as $field)
+		{
+			if (!isset($data[$field]))
+			{
+				throw new \pico\reputation\exception\invalid_argument(array($field, 'FIELD_MISSING'));
+			}
+		}
+
+		if ($data['reputation_type_id'] == $this->get_reputation_type_id('post'))
+		{
+			$sql = 'UPDATE ' . POSTS_TABLE . "
+				SET post_reputation = post_reputation - {$data['reputation_points']}
+				WHERE post_id = {$data['reputation_item_id']}";
+			$this->db->sql_query($sql);
+		}
+
+		$sql = 'DELETE FROM ' . $this->reputations_table . "
+			WHERE reputation_id = {$data['reputation_id']}";
+		$this->db->sql_query($sql);
+
+		$sql = 'UPDATE ' . USERS_TABLE . "
+			SET user_reputation = user_reputation - {$data['reputation_points']}
+			WHERE user_id = {$data['user_id_to']}";
+		$this->db->sql_query($sql);
+
+		// Check max/min points
+		if ($this->config['rs_max_point'] || $this->config['rs_min_point'])
+		{
+			$this->check_max_min($data['user_id_to']);
+		}
+
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_REPUTATION_DELETED', false, array(
+			'user_id_from'	=> (isset($data['username_from'])) ? $data['username_from'] : $data['user_id_from'],
+			'user_id_to'	=> (isset($data['username_to'])) ? $data['username_to'] : $data['user_id_from'],
+			'points'		=> $data['reputation_points'],
+			'type_name'		=> $data['reputation_type_name'],
+			'item_id'		=> $data['reputation_item_id'],
 		));
 	}
 }

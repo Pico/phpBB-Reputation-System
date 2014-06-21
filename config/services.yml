@@ -16,6 +16,21 @@ services:
             - %core.adm_relative_path%
             - %core.php_ext%
 
+    pico.reputation.action.controller:
+        class: pico\reputation\controller\action_controller
+        arguments:
+            - @auth
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - %tables.reputations%
+            - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
+
     pico.reputation.details.controller:
         class: pico\reputation\controller\details_controller
         arguments:
@@ -83,6 +98,7 @@ services:
             - @cache
             - @config
             - @dbal.conn
+            - @log
             - @template
             - @user
             - %tables.reputations%
