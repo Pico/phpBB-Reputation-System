@@ -21,18 +21,10 @@ class reputation_power implements reputation_power_interface
 	/** @var \phpbb\db\driver\driver */
 	protected $db;
 
-	/**
-	* The database table the reputations are stored in
-	*
-	* @var string
-	*/
+	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
-	/** 
-	* Reputation power explanation
-	*
-	* @var array 
-	*/
+	/** @var array Reputation power explanation */
 	private $explanation;
 
 	/**

@@ -33,11 +33,7 @@ class acp_controller implements acp_interface
 	/** @var \pico\reputation\core\reputation_manager */
 	protected $reputation_manager;
 
-	/**
-	* The database table the reputations are stored in
-	*
-	* @var string
-	*/
+	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
 	/** @var string phpBB root path */

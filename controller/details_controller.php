@@ -109,7 +109,7 @@ class details_controller
 	* Main reputation details controller 
 	*
 	* @param int $uid			User ID taken from the URL
-	* @param string $sort_key	Sort key: id|username|time|point|action|post (default: id)
+	* @param string $sort_key	Sort key: id|username|time|point|action (default: id)
 	* @param string $sort_dir	Sort direction: dsc|asc (descending|ascending) (default: dsc)
 	* @param int $page			Page number taken from the URL
 	* @return Symfony\Component\HttpFoundation\Response A Symfony Response object
@@ -538,7 +538,7 @@ class details_controller
 	* User details controller
 	*
 	* @param int $uid			User ID taken from the URL
-	* @param string $sort_key	Sort key: id|username|time|point|action|post (default: id)
+	* @param string $sort_key	Sort key: id|username|time|point|action (default: id)
 	* @param string $sort_dir	Sort direction: dsc|asc (descending|ascending) (default: dsc)
 	* @return Symfony\Component\HttpFoundation\Response A Symfony Response object
 	* @access public

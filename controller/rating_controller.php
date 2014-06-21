@@ -42,11 +42,7 @@ class rating_controller
 	/** @ \pico\reputation\core\reputation_power */
 	protected $reputation_power;
 
-	/**
-	* The database table the reputations are stored in
-	*
-	* @var string
-	*/
+	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
 	/** @var string phpBB root path */

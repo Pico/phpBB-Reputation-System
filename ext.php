@@ -1,10 +1,9 @@
 <?php
 /**
 *
-* Reputation System extension for the phpBB Forum Software package.
-*
-* @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
-* @license GNU General Public License, version 2 (GPL-2.0)
+* @package Reputation System Extension
+* @copyright (c) 2014 Pico
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 

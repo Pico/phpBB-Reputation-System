@@ -41,11 +41,7 @@ class listener implements EventSubscriberInterface
 	/** @var \pico\reputation\core\reputation_helper */
 	protected $reputation_helper;
 
-	/**
-	* The database table the reputations are stored in
-	*
-	* @var string
-	*/
+	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
 	/**

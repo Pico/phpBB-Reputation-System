@@ -32,11 +32,7 @@ class reputation_manager implements reputation_manager_interface
 	/** @var string The table we use to store our reputations */
 	protected $reputations_table;
 
-	/**
-	* The database table the reputation types are stored
-	*
-	* @var string
-	*/
+	/** @var string The database table the reputation types are stored */
 	protected $reputation_types_table;
 
 	/**
@@ -45,7 +41,7 @@ class reputation_manager implements reputation_manager_interface
 	* @param \phpbb\cache\service $cache		Cache object
 	* @param \phpbb\config\config $config		Config object
 	* @param \phpbb\db\driver\driver $db		Database object
-	* @param \phpbb\user $user							User object
+	* @param \phpbb\user $user					User object
 	* @param string $reputations_table			Name of the table used to store reputations data
 	* @param string $reputation_types_table		Name of the table used to store reputation types data
 	*/
