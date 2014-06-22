@@ -241,41 +241,21 @@ class reputation_manager implements reputation_manager_interface
 		$mode = ($points > 0) ? 'max' : 'min';
 
 		// Maximum user reputation
-		if ($mode == 'max' && $this->config['rs_max_point'])
+		if (($points > $this->config['rs_max_point']) && $this->config['rs_max_point'])
 		{
-			if ($points > $this->config['rs_max_point'])
-			{
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_reputation = {$this->config['rs_max_point']}
-					WHERE user_id = $user_id";
-				$this->db->sql_query($sql);
-			}
-			/*else
-			{
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_reputation = $points
-					WHERE user_id = $user_id";
-				$this->db->sql_query($sql);
-			}*/
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = {$this->config['rs_max_point']}
+				WHERE user_id = $user_id";
+			$this->db->sql_query($sql);
 		}
 
 		// Minimum user reputation
-		if ($mode == 'min' && $this->config['rs_min_point'])
+		if (($points < $this->config['rs_min_point']) && $this->config['rs_min_point'])
 		{
-			if ($points < $this->config['rs_min_point'])
-			{
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_reputation = {$this->config['rs_min_point']}
-					WHERE user_id = $user_id";
-				$this->db->sql_query($sql);
-			}
-			/*else
-			{
-				$sql = 'UPDATE ' . USERS_TABLE . "
-					SET user_reputation = $points
-					WHERE user_id = $user_id";
-				$this->db->sql_query($sql);
-			}*/
+			$sql = 'UPDATE ' . USERS_TABLE . "
+				SET user_reputation = {$this->config['rs_min_point']}
+				WHERE user_id = $user_id";
+			$this->db->sql_query($sql);
 		}
 	}
 
