@@ -278,8 +278,7 @@ class listener implements EventSubscriberInterface
 					'USERNAME_FULL'		=> get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
 					'USER_REPUTATION'	=> $row['user_reputation'],
 
-					// ToDo
-					'U_VIEW_USER_REPUTATION'	=> '',
+					'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_details_controller', array('uid' => $row['user_id'])),
 
 					'S_DIRECTION'	=> $this->config['rs_toplist_direction'] ? true : false,
 				));
@@ -287,7 +286,8 @@ class listener implements EventSubscriberInterface
 			$this->db->sql_freeresult($result);
 
 			$this->template->assign_vars(array(
-				'S_RS_TOPLIST'	=> true,
+				'S_RS_TOPLIST'		=> true,
+				'S_VIEW_REPUTATION'	=> ($this->auth->acl_get('u_rs_view')) ? true : false,
 			));
 		}
 	}

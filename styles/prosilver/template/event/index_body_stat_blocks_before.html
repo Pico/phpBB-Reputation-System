@@ -6,7 +6,7 @@
 			<!-- BEGIN toplist -->
 				<!-- IF toplist.S_DIRECTION and toplist.S_FIRST_ROW -->{L_RS_NEW_LINE}<!-- ENDIF -->
 				{toplist.USERNAME_FULL}
-				(<!-- IF toplist.U_VIEW_USER_REPUTATION --><a href="{toplist.U_VIEW_USER_REPUTATION}"><!-- ENDIF -->{toplist.USER_REPUTATION}<!-- IF toplist.U_VIEW_USER_REPUTATION --></a><!-- ENDIF -->)<!-- IF toplist.S_DIRECTION and not toplist.S_LAST_ROW -->{L_RS_NEW_LINE}<!-- ELSE IF not toplist.S_LAST_ROW -->{L_COMMA_SEPARATOR}<!-- ENDIF -->
+				(<!-- IF S_VIEW_REPUTATION --><a href="{toplist.U_VIEW_USER_REPUTATION}"><!-- ENDIF -->{toplist.USER_REPUTATION}<!-- IF S_VIEW_REPUTATION --></a><!-- ENDIF -->)<!-- IF toplist.S_DIRECTION and not toplist.S_LAST_ROW -->{L_RS_NEW_LINE}<!-- ELSE IF not toplist.S_LAST_ROW -->{L_COMMA_SEPARATOR}<!-- ENDIF -->
 			<!-- END toplist -->
 			</strong>
 		<!-- ELSE -->
