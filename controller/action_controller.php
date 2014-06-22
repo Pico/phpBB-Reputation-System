@@ -137,7 +137,7 @@ class action_controller
 			redirect($this->helper->route('reputation_details_controller', array('uid' => $row['user_id_to'])));
 		}
 
-		if ($this->auth->acl_gets('m_rs_moderate') || (($row['rep_from'] == $this->user->data['user_id']) && $this->auth->acl_get('u_rs_delete')))
+		if ($this->auth->acl_gets('m_rs_moderate') || (($row['user_id_from'] == $this->user->data['user_id']) && $this->auth->acl_get('u_rs_delete')))
 		{
 			if ($is_ajax)
 			{
@@ -173,7 +173,15 @@ class action_controller
 
 		if ($submit)
 		{
-			$this->reputation_manager->delete_reputation($row);
+			try
+			{
+				$this->reputation_manager->delete_reputation($row);
+			}
+			catch (\pico\reputation\exception\base $e)
+			{
+				// Catch exception
+				trigger_error($e->get_message($this->user));
+			}
 
 			$user_reputation = $this->reputation_manager->get_user_reputation($row['user_id_to']);
 
