@@ -489,7 +489,7 @@ class reputation_manager implements reputation_manager_interface
 
 		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_REPUTATION_DELETED', false, array(
 			'user_id_from'	=> (isset($data['username_from'])) ? $data['username_from'] : $data['user_id_from'],
-			'user_id_to'	=> (isset($data['username_to'])) ? $data['username_to'] : $data['user_id_from'],
+			'user_id_to'	=> (isset($data['username_to'])) ? $data['username_to'] : $data['user_id_to'],
 			'points'		=> $data['reputation_points'],
 			'type_name'		=> $data['reputation_type_name'],
 			'item_id'		=> $data['reputation_item_id'],
