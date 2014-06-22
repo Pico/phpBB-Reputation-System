@@ -6,8 +6,8 @@ A full reputation (karma) system for phpBB3.1, with adjustable reputation settin
 ## Features
 * AJAX post rating
 * AJAX user rating
-* posibility to choose reputation power during giving a reputation point
-* lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disbale comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)
+* possibility to choose reputation power during giving a reputation point
+* lots of ACP setting such as: enable/disable the whole system, enable/disable negative points, enable/disable comment, force to write a reputation comment, reputation power settings (base on post, groups, etc.)
 * permissions system - you can adjust it to your board
 * and more
 
@@ -31,12 +31,14 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 - [x] Link to post on details pages
 - [x] Group reputation power
 - [x] Delete reputation
-- [ ] Clear user/post reputation
-- [ ] ACP Synchronization functions
+- [ ] Clear user/post reputations
+- [ ] ACP synchronization functions
 - [ ] MCP reputation modules
-- [ ] UPC reputation modules
+- [ ] UCP reputation modules
 - [ ] Notifications
 - [ ] Responsive design
+- [ ] Reputation ranks
+- [ ] Updater from version for phpBB 3.0.x to release for phpBB 3.1.x
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)
