@@ -194,9 +194,6 @@ class details_controller
 			$row['user_avatar_width'] = !$row['user_avatar'] ?: ($row['user_avatar_width'] > $row['user_avatar_height']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_height']) * $row['user_avatar_width'];
 			$row['user_avatar_height'] = !$row['user_avatar'] ?: ($row['user_avatar_height'] > $row['user_avatar_width']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_width']) * $row['user_avatar_height'];
 
-			// ToDo
-			// Generate post url if it is needed
-
 			$can_delete = ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false;
 
 			$this->template->assign_block_vars('reputation', array(
