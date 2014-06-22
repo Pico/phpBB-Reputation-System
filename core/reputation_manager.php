@@ -434,20 +434,6 @@ class reputation_manager implements reputation_manager_interface
 	*/
 	public function delete_reputation($data)
 	{
-		/*$sql_array = array(
-			'SELECT'	=> 'r.*, rt.reputation_type_name',
-			'FROM'		=> array(
-				$this->reputations_table => 'r',
-				$this->reputation_types_table => 'rt',
-			),
-			'WHERE'		=> 'r.reputation_type_id = rt.reputation_type_id
-				AND r.reputation_id = ' . $rid
-		);
-		$sql = $this->db->sql_build_query('SELECT', $sql_array);
-		$result = $this->db->sql_query($sql);
-		$data = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);*/
-
 		$fields = array(
 			'user_id_from',
 			'user_id_to',
