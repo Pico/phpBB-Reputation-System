@@ -226,23 +226,20 @@ class action_controller
 		$post_type_id = (int) $this->reputation_manager->get_reputation_type_id('post');
 
 		$sql_array = array(
-			'SELECT'	=> 'r.*, p.post_subject, ut.username AS username_to',
+			'SELECT'	=> 'r.*, p.post_subject, p.post_reputation, ut.username AS username_to',
 			'FROM'		=> array(
 				$this->reputations_table => 'r',
+				POSTS_TABLE => 'p',
 			),
 			'LEFT_JOIN'	=> array(
-				array(
-					'FROM'	=> array(POSTS_TABLE => 'p'),
-					'ON'	=> 'p.post_id = r.reputation_item_id
-						AND r.reputation_type_id = ' . $post_type_id,
-				),
 				array(
 					'FROM'	=> array(USERS_TABLE => 'ut'),
 					'ON'	=> 'r.user_id_to = ut.user_id ',
 				),
 			),
 			'WHERE'	=> 'r.reputation_item_id = ' . $post_id . '
-				AND r.reputation_type_id = ' . $post_type_id,
+				AND r.reputation_type_id = ' . $post_type_id . '
+				AND p.post_id = r.reputation_item_id',
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);

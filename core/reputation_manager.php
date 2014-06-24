@@ -475,6 +475,7 @@ class reputation_manager implements reputation_manager_interface
 			'user_id_to',
 			'reputation_item_id',
 			'reputation_type_id',
+			'post_reputation',
 		);
 
 		foreach ($fields as $field)
@@ -489,6 +490,17 @@ class reputation_manager implements reputation_manager_interface
 			SET post_reputation = 0
 			WHERE post_id = {$post_id}";
 		$this->db->sql_query($sql);
+
+		$sql = 'UPDATE ' . USERS_TABLE . "
+			SET user_reputation = user_reputation - {$data['post_reputation']}
+			WHERE user_id = {$data['user_id_to']}";
+		$this->db->sql_query($sql);
+
+		// Check max/min points
+		if ($this->config['rs_max_point'] || $this->config['rs_min_point'])
+		{
+			$this->check_max_min($data['user_id_to']);
+		}
 
 		$sql = 'DELETE FROM ' . $this->reputations_table . "
 			WHERE reputation_item_id = {$post_id}
