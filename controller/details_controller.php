@@ -353,8 +353,7 @@ class details_controller
 			'U_SORT_POINT'		=> $this->helper->route('reputation_details_controller', array('uid' => $uid, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 			'U_SORT_ACTION'		=> $this->helper->route('reputation_details_controller', array('uid' => $uid, 'sort_key' => 'action', 'sort_dir' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 
-			//ToDo
-			//'U_CLEAR'			=> '',
+			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_user', 'u' =>  $uid,)),
 
 			'POST_COUNT'		=> $post_count,
 			'USER_COUNT'		=> $user_count,
@@ -375,7 +374,7 @@ class details_controller
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_NEGATIVE'		=> $this->config['rs_negative_point'] ? true : false,
 			'S_RS_POWER_ENABLE'	=> $this->config['rs_enable_power'] ? true : false,
-			'S_TRUNCATE'		=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
+			'S_CLEAR'			=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
 		 ));
 
 		return $this->helper->render('details.html', $this->user->lang('RS_DETAILS'));
@@ -513,13 +512,12 @@ class details_controller
 			'U_SORT_TIME'		=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id, 'sk' => 'time', 'sd' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 			'U_SORT_POINT'		=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id, 'sk' => 'point', 'sd' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 
-			// ToDo
-			//'U_CLEAR'			=> '',
+			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_post', 'p' =>  $post_id,)),
 
 			'S_RS_AVATAR'		=> $this->config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POINTS_IMG'	=> $this->config['rs_point_type'] ? true : false,
-			'S_TRUNCATE'		=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
+			'S_CLEAR'			=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
 			'S_IS_AJAX'			=> $is_ajax,
 		));
 
@@ -670,15 +668,14 @@ class details_controller
 			'U_SORT_POINT'		=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'point', 'sd' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 			'U_SORT_ACTION'		=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'action', 'sd' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 
-			// ToDo
-			//'U_CLEAR'		=> '',
+			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_user', 'u' =>  $uid,)),
 
 			'L_RS_USER_REPUTATION'	=> $this->user->lang('RS_USER_REPUTATION', get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour'])),
 
 			'S_RS_AVATAR'		=> $this->config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POINTS_IMG'	=> $this->config['rs_point_type'] ? true : false,
-			'S_TRUNCATE'		=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
+			'S_CLEAR'			=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
 			'S_IS_AJAX'			=> $is_ajax,
 		));
 

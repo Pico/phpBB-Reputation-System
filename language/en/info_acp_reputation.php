@@ -65,6 +65,8 @@ $lang = array_merge($lang, array(
 
 	'REPUTATION_SETTINGS_CHANGED'	=> '<strong>Altered Reputation System settings</strong>',
 	'LOG_REPUTATION_DELETED'		=> '<strong>Deleted reputation</strong><br />From user ID: %1$s<br />To user ID: %2$s<br />Points: %3$s<br/>Type: %4$s<br/>Item ID: %5$s',
+	'LOG_POST_REPUTATION_CLEARED'	=> '<strong>Cleared post reputation</strong><br />Post author: %1$s<br />Post subject: %2$s',
+	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Cleared user reputation</strong><br />User: %1$s',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputation System resynchronised</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Cleared reputations</strong>',
 

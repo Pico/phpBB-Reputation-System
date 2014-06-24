@@ -54,6 +54,16 @@ class main_controller
 					$rid = $this->request->variable('r', 0);
 					return $action->delete($rid);
 				break;
+
+				case 'clear_post':
+					$post_id = $this->request->variable('p', 0);
+					return $action->clear_post($post_id);
+				break;
+
+				case 'clear_user':
+					$user_id = $this->request->variable('u', 0);
+					return $action->clear_user($user_id);
+				break;
 			}
 		}
 

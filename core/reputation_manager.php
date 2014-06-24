@@ -237,9 +237,6 @@ class reputation_manager implements reputation_manager_interface
 		$points = $this->db->sql_fetchfield('points');
 		$this->db->sql_freeresult($result);
 
-		// Choose mode
-		$mode = ($points > 0) ? 'max' : 'min';
-
 		// Maximum user reputation
 		if (($points > $this->config['rs_max_point']) && $this->config['rs_max_point'])
 		{
@@ -414,6 +411,7 @@ class reputation_manager implements reputation_manager_interface
 	*/
 	public function delete_reputation($data)
 	{
+		// Required fields
 		$fields = array(
 			'user_id_from',
 			'user_id_to',
@@ -459,6 +457,91 @@ class reputation_manager implements reputation_manager_interface
 			'points'		=> $data['reputation_points'],
 			'type_name'		=> $data['reputation_type_name'],
 			'item_id'		=> $data['reputation_item_id'],
+		));
+	}
+
+	/**
+	* Clear post reputation
+	*
+	* @param int $post_id Post id
+	* @param array $data Reputation data
+	* @access public
+	* @return null
+	*/
+	public function clear_post_reputation($post_id, $data)
+	{
+		// Required fields
+		$fields = array(
+			'user_id_to',
+			'reputation_item_id',
+			'reputation_type_id',
+		);
+
+		foreach ($fields as $field)
+		{
+			if (!isset($data[$field]))
+			{
+				throw new \pico\reputation\exception\invalid_argument(array($field, 'FIELD_MISSING'));
+			}
+		}
+
+		$sql = 'UPDATE ' . POSTS_TABLE . "
+			SET post_reputation = 0
+			WHERE post_id = {$post_id}";
+		$this->db->sql_query($sql);
+
+		$sql = 'DELETE FROM ' . $this->reputations_table . "
+			WHERE reputation_item_id = {$post_id}
+				AND reputation_type_id = {$data['reputation_type_id']}";
+		$this->db->sql_query($sql);
+
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_POST_REPUTATION_CLEARED', false, array(
+			'user_id_to'	=> (isset($data['username_to'])) ? $data['username_to'] : $data['user_id_to'],
+			'post_subject'	=> (isset($data['post_subject'])) ? $data['post_subject'] : $data['reputation_item_id'],
+		));
+	}
+
+	/**
+	* Clear user reputation
+	*
+	* @param int $user_id User id
+	* @param array $data Reputation data
+	* @param arrat $post_ids Post IDs
+	* @access public
+	* @return null
+	*/
+	public function clear_user_reputation($user_id, $data, $post_ids)
+	{
+		// Required fields
+		$fields = array(
+			'user_id_to',
+			'reputation_item_id',
+		);
+
+		foreach ($fields as $field)
+		{
+			if (!isset($data[$field]))
+			{
+				throw new \pico\reputation\exception\invalid_argument(array($field, 'FIELD_MISSING'));
+			}
+		}
+
+		$sql = 'UPDATE ' . USERS_TABLE . "
+			SET user_reputation = 0
+			WHERE user_id = {$user_id}";
+		$this->db->sql_query($sql);
+
+		$sql = 'UPDATE ' . POSTS_TABLE . '
+			SET post_reputation = 0
+			WHERE ' . $this->db->sql_in_set('post_id', $post_ids, false, true);
+		$this->db->sql_query($sql);
+
+		$sql = 'DELETE FROM ' . $this->reputations_table . "
+			WHERE user_id_to = {$user_id}";
+		$this->db->sql_query($sql);
+
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_REPUTATION_CLEARED', false, array(
+			'user_id_to'	=> (isset($data['username_to'])) ? $data['username_to'] : $data['user_id_to'],
 		));
 	}
 }

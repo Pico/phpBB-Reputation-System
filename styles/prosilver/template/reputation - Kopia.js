@@ -247,31 +247,28 @@ reputation.response = function(data, mode) {
 					var poster_id = data.poster_id;
 
 					$('.reputation-list').slideUp(function() {
-						$('#reputation-popup').fadeOut('fast').empty().delay(300).queue(function() {
-							$('#profile-' + poster_id + ' span').text(data.user_reputation);
-							$('#p' + post_id + ' .post-reputation span').text(data.post_reputation);
-							$('#p' + post_id + ' .post-reputation').removeClass('neutral negative positive').addClass(data.reputation_class);
-							$('#p' + post_id + ' .rate-good-icon').removeClass('rated_good rated_bad');
-							$('#p' + post_id + ' .rate-bad-icon').removeClass('rated_good rated_bad');
-						}).dequeue();
+						$('#reputation-popup').fadeOut('fast').empty();
 					});
-					
+					$('#profile-' + poster_id + ' span').text(data.user_reputation);
+					$('#p' + post_id + ' .post-reputation span').text(data.post_reputation);
+					$('#p' + post_id + ' .post-reputation').removeClass('neutral negative positive').addClass(data.reputation_class);
+					$('#p' + post_id + ' .rate-good-icon').removeClass('rated_good rated_bad');
+					$('#p' + post_id + ' .rate-bad-icon').removeClass('rated_good rated_bad');
 				}
 				else if (data.clear_user) {
 					var post_ids = data.post_ids;
 					var poster_id = data.poster_id;
 
 					$('.reputation-list').slideUp(function() {
-						$('#reputation-popup').fadeOut('fast').empty().delay(300).queue(function() {
-							$('#profile-' + poster_id + ' span').text(data.user_reputation);
+						$('#reputation-popup').fadeOut('fast').empty();
+					});
+					$('#profile-' + poster_id + ' span').text(data.user_reputation);
 
-							$.each(post_ids, function(i, post_id) { 
-								$('#p' + post_id + ' .post-reputation span').text(data.post_reputation);
-								$('#p' + post_id + ' .post-reputation').removeClass('neutral negative positive').addClass(data.reputation_class);
-								$('#p' + post_id + ' .rate-good-icon').removeClass('rated_good rated_bad');
-								$('#p' + post_id + ' .rate-bad-icon').removeClass('rated_good rated_bad');
-							});
-						}).dequeue();
+					$.each(post_ids, function(i, post_id) { 
+						$('#p' + post_id + ' .post-reputation span').text(data.post_reputation);
+						$('#p' + post_id + ' .post-reputation').removeClass('neutral negative positive').addClass(data.reputation_class);
+						$('#p' + post_id + ' .rate-good-icon').removeClass('rated_good rated_bad');
+						$('#p' + post_id + ' .rate-bad-icon').removeClass('rated_good rated_bad');
 					});
 				}
 			break;
