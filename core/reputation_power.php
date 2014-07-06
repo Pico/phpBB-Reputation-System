@@ -34,7 +34,7 @@ class reputation_power implements reputation_power_interface
 	* @param \phpbb\db\driver\driver $db	Database object
 	* @param string $reputations_table		Name of the table used to store reputations data
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver $db, $reputation_table)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, $reputation_table)
 	{
 		$this->config = $config;
 		$this->db = $db;

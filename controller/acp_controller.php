@@ -67,7 +67,7 @@ class acp_controller implements acp_interface
 	* @return \pico\reputation\controller\acp_controller
 	* @access public
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_manager $reputation_manager, $reputations_table, $phpbb_root_path, $relative_admin_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_manager $reputation_manager, $reputations_table, $phpbb_root_path, $relative_admin_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->db = $db;

@@ -66,7 +66,7 @@ class reputation_manager implements reputation_manager_interface
 	* @param string $php_ext						phpEx
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver $db, \phpbb\log\log $log, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->cache = $cache;
