@@ -329,11 +329,11 @@ class action_controller
 	/**
 	* Clear user reputation
 	*
-	* @param int $user_id	User ID
+	* @param int $uid	User ID
 	* @return null
 	* @access public
 	*/
-	public function clear_user($user_id)
+	public function clear_user($uid)
 	{
 		$this->user->add_lang_ext('pico/reputation', 'reputation_system');
 		$is_ajax = $this->request->is_ajax();
@@ -350,7 +350,7 @@ class action_controller
 					'ON'	=> 'r.user_id_to = ut.user_id ',
 				),
 			),
-			'WHERE'	=> 'r.user_id_to = ' . $user_id
+			'WHERE'	=> 'r.user_id_to = ' . $uid
 		);
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
@@ -370,7 +370,7 @@ class action_controller
 			$this->reputation_manager->response($message, $json_data, $redirect, $redirect_text, $is_ajax);
 		}
 
-		$redirect = $this->helper->route('reputation_details_controller', array('uid' => $user_id));
+		$redirect = $this->helper->route('reputation_details_controller', array('uid' => $uid));
 
 		if ($this->request->is_set_post('cancel'))
 		{
@@ -382,7 +382,7 @@ class action_controller
 
 		$sql = 'SELECT reputation_item_id
 			FROM ' . $this->reputations_table . "
-			WHERE user_id_to = {$user_id}
+			WHERE user_id_to = {$uid}
 				AND reputation_type_id = {$post_type_id}
 			GROUP BY reputation_item_id";
 		$result = $this->db->sql_query($sql);
@@ -404,7 +404,7 @@ class action_controller
 			else
 			{
 				$s_hidden_fields = build_hidden_fields(array(
-					'u'		=> $user_id,
+					'u'		=> $uid,
 				));
 
 				if (confirm_box(true))
@@ -431,7 +431,7 @@ class action_controller
 		{
 			try
 			{
-				$this->reputation_manager->clear_user_reputation($user_id, $row, $post_ids);
+				$this->reputation_manager->clear_user_reputation($uid, $row, $post_ids);
 			}
 			catch (\pico\reputation\exception\base $e)
 			{
@@ -443,7 +443,7 @@ class action_controller
 			$json_data = array(
 				'clear_user'			=> true,
 				'post_ids'				=> $post_ids,
-				'poster_id'				=> $user_id,
+				'poster_id'				=> $uid,
 				'user_reputation'		=> 0,
 				'post_reputation'		=> 0,
 				'reputation_class'		=> 'neutral',

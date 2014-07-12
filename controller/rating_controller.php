@@ -488,7 +488,7 @@ class rating_controller
 		$this->template->assign_vars(array(
 			'ERROR_MSG'					=> $error,
 
-			'S_CONFIRM_ACTION'			=> $this->helper->route('reputation_main_controller', array('rate' => 'post', 'mode' => $mode, 'p' => $post_id)),
+			'S_CONFIRM_ACTION'			=> $this->helper->route('reputation_post_rating_controller', array('mode' => $mode, 'post_id' => $post_id)),
 			'S_ERROR'					=> (!empty($error)) ? true : false,
 			'S_RS_COMMENT_ENABLE'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POWER_ENABLE' 		=> $this->config['rs_enable_power'] ? true : false,
@@ -855,7 +855,7 @@ class rating_controller
 		$this->template->assign_vars(array(
 			'ERROR_MSG'					=> $error,
 
-			'S_CONFIRM_ACTION'			=> $this->helper->route('reputation_main_controller', array('rate' => 'user', 'u' => $uid)),
+			'S_CONFIRM_ACTION'			=> $this->helper->route('reputation_user_rating_controller', array('uid' => $uid)),
 			'S_RS_COMMENT_ENABLE'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_IS_AJAX'					=> $is_ajax,
 		));

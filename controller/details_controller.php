@@ -208,8 +208,7 @@ class details_controller
 				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				// ToDo
-				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
+				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
@@ -353,7 +352,7 @@ class details_controller
 			'U_SORT_POINT'		=> $this->helper->route('reputation_details_controller', array('uid' => $uid, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 			'U_SORT_ACTION'		=> $this->helper->route('reputation_details_controller', array('uid' => $uid, 'sort_key' => 'action', 'sort_dir' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
 
-			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_user', 'u' =>  $uid,)),
+			'U_CLEAR'			=> $this->helper->route('reputation_clear_user_controller', array('uid' =>  $uid,)),
 
 			'POST_COUNT'		=> $post_count,
 			'USER_COUNT'		=> $user_count,
@@ -495,7 +494,7 @@ class details_controller
 				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
+				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
@@ -508,11 +507,11 @@ class details_controller
 			'POST_SUBJECT'		=> $post_row['post_subject'],
 			'POST_AUTHOR'		=> get_username_string('full', $post_row['poster_id'], $post_row['username'], $post_row['user_colour']),
 
-			'U_SORT_USERNAME'	=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id, 'sk' => 'username', 'sd' => ($sort_key == 'username' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
-			'U_SORT_TIME'		=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id, 'sk' => 'time', 'sd' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
-			'U_SORT_POINT'		=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id, 'sk' => 'point', 'sd' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
+			'U_SORT_USERNAME'	=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'username', 'sort_dir' => ($sort_key == 'username' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
+			'U_SORT_TIME'		=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'time', 'sort_dir' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
+			'U_SORT_POINT'		=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
-			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_post', 'p' =>  $post_id,)),
+			'U_CLEAR'			=> $this->helper->route('reputation_clear_post_controller', array('post_id' =>  $post_id)),
 
 			'S_RS_AVATAR'		=> $this->config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
@@ -648,7 +647,7 @@ class details_controller
 				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				'U_DELETE'		=> $this->helper->route('reputation_main_controller', array('action' => 'delete', 'r' => $row['reputation_id'],)),
+				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
 				'S_COMMENT'			=> !empty($row['reputation_comment']),
 				'S_DELETE'			=> $can_delete,
@@ -663,12 +662,12 @@ class details_controller
 			'USER_ID'			=> $uid,
 
 			'U_USER_DETAILS'	=> $this->helper->route('reputation_details_controller', array('uid' => $uid)),
-			'U_SORT_USERNAME'	=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'username', 'sd' => ($sort_key == 'username' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
-			'U_SORT_TIME'		=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'time', 'sd' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
-			'U_SORT_POINT'		=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'point', 'sd' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
-			'U_SORT_ACTION'		=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $uid, 'sk' => 'action', 'sd' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc',)),
+			'U_SORT_USERNAME'	=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'username', 'sort_dir' => ($sort_key == 'username' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
+			'U_SORT_TIME'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'time', 'sort_dir' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
+			'U_SORT_POINT'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
+			'U_SORT_ACTION'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'action', 'sort_dir' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
-			'U_CLEAR'			=> $this->helper->route('reputation_main_controller', array('action' => 'clear_user', 'u' =>  $uid,)),
+			'U_CLEAR'			=> $this->helper->route('reputation_clear_user_controller', array('uid' =>  $uid)),
 
 			'L_RS_USER_REPUTATION'	=> $this->user->lang('RS_USER_REPUTATION', get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour'])),
 

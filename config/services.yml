@@ -50,12 +50,6 @@ services:
             - %core.root_path%
             - %core.php_ext%
 
-    pico.reputation.main.controller:
-        class: pico\reputation\controller\main_controller
-        arguments:
-            - @request
-            - @service_container
-
     pico.reputation.rating.controller:
         class: pico\reputation\controller\rating_controller
         arguments:

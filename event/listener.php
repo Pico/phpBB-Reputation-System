@@ -308,7 +308,7 @@ class listener implements EventSubscriberInterface
 			'USER_REPUTATION' => $data['user_reputation'],
 
 			'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_details_controller', array('uid' => $data['user_id'])),
-			'U_RATE_USER'				=> $this->helper->route('reputation_main_controller', array('rate' => 'user', 'u' => $data['user_id'])),
+			'U_RATE_USER'				=> $this->helper->route('reputation_user_rating_controller', array('uid' => $data['user_id'])),
 
 			'S_RATE_USER'		=> ($this->config['rs_user_rating'] && $this->auth->acl_get('u_rs_rate')) ? true : false,
 			'S_VIEW_REPUTATION'	=> ($this->auth->acl_get('u_rs_view')) ? true : false,
@@ -418,10 +418,10 @@ class listener implements EventSubscriberInterface
 				'RS_RATE_POST_NEGATIVE'	=> ($row['user_voted_id'] == $this->user->data['user_id']) ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_NEGATIVE'),
 				'RS_RATE_POST_POSITIVE'	=> ($row['user_voted_id'] == $this->user->data['user_id']) ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_POSITIVE'),
 
-				'U_RATE_POST_POSITIVE'		=> $this->helper->route('reputation_main_controller', array('rate' => 'post', 'mode' => 'positive', 'p' => $post_id)),
-				'U_RATE_POST_NEGATIVE'		=> $this->helper->route('reputation_main_controller', array('rate' => 'post', 'mode' => 'negative', 'p' => $post_id)),
-				'U_VIEW_POST_REPUTATION'	=> $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id)),
-				'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_main_controller', array('details' => 'user', 'u' => $row['user_id'])),
+				'U_RATE_POST_POSITIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'positive', 'post_id' => $post_id)),
+				'U_RATE_POST_NEGATIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'negative', 'post_id' => $post_id)),
+				'U_VIEW_POST_REPUTATION'	=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id)),
+				'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_user_details_controller', array('uid' => $row['user_id'])),
 
 				'POST_REPUTATION'		=> $row['post_reputation'],
 				'POST_REPUTATION_CLASS'	=> $this->reputation_helper->reputation_class($row['post_reputation']),
