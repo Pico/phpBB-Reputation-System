@@ -86,12 +86,13 @@ class listener implements EventSubscriberInterface
 			'core.user_setup'	=> 'load_language_on_setup',
 
 			// ACP events
-			'core.acp_manage_forums_request_data'	=> 'forum_reputation_request',
-			'core.acp_manage_forums_display_form'	=> 'forum_display_reputation',
-			'core.acp_manage_group_request_data'	=> 'group_request_data',
-			'core.acp_manage_group_initialise_data'	=> 'group_initialise_data',
-			'core.acp_manage_group_display_form'	=> 'group_display_form',
-			'core.permissions'						=> 'add_reputation_permissions',
+			'core.acp_manage_forums_request_data'		=> 'forum_reputation_request',
+			'core.acp_manage_forums_initialise_data'	=> 'forum_initialise_reputation',
+			'core.acp_manage_forums_display_form'		=> 'forum_display_reputation',
+			'core.acp_manage_group_request_data'		=> 'group_request_data',
+			'core.acp_manage_group_initialise_data'		=> 'group_initialise_data',
+			'core.acp_manage_group_display_form'		=> 'group_display_form',
+			'core.permissions'							=> 'add_reputation_permissions',
 
 			// Index event
 			'core.index_modify_page_title'	=> 'index_reputation_toplist',
@@ -151,6 +152,25 @@ class listener implements EventSubscriberInterface
 		$forum_data = $event['forum_data'];
 		$forum_data['reputation_enabled'] = $this->request->variable('reputation_enabled', 0);
 		$event['forum_data'] = $forum_data;
+	}
+
+	/**
+	* Initialise reputation data while creating a new forum
+	*
+	* @param object $event The event object
+	* @return null
+	* @access public
+	*/
+	public function forum_initialise_reputation($event)
+	{
+		if($event['action'] == 'add')
+		{
+			$forum_data = $event['forum_data'];
+			$forum_data = array_merge($forum_data, array(
+				'reputation_enabled'	=> false,
+			));
+			$event['forum_data'] = $forum_data;
+		}
 	}
 
 	/**
