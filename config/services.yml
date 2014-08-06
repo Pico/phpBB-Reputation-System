@@ -97,7 +97,6 @@ services:
             - @log
             - @template
             - @user
-            - @service_container
             - %tables.reputations%
             - %tables.reputation_types%
             - %core.root_path%
