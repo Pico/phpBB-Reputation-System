@@ -2,7 +2,7 @@
 <!-- INCLUDE overall_header.html -->
 <!-- ENDIF -->
 
-<form method="post" action="{S_CONFIRM_ACTION}" data-rate="post">
+<form method="post" action="{S_CONFIRM_ACTION}" data-rate="post"<!-- IF S_IS_AJAX --> data-referer="_referer={U_RS_REFERER}"<!-- ENDIF -->>
 <div class="panel">
 	<div class="inner"><span class="corners-top"><span></span></span>
 
@@ -28,7 +28,7 @@
 			<!-- ENDIF -->
 		<!-- ENDIF -->
 		<!-- IF S_RS_COMMENT_ENABLE -->
-		<dl class="comment" data-commenton = "{S_RS_COMMENT_ENABLE}" data-ommentreq = "{S_RS_COMMENT_REQ}" data-nocomment = "{L_RS_NO_COMMENT}" data-commentlen = "{RS_COMMENT_TOO_LONG}" data-toolongcomment = "{S_RS_COMMENT_TOO_LONG}">
+		<dl class="comment">
 			<dt><label>{L_RS_COMMENT}</label></dt>
 			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 98%;"></textarea>
 			<!-- IF S_ERROR --><dl class="error">{ERROR_MSG}</dl><!-- ENDIF -->

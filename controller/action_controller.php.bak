@@ -259,7 +259,7 @@ class action_controller
 			$this->reputation_manager->response($message, $json_data, $redirect, $redirect_text, $is_ajax);
 		}
 
-		$redirect = $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id));
+		$redirect = $this->helper->route('reputation_main_controller', array('details' => 'post', 'p' => $post_id));
 
 		if ($this->request->is_set_post('cancel'))
 		{

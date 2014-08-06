@@ -40,7 +40,6 @@ services:
             - @dbal.conn
             - @pagination
             - @request
-            - @symfony_request
             - @template
             - @user
             - @pico.reputation.helper
@@ -59,7 +58,6 @@ services:
             - @controller.helper
             - @dbal.conn
             - @request
-            - @symfony_request
             - @template
             - @user
             - @pico.reputation.helper
@@ -97,7 +95,6 @@ services:
             - @log
             - @template
             - @user
-            - @service_container
             - %tables.reputations%
             - %tables.reputation_types%
             - %core.root_path%

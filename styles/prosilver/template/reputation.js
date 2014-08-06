@@ -29,27 +29,27 @@ $('#reputation-popup').click(function(e) {
 
 // Rating user
 $('#rate-user').click(function(event) {
-	reputation.show_popup(this.href, event, 'user');
+	reputation.show_popup(this.href, event, 'user', $(this).attr('data-referer'));
 });
 
 // Rating post - positive
 $('.rate-good-icon a').click(function(event) {
-	reputation.show_popup(this.href, event, 'post');
+	reputation.show_popup(this.href, event, 'post', $(this).attr('data-referer'));
 });
 
 // Rating post - negative
 $('.rate-bad-icon a').click(function(event) {
-	reputation.show_popup(this.href, event, 'post');
+	reputation.show_popup(this.href, event, 'post', $(this).attr('data-referer'));
 });
 
 // Display post reputation details
 $('.post-reputation a').click(function(event) {
-	reputation.show_popup(this.href, event, 'details');
+	reputation.show_popup(this.href, event, 'details', $(this).attr('data-referer'));
 });
 
 // Display user reputation details
 $('.user-reputation a').click(function(event) {
-	reputation.show_popup(this.href, event, 'details');
+	reputation.show_popup(this.href, event, 'details', $(this).attr('data-referer'));
 });
 
 // Save vote
@@ -76,7 +76,7 @@ $('#reputation-popup').on("click", 'a.sort_order', function(event) {
 	event.stopPropagation();
 	event.preventDefault();
 
-	reputation.sort_order_by(this.href)
+	reputation.sort_order_by(this.href, $('.footer-popup').attr('data-referer'));
 });
 
 // Delete reputation
@@ -87,7 +87,7 @@ $('#reputation-popup').on("click", '.reputation-delete', function(event) {
 	var confirmation = $('a.reputation-delete').attr('data-lang-confirm');
 
 	if (confirm(confirmation)) {
-		reputation.submit_action(this.href, 'delete')
+		reputation.submit_action(this.href, 'delete');
 	}
 });
 
@@ -99,14 +99,14 @@ $('#reputation-popup').on("click", '.clear-reputation', function(event) {
 	var confirmation = $('a.clear-reputation').attr('data-lang-confirm');
 
 	if (confirm(confirmation)) {
-		reputation.submit_action(this.href, 'clear')
+		reputation.submit_action(this.href, 'clear');
 	}
 });
 
 /**
 * Show the reputation popup with proper data
 */
-reputation.show_popup = function(href, event, mode) {
+reputation.show_popup = function(href, event, mode, ref) {
 	event.stopPropagation();
 	event.preventDefault();
 
@@ -115,6 +115,7 @@ reputation.show_popup = function(href, event, mode) {
 
 		$.ajax({
 			url: href,
+			data: ref,
 			dataType: 'html',
 			beforeSend: function() {
 				$('#reputation-popup').hide().empty().removeClass('small-popup normal-popup');
@@ -282,9 +283,10 @@ reputation.response = function(data, mode) {
 /**
 * Sort reputations
 */
-reputation.sort_order_by = function(href) {
+reputation.sort_order_by = function(href, ref) {
 	$.ajax({
 		url: href,
+		data: ref,
 		dataType: 'html',
 		success: function(s) {
 			$('#reputation-popup').empty().append(s);

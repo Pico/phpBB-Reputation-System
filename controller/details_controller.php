@@ -30,6 +30,9 @@ class details_controller
 	/** @var \phpbb\request\request */
 	protected $request;
 
+	/* @var \phpbb\symfony_request */
+	protected $symfony_request;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -66,6 +69,7 @@ class details_controller
 	* @param \phpbb\db\driver\driver $db				Database object
 	* @param \phpbb\pagination $pagination				Pagination object
 	* @param \phpbb\request\request $request			Request object
+	* @param \phpbb\symfony_request $symfony_request	Symfony Request object
 	* @param \phpbb\template\template $template			Template object
 	* @param \phpbb\user $user							User object
 	* @param \pico\reputation\core\reputation_helper	Reputation helper object
@@ -78,7 +82,7 @@ class details_controller
 	* @return \pico\reputation\controller\details_controller
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_helper $reputation_helper, \pico\reputation\core\reputation_manager $reputation_manager, \pico\reputation\core\reputation_power $reputation_power, $reputations_table, $reputation_types_table, $root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\symfony_request $symfony_request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_helper $reputation_helper, \pico\reputation\core\reputation_manager $reputation_manager, \pico\reputation\core\reputation_power $reputation_power, $reputations_table, $reputation_types_table, $root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -86,6 +90,7 @@ class details_controller
 		$this->helper = $helper;
 		$this->pagination = $pagination;
 		$this->request = $request;
+		$this->symfony_request = $symfony_request;
 		$this->template = $template;
 		$this->user = $user;
 		$this->reputation_helper = $reputation_helper;
@@ -391,7 +396,9 @@ class details_controller
 	public function postdetails($post_id, $sort_key, $sort_dir)
 	{
 		$this->user->add_lang_ext('pico/reputation', array('reputation_system', 'reputation_rating'));
+
 		$is_ajax = $this->request->is_ajax();
+		$referer = $this->symfony_request->get('_referer');
 
 		if (empty($this->config['rs_enable']))
 		{
@@ -512,6 +519,7 @@ class details_controller
 			'U_SORT_POINT'		=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
 			'U_CLEAR'			=> $this->helper->route('reputation_clear_post_controller', array('post_id' =>  $post_id)),
+			'U_RS_REFERER'		=> $referer,
 
 			'S_RS_AVATAR'		=> $this->config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
@@ -535,7 +543,9 @@ class details_controller
 	public function userdetails($uid, $sort_key, $sort_dir)
 	{
 		$this->user->add_lang_ext('pico/reputation', array('reputation_system', 'reputation_rating'));
+
 		$is_ajax = $this->request->is_ajax();
+		$referer = $this->symfony_request->get('_referer');
 
 		if (empty($this->config['rs_enable']))
 		{
@@ -668,6 +678,7 @@ class details_controller
 			'U_SORT_ACTION'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'action', 'sort_dir' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
 			'U_CLEAR'			=> $this->helper->route('reputation_clear_user_controller', array('uid' =>  $uid)),
+			'U_RS_REFERER'		=> $referer,
 
 			'L_RS_USER_REPUTATION'	=> $this->user->lang('RS_USER_REPUTATION', get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour'])),
 

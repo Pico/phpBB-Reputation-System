@@ -471,6 +471,8 @@ class listener implements EventSubscriberInterface
 			//	because there is no option to set proper permissions for such topics
 			$this->template->assign_vars(array(
 				'S_FORUM_REPUTATION'	=> ($topic_data['reputation_enabled'] && $this->config['rs_post_rating'] && ($topic_data['topic_type'] != POST_GLOBAL)) ? true : false,
+
+				'U_RS_REFERER'	=> $this->helper->get_current_url(),
 			));
 		}
 	}

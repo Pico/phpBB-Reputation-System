@@ -27,6 +27,9 @@ class rating_controller
 	/** @var \phpbb\request\request */
 	protected $request;
 
+	/* @var \phpbb\symfony_request */
+	protected $symfony_request;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -64,6 +67,7 @@ class rating_controller
 	* @param \phpbb\controller\helper					Controller helper object
 	* @param \phpbb\db\driver\driver $db				Database object
 	* @param \phpbb\request\request $request			Request object
+	* @param \phpbb\symfony_request $symfony_request	Symfony Request object
 	* @param \phpbb\template\template $template			Template object
 	* @param \phpbb\user $user							User object
 	* @param \pico\reputation\core\reputation_helper	Reputation helper object
@@ -75,13 +79,14 @@ class rating_controller
 	* @return \pico\reputation\controller\rating_controller
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_helper $reputation_helper, \pico\reputation\core\reputation_manager $reputation_manager, \pico\reputation\core\reputation_power $reputation_power, $reputations_table, $root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\db\driver\driver_interface $db, \phpbb\request\request $request, \phpbb\symfony_request $symfony_request, \phpbb\template\template $template, \phpbb\user $user, \pico\reputation\core\reputation_helper $reputation_helper, \pico\reputation\core\reputation_manager $reputation_manager, \pico\reputation\core\reputation_power $reputation_power, $reputations_table, $root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
 		$this->db = $db;
 		$this->helper = $helper;
 		$this->request = $request;
+		$this->symfony_request = $symfony_request;
 		$this->template = $template;
 		$this->user = $user;
 		$this->reputation_helper = $reputation_helper;
@@ -103,8 +108,11 @@ class rating_controller
 	public function post($mode, $post_id)
 	{
 		$this->user->add_lang_ext('pico/reputation', 'reputation_rating');
-		$is_ajax = $this->request->is_ajax();
+
+		// Define some variables
 		$error = '';
+		$is_ajax = $this->request->is_ajax();
+		$referer = $this->symfony_request->get('_referer');
 
 		if (empty($this->config['rs_enable']))
 		{
@@ -493,6 +501,8 @@ class rating_controller
 			'S_RS_COMMENT_ENABLE'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POWER_ENABLE' 		=> $this->config['rs_enable_power'] ? true : false,
 			'S_IS_AJAX'					=> $is_ajax,
+
+			'U_RS_REFERER'	=> $referer,
 		));
 
 		return $this->helper->render('ratepost.html', $this->user->lang('RS_POST_RATING'));
