@@ -518,8 +518,11 @@ class rating_controller
 	public function user($uid)
 	{
 		$this->user->add_lang_ext('pico/reputation', 'reputation_rating');
-		$is_ajax = $this->request->is_ajax();
+
+		// Define some variables
 		$error = '';
+		$is_ajax = $this->request->is_ajax();
+		$referer = $this->symfony_request->get('_referer');
 
 		if (empty($this->config['rs_enable']))
 		{
@@ -868,6 +871,8 @@ class rating_controller
 			'S_CONFIRM_ACTION'			=> $this->helper->route('reputation_user_rating_controller', array('uid' => $uid)),
 			'S_RS_COMMENT_ENABLE'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_IS_AJAX'					=> $is_ajax,
+
+			'U_RS_REFERER'	=> $referer,
 		));
 
 		return $this->helper->render('rateuser.html', $this->user->lang('RS_USER_RATING'));

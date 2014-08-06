@@ -329,6 +329,7 @@ class listener implements EventSubscriberInterface
 
 			'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_details_controller', array('uid' => $data['user_id'])),
 			'U_RATE_USER'				=> $this->helper->route('reputation_user_rating_controller', array('uid' => $data['user_id'])),
+			'U_RS_REFERER'				=> $this->helper->get_current_url(),
 
 			'S_RATE_USER'		=> ($this->config['rs_user_rating'] && $this->auth->acl_get('u_rs_rate')) ? true : false,
 			'S_VIEW_REPUTATION'	=> ($this->auth->acl_get('u_rs_view')) ? true : false,
