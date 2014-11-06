@@ -22,6 +22,7 @@
 	padding-bottom: 0;
 	height: 16px;
 	font-weight: bold;
+	cursor: auto !important;
 }
 
 .post-reputation:hover { text-shadow: 0 0 #fff; }
