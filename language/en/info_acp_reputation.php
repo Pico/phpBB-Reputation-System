@@ -70,7 +70,7 @@ $lang = array_merge($lang, array(
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputation System resynchronised</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Cleared reputations</strong>',
 
-	// Setting tabs
+	// Setting legend
 	'ACP_RS_MAIN'			=> 'General',
 	'ACP_RS_DISPLAY'		=> 'Display settings',
 	'ACP_RS_POSTS_RATING'	=> 'Post rating',
@@ -79,11 +79,15 @@ $lang = array_merge($lang, array(
 	'ACP_RS_POWER'			=> 'Reputation power',
 	'ACP_RS_TOPLIST'		=> 'Toplist',
 
-	// General tab
+	// General
 	'RS_NEGATIVE_POINT'				=> 'Allow negative points',
 	'RS_NEGATIVE_POINT_EXPLAIN'		=> 'When disabled users can not give negative points.',
 	'RS_MIN_REP_NEGATIVE'			=> 'Minimum reputation for negative voting',
 	'RS_MIN_REP_NEGATIVE_EXPLAIN'	=> 'How much reputation is required to give negative points. Setting the value to 0 disables this behaviour.',
+	'RS_WARNING'					=> 'Enable warnings',
+	'RS_WARNING_EXPLAIN'			=> 'Users with proper permissions can give negative points when warning users.',
+	'RS_WARNING_MAX_POWER'			=> 'Maximum reputation power for warnings',
+	'RS_WARNING_MAX_POWER_EXPLAIN'	=> 'Maximum reputation power allowed for warnings.',
 	'RS_MIN_POINT'					=> 'Minimum points',
 	'RS_MIN_POINT_EXPLAIN'			=> 'Limits the minimum reputation points a user can receive. Setting the value to 0 disables this behaviour.',
 	'RS_MAX_POINT'					=> 'Maximum points',
@@ -92,16 +96,15 @@ $lang = array_merge($lang, array(
 	'RS_PREVENT_OVERRATING_EXPLAIN'	=> 'Block users from rating the same user.<br /><em>Example:</em> if user A has more than 10 reputation entries and 85% of them come from user B, user B can not rate that user until his votes ratio is higher than 85%.<br />To disable this feature set one or both values to 0.',
 	'RS_PREVENT_NUM'				=> 'Total reputation entries of user A is equal to or higher than',
 	'RS_PREVENT_PERC'				=> '<br />and ratio of user B votes is equal to or higher than',
+	'RS_PER_PAGE'					=> 'Reputations per page',
+	'RS_PER_PAGE_EXPLAIN'			=> 'How many rows should we display in tables of reputation points?',
+	'RS_DISPLAY_AVATAR'				=> 'Display avatars',
+	'RS_POINT_TYPE'					=> 'Method for displaying points',
+	'RS_POINT_TYPE_EXPLAIN'			=> 'Viewing reputation points can be displayed as either the exact value of reputation points a user gave or as an image showing a plus or minus for positive or negative points. The Image method is useful if you set up reputation points so that one rating always equals to one point.',
+	'RS_POINT_VALUE'				=> 'Value',
+	'RS_POINT_IMG'					=> 'Image',
 
-	'RS_PER_PAGE'							=> 'Reputations per page',
-	'RS_PER_PAGE_EXPLAIN'					=> 'How many rows should we display in tables of reputation points?',
-	'RS_DISPLAY_AVATAR'						=> 'Display avatars',
-	'RS_POINT_TYPE'							=> 'Method for displaying points',
-	'RS_POINT_TYPE_EXPLAIN'					=> 'Viewing reputation points can be displayed as either the exact value of reputation points a user gave or as an image showing a plus or minus for positive or negative points. The Image method is useful if you set up reputation points so that one rating always equals to one point.',
-	'RS_POINT_VALUE'						=> 'Value',
-	'RS_POINT_IMG'							=> 'Image',
-
-	// Post rating tab
+	// Post rating
 	'RS_POST_RATING'				=> 'Enable post rating',
 	'RS_POST_RATING_EXPLAIN'		=> 'Allow users to rate other user posts.<br />On each forums management page you can enable or disable reputations.',
 	'RS_ALLOW_REPUTATION_BUTTON'	=> 'Submit and enable Reputation System in all forums',
@@ -114,12 +117,12 @@ $lang = array_merge($lang, array(
 	'RS_SAME_USER'					=> 'Same user',
 	'RS_ALL_USERS'					=> 'All users',
 
-	// User rating tab
+	// User rating
 	'RS_USER_RATING'				=> 'Allow rating of users from their profile page',
 	'RS_USER_RATING_GAP'			=> 'Voting gap',
 	'RS_USER_RATING_GAP_EXPLAIN'	=> 'Time period a user must wait before they can give another rating to a user they have already rated. Setting the value to 0 disables this behaviour and users can rate other users once each.',
 
-	// Comments tab
+	// Comments
 	'RS_ENABLE_COMMENT'				=> 'Enable comments',
 	'RS_ENABLE_COMMENT_EXPLAIN'		=> 'When enabled, users will be able to add a personal comment with their rating.',
 	'RS_FORCE_COMMENT'				=> 'Force user to enter comment',
@@ -131,7 +134,7 @@ $lang = array_merge($lang, array(
 	'RS_COMMEN_LENGTH'				=> 'Comment length',
 	'RS_COMMEN_LENGTH_EXPLAIN'		=> 'The number of characters allowed within a comment. Set to 0 for unlimited characters.',
 
-	// Reputation power tab
+	// Reputation power
 	'RS_ENABLE_POWER'				=> 'Enable reputation power',
 	'RS_ENABLE_POWER_EXPLAIN'		=> 'Reputation power is something that users earn and spend on voting. New users have low power, active and veteran users gain more power. The more power you have the more you can vote during a specified period of time and the more influence you can have on the rating of another user or post.<br/>Users can choose during voting how much power they will spend on a vote, giving more points to interesting posts.',
 	'RS_POWER_RENEWAL'				=> 'Power renewal time',
@@ -151,7 +154,7 @@ $lang = array_merge($lang, array(
 	'RS_LOSE_POWER_WARN'			=> 'Lose power with warnings',
 	'RS_LOSE_POWER_WARN_EXPLAIN'	=> 'Each warning decreases reputation power by this amount of points. Warnings expire in accordance with the settings in General -> Board Configuration -> Board settings',
 
-	// Toplist tab
+	// Toplist
 	'RS_ENABLE_TOPLIST'				=> 'Enable Toplist',
 	'RS_ENABLE_TOPLIST_EXPLAIN' 	=> 'Display a list of users with the most reputation points on the index page.',
 	'RS_TOPLIST_DIRECTION'			=> 'Direction of list',
