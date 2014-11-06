@@ -1,0 +1,46 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_REPUTATION_SETTINGS}</h1>
+
+<p>{L_ACP_REPUTATION_SETTINGS_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<form id="manage_settings" method="post" action="{U_ACTION}">
+
+<!-- BEGIN options -->
+	<!-- IF options.S_LEGEND -->
+		<!-- IF not options.S_FIRST_ROW -->
+			</fieldset>
+		<!-- ENDIF -->
+		<fieldset>
+			<legend>{options.LEGEND}</legend>
+	<!-- ELSE -->
+
+		<dl>
+			<dt><label for="{options.KEY}">{options.TITLE}{L_COLON}</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
+			<dd>{options.CONTENT}</dd>
+		</dl>
+
+	<!-- ENDIF -->
+<!-- END options -->
+</fieldset>
+
+<fieldset>
+	<legend>{L_ACP_SUBMIT_CHANGES}</legend>
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+	</p>
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<!-- INCLUDE overall_footer.html -->

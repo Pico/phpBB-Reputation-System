@@ -1,0 +1,68 @@
+<?php
+/**
+*
+* Reputation System extension for the phpBB Forum Software package.
+*
+* @copyright (c) 2014 phpBB Limited <https://www.phpbb.com>
+* @license GNU General Public License, version 2 (GPL-2.0)
+*
+*/
+
+namespace pico\reputation\migrations\converter;
+
+/**
+* Converter stage 1: Convert table name
+*/
+class c1_convert_table extends \phpbb\db\migration\migration
+{
+	/**
+	* Skip this migration if a previous reputations table does not
+	* exist, or new reputations table is already installed
+	*
+	* @return bool True to skip this migration, false to run it
+	* @access public
+	*/
+	public function effectively_installed()
+	{
+		return !$this->db_tools->sql_table_exists($this->table_prefix . 'reputations') || $this->db_tools->sql_column_exists($this->table_prefix . 'reputations', 'reputation_id');
+	}
+
+	/**
+	* Update the table name
+	*
+	* @return array Array of table schema
+	* @access public
+	*/
+	public function update_data()
+	{
+		return array(
+			array('custom', array(array($this, 'rename_reputations_table'))),
+		);
+	}
+
+	/**
+	* Rename the previous pages table
+	*
+	* @return null
+	* @access public
+	*/
+	public function rename_reputations_table()
+	{
+		switch($this->db->get_sql_layer())
+		{
+			// SQL Server dbms support this syntax
+			case 'mssql':
+			case 'mssql_odbc':
+			case 'mssqlnative':
+				$sql = "EXEC sp_rename '{$this->table_prefix}reputations', '{$this->table_prefix}reputations_mod_backup'";
+			break;
+
+			// All other dbms support this syntax
+			default:
+				$sql = "ALTER TABLE {$this->table_prefix}reputations RENAME TO {$this->table_prefix}reputations_mod_backup";
+			break;
+		}
+
+		$this->db->sql_query($sql);
+	}
+}

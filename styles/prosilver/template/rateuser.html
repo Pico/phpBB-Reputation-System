@@ -1,0 +1,47 @@
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<form method="post" action="{S_CONFIRM_ACTION}" data-rate="user"<!-- IF S_IS_AJAX --> data-referer="_referer={U_RS_REFERER}"<!-- ENDIF -->>
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<fieldset>
+		<!-- IF RS_POWER_POINTS_LEFT -->
+		<div style="margin-bottom:10px; text-align:center">
+			<div class="progress-bar">
+				<div class="empty-progress" style="width:{RS_POWER_PROGRESS_EMPTY}%"></div>
+			</div>
+			<span>{RS_POWER_POINTS_LEFT}</span><br/>
+		</div>
+		<!-- ENDIF -->
+		<dl>
+			<dt><label>{L_RS_POINTS}<label></dt>
+			<dd><select name="points" id="points">
+				<!-- BEGIN reputation -->
+					{reputation.REPUTATION_POWER}
+				<!-- END reputation -->
+				</select></dd>
+		</dl>
+		<!-- IF S_RS_COMMENT_ENABLE -->
+		<dl class="comment">
+			<dt><label>{L_RS_COMMENT}<label></dt>
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3" style="width: 98%;"></textarea>
+			<!-- IF ERROR_MSG --><dl class="error">{ERROR_MSG}</dl><!-- ENDIF -->
+		</dl>
+		<!-- ENDIF -->
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input type="hidden" name="submit_vote" value="1" />
+		<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button1" />&nbsp;
+		<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" />
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

@@ -1,0 +1,96 @@
+imports:
+    - { resource: listeners.yml}
+    - { resource: tables.yml }
+
+services:
+    pico.reputation.acp.controller:
+        class: pico\reputation\controller\acp_controller
+        arguments:
+            - @config
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.manager
+            - %tables.reputations%
+            - %core.root_path%
+            - %core.adm_relative_path%
+            - %core.php_ext%
+
+    pico.reputation.action.controller:
+        class: pico\reputation\controller\action_controller
+        arguments:
+            - @auth
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - %tables.reputations%
+            - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.details.controller:
+        class: pico\reputation\controller\details_controller
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @pagination
+            - @request
+            - @symfony_request
+            - @template
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - @pico.reputation.power
+            - %tables.reputations%
+            - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.rating.controller:
+        class: pico\reputation\controller\rating_controller
+        arguments:
+            - @auth
+            - @config
+            - @controller.helper
+            - @dbal.conn
+            - @request
+            - @symfony_request
+            - @template
+            - @user
+            - @pico.reputation.helper
+            - @pico.reputation.manager
+            - @pico.reputation.power
+            - %tables.reputations%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.helper:
+        class: pico\reputation\core\reputation_helper
+
+    pico.reputation.manager:
+        class: pico\reputation\core\reputation_manager
+        arguments:
+            - @auth
+            - @cache
+            - @config
+            - @dbal.conn
+            - @log
+            - @template
+            - @user
+            - %tables.reputations%
+            - %tables.reputation_types%
+            - %core.root_path%
+            - %core.php_ext%
+
+    pico.reputation.power:
+        class: pico\reputation\core\reputation_power
+        arguments:
+            - @config
+            - @dbal.conn
+            - %tables.reputations%

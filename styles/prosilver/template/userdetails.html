@@ -1,0 +1,58 @@
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<h3>{L_RS_USER_REPUTATION} <span style="float:right;"><a href="{U_USER_DETAILS}" title="">{L_RS_MORE_DETAILS}</a></span></h3>
+
+<div id="post-reputation-list">
+<!-- IF .reputation -->
+	<!-- BEGIN reputation -->
+	<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.REP_ID}">
+		<!-- IF S_RS_AVATAR -->
+		<div class="reputation-avatar"><!-- IF reputation.AVATAR -->{reputation.AVATAR}<!-- ELSE --><img src="{T_THEME_PATH}/images/no_avatar.gif" width="{reputation.AVATAR_DIM}px;" height="{reputation.AVATAR_DIM}px;"alt="" /><!-- ENDIF --></div>
+		<!-- ENDIF -->
+		<div class="reputation-detail">
+			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
+			<div class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</div>
+			<div><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</div>
+			<div class="reputation-action">
+				<span class="type-title">{reputation.ACTION}</span>
+				<!-- BEGIN reputation.post -->
+					<!-- IF reputation.post.S_POST -->
+						<br />&raquo; 
+						<!-- IF reputation.post.U_POST --><a href="{reputation.post.U_POST}" title="{L_POST}"><!-- ENDIF -->
+						{reputation.post.POST_SUBJECT}
+						<!-- IF reputation.post.U_POST --></a><!-- ENDIF -->
+					<!-- ENDIF -->
+				<!-- END reputation.post -->
+			</div>
+			<!-- IF S_RS_COMMENT and reputation.S_COMMENT -->
+			<div class="comment_message">
+				<span>{L_RS_COMMENT}:</span>
+				<div>{reputation.COMMENT}</div>
+			</div>
+			<!-- ENDIF -->
+		</div>
+	</div>
+	<!-- END reputation -->
+<!-- ELSE -->
+	<div class="reputation-list bg3">
+		<span>{L_RS_EMPTY_DATA}</span>
+	</div>
+<!-- ENDIF -->
+</div>
+
+<!-- IF .reputation -->
+<div class="footer-popup"<!-- IF S_IS_AJAX --> data-referer="_referer={U_RS_REFERER}"<!-- ENDIF -->>
+	<label>{L_SORT_BY}:</label>
+	<a href="{U_SORT_USERNAME}" class="sort_order">{L_USERNAME}</a> &bull; 
+	<a href="{U_SORT_TIME}" class="sort_order">{L_TIME}</a> &bull; 
+	<a href="{U_SORT_POINT}" class="sort_order">{L_RS_POINTS}</a> &bull; 
+	<a href="{U_SORT_ACTION}" class="sort_order">{L_RS_ACTION}</a> 
+	<!-- IF S_CLEAR --><a href="{U_CLEAR}" class="clear-reputation" data-lang-confirm="{L_RS_CLEAR_USER_CONFIRM}">{L_RS_CLEAR_USER}</a><!-- ENDIF -->
+</div>
+<!-- ENDIF -->
+
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->
