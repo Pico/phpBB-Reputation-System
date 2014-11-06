@@ -27,6 +27,18 @@ services:
         tags:
             - { name: event.listener }
 
+    pico.reputation.mcp_listener:
+        class: pico\reputation\event\mcp_listener
+        arguments:
+            - @auth
+            - @config
+            - @request
+            - @template
+            - @user
+            - @pico.reputation.manager
+        tags:
+            - { name: event.listener }
+
     pico.reputation.memberlist_listener:
         class: pico\reputation\event\memberlist_listener
         arguments:

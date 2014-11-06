@@ -213,6 +213,8 @@ class acp_controller implements acp_interface
 			'legend1'				=> array('lang' => 'ACP_RS_MAIN'),
 			'rs_negative_point'		=> array('lang' => 'RS_NEGATIVE_POINT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 			'rs_min_rep_negative'	=> array('lang' => 'RS_MIN_REP_NEGATIVE', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
+			'rs_warning'			=> array('lang' => 'RS_WARNING', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
+			'rs_max_power_warning'	=> array('lang' => 'RS_WARNING_MAX_POWER', 'validate' => 'int:1', 'type' => 'text:4:5', 'explain' => true),
 			'rs_min_point'			=> array('lang' => 'RS_MIN_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 			'rs_max_point'			=> array('lang' => 'RS_MAX_POINT', 'validate' => 'int', 'type' => 'text:4:5', 'explain' => true),
 			'rs_prevent_perc'		=> array('lang' => 'RS_PREVENT_OVERRATING', 'validate' => 'int:0:99', 'type' => 'false', 'method' => 'false', 'explain' => false),

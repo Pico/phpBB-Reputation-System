@@ -1,0 +1,29 @@
+<!-- IF S_REPUTATION and S_RS_WARNING -->
+<div class="panel">
+	<div class="inner"><span class="corners-top"><span></span></span>
+
+	<h3>{L_MCP_RS_ADD_WARNING}</h3>
+	<p>{L_MCP_RS_ADD_WARNING_EXPLAIN}</p>
+
+	<fieldset>
+		<dl>
+			<dt><label>{L_RS_POINTS}</label></dt>
+			<dd><select name="points" id="points">
+				<!-- BEGIN power -->
+					<option value="{power.POINTS}">{power.TITLE}</option>'
+				<!-- END power -->
+				</select></dd>
+		</dl>
+		<dl class="comment">
+			<dt><label>{L_RS_COMMENT}</label></dt>
+			<textarea name="comment" id="comment" class="inputbox" cols="40" rows="3"></textarea>
+		</dl>
+		<dl class="panel">
+			<dt>&nbsp;</dt>
+			<dd><label><input type="checkbox" name="add_reputation" /> {L_MCP_RS_ADD_REPUTATION}</label></dd>
+		</dl>
+	</fieldset>
+
+	<span class="corners-bottom"><span></span></span></div>
+</div>
+<!-- ENDIF -->

@@ -62,4 +62,5 @@ $lang = array_merge($lang, array(
 	'RS_VIEW_DISALLOWED'		=> 'You are not allowed to view reputation points.',
 	'RS_VOTE_POWER_LEFT_OF_MAX'	=> '%1$d reputation power points left of %2$d.<br />Maximum per vote: %3$d',
 	'RS_VOTE_SAVED'				=> 'Vote saved',
+	'RS_WARNING_RATING'			=> 'Warning',
 ));
