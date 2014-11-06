@@ -415,7 +415,7 @@ class details_controller
 		}
 
 		$sql_array = array(
-			'SELECT'	=> 'p.poster_id, p.post_subject, u.username, u.user_colour',
+			'SELECT'	=> 'p.forum_id, p.poster_id, p.post_subject, u.username, u.user_colour',
 			'FROM'		=> array(
 				POSTS_TABLE => 'p',
 				USERS_TABLE => 'u'
@@ -615,7 +615,7 @@ class details_controller
 			'LEFT_JOIN' => array(
 				array(
 					'FROM'	=> array(USERS_TABLE => 'u'),
-					'ON'	=> 'r.user_id_from = u.user_id ',
+					'ON'	=> 'u.user_id = r.user_id_from',
 				),
 				array(
 					'FROM'	=> array(POSTS_TABLE => 'p'),
@@ -630,18 +630,12 @@ class details_controller
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
 
-		// Path to images folder
-		$images_path = 'ext/pico/reputation/images/';
-
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			// Display avatar if it is enabled
 			$avatar_dimensions = $this->reputation_helper->avatar_dimensions($is_ajax ? 'small' : 'medium');
 			$row['user_avatar_width'] = !$row['user_avatar'] ?: ($row['user_avatar_width'] > $row['user_avatar_height']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_height']) * $row['user_avatar_width'];
 			$row['user_avatar_height'] = !$row['user_avatar'] ?: ($row['user_avatar_height'] > $row['user_avatar_width']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_width']) * $row['user_avatar_height'];
-
-			// ToDo
-			// Generate post url if it is needed
 
 			$can_delete = ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false;
 
