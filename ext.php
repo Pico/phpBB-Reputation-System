@@ -1,9 +1,10 @@
 <?php
 /**
 *
-* @package Reputation System Extension
-* @copyright (c) 2014 Pico
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* Reputation System
+*
+* @copyright (c) 2014 Lukasz Kaczynski
+* @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
 
