@@ -257,9 +257,9 @@ class rating_controller
 		{
 			$anti_time = time() - $this->config['rs_anti_time'] * 3600;
 			$sql_and = (!$this->config['rs_anti_method']) ? 'AND user_id_to = ' . $row['poster_id'] : '';
-			$sql = 'SELECT COUNT(reputation_id) AS rep_per_day
+			$sql = 'SELECT COUNT(reputation_id) AS reputation_per_day
 				FROM ' . $this->reputations_table . '
-				WHERE user_id_from = ' . $user->data['user_id'] . '
+				WHERE user_id_from = ' . $this->user->data['user_id'] . '
 					' . $sql_and . '
 					AND reputation_type_id = ' . $reputation_type_id . '
 					AND reputation_time > ' . $anti_time;
@@ -267,7 +267,7 @@ class rating_controller
 			$anti_row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
-			if ($anti_row['rep_per_day'] >= $this->config['rs_anti_post'])
+			if ($anti_row['reputation_per_day'] >= $this->config['rs_anti_post'])
 			{
 				$message = $this->user->lang('RS_ANTISPAM_INFO');
 				$json_data = array(
