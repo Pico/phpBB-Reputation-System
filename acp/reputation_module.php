@@ -18,6 +18,9 @@ class reputation_module
 	{
 		global $phpbb_container, $user;
 
+		// Add the pages ACP lang file
+		$user->add_lang_ext('pico/reputation', 'reputation_acp');
+
 		// Define acp controller
 		$acp_controller = $phpbb_container->get('pico.reputation.acp.controller');
 
