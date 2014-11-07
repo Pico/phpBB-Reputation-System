@@ -119,8 +119,8 @@ class details_controller
 		// Check user permissions - if user can not view reputation details, throw the error
 		if (!$this->auth->acl_get('u_rs_view'))
 		{
-			$meta_info = append_sid("{$this->phpbb_root_path}index.$this->php_ext", "");
-			$message = $user->lang['RS_VIEW_DISALLOWED'] . '<br /><br />' . $this->user->lang('RETURN_INDEX', '<a href="' . append_sid("{$this->phpbb_root_path}index.$this->php_ext", "") . '">', '</a>');
+			$meta_info = append_sid("{$this->root_path}index.$this->php_ext", "");
+			$message = $user->lang['RS_VIEW_DISALLOWED'] . '<br /><br />' . $this->user->lang('RETURN_INDEX', '<a href="' . append_sid("{$this->root_path}index.$this->php_ext", "") . '">', '</a>');
 			meta_refresh(3, $meta_info);
 			trigger_error($message);
 		}
@@ -137,8 +137,8 @@ class details_controller
 		// Check if an user exists - if not, throw the error and return to the index page
 		if (empty($user_row))
 		{
-			$meta_info = append_sid("{$this->phpbb_root_path}index.$this->php_ext", "");
-			$message = $this->user->lang['RS_NO_USER_ID'] . '<br /><br />' . $this->user->lang('RETURN_INDEX', '<a href="' . append_sid("{$this->phpbb_root_path}index.$this->php_ext", "") . '">', '</a>');
+			$meta_info = append_sid("{$this->root_path}index.$this->php_ext", "");
+			$message = $this->user->lang['RS_NO_USER_ID'] . '<br /><br />' . $this->user->lang('RETURN_INDEX', '<a href="' . append_sid("{$this->root_path}index.$this->php_ext", "") . '">', '</a>');
 			meta_refresh(3, $meta_info);
 			trigger_error($message);
 		}
@@ -225,8 +225,11 @@ class details_controller
 		$this->db->sql_freeresult($result);
 
 		// User reputation rank
-		$rank_title = $rank_img = $rank_img_src = '';
-		//get_user_rank($user_row['user_rank'], $user_row['user_posts'], $rank_title, $rank_img, $rank_img_src);
+		if (!function_exists('phpbb_get_user_rank'))
+		{
+			include($this->root_path . 'includes/functions_display.' . $this->php_ext);
+		}
+		$user_rank_data = phpbb_get_user_rank($user_row, $user_row['user_posts']);
 
 		// Reputation statistics
 		$positive_count = $negative_count = 0;
@@ -345,8 +348,9 @@ class details_controller
 			'USERNAME_FULL'		=> get_username_string('full', $user_row['user_id'], $user_row['username'], $user_row['user_colour']),
 			'REPUTATION'		=> ($user_row['user_reputation']),
 			'AVATAR_IMG'		=> phpbb_get_user_avatar($user_row),
-			'RANK_TITLE'		=> $rank_title,
-			'RANK_IMG'			=> $rank_img,
+			'RANK_IMG'			=> $user_rank_data['img'],
+			'RANK_IMG_SRC'		=> $user_rank_data['img_src'],
+			'RANK_TITLE'		=> $user_rank_data['title'],
 			'REPUTATION_CLASS'	=> $this->reputation_helper->reputation_class($user_row['user_reputation']),
 
 			'PAGE_NUMBER'		=> $this->pagination->on_page($total_reps, $this->config['rs_per_page'], $start),
