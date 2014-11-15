@@ -29,7 +29,6 @@ class m5_initial_columns extends \phpbb\db\migration\migration
 				),
 				$this->table_prefix . 'users'	=> array(
 					'user_reputation'		=> array('INT:11', 0),
-					'user_last_reputation'	=> array('INT:11', 0),
 				),
 				$this->table_prefix . 'posts'	=> array(
 					'post_reputation'		=> array('INT:11', 0),
@@ -50,7 +49,6 @@ class m5_initial_columns extends \phpbb\db\migration\migration
 				),
 				$this->table_prefix . 'users'	=> array(
 					'user_reputation',
-					'user_last_reputation',
 				),
 				$this->table_prefix . 'posts'	=> array(
 					'post_reputation',

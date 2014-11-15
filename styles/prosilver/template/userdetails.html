@@ -7,9 +7,15 @@
 <div id="post-reputation-list">
 <!-- IF .reputation -->
 	<!-- BEGIN reputation -->
-	<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.REP_ID}">
+	<div class="reputation-list <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.ID}">
 		<!-- IF S_RS_AVATAR -->
-			<div class="reputation-avatar"><!-- IF reputation.AVATAR -->{reputation.AVATAR}<!-- ELSE --><img src="{T_THEME_PATH}/images/no_avatar.gif" width="{reputation.AVATAR_DIM}px;" height="{reputation.AVATAR_DIM}px;" alt="" /><!-- ENDIF --></div>
+			<div class="reputation-avatar">
+				<!-- IF reputation.AVATAR -->
+					{reputation.AVATAR}
+				<!-- ELSE -->
+					<img src="{T_THEME_PATH}/images/no_avatar.gif" alt="" />
+				<!-- ENDIF -->
+			</div>
 		<!-- ENDIF -->
 		<div class="reputation-detail">
 			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
@@ -21,7 +27,7 @@
 					<!-- IF reputation.post.S_POST -->
 						<br />&raquo; 
 						<!-- IF reputation.post.U_POST --><a href="{reputation.post.U_POST}" title="{L_POST}"><!-- ENDIF -->
-						{reputation.post.POST_SUBJECT}
+							{reputation.post.POST_SUBJECT}
 						<!-- IF reputation.post.U_POST --></a><!-- ENDIF -->
 					<!-- ENDIF -->
 				<!-- END reputation.post -->
@@ -43,7 +49,7 @@
 </div>
 
 <!-- IF .reputation -->
-<div class="footer-popup"<!-- IF S_IS_AJAX --> data-referer="_referer={U_RS_REFERER}"<!-- ENDIF -->>
+<div class="footer-popup"<!-- IF S_IS_AJAX --> data-referer="_referer={U_REPUTATION_REFERER}"<!-- ENDIF -->>
 	<label>{L_SORT_BY}:</label>
 	<a href="{U_SORT_USERNAME}" class="sort_order">{L_USERNAME}</a> &bull; 
 	<a href="{U_SORT_TIME}" class="sort_order">{L_TIME}</a> &bull; 

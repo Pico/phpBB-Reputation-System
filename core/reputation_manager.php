@@ -203,8 +203,7 @@ class reputation_manager implements reputation_manager_interface
 
 		// Update user reputation
 		$sql = 'UPDATE ' . USERS_TABLE . "
-			SET user_reputation = user_reputation + {$data['reputation_points']},
-				user_last_reputation = {$data['reputation_time']}
+			SET user_reputation = user_reputation + {$data['reputation_points']}
 			WHERE user_id = {$data['user_id_to']}";
 		$this->db->sql_query($sql);
 

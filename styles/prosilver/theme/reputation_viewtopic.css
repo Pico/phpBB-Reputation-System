@@ -1,4 +1,5 @@
 .rate-good-icon:before { background-position: 0 0; }
+
 .rate-bad-icon:before { background-position: -15px 0; }
 
 .rate-good-icon:hover:before { background-position: 0 -21px; }
@@ -9,7 +10,7 @@
 
 .own, .rate-good-icon.rated_bad, .rate-bad-icon.rated_good { display: none; }
 
-.rate-good-icon.rated_good:before{ background-position: 0 -21px; }
+.rate-good-icon.rated_good:before { background-position: 0 -21px; }
 
 .rate-bad-icon.rated_bad:before { background-position: -15px -21px; }
 
@@ -34,3 +35,8 @@
 .post-reputation.negative { background: #B82929; }
 
 .post-reputation.neutral span { color: #666666; }
+
+.reputation-avatar img {
+	width: 40px;
+	height: initial;
+}

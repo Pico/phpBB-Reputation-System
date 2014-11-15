@@ -194,29 +194,21 @@ class details_controller
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			// Display avatar if it is enabled
-			$avatar_dimensions = $this->reputation_helper->avatar_dimensions('medium');
-			$row['user_avatar_width'] = !$row['user_avatar'] ?: ($row['user_avatar_width'] > $row['user_avatar_height']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_height']) * $row['user_avatar_width'];
-			$row['user_avatar_height'] = !$row['user_avatar'] ?: ($row['user_avatar_height'] > $row['user_avatar_width']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_width']) * $row['user_avatar_height'];
-
-			$can_delete = ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false;
-
 			$this->template->assign_block_vars('reputation', array(
-				'REP_ID'			=> $row['reputation_id'],
-				'USERNAME'			=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
-				'ACTION'			=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
-				'AVATAR'			=> phpbb_get_user_avatar($row),
-				'AVATAR_DIM'		=> $avatar_dimensions,
-				'TIME'				=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'			=> $row['reputation_comment'],
-				'POINTS'			=> $row['reputation_points'],
-				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
-				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
+				'ID'			=> $row['reputation_id'],
+				'USERNAME'		=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
+				'ACTION'		=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
+				'AVATAR'		=> phpbb_get_user_avatar($row),
+				'TIME'			=> $this->user->format_date($row['reputation_time']),
+				'COMMENT'		=> $row['reputation_comment'],
+				'POINTS'		=> $row['reputation_points'],
+				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
+				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
+				'U_DELETE'	=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
-				'S_COMMENT'			=> !empty($row['reputation_comment']),
-				'S_DELETE'			=> $can_delete,
+				'S_COMMENT'	=> !empty($row['reputation_comment']),
+				'S_DELETE'	=> ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false,
 			));
 
 			// Generate post url
@@ -340,7 +332,13 @@ class details_controller
 					'sort_key'	=> $sort_key,
 					'sort_dir'	=> $sort_dir,
 				),
-			), 'pagination', 'page', $total_reps, $this->config['rs_per_page'], $start);
+			),
+			'pagination',
+			'page',
+			$total_reps,
+			$this->config['rs_per_page'],
+			$start
+		);
 
 		$this->template->assign_vars(array(
 			'USER_ID'			=> $user_row['user_id'],
@@ -432,7 +430,7 @@ class details_controller
 		$post_row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		//We couldn't find this post. May be it was deleted while user voted?
+		//We couldn't find the post. It might be deleted while user tried voting?
 		if (empty($post_row))
 		{
 			$message = $this->user->lang('RS_NO_POST');
@@ -487,49 +485,41 @@ class details_controller
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			// Display avatar if it is enabled
-			$avatar_dimensions = $this->reputation_helper->avatar_dimensions($is_ajax ? 'small' : 'medium');
-			$row['user_avatar_width'] = !$row['user_avatar'] ?: ($row['user_avatar_width'] > $row['user_avatar_height']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_height']) * $row['user_avatar_width'];
-			$row['user_avatar_height'] = !$row['user_avatar'] ?: ($row['user_avatar_height'] > $row['user_avatar_width']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_width']) * $row['user_avatar_height'];
-
-			$can_delete = ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false;
-
 			$this->template->assign_block_vars('reputation', array(
-				'REP_ID'			=> $row['reputation_id'],
-				'USERNAME'			=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
-				'AVATAR'			=> phpbb_get_user_avatar($row),
-				'AVATAR_DIM'		=> $avatar_dimensions,
-				'TIME'				=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'			=> $row['reputation_comment'],
-				'POINTS'			=> $row['reputation_points'],
-				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
-				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
+				'ID'			=> $row['reputation_id'],
+				'USERNAME'		=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
+				'AVATAR'		=> phpbb_get_user_avatar($row),
+				'TIME'			=> $this->user->format_date($row['reputation_time']),
+				'COMMENT'		=> $row['reputation_comment'],
+				'POINTS'		=> $row['reputation_points'],
+				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
+				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
+				'U_DELETE'	=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
-				'S_COMMENT'			=> !empty($row['reputation_comment']),
-				'S_DELETE'			=> $can_delete,
+				'S_COMMENT'	=> !empty($row['reputation_comment']),
+				'S_DELETE'	=> ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false,
 			));
 		}
 		$this->db->sql_freeresult($result);
 
 		$this->template->assign_vars(array(
-			'POST_ID'			=> $post_id,
-			'POST_SUBJECT'		=> $post_row['post_subject'],
-			'POST_AUTHOR'		=> get_username_string('full', $post_row['poster_id'], $post_row['username'], $post_row['user_colour']),
+			'POST_ID'		=> $post_id,
+			'POST_SUBJECT'	=> $post_row['post_subject'],
+			'POST_AUTHOR'	=> get_username_string('full', $post_row['poster_id'], $post_row['username'], $post_row['user_colour']),
 
 			'U_SORT_USERNAME'	=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'username', 'sort_dir' => ($sort_key == 'username' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 			'U_SORT_TIME'		=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'time', 'sort_dir' => ($sort_key == 'time' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 			'U_SORT_POINT'		=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
-			'U_CLEAR'			=> $this->helper->route('reputation_clear_post_controller', array('post_id' =>  $post_id)),
-			'U_RS_REFERER'		=> $referer,
+			'U_CLEAR'				=> $this->helper->route('reputation_clear_post_controller', array('post_id' =>  $post_id)),
+			'U_REPUTATION_REFERER'	=> $referer,
 
 			'S_RS_AVATAR'		=> $this->config['rs_display_avatar'] ? true : false,
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POINTS_IMG'	=> $this->config['rs_point_type'] ? true : false,
 			'S_CLEAR'			=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
-			'S_IS_AJAX'			=> $is_ajax,
+			'S_IS_AJAX'			=> $is_ajax ? true : false,
 		));
 
 		return $this->helper->render('postdetails.html');
@@ -566,9 +556,9 @@ class details_controller
 		}
 
 		$sql = 'SELECT user_id, username, user_colour
-			FROM ' . USERS_TABLE . "
+			FROM ' . USERS_TABLE . '
 			WHERE user_type <> 2
-				AND user_id = $uid";
+				AND user_id =' . (int) $uid;
 		$result = $this->db->sql_query($sql);
 		$user_row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
@@ -636,29 +626,21 @@ class details_controller
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			// Display avatar if it is enabled
-			$avatar_dimensions = $this->reputation_helper->avatar_dimensions($is_ajax ? 'small' : 'medium');
-			$row['user_avatar_width'] = !$row['user_avatar'] ?: ($row['user_avatar_width'] > $row['user_avatar_height']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_height']) * $row['user_avatar_width'];
-			$row['user_avatar_height'] = !$row['user_avatar'] ?: ($row['user_avatar_height'] > $row['user_avatar_width']) ? $avatar_dimensions : ($avatar_dimensions / $row['user_avatar_width']) * $row['user_avatar_height'];
-
-			$can_delete = ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false;
-
 			$this->template->assign_block_vars('reputation', array(
-				'REP_ID'			=> $row['reputation_id'],
-				'USERNAME'			=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
-				'ACTION'			=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
-				'AVATAR'			=> phpbb_get_user_avatar($row),
-				'AVATAR_DIM'		=> $avatar_dimensions,
-				'TIME'				=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'			=> $row['reputation_comment'],
-				'POINTS'			=> $row['reputation_points'],
-				'POINTS_CLASS'		=> $this->reputation_helper->reputation_class($row['reputation_points']),
-				'POINTS_TITLE'		=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
+				'ID'			=> $row['reputation_id'],
+				'USERNAME'		=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
+				'ACTION'		=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
+				'AVATAR'		=> phpbb_get_user_avatar($row),
+				'TIME'			=> $this->user->format_date($row['reputation_time']),
+				'COMMENT'		=> $row['reputation_comment'],
+				'POINTS'		=> $row['reputation_points'],
+				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
+				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
 
-				'U_DELETE'		=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
+				'U_DELETE'	=> $this->helper->route('reputation_delete_controller', array('rid' => $row['reputation_id'])),
 
-				'S_COMMENT'			=> !empty($row['reputation_comment']),
-				'S_DELETE'			=> $can_delete,
+				'S_COMMENT'	=> !empty($row['reputation_comment']),
+				'S_DELETE'	=> ($this->auth->acl_get('m_rs_moderate') || ($row['user_id_from'] == $this->user->data['user_id'] && $this->auth->acl_get('u_rs_delete'))) ? true : false,
 			));
 
 			// Generate post url
@@ -675,8 +657,8 @@ class details_controller
 			'U_SORT_POINT'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'point', 'sort_dir' => ($sort_key == 'point' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 			'U_SORT_ACTION'		=> $this->helper->route('reputation_user_details_controller', array('uid' => $uid, 'sort_key' => 'action', 'sort_dir' => ($sort_key == 'action' && $sort_dir == 'asc') ? 'dsc' : 'asc')),
 
-			'U_CLEAR'			=> $this->helper->route('reputation_clear_user_controller', array('uid' =>  $uid)),
-			'U_RS_REFERER'		=> $referer,
+			'U_CLEAR'				=> $this->helper->route('reputation_clear_user_controller', array('uid' =>  $uid)),
+			'U_REPUTATION_REFERER'	=> $referer,
 
 			'L_RS_USER_REPUTATION'	=> $this->user->lang('RS_USER_REPUTATION', get_username_string('username', $user_row['user_id'], $user_row['username'], $user_row['user_colour'])),
 
@@ -684,7 +666,7 @@ class details_controller
 			'S_RS_COMMENT'		=> $this->config['rs_enable_comment'] ? true : false,
 			'S_RS_POINTS_IMG'	=> $this->config['rs_point_type'] ? true : false,
 			'S_CLEAR'			=> $this->auth->acl_gets('m_rs_moderate') ? true : false,
-			'S_IS_AJAX'			=> $is_ajax,
+			'S_IS_AJAX'			=> $is_ajax ? true : false,
 		));
 
 		return $this->helper->render('userdetails.html');

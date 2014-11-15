@@ -106,8 +106,11 @@
 	border: 1px solid #D5D5D5;
 	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
-
-.reputation-avatar  img{ display: block !important; }
+.reputation-avatar img {
+	display: block !important;
+	width: 60px;
+	height: initial;
+}
 
 .reputation-rating {
 	display: block;

@@ -109,7 +109,7 @@ class rating_controller
 	{
 		$this->user->add_lang_ext('pico/reputation', 'reputation_rating');
 
-		// Define some variables
+		// Define basic variables
 		$error = '';
 		$is_ajax = $this->request->is_ajax();
 		$referer = $this->symfony_request->get('_referer');
@@ -130,7 +130,6 @@ class rating_controller
 
 		$reputation_type_id = (int) $this->reputation_manager->get_reputation_type_id('post');
 
-		// Let get sql data
 		$sql_array = array(
 			'SELECT'	=> 'p.forum_id, p.poster_id, u.user_type, u.user_reputation, f.reputation_enabled, r.reputation_id, r.reputation_points',
 			'FROM'		=> array(
