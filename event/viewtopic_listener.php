@@ -122,9 +122,11 @@ class viewtopic_listener implements EventSubscriberInterface
 
 			$sql_ary['LEFT_JOIN'][] = array(
 				'FROM'	=> array($this->reputations_table => 'r'),
-				'ON'	=> 'r.reputation_item_id = p.post_id AND r.reputation_type_id = 1'
+				'ON'	=> 'r.reputation_item_id = p.post_id
+					AND r.reputation_type_id = 1
+					AND r.user_id_from =' . $this->user->data['user_id'],
 			);
-			$sql_ary['SELECT'] .= ', r.user_id_from, r.reputation_points';
+			$sql_ary['SELECT'] .= ', r.reputation_id, r.reputation_points';
 
 			$event['sql_ary'] = $sql_ary;
 		}
@@ -146,7 +148,7 @@ class viewtopic_listener implements EventSubscriberInterface
 
 			$rowset_data = array_merge($rowset_data, array(
 				'post_reputation'	=> $row['post_reputation'],
-				'user_voted_id'		=> $row['user_id_from'],
+				'user_voted'		=> $row['reputation_id'],
 				'reputation_points'	=> $row['reputation_points'],
 			));
 
@@ -196,7 +198,7 @@ class viewtopic_listener implements EventSubscriberInterface
 			}
 			else
 			{
-				$post_vote_class = ($row['user_voted_id'] == $this->user->data['user_id'])  ? (($row['reputation_points'] > 0) ? 'rated_good' : 'rated_bad') : '';
+				$post_vote_class = $row['user_voted'] ? (($row['reputation_points'] > 0) ? 'rated_good' : 'rated_bad') : '';
 			}
 
 			$post_row = array_merge($post_row, array(
@@ -204,8 +206,8 @@ class viewtopic_listener implements EventSubscriberInterface
 				'S_RATE_POST'			=> ($this->auth->acl_get('f_rs_rate', $row['forum_id']) && $this->auth->acl_get('u_rs_rate_post') && $poster_id != ANONYMOUS) ? true : false,
 				'S_RATE_POST_NEGATIVE'	=> ($this->auth->acl_get('f_rs_rate_negative', $row['forum_id']) && $this->config['rs_negative_point']) ? true : false,
 
-				'RS_RATE_POST_NEGATIVE'	=> ($row['user_voted_id'] == $this->user->data['user_id']) ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_NEGATIVE'),
-				'RS_RATE_POST_POSITIVE'	=> ($row['user_voted_id'] == $this->user->data['user_id']) ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_POSITIVE'),
+				'RS_RATE_POST_NEGATIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_NEGATIVE'),
+				'RS_RATE_POST_POSITIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_POSITIVE'),
 
 				'U_RATE_POST_POSITIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'positive', 'post_id' => $post_id)),
 				'U_RATE_POST_NEGATIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'negative', 'post_id' => $post_id)),
