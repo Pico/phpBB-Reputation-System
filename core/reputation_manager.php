@@ -15,7 +15,7 @@ namespace pico\reputation\core;
 *
 * This class consists all common methods for reputations
 */
-class reputation_manager implements reputation_manager_interface
+class reputation_manager
 {
 	/** @var \phpbb\auth\auth */
 	protected $auth;
@@ -31,6 +31,9 @@ class reputation_manager implements reputation_manager_interface
 
 	/** @var \phpbb\log\log */
 	protected $log;
+
+	/** @var \phpbb\notification\manager */
+	protected $notification_manager;
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -50,29 +53,35 @@ class reputation_manager implements reputation_manager_interface
 	/** @var string phpEx */
 	protected $php_ext;
 
+	/** @var int Reputation identifier */
+	private $reputation_id;
+
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth $auth					Auth object
-	* @param \phpbb\cache\service $cache			Cache object
-	* @param \phpbb\config\config $config			Config object
-	* @param \phpbb\db\driver\driver $db			Database object
-	* @param \phpbb\log\log\ $log					Log object
-	* @param \phpbb\template\template $template		Template object
-	* @param \phpbb\user $user						User object
-	* @param string $reputations_table				Name of the table used to store reputations data
-	* @param string $reputation_types_table			Name of the table used to store reputation types data
-	* @param string $root_path						phpBB root path
-	* @param string $php_ext						phpEx
+	* @param \phpbb\auth\auth               $auth                   Auth object
+	* @param \phpbb\cache\service           $cache                  Cache object
+	* @param \phpbb\config\config           $config                 Config object
+	* @param \phpbb\db\driver\driver        $db                     Database object
+	* @param \phpbb\log\log\                $log                    Log object
+	* @param \phpbb\template\template       $template               Template object
+	* @param \phpbb\notification\manager    $notification_manager   Notification object
+	* @param \phpbb\user                    $user                   User object
+	* @param string                         $reputations_table      Name of the table used to store reputations data
+	* @param string                         $reputation_types_table Name of the table used to store reputation types data
+	* @param string                         $root_path              phpBB root path
+	* @param string                         $php_ext                phpEx
+	* @return \pico\reputation\core\reputation_manager
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\notification\manager $notification_manager, \phpbb\template\template $template, \phpbb\user $user, $reputations_table, $reputation_types_table, $root_path, $php_ext)
 	{
 		$this->auth = $auth;
 		$this->cache = $cache;
 		$this->config = $config;
 		$this->db = $db;
 		$this->log = $log;
+		$this->notification_manager = $notification_manager;
 		$this->template = $template;
 		$this->user = $user;
 		$this->reputations_table = $reputations_table;
@@ -192,6 +201,9 @@ class reputation_manager implements reputation_manager_interface
 		$sql = 'INSERT INTO ' . $this->reputations_table . ' ' . $this->db->sql_build_array('INSERT', $data);
 		$this->db->sql_query($sql);
 
+		unset($this->reputation_id);
+		$this->reputation_id = $this->db->sql_nextid();
+
 		// Update post reputation
 		if ($data['reputation_type_id'] == $this->get_reputation_type_id('post'))
 		{
@@ -212,9 +224,6 @@ class reputation_manager implements reputation_manager_interface
 		{
 			$this->check_max_min($data['user_id_to']);
 		}
-
-		// ToDo
-		// Notification
 	}
 
 	/**
@@ -253,6 +262,23 @@ class reputation_manager implements reputation_manager_interface
 				WHERE user_id = $user_id";
 			$this->db->sql_query($sql);
 		}
+	}
+
+	/**
+	* Notify user about reputation
+	*
+	* @param string $notification_type_name Notification type name
+	* @param array $data Notification data
+	* @access public
+	* @return null
+	*/
+	public function add_notification($notification_type_name, $data)
+	{
+		$data = array_merge(
+			array('reputation_id' => $this->reputation_id),
+			$data
+		);
+		$this->notification_manager->add_notifications($notification_type_name, $data);
 	}
 
 	/**

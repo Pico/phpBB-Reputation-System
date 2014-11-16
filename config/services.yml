@@ -1,5 +1,6 @@
 imports:
     - { resource: listeners.yml}
+    - { resource: notifications.yml}
     - { resource: tables.yml }
 
 services:
@@ -81,6 +82,7 @@ services:
             - @config
             - @dbal.conn
             - @log
+            - @notification_manager
             - @template
             - @user
             - %tables.reputations%

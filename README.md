@@ -35,10 +35,10 @@ You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](h
 - [ ] ACP synchronization functions
 - [ ] MCP reputation modules
 - [ ] UCP reputation modules
-- [ ] Notifications
+- [x] Notifications
 - [ ] Responsive design
 - [ ] Reputation ranks
-- [ ] Updater from version for phpBB 3.0.x to release for phpBB 3.1.x
+- [x] Updater from version for phpBB 3.0.x to release for phpBB 3.1.x - in progress (testing phase)
 
 ## License
 [GNU General Public License v2](http://opensource.org/licenses/GPL-2.0)

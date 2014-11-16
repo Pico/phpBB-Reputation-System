@@ -10,6 +10,9 @@
 
 namespace pico\reputation\controller;
 
+/**
+*
+*/
 class rating_controller
 {
 	/** @var \phpbb\auth\auth */
@@ -131,7 +134,7 @@ class rating_controller
 		$reputation_type_id = (int) $this->reputation_manager->get_reputation_type_id('post');
 
 		$sql_array = array(
-			'SELECT'	=> 'p.forum_id, p.poster_id, u.user_type, u.user_reputation, f.reputation_enabled, r.reputation_id, r.reputation_points',
+			'SELECT'	=> 'p.forum_id, p.poster_id, p.post_subject, u.user_type, u.user_reputation, f.reputation_enabled, r.reputation_id, r.reputation_points',
 			'FROM'		=> array(
 				POSTS_TABLE		=> 'p',
 				USERS_TABLE		=> 'u',
@@ -474,6 +477,18 @@ class rating_controller
 				$error = $e->get_message($this->user);
 			}
 
+			// Notification data
+			$notification_data = array(
+				'user_id_to'		=> $row['poster_id'],
+				'user_id_from'		=> $this->user->data['user_id'],
+				'post_id'			=> $post_id,
+				'post_subject'		=> $row['post_subject'],
+			);
+
+			$notification_type = ($points > 0) ? 'pico.reputation.notification.type.rate_post_positive' : 'pico.reputation.notification.type.rate_post_negative';
+			$this->reputation_manager->add_notification($notification_type, $notification_data);
+
+			// Get post reputation
 			$post_reputation = $this->reputation_manager->get_post_reputation($post_id);
 
 			$message = $this->user->lang('RS_VOTE_SAVED');
@@ -852,6 +867,13 @@ class rating_controller
 				// Catch exception
 				$error = $e->get_message($this->user);
 			}
+
+			// Prepare notification data and notify user
+			$notification_data = array(
+				'user_id_to'	=> $uid,
+				'user_id_from'	=> $this->user->data['user_id'],
+			);
+			$this->reputation_manager->add_notification('pico.reputation.notification.type.rate_user', $notification_data);
 
 			$message = $this->user->lang('RS_VOTE_SAVED');
 			$json_data = array(

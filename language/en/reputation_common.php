@@ -51,4 +51,9 @@ $lang = array_merge($lang, array(
 	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
 	'RS_RATE_USER'			=> 'Rate user',
 	'RS_VIEW_DETAILS'		=> 'View details',
+
+	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
+	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
+	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
+	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
 ));
