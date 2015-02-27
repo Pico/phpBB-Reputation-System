@@ -413,7 +413,7 @@ class action_controller
 				}
 				else
 				{
-					confirm_box(false, $this->user->lang('RS_CLEAR_POST_CONFIRM'), $s_hidden_fields);
+					confirm_box(false, $this->user->lang('RS_CLEAR_USER_CONFIRM'), $s_hidden_fields);
 				}
 			}
 		}
