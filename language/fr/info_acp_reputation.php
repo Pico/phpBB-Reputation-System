@@ -56,4 +56,5 @@ $lang = array_merge($lang, array(
 	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Réputation de l’utilisateur effacée</strong><br />Utilisateur : %1$s',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Système de réputation resynchronisé</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Réputations effacées</strong>',
+	'REPUTATION_SETTINGS_CHANGED'	=> '<strong>Paramètres du système de réputation modifiés</strong>',
 ));
