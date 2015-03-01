@@ -98,7 +98,7 @@ $lang = array_merge($lang, array(
 	'RS_POSTS'						=> 'Nombre de messages notés',
 	'RS_HOURS'						=> 'suivant le nombre d’heures',
 	'RS_ANTISPAM_METHOD'			=> 'Méthode de vérification anti-spam',
-	'RS_ANTISPAM_METHOD_EXPLAIN'	=> 'Méthode de vérification anti-spam. “Même utilisateur” vérifie les réputations données pour le même utilisateur. “Tous les utilisateurs” vérifie la réputation indépendamment de qui a reçu des points.',
+	'RS_ANTISPAM_METHOD_EXPLAIN'	=> 'Méthode de vérification anti-spam. « Même utilisateur » vérifie les réputations données pour le même utilisateur. « Tous les utilisateurs » vérifie la réputation indépendamment de qui a reçu des points.',
 	'RS_SAME_USER'					=> 'Même utilisateur',
 	'RS_ALL_USERS'					=> 'Tous les utilisateurs',
 
