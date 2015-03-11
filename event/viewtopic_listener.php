@@ -208,6 +208,7 @@ class viewtopic_listener implements EventSubscriberInterface
 
 				'RS_RATE_POST_NEGATIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_NEGATIVE'),
 				'RS_RATE_POST_POSITIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_POSITIVE'),
+				'RS_POST_REPUTATION'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_POST_REPUTATION'),
 
 				'U_RATE_POST_POSITIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'positive', 'post_id' => $post_id)),
 				'U_RATE_POST_NEGATIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'negative', 'post_id' => $post_id)),
