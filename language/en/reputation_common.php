@@ -45,7 +45,7 @@ $lang = array_merge($lang, array(
 	'RS_COMMENT'		=> 'Comment',
 	'RS_POINTS'			=> 'Points',
 
-	'RS_POST_REPUTATION'	=> 'Post reputation',
+	'RS_POST_A_REPUTATION'	=> 'Post reputation',
 	'RS_POST_RATED'			=> 'You have rated this post',
 	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
 	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
