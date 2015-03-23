@@ -1,0 +1,10 @@
+<!-- IF S_REPUTATION and S_FORUM_REPUTATION -->
+<!-- IF postrow.S_RATE_POST --><a href="{postrow.U_RATE_POST_POSITIVE}" title="{postrow.RS_RATE_POST_POSITIVE}" class="button">+</a><!-- ENDIF -->
+<!-- IF postrow.S_RATE_POST and postrow.S_RATE_POST_NEGATIVE -->
+<a href="{postrow.U_RATE_POST_NEGATIVE}" title="{postrow.RS_RATE_POST_NEGATIVE}" class="button">-</a><!-- ENDIF -->
+<!-- IF postrow.S_VIEW_REPUTATION -->
+<a href="{postrow.U_VIEW_POST_REPUTATION}" class="button"><span>{postrow.POST_REPUTATION}</span></a>
+<!-- ELSE -->
+<span title="{postrow.RS_RATE_POST_POSITIVE}" class="button">{postrow.POST_REPUTATION}</span>
+<!-- ENDIF -->
+<!-- ENDIF -->

@@ -1,0 +1,45 @@
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+<h3>{L_RS_USER_REPUTATION}</h3>
+<span class="mark-read"><a href="{U_USER_DETAILS}">{L_RS_MORE_DETAILS}</a></span>
+<!-- IF .reputation -->
+<!-- BEGIN reputation -->
+<div class="post <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.ID}">
+	<div class="inner">
+		<!-- IF S_RS_AVATAR -->
+			<div class="avatar">
+				<!-- IF reputation.AVATAR -->
+					{reputation.AVATAR}
+				<!-- ELSE -->
+					<img src="{T_THEME_PATH}/images/no_avatar.gif" alt="" />
+				<!-- ENDIF -->
+			</div>
+		<!-- ENDIF -->
+		<p class="author"><b>{reputation.USERNAME}</b> &raquo; {reputation.TIME}<br />
+		{reputation.ACTION}{L_COLON} <span title="{reputation.POINTS_TITLE}">{reputation.POINTS}</span>
+		<!-- BEGIN reputation.post -->
+			<!-- IF reputation.post.S_POST -->
+			<br />
+			<!-- IF reputation.post.U_POST --><a href="{reputation.post.U_POST}" title="{L_POST}">{reputation.post.POST_SUBJECT}</a><!-- ELSE -->{reputation.post.POST_SUBJECT}<!-- ENDIF -->
+			<!-- ENDIF -->
+		<!-- END reputation.post -->
+		<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="rightside button" title="{L_DELETE}">{L_DELETE}</a><!-- ENDIF -->
+		</p>
+	</div>
+	<!-- IF S_RS_COMMENT and reputation.S_COMMENT --><div class="content">{reputation.COMMENT}</div><!-- ENDIF -->
+</div>
+<!-- END reputation -->
+<!-- ELSE -->
+<div class="post bg3">{L_RS_EMPTY_DATA}</div>
+<!-- ENDIF -->
+</div>
+<!-- IF .reputation -->
+<div class="post bg3"<!-- IF S_IS_AJAX --> data-referer="_referer={U_REPUTATION_REFERER}"<!-- ENDIF -->>
+{L_SORT_BY}: <a href="{U_SORT_USERNAME}">{L_USERNAME}</a> &bull; <a href="{U_SORT_TIME}">{L_TIME}</a> &bull; <a href="{U_SORT_POINT}">{L_RS_POINTS}</a> &bull; <a href="{U_SORT_ACTION}">{L_RS_ACTION}</a>
+</div>
+<!-- IF S_CLEAR --><a href="{U_CLEAR}" class="button">{L_RS_CLEAR_USER}</a><!-- ENDIF -->
+<!-- ENDIF -->
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

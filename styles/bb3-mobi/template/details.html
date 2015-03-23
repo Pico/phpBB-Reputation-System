@@ -1,0 +1,105 @@
+<!-- INCLUDE overall_header.html -->
+<h2>{L_RS_DETAILS} - {USERNAME}</h2>
+<div class="panel bg1">
+<b>{USERNAME_FULL}</b> <!-- IF RANK_TITLE --><i>[ {RANK_TITLE} ]</i><!-- ENDIF -->
+<!-- IF AVATAR_IMG --><div class="panel bg2">{AVATAR_IMG}</div><!-- ENDIF -->
+<!-- IF RANK_IMG --><p>{RANK_IMG}</p><!-- ENDIF -->
+<p>{L_REPUTATION}{L_COLON} {REPUTATION}</p>
+<!-- IF S_RS_POWER_ENABLE -->
+<p>{L_RS_POWER}{L_COLON} {RS_POWER}</p>
+<!-- IF RS_POWER_LEFT --><p>{L_RS_VOTING_POWER}{L_COLON} {RS_POWER_LEFT}</p><!-- ENDIF -->
+<!-- ENDIF -->
+<!-- IF S_RS_POST_RATING --><p>{L_RS_POST_COUNT}{L_COLON} {POST_COUNT}</p><!-- ENDIF -->
+<!-- IF S_RS_USER_RATING --><p>{L_RS_USER_COUNT}{L_COLON} {USER_COUNT}</p><!-- ENDIF -->
+<p>{L_RS_POSITIVE_COUNT}{L_COLON} {POSITIVE_COUNT} ({L_RS_POINTS}{L_COLON} {POSITIVE_SUM})</p>
+<p>{L_RS_NEGATIVE_COUNT}{L_COLON} {NEGATIVE_COUNT} ({L_RS_POINTS}{L_COLON} {NEGATIVE_SUM})</p>
+<!-- IF S_CLEAR --><p>[ <a href="{U_CLEAR}">{L_RS_CLEAR_USER}</a> ]</p><!-- ENDIF -->
+</div>
+
+<!-- IF S_RS_POWER_ENABLE and S_RS_POWER_EXPLAIN -->
+<div class="panel bg2">
+<b>{L_RS_POWER_DETAILS}</b>
+<!-- IF not S_RS_GROUP_POWER -->
+	<!-- IF RS_CFG_MEMBERSHIP_DAYS --><p>{L_RS_POWER_DETAIL_AGE}{L_COLON} {FOR_USER_AGE}</p><!-- ENDIF -->
+	<!-- IF RS_CFG_TOTAL_POSTS --><p>{L_RS_POWER_DETAIL_POSTS}{L_COLON} {FOR_NUMBER_OF_POSTS}</p><!-- ENDIF -->
+	<!-- IF RS_CFG_REP_POINT --><p>{L_RS_POWER_DETAIL_REPUTAION}{L_COLON} {FOR_REPUTATION}</p><!-- ENDIF -->
+	<!-- IF RS_CFG_LOOSE_WARN --><p>{L_RS_POWER_DETAIL_WARNINGS}{L_COLON} {FOR_WARNINGS}</p><!-- ENDIF -->
+	<!-- IF RS_CFG_LOOSE_BAN --><p>{L_RS_POWER_DETAIL_BANS}{L_COLON} {FOR_BANS}</p><!-- ENDIF -->
+	<!-- IF MINIMUM_VOTING_POWER --><p>{L_RS_POWER_DETAIL_MIN}{L_COLON} {MINIMUM_VOTING_POWER}</p><!-- ENDIF -->
+	<!-- IF MAXIMUM_VOTING_POWER --><p>{L_RS_POWER_DETAIL_MAX}{L_COLON} {MAXIMUM_VOTING_POWER}</p><!-- ENDIF -->
+<!-- ELSE -->
+	<p>{L_RS_GROUP_POWER}{L_COLON} {GROUP_VOTING_POWER}</p>
+<!-- ENDIF -->
+</div>
+<!-- ENDIF -->
+<table class="table1" cellspacing="1" width="100%">
+	<tr>
+		<th class="header">{L_RS_STATS}</th>
+		<th class="header mark"><span class="stats-positive">{L_RS_POSITIVE}</span></th>
+		<!-- IF S_RS_NEGATIVE --><th class="header mark"><span class="stats-negative">{L_RS_NEGATIVE}</span></th><!-- ENDIF -->
+	</tr>
+	<tr class="bg1">
+		<td>{L_RS_WEEK}</td>
+		<td class="mark">{POSITIVE_WEEK}</td>
+		<!-- IF S_RS_NEGATIVE --><td class="mark">{NEGATIVE_WEEK}</td><!-- ENDIF -->
+	</tr>
+	<tr class="bg2">
+		<td>{L_RS_MONTH}</td>
+		<td class="mark">{POSITIVE_MONTH}</td>
+		<!-- IF S_RS_NEGATIVE --><td class="mark">{NEGATIVE_MONTH}</td><!-- ENDIF -->
+	</tr>
+	<tr class="bg3">
+		<td>{L_RS_6MONTHS}</td>
+		<td class="mark">{POSITIVE_6MONTHS}</td>
+		<!-- IF S_RS_NEGATIVE --><td class="mark">{NEGATIVE_6MONTHS}</td><!-- ENDIF -->
+	</tr>
+</table>
+<!-- IF .reputation -->
+<!-- IF .pagination  -->
+<div class="action-bar">
+	<div class="rightside pagination">
+		<!-- INCLUDE pagination.html -->
+	</div>
+</div>
+<!-- ENDIF -->
+<!-- IF TOTAL_REPS --><div class="header">{TOTAL_REPS}</div><!-- ENDIF -->
+<!-- BEGIN reputation -->
+<div class="post <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.ID}">
+	<div class="inner">
+		<!-- IF S_RS_AVATAR -->
+			<div class="avatar">
+				<!-- IF reputation.AVATAR -->
+					{reputation.AVATAR}
+				<!-- ELSE -->
+					<img src="{T_THEME_PATH}/images/no_avatar.gif" alt="" />
+				<!-- ENDIF -->
+			</div>
+		<!-- ENDIF -->
+		<p class="author"><b>{reputation.USERNAME}</b> &raquo; {reputation.TIME}<br />
+		{reputation.ACTION}{L_COLON} <span title="{reputation.POINTS_TITLE}">{reputation.POINTS}</span>
+		<!-- BEGIN reputation.post -->
+			<!-- IF reputation.post.S_POST -->
+			<br />
+			<!-- IF reputation.post.U_POST --><a href="{reputation.post.U_POST}" title="{L_POST}">{reputation.post.POST_SUBJECT}</a><!-- ELSE -->{reputation.post.POST_SUBJECT}<!-- ENDIF -->
+			<!-- ENDIF -->
+		<!-- END reputation.post -->
+		<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="rightside button" title="{L_DELETE}">{L_DELETE}</a><!-- ENDIF -->
+		</p>
+	</div>
+	<!-- IF S_RS_COMMENT and reputation.S_COMMENT --><div class="content">{reputation.COMMENT}</div><!-- ENDIF -->
+</div>
+<!-- END reputation -->
+<div class="post bg3">
+{L_SORT_BY}{L_COLON} <a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; <a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; <a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull; <a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a>
+</div>
+<!-- IF .pagination -->
+<div class="action-bar">
+<div class="rightside pagination">
+	<!-- INCLUDE pagination.html -->
+</div>
+</div>
+<!-- ENDIF -->
+<!-- ELSE -->
+<div class="post bg3">{L_RS_EMPTY_DATA}</div>
+<!-- ENDIF -->
+<!-- INCLUDE overall_footer.html -->

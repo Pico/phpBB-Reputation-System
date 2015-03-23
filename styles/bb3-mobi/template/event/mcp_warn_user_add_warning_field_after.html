@@ -1,0 +1,11 @@
+<!-- IF S_REPUTATION and S_RS_WARNING -->
+<div class="panel bg3">
+<b>{L_MCP_RS_ADD_WARNING}</b>
+	<div class="post bg1">{L_RS_POINTS}<br />
+	<select name="points" id="points"><!-- BEGIN power --><option value="{power.POINTS}">{power.TITLE}</option>'<!-- END power --></select></div>
+	<div class="post bg1">{L_RS_COMMENT}<br />
+	<textarea name="comment" id="comment" class="inputbox" cols="20" rows="3"></textarea></div>
+	<div class="post bg1"><input type="checkbox" name="add_reputation" /> {L_MCP_RS_ADD_REPUTATION}</div>
+<i>{L_MCP_RS_ADD_WARNING_EXPLAIN}</i>
+</div>
+<!-- ENDIF -->
