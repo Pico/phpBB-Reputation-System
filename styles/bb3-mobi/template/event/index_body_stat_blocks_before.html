@@ -1,0 +1,16 @@
+<!-- IF S_RS_TOPLIST -->
+<div class="panel bg3">
+{L_RS_TOPLIST}
+<div class="post bg1">{L_RS_TOPLIST_EXPLAIN}{L_COLON}
+<!-- IF .toplist -->
+	<!-- BEGIN toplist -->
+		<!-- IF toplist.S_DIRECTION and toplist.S_FIRST_ROW -->{L_RS_NEW_LINE}<!-- ENDIF -->
+		<b>{toplist.USERNAME_FULL}</b>
+		(<!-- IF S_VIEW_REPUTATION --><a href="{toplist.U_VIEW_USER_REPUTATION}"><!-- ENDIF -->{toplist.USER_REPUTATION}<!-- IF S_VIEW_REPUTATION --></a><!-- ENDIF -->)<!-- IF toplist.S_DIRECTION and not toplist.S_LAST_ROW -->{L_RS_NEW_LINE}<!-- ELSE IF not toplist.S_LAST_ROW -->{L_COMMA_SEPARATOR}<!-- ENDIF -->
+	<!-- END toplist -->
+<!-- ELSE -->
+	{L_RS_NO_USERS}
+<!-- ENDIF -->
+</div>
+</div>
+<!-- ENDIF -->

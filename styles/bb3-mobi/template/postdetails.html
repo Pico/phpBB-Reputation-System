@@ -1,0 +1,37 @@
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+<h3>{POST_SUBJECT}</h3>
+<div class="header">{L_RS_POST_REPUTATION} {POST_AUTHOR}</div>
+<!-- IF .reputation -->
+<!-- BEGIN reputation -->
+<div class="post <!-- IF reputation.S_ROW_COUNT is odd -->bg2<!-- ELSE -->bg1<!-- ENDIF -->" id="r{reputation.ID}">
+	<div class="inner">
+		<!-- IF S_RS_AVATAR -->
+			<div class="avatar">
+				<!-- IF reputation.AVATAR -->
+					{reputation.AVATAR}
+				<!-- ELSE -->
+					<img src="{T_THEME_PATH}/images/no_avatar.gif" alt="" />
+				<!-- ENDIF -->
+			</div>
+		<!-- ENDIF -->
+		<p class="author"><b>{reputation.USERNAME}</b> [{reputation.POINTS}] &raquo; {reputation.TIME}
+		<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="rightside button" title="{L_DELETE}">{L_DELETE}</a><!-- ENDIF -->
+		</p>
+	</div>
+	<!-- IF S_RS_COMMENT and reputation.S_COMMENT --><div class="content">{reputation.COMMENT}</div><!-- ENDIF -->
+</div>
+<!-- END reputation -->
+<!-- ELSE -->
+<div class="post bg3">{L_RS_EMPTY_DATA}</div>
+<!-- ENDIF -->
+<!-- IF .reputation -->
+<div class="post bg3"<!-- IF S_IS_AJAX --> data-referer="_referer={U_REPUTATION_REFERER}"<!-- ENDIF -->>
+{L_SORT_BY}: <a href="{U_SORT_USERNAME}">{L_USERNAME}</a> &bull; <a href="{U_SORT_TIME}">{L_TIME}</a> &bull; <a href="{U_SORT_POINT}">{L_RS_POINTS}</a>
+</div>
+<!-- IF S_CLEAR --><a href="{U_CLEAR}" class="button">{L_RS_CLEAR_POST}</a><!-- ENDIF -->
+<!-- ENDIF -->
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

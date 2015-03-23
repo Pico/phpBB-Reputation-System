@@ -1,0 +1,35 @@
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+<form method="post" action="{S_CONFIRM_ACTION}">
+<div class="panel bg3">
+<!-- IF S_RS_POWER_ENABLE -->
+<!-- IF RS_POWER_POINTS_LEFT -->
+<div style="margin-bottom:10px;text-align: center">
+	<div class="progress-bar">
+		<div class="empty-progress" style="width:{RS_POWER_PROGRESS_EMPTY}%"></div>
+	</div>
+	<span>{RS_POWER_POINTS_LEFT}</span><br/>
+</div>
+<!-- ENDIF -->
+<!-- IF .reputation > 0 -->
+<div class="post bg1">{L_RS_POINTS}
+<select name="points" id="points"><!-- BEGIN reputation -->{reputation.REPUTATION_POWER}<!-- END reputation --></select></div>
+<!-- ENDIF -->
+<!-- ENDIF -->
+<!-- IF S_RS_COMMENT_ENABLE -->
+<div class="post bg1">{L_RS_COMMENT}<br />
+	<textarea name="comment" id="comment" class="inputbox" cols="20" rows="3"></textarea>
+	<!-- IF S_ERROR --><p class="error">{ERROR_MSG}</p><!-- ENDIF -->
+</div>
+<!-- ENDIF -->
+<div class="submit-buttons">
+	<input type="hidden" name="submit_vote" value="1" />
+	<input type="submit" name="submit" value="{L_RS_RATE_BUTTON}" class="button1" />&nbsp;
+	<input type="submit" name="cancel" value="{L_CANCEL}" class="button2" />
+</div>
+</div>
+</form>
+<!-- IF not S_IS_AJAX -->
+<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->
