@@ -34,8 +34,9 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
-// Some characters for use
-// ’ » “ ” …
+// Some characters you may want to copy&paste:
+// ’ « » “ ” …
+//
 
 $lang = array_merge($lang, array(
 	'RS_TITLE'			=> 'Système de réputation',
@@ -45,11 +46,11 @@ $lang = array_merge($lang, array(
 	'RS_DETAILS'				=> 'Détails de la réputation de l’utilisateur',
 	'RS_FROM'					=> 'De',
 	'RS_LIST'					=> 'Liste des points de réputation de l’utilisateur',
-	'RS_POST_COUNT'				=> 'Points des messages ',
+	'RS_POST_COUNT'				=> 'Points des messages',
 	'RS_POST_REPUTATION'		=> 'Réputation du message',
-	'RS_USER_COUNT'				=> 'Points d’utilisateur ',
-	'RS_POSITIVE_COUNT'			=> 'Notes positives ',
-	'RS_NEGATIVE_COUNT'			=> 'Notes négatives ',
+	'RS_USER_COUNT'				=> 'Points d’utilisateur',
+	'RS_POSITIVE_COUNT'			=> 'Notes positives',
+	'RS_NEGATIVE_COUNT'			=> 'Notes négatives',
 	'RS_STATS'					=> 'Statistiques',
 	'RS_WEEK'					=> 'La semaine dernière',
 	'RS_MONTH'					=> 'Le mois dernier',
@@ -60,11 +61,11 @@ $lang = array_merge($lang, array(
 		2	=> 'Point(s) : %d',
 	),
 	'RS_POST_DELETE'			=> 'Message supprimé',
-	'RS_POWER'					=> 'Points d’influence ',
+	'RS_POWER'					=> 'Points d’influence',
 	'RS_TIME'					=> 'Heure',
 	'RS_TO'						=> 'à',
 	'RS_TO_USER'				=> 'A',
-	'RS_VOTING_POWER'			=> 'Points d’influence restants ',
+	'RS_VOTING_POWER'			=> 'Points d’influence restants',
 
 	'RS_EMPTY_DATA'				=> 'Il n’y a pas de point de réputation.',
 	'RS_NA'						=> 'N/A',
@@ -106,12 +107,12 @@ $lang = array_merge($lang, array(
 	'RS_VOTE_POWER_LEFT'			=> '%1$d sur %2$d',
 
 	'RS_POWER_DETAILS'				=> 'Points d’influence calculés selon',
-	'RS_POWER_DETAIL_AGE'			=> 'Date d’inscription ',
-	'RS_POWER_DETAIL_POSTS'			=> 'Nombre de messages ',
+	'RS_POWER_DETAIL_AGE'			=> 'Date d’inscription',
+	'RS_POWER_DETAIL_POSTS'			=> 'Nombre de messages',
 	'RS_POWER_DETAIL_REPUTATION'		=> 'Réputation',
-	'RS_POWER_DETAIL_WARNINGS'		=> 'Avertissements ',
+	'RS_POWER_DETAIL_WARNINGS'		=> 'Avertissements',
 	'RS_POWER_DETAIL_MIN'			=> 'Minimum de points d’influence autorisé',
 	'RS_POWER_DETAIL_MAX'			=> 'Maximum de points d’influence autorisé',
 	'RS_POWER_DETAIL_GROUP_POWER'	=> 'Points d’influence basés sur les groupes d’utilisateurs',
-	'RS_GROUP_POWER'				=> 'Groupes d’utilisateurs ',
+	'RS_GROUP_POWER'				=> 'Groupes d’utilisateurs',
 ));

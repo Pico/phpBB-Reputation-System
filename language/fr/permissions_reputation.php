@@ -35,23 +35,23 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
 // Some characters you may want to copy&paste:
-// ’ » “ ” …
+// ’ « » “ ” …
 //
 
 $lang = array_merge($lang, array(
 	'ACL_CAT_REPUTATION'	=> 'Réputation',
 
-	'ACL_A_REPUTATION'	=> 'Peut gérer les paramètres de réputation',
+	'ACL_A_REPUTATION'	=> 'Peut gérer les paramètres de réputation.',
 
-	'ACL_M_RS_MODERATE'	=> 'Peut modérer les points de réputation',
-	'ACL_M_RS_RATE'		=> 'Peut attribuer des points de réputation supplémentaires',
+	'ACL_M_RS_MODERATE'	=> 'Peut modérer les points de réputation.',
+	'ACL_M_RS_RATE'		=> 'Peut attribuer des points de réputation supplémentaires.',
 
-	'ACL_U_RS_DELETE'			=> 'Peut supprimer les points donnés',
-	'ACL_U_RS_RATE'				=> 'Peut noter les autres utilisateurs',
+	'ACL_U_RS_DELETE'			=> 'Peut supprimer les points donnés.',
+	'ACL_U_RS_RATE'				=> 'Peut noter les autres utilisateurs.',
 	'ACL_U_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les autres utilisateurs<br /><em>L’utilisateur doit être en mesure de noter les autres utilisateurs avant qu’il / elle puisse noter négativement les autres utilisateurs.</em>',
-	'ACL_U_RS_RATE_POST'		=> 'Peut noter les messages postés par les autres utilisateurs',
-	'ACL_U_RS_VIEW'				=> 'Peut voir la réputation',
+	'ACL_U_RS_RATE_POST'		=> 'Peut noter les messages postés par les autres utilisateurs.',
+	'ACL_U_RS_VIEW'				=> 'Peut voir la réputation.',
 
-	'ACL_F_RS_RATE'				=> 'Peut noter les messages postés par les autres utilisateurs',
+	'ACL_F_RS_RATE'				=> 'Peut noter les messages postés par les autres utilisateurs.',
 	'ACL_F_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les messages postés par les autres utilisateurs<br /><em>L’utilisateur doit être en mesure de noter les messages postés par les autres utilisateurs avant qu’il / elle puisse noter négativement les messages postés par les autres utilisateurs.</em>',
 ));

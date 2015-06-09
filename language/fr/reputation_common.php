@@ -35,16 +35,16 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
 // Some characters you may want to copy&paste:
-// ’ » “ ” …
+// ’ « » “ ” …
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Réputation ',
+	'REPUTATION'		=> 'Réputation',
 
 	'RS_DISABLED'		=> 'Désolé, mais l’administrateur a désactivé cette fonctionnalité.',
 
-	'RS_COMMENT'		=> 'Commentaire ',
-	'RS_POINTS'			=> 'Points ',
+	'RS_COMMENT'		=> 'Commentaire',
+	'RS_POINTS'			=> 'Points',
 
 	'RS_POST_REPUTATION'	=> 'Réputation du message',
 	'RS_POST_RATED'			=> 'Vous avez noté ce message',
