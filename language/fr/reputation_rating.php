@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
@@ -40,7 +40,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'RS_ANTISPAM_INFO'			=> 'Vous ne pouvez pas donner des points de réputation si tôt. Vous pouvez réessayer plus tard.',
-	'RS_COMMENT_TOO_LONG'		=> 'Votre commentaire contient %1$s caractères et est trop long.<br />Nombre maximum de caractères autorisé : %2$s.',
+	'RS_COMMENT_TOO_LONG'		=> 'Votre commentaire contient %1$s caractères et est trop long.<br />Nombre maximum de caractères autorisé : %2$s.',
 	'RS_NEGATIVE'				=> 'Négatif',
 	'RS_NO_COMMENT'				=> 'Vous ne pouvez pas laisser le champ du commentaire vide.',
 	'RS_NO_POST'				=> 'Il n’y a pas de message.',
@@ -61,7 +61,7 @@ $lang = array_merge($lang, array(
 	'RS_USER_NEGATIVE'			=> 'Vous n’êtes pas autorisé à donner des points de réputation négatifs.<br />Votre réputation doit être supérieure à %s.',
 	'RS_USER_RATING'			=> 'Note donnée à l’utilisateur',
 	'RS_VIEW_DISALLOWED'		=> 'Vous n’êtes pas autorisé à afficher les points de réputation.',
-	'RS_VOTE_POWER_LEFT_OF_MAX'	=> '%1$d points d’influence utilisés sur %2$d.<br />Maximum par note : %3$d',
+	'RS_VOTE_POWER_LEFT_OF_MAX'	=> '%1$d points d’influence utilisés sur %2$d.<br />Maximum par note : %3$d',
 	'RS_VOTE_SAVED'				=> 'Note sauvegardée',
 	'RS_WARNING_RATING'			=> 'Avertissement',
 ));
