@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
@@ -64,7 +64,7 @@ $lang = array_merge($lang, array(
 	'RS_POWER'					=> 'Points d’influence',
 	'RS_TIME'					=> 'Heure',
 	'RS_TO'						=> 'à',
-	'RS_TO_USER'				=> 'A',
+	'RS_TO_USER'				=> 'À',
 	'RS_VOTING_POWER'			=> 'Points d’influence restants',
 
 	'RS_EMPTY_DATA'				=> 'Il n’y a pas de point de réputation.',
@@ -74,18 +74,18 @@ $lang = array_merge($lang, array(
 
 	'NO_REPUTATION_SELECTED'	=> 'Vous n’avez pas sélectionné de point de réputation.',
 
-	'RS_REPUTATION_DELETE_CONFIRM'	=> 'Voulez-vous vraiment supprimer cette réputation ?',
-	'RS_REPUTATIONS_DELETE_CONFIRM'	=> 'Voulez-vous vraiment supprimer ces réputations ?',
+	'RS_REPUTATION_DELETE_CONFIRM'	=> 'Voulez-vous vraiment supprimer cette réputation ?',
+	'RS_REPUTATIONS_DELETE_CONFIRM'	=> 'Voulez-vous vraiment supprimer ces réputations ?',
 	'RS_POINTS_DELETED'			=> array(
 		1	=> 'La réputation a été supprimée.',
 		2	=> 'Les réputations ont été supprimées.',
 	),
 
 	'RS_CLEAR_POST'				=> 'Effacer la réputation de ce message',
-	'RS_CLEAR_POST_CONFIRM'		=> 'Voulez-vous vraiment supprimer tous les points de réputation pour ce message ?',
+	'RS_CLEAR_POST_CONFIRM'		=> 'Voulez-vous vraiment supprimer tous les points de réputation pour ce message ?',
 	'RS_CLEARED_POST'			=> 'Le message réputation a été effacé.',
 	'RS_CLEAR_USER'				=> 'Effacer la réputation',
-	'RS_CLEAR_USER_CONFIRM'		=> 'Voulez-vous vraiment supprimer tous les points de réputation pour cet utilisateur ?',
+	'RS_CLEAR_USER_CONFIRM'		=> 'Voulez-vous vraiment supprimer tous les points de réputation pour cet utilisateur ?',
 	'RS_CLEARED_USER'			=> 'La réputation de l’utilisateur a été effacée.',
 
 	'RS_LATEST_REPUTATIONS'			=> 'Dernières réputations',
