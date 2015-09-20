@@ -1,14 +1,13 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
 * @license GNU General Public License, version 2 (GPL-2.0)
 *
 */
-
 
 /**
 * DO NOT CHANGE
@@ -39,19 +38,9 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-/*
-* These are errors which can be triggered by sending invalid data to the
-* reputation extension API.
-*
-* These errors will never show to a user unless they are either modifying
-* the core reputation extension code OR unless they are writing an extension
-* which makes calls to this extension.
-*
-* Translators: Feel free to not translate these language strings
-*/
 $lang = array_merge($lang, array(
 	'EXCEPTION_FIELD_MISSING'		=> 'Champ obligatoire manquant',
-	'EXCEPTION_INVALID_ARGUMENT'	=> 'L’argument spécifié pour `%1$s` est invalide. Raison : %2$s.',
+	'EXCEPTION_INVALID_ARGUMENT'	=> 'L’argument spécifié pour `%1$s` est invalide. Raison : %2$s.',
 	'EXCEPTION_INVALID_TYPE'		=> 'Ce type de réputation n’existe pas',
 	'EXCEPTION_OUT_OF_BOUNDS'		=> 'Le champ `%1$s` a reçu des données au-delà de ses limites',
 ));
