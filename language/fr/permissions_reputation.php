@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com) & flyingrub (https://github.com/flyingrub)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
@@ -48,10 +48,10 @@ $lang = array_merge($lang, array(
 
 	'ACL_U_RS_DELETE'			=> 'Peut supprimer les points donnés.',
 	'ACL_U_RS_RATE'				=> 'Peut noter les autres utilisateurs.',
-	'ACL_U_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les autres utilisateurs<br /><em>L’utilisateur doit être en mesure de noter les autres utilisateurs avant qu’il / elle puisse noter négativement les autres utilisateurs.</em>',
+	'ACL_U_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les autres utilisateurs.<br /><em>L’utilisateur doit être en mesure de noter les autres utilisateurs avant qu’il / elle puisse noter négativement les autres utilisateurs.</em>',
 	'ACL_U_RS_RATE_POST'		=> 'Peut noter les messages postés par les autres utilisateurs.',
 	'ACL_U_RS_VIEW'				=> 'Peut voir la réputation.',
 
 	'ACL_F_RS_RATE'				=> 'Peut noter les messages postés par les autres utilisateurs.',
-	'ACL_F_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les messages postés par les autres utilisateurs<br /><em>L’utilisateur doit être en mesure de noter les messages postés par les autres utilisateurs avant qu’il / elle puisse noter négativement les messages postés par les autres utilisateurs.</em>',
+	'ACL_F_RS_RATE_NEGATIVE'	=> 'Peut noter négativement les messages postés par les autres utilisateurs.<br /><em>L’utilisateur doit être en mesure de noter les messages postés par les autres utilisateurs avant qu’il / elle puisse noter négativement les messages postés par les autres utilisateurs.</em>',
 ));
