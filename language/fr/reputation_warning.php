@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
@@ -40,7 +40,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'MCP_RS_ADD_WARNING'			=> 'Points de réputation pour les avertissements',
-	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'Vous pouvez attribuer des points de réputation négatifs à cet utilisateur pour son mauvais comportement, etc. Cela fonctionnera uniquement si vous avez coché la case ci-dessous.',
+	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'Vous pouvez attribuer des points de réputation négatifs à cet utilisateur pour son mauvais comportement, etc.. Cela fonctionnera uniquement si vous avez coché la case ci-dessous.',
 	'MCP_RS_ADD_REPUTATION'			=> 'Ajouter une réputation',
 
 	'MCP_RS_POINTS'	=> array(
