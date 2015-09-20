@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
 * French translation by Galixte (http://www.galixte.com), tomberaid (https://github.com/tomberaid), flyingrub (https://github.com/flyingrub) & monpseudo (https://github.com/monpseudo)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
@@ -51,9 +51,9 @@ $lang = array_merge($lang, array(
 	'RS_GROUP_POWER'				=> 'Points d’influence du groupe',
 	'RS_GROUP_POWER_EXPLAIN'		=> 'Si ce champ est rempli, les points d’influence des membres seront écrasés et ne seront pas basés sur les messages etc.',
 
-	'LOG_REPUTATION_DELETED'		=> '<strong>Réputation supprimée</strong><br />De l’utilisateur : %1$s<br />Pour l’utilisateur : %2$s<br />Points : %3$s<br/>Type : %4$s<br/>ID du message : %5$s',
-	'LOG_POST_REPUTATION_CLEARED'	=> '<strong>Réputation du message effacée</strong><br />Auteur du message : %1$s<br />Sujet du message : %2$s',
-	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Réputation de l’utilisateur effacée</strong><br />Utilisateur : %1$s',
+	'LOG_REPUTATION_DELETED'		=> '<strong>Réputation supprimée</strong><br />De l’utilisateur : %1$s<br />Pour l’utilisateur : %2$s<br />Points : %3$s<br/>Type : %4$s<br/>ID du message : %5$s',
+	'LOG_POST_REPUTATION_CLEARED'	=> '<strong>Réputation du message effacée</strong><br />Auteur du message : %1$s<br />Sujet du message : %2$s',
+	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Réputation de l’utilisateur effacée</strong><br />Utilisateur : %1$s',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Système de réputation resynchronisé</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Réputations effacées</strong>',
 	'REPUTATION_SETTINGS_CHANGED'	=> '<strong>Paramètres du système de réputation modifiés</strong>',
