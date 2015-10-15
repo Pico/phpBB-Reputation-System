@@ -20,7 +20,7 @@
 }
 
 .post-reputation {
-	padding-bottom: 0;
+	padding: 2px 8px 0px 8px;
 	height: 16px;
 	font-weight: bold;
 	cursor: auto !important;
@@ -30,9 +30,16 @@
 
 .post-reputation.positive span, .post-reputation.negative span { color: #fff; }
 
-.post-reputation.positive { background: #6F8F52; }
+.post-reputation.positive { background: #00ab00; }
 
-.post-reputation.negative { background: #B82929; }
+.post-reputation.negative {
+	background: #D31141;
+	padding: 2px 6px 1px 6px;
+}
+
+.post-reputation.neutral {
+	padding: 2px 8px 0px 8px;
+}
 
 .post-reputation.neutral span { color: #666666; }
 

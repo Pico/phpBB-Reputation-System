@@ -1,7 +1,8 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
+* French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
 * @license GNU General Public License, version 2 (GPL-2.0)
@@ -34,26 +35,16 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
 // Some characters you may want to copy&paste:
-// ’ » “ ” …
+// ’ « » “ ” …
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'MCP_RS_ADD_WARNING'			=> 'Points de réputation pour les avertissements',
+	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'Vous pouvez attribuer des points de réputation négatifs à cet utilisateur pour son mauvais comportement, etc.. Cela fonctionnera uniquement si vous avez coché la case ci-dessous.',
+	'MCP_RS_ADD_REPUTATION'			=> 'Ajouter une réputation',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
-
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
-
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
-
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'MCP_RS_POINTS'	=> array(
+		1	=> '-%d point',
+		2	=> '-%d points',
+	),
 ));

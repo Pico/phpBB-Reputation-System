@@ -1,7 +1,8 @@
 <?php
 /**
 *
-* Reputation System
+* Reputation System extension for the phpBB Forum Software package.
+* French translation by Galixte (http://www.galixte.com)
 *
 * @copyright (c) 2014 Lukasz Kaczynski
 * @license GNU General Public License, version 2 (GPL-2.0)
@@ -34,26 +35,26 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 //
 // Some characters you may want to copy&paste:
-// ’ » “ ” …
+// ’ « » “ ” …
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'REPUTATION'		=> 'Réputation',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
+	'RS_DISABLED'		=> 'Désolé, mais l’administrateur a désactivé cette fonctionnalité.',
 
-	'RS_COMMENT'		=> 'Comment',
+	'RS_COMMENT'		=> 'Commentaire',
 	'RS_POINTS'			=> 'Points',
 
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
+	'RS_POST_REPUTATION'	=> 'Réputation du message',
+	'RS_POST_RATED'			=> 'Vous avez noté ce message',
+	'RS_RATE_POST_POSITIVE'	=> 'Note positive au message',
+	'RS_RATE_POST_NEGATIVE'	=> 'Note négative au message',
+	'RS_RATE_USER'			=> 'Noter l’utilisateur',
+	'RS_VIEW_DETAILS'		=> 'Voir les détails',
 
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'NOTIFICATION_TYPE_REPUTATION'		=> 'Quelqu’un vous a donné un point de réputation',
+	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Noté positivement</strong> par %s pour le message',
+	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Noté négativement</strong> par %s pour le message',
+	'NOTIFICATION_RATE_USER'			=> '<strong>Noté</strong> par %s',
 ));

@@ -19,18 +19,18 @@
 
 		<dl class="left-box details" style="width: 70%;">
 			<!-- IF not AVATAR_IMG -->
-				<!-- IF RANK_TITLE --><dt style="width: 50%;">{L_RANK}:</dt> <dd style="width: 45%;">{RANK_TITLE}</dd><!-- ENDIF -->
-				<!-- IF RANK_IMG --><dt style="width: 50%;"><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}:<!-- ENDIF --></dt> <dd style="width: 45%;">{RANK_IMG}</dd><!-- ENDIF -->
+				<!-- IF RANK_TITLE --><dt style="width: 50%;">{L_RANK}{L_COLON}</dt> <dd style="width: 45%;">{RANK_TITLE}</dd><!-- ENDIF -->
+				<!-- IF RANK_IMG --><dt style="width: 50%;"><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}{L_COLON}<!-- ENDIF --></dt> <dd style="width: 45%;">{RANK_IMG}</dd><!-- ENDIF -->
 			<!-- ENDIF -->
-			<dt style="width: 50%;">{L_REPUTATION}:</dt><dd style="width: 45%;"><div class="reputation {REPUTATION_CLASS}"><span>{REPUTATION}</span>
+			<dt style="width: 50%;">{L_REPUTATION}{L_COLON}</dt><dd style="width: 45%;"><div class="reputation {REPUTATION_CLASS}"><span>{REPUTATION}</span>
 			<!-- IF S_RS_POWER_ENABLE -->
-				<dt style="width: 50%;">{L_RS_POWER}:</dt> <dd style="width: 45%;">{RS_POWER}</dd>
-				<!-- IF RS_POWER_LEFT --><dt style="width: 50%;">{L_RS_VOTING_POWER}:</dt> <dd style="width: 45%;">{RS_POWER_LEFT}</dd><!-- ENDIF -->
+				<dt style="width: 50%;">{L_RS_POWER}{L_COLON}</dt> <dd style="width: 45%;">{RS_POWER}</dd>
+				<!-- IF RS_POWER_LEFT --><dt style="width: 50%;">{L_RS_VOTING_POWER}{L_COLON}</dt> <dd style="width: 45%;">{RS_POWER_LEFT}</dd><!-- ENDIF -->
 			<!-- ENDIF -->
-			<!-- IF S_RS_POST_RATING --><dt style="width: 50%;">{L_RS_POST_COUNT}:</dt> <dd style="width: 45%;">{POST_COUNT}</dd><!-- ENDIF -->
-			<!-- IF S_RS_USER_RATING --><dt style="width: 50%;">{L_RS_USER_COUNT}:</dt> <dd style="width: 45%;">{USER_COUNT}</dd><!-- ENDIF -->
-			<dt style="width: 50%;">{L_RS_POSITIVE_COUNT}:</dt> <dd style="width: 45%;">{POSITIVE_COUNT} ({L_RS_POINTS}: {POSITIVE_SUM})</dd>
-			<dt style="width: 50%;">{L_RS_NEGATIVE_COUNT}:</dt> <dd style="width: 45%;">{NEGATIVE_COUNT} ({L_RS_POINTS}: {NEGATIVE_SUM})</dd>
+			<!-- IF S_RS_POST_RATING --><dt style="width: 50%;">{L_RS_POST_COUNT}{L_COLON}</dt> <dd style="width: 45%;">{POST_COUNT}</dd><!-- ENDIF -->
+			<!-- IF S_RS_USER_RATING --><dt style="width: 50%;">{L_RS_USER_COUNT}{L_COLON}</dt> <dd style="width: 45%;">{USER_COUNT}</dd><!-- ENDIF -->
+			<dt style="width: 50%;">{L_RS_POSITIVE_COUNT}{L_COLON}</dt> <dd style="width: 45%;">{POSITIVE_COUNT} ({L_RS_POINTS}{L_COLON} {POSITIVE_SUM})</dd>
+			<dt style="width: 50%;">{L_RS_NEGATIVE_COUNT}{L_COLON}</dt> <dd style="width: 45%;">{NEGATIVE_COUNT} ({L_RS_POINTS}{L_COLON} {NEGATIVE_SUM})</dd>
 			<!-- IF S_CLEAR --><dt style="width: 50%;">&nbsp;</dt> <dd style="width: 45%;">[ <a href="{U_CLEAR}">{L_RS_CLEAR_USER}</a> ]</dd><!-- ENDIF -->
 		</dl>
 
@@ -47,15 +47,15 @@
 
 			<dl class="details">
 			<!-- IF not S_RS_GROUP_POWER -->
-				<!-- IF RS_CFG_MEMBERSHIP_DAYS --><dt style="width: 50%">{L_RS_POWER_DETAIL_AGE}:</dt> <dd style="width: 45%">{FOR_USER_AGE}</dd><!-- ENDIF -->
-				<!-- IF RS_CFG_TOTAL_POSTS --><dt style="width: 50%">{L_RS_POWER_DETAIL_POSTS}:</dt> <dd style="width: 45%">{FOR_NUMBER_OF_POSTS}</dd><!-- ENDIF -->
-				<!-- IF RS_CFG_REP_POINT --><dt style="width: 50%">{L_RS_POWER_DETAIL_REPUTAION}:</dt> <dd style="width: 45%">{FOR_REPUTATION}</dd><!-- ENDIF -->
-				<!-- IF RS_CFG_LOOSE_WARN --><dt style="width: 50%">{L_RS_POWER_DETAIL_WARNINGS}:</dt> <dd style="width: 45%">{FOR_WARNINGS}</dd><!-- ENDIF -->
-				<!-- IF RS_CFG_LOOSE_BAN --><dt style="width: 50%">{L_RS_POWER_DETAIL_BANS}:</dt> <dd style="width: 45%">{FOR_BANS}</dd><!-- ENDIF -->
-				<!-- IF MINIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MIN}:</dt> <dd style="width: 45%">{MINIMUM_VOTING_POWER}</dd><!-- ENDIF -->
-				<!-- IF MAXIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MAX}:</dt> <dd style="width: 45%">{MAXIMUM_VOTING_POWER}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_MEMBERSHIP_DAYS --><dt style="width: 50%">{L_RS_POWER_DETAIL_AGE}{L_COLON}</dt> <dd style="width: 45%">{FOR_USER_AGE}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_TOTAL_POSTS --><dt style="width: 50%">{L_RS_POWER_DETAIL_POSTS}{L_COLON}</dt> <dd style="width: 45%">{FOR_NUMBER_OF_POSTS}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_REP_POINT --><dt style="width: 50%">{L_RS_POWER_DETAIL_REPUTATION}{L_COLON}</dt> <dd style="width: 45%">{FOR_REPUTATION}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_LOOSE_WARN --><dt style="width: 50%">{L_RS_POWER_DETAIL_WARNINGS}{L_COLON}</dt> <dd style="width: 45%">{FOR_WARNINGS}</dd><!-- ENDIF -->
+				<!-- IF RS_CFG_LOOSE_BAN --><dt style="width: 50%">{L_RS_POWER_DETAIL_BANS}{L_COLON}</dt> <dd style="width: 45%">{FOR_BANS}</dd><!-- ENDIF -->
+				<!-- IF MINIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MIN}{L_COLON}</dt> <dd style="width: 45%">{MINIMUM_VOTING_POWER}</dd><!-- ENDIF -->
+				<!-- IF MAXIMUM_VOTING_POWER --><dt style="width: 50%">{L_RS_POWER_DETAIL_MAX}{L_COLON}</dt> <dd style="width: 45%">{MAXIMUM_VOTING_POWER}</dd><!-- ENDIF -->
 			<!-- ELSE -->
-				<dt style="width: 50%">{L_RS_GROUP_POWER}:</dt> <dd style="width: 45%">{GROUP_VOTING_POWER}</dd>
+				<dt style="width: 50%">{L_RS_GROUP_POWER}{L_COLON}</dt> <dd style="width: 45%">{GROUP_VOTING_POWER}</dd>
 			<!-- ENDIF -->
 			</dl>
 		</div>
@@ -101,7 +101,7 @@
 <!-- IF .reputation -->
 	<div class="action-bar top">
 		<div class="sorting">
-			<label>{L_SORT_BY}:</label>
+			<label>{L_SORT_BY}{L_COLON}</label>
 			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
 			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
 			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull; 
@@ -149,7 +149,7 @@
 				</div>
 				<!-- IF S_RS_COMMENT and reputation.S_COMMENT -->
 				<div class="comment_message">
-					<span>{L_RS_COMMENT}:</span>
+					<span>{L_RS_COMMENT}{L_COLON}</span>
 					<div>{reputation.COMMENT}</div>
 				</div>
 				<!-- ENDIF -->
@@ -166,7 +166,7 @@
 	<!-- IF .reputation -->
 	<div class="action-bar bottom">
 		<div class="sorting">
-			<label>{L_SORT_BY}:</label>
+			<label>{L_SORT_BY}{L_COLON}</label>
 			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
 			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
 			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull; 
