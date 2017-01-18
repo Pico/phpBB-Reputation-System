@@ -102,9 +102,9 @@
 	<div class="action-bar top">
 		<div class="sorting">
 			<label>{L_SORT_BY}:</label>
-			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
-			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
-			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull; 
+			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull;
+			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull;
+			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull;
 			<a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a>
 		</div>
 		<div class="pagination">
@@ -133,14 +133,18 @@
 			</div>
 			<!-- ENDIF -->
 			<div class="reputation-detail">
-				<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
+				<!-- IF reputation.S_DELETE -->
+					<a href="{reputation.U_DELETE}" class="rightside" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">
+						<i class="icon fa-trash-o fa-fw" aria-hidden="true"></i>
+					</a>
+				<!-- ENDIF -->
 				<div class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</div>
 				<div><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</div>
 				<div class="reputation-action">
 					<span class="type-title">{reputation.ACTION}</span>
 					<!-- BEGIN reputation.post -->
 						<!-- IF reputation.post.S_POST -->
-							<br />&raquo; 
+							<br />&raquo;
 							<!-- IF reputation.post.U_POST --><a href="{reputation.post.U_POST}" title="{L_POST}"><!-- ENDIF -->
 							{reputation.post.POST_SUBJECT}
 							<!-- IF reputation.post.U_POST --></a><!-- ENDIF -->
@@ -167,9 +171,9 @@
 	<div class="action-bar bottom">
 		<div class="sorting">
 			<label>{L_SORT_BY}:</label>
-			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull; 
-			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull; 
-			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull; 
+			<a href="{U_SORT_USERNAME}" >{L_USERNAME}</a> &bull;
+			<a href="{U_SORT_TIME}" >{L_TIME}</a> &bull;
+			<a href="{U_SORT_POINT}" >{L_RS_POINTS}</a> &bull;
 			<a href="{U_SORT_ACTION}" >{L_RS_ACTION}</a>
 		</div>
 		<div class="pagination">

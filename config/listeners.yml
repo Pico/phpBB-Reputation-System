@@ -2,61 +2,61 @@ services:
     pico.reputation.acp_listener:
         class: pico\reputation\event\acp_listener
         arguments:
-            - @request
-            - @template
+            - '@request'
+            - '@template'
         tags:
             - { name: event.listener }
 
     pico.reputation.index_listener:
         class: pico\reputation\event\index_listener
         arguments:
-            - @auth
-            - @config
-            - @dbal.conn
-            - @controller.helper  
-            - @template
-            - @user
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
         tags:
             - { name: event.listener }
 
     pico.reputation.main_listener:
         class: pico\reputation\event\main_listener
         arguments:
-            - @config
-            - @template
+            - '@config'
+            - '@template'
         tags:
             - { name: event.listener }
 
     pico.reputation.mcp_listener:
         class: pico\reputation\event\mcp_listener
         arguments:
-            - @auth
-            - @config
-            - @request
-            - @template
-            - @user
-            - @pico.reputation.manager
+            - '@auth'
+            - '@config'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@pico.reputation.manager'
         tags:
             - { name: event.listener }
 
     pico.reputation.memberlist_listener:
         class: pico\reputation\event\memberlist_listener
         arguments:
-            - @auth
-            - @config
-            - @controller.helper 
+            - '@auth'
+            - '@config'
+            - '@controller.helper'
         tags:
             - { name: event.listener }
 
     pico.reputation.viewtopic_listener:
         class: pico\reputation\event\viewtopic_listener
         arguments:
-            - @auth
-            - @config
-            - @controller.helper
-            - @template
-            - @user
-            - @pico.reputation.helper
-            - %tables.reputations%
+            - '@auth'
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+            - '@pico.reputation.helper'
+            - '%tables.reputations%'
         tags:
             - { name: event.listener }
