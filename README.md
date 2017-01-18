@@ -12,7 +12,7 @@ A full reputation (karma) system for phpBB3.1, with adjustable reputation settin
 * and more
 
 ## Quick Install
-You can install this on the latest copy of the develop branch ([phpBB 3.1-dev](https://github.com/phpbb/phpbb3)) by following the steps below:
+You can install this on the latest copy of the develop branch ([phpBB 3.2](https://github.com/phpbb/phpbb3)) by following the steps below:
 
 1. Download the latest repository.
 2. Unzip the downloaded release, and change the name of the folder to `reputation`.

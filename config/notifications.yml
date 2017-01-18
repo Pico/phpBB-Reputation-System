@@ -3,17 +3,18 @@ services:
         class: pico\reputation\notification\type\rate_post_positive
         scope: prototype # scope MUST be prototype for this to work!
         arguments:
-            - @user_loader
             - @dbal.conn
-            - @cache.driver
+            - @language
             - @user
             - @auth
-            - @config
             - %core.root_path%
             - %core.php_ext%
+            - %tables.user_notifications%
+            - @user_loader
+            - @cache.driver
+            - @config
             - %tables.notification_types%
             - %tables.notifications%
-            - %tables.user_notifications%
         tags:
             - { name: notification.type }
 
@@ -21,17 +22,18 @@ services:
         class: pico\reputation\notification\type\rate_post_negative
         scope: prototype # scope MUST be prototype for this to work!
         arguments:
-            - @user_loader
             - @dbal.conn
-            - @cache.driver
+            - @language
             - @user
             - @auth
-            - @config
             - %core.root_path%
             - %core.php_ext%
+            - %tables.user_notifications%
+            - @user_loader
+            - @cache.driver
+            - @config
             - %tables.notification_types%
             - %tables.notifications%
-            - %tables.user_notifications%
         tags:
             - { name: notification.type }
 
@@ -39,17 +41,17 @@ services:
         class: pico\reputation\notification\type\rate_user
         scope: prototype # scope MUST be prototype for this to work!
         arguments:
-            - @user_loader
             - @dbal.conn
-            - @cache.driver
+            - @language
             - @user
             - @auth
-            - @config
-            - @controller.helper
             - %core.root_path%
             - %core.php_ext%
+            - %tables.user_notifications%
+            - @user_loader
+            - @cache.driver
+            - @config
             - %tables.notification_types%
             - %tables.notifications%
-            - %tables.user_notifications%
         tags:
             - { name: notification.type }
