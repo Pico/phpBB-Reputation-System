@@ -1,57 +1,41 @@
 services:
     pico.reputation.notification.type.rate_post_positive:
         class: pico\reputation\notification\type\rate_post_positive
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @dbal.conn
-            - @language
-            - @user
-            - @auth
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.user_notifications%
-            - @user_loader
-            - @cache.driver
-            - @config
-            - %tables.notification_types%
-            - %tables.notifications%
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
         tags:
             - { name: notification.type }
 
     pico.reputation.notification.type.rate_post_negative:
         class: pico\reputation\notification\type\rate_post_negative
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @dbal.conn
-            - @language
-            - @user
-            - @auth
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.user_notifications%
-            - @user_loader
-            - @cache.driver
-            - @config
-            - %tables.notification_types%
-            - %tables.notifications%
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
         tags:
             - { name: notification.type }
 
     pico.reputation.notification.type.rate_user:
         class: pico\reputation\notification\type\rate_user
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @dbal.conn
-            - @language
-            - @user
-            - @auth
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.user_notifications%
-            - @user_loader
-            - @cache.driver
-            - @config
-            - %tables.notification_types%
-            - %tables.notifications%
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+        tags:
+            - { name: notification.type }
         tags:
             - { name: notification.type }
