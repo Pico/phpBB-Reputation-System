@@ -18,9 +18,33 @@ namespace pico\reputation\notification\type;
 */
 class rate_user extends \phpbb\notification\type\base
 {
-	/** @var \phpbb\controller\helper */
-	protected $helper;
+	/** 
+   * @var \phpbb\controller\helper
+   */
+	 protected $helper;
 
+  /**
+   * @var \phpbb\user_loader
+   */
+  protected $user_loader;
+
+	/**
+	 * Set the controller helper
+	 *
+	 * @param \phpbb\controller\helper $helper
+	 *
+	 * @return void
+	 */
+	public function set_controller_helper(\phpbb\controller\helper $helper)
+	{
+		$this->helper = $helper;
+	}
+
+	public function set_user_loader(\phpbb\user_loader $user_loader)
+	{
+		$this->user_loader = $user_loader;
+	}
+  
 /**
 	* Notification Type Boardrules Constructor
 	*
@@ -124,43 +148,13 @@ class rate_user extends \phpbb\notification\type\base
 	*/
 	public function find_users_for_notification($data, $options = array())
 	{
-		$options = array_merge(array(
-			'ignore_users'	=> array(),
-		), $options);
-		$users = array((int) $data['user_id_to']);
-
-		$notify_users = $this->check_user_notification_options($users, $options);
-
-		// Try to find the users who already have been notified about replies and have not read the topic since and just update their notifications
-		$sql = 'SELECT n.*
-			FROM ' . $this->notifications_table . ' n, ' . $this->notification_types_table . ' nt
-			WHERE n.notification_type_id = ' . (int) $this->notification_type_id . '
-				AND n.item_parent_id = ' . (int) self::get_item_parent_id($data) . '
-				AND n.notification_read = 0
-				AND n.user_id = ' . $data['user_id_to'] . '
-				AND nt.notification_type_id = n.notification_type_id
-				AND nt.notification_type_enabled = 1';
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$users = array();
+		$data['user_id_to'] = (!is_array($data['user_id_to'])) ? array($data['user_id_to']) : $data['user_id_to'];
+		foreach ($data['user_id_to'] as $user_id)
 		{
-			$row_data = unserialize($row['notification_data']);
-
-			// Do not create a new notification
-			unset($notify_users[$row['user_id']]);
-
-			$notification = $this->notification_manager->get_item_type_class($this->get_type(), $row);
-			$update_responders = $notification->add_voting_users($data);
-			if (!empty($update_responders))
-			{
-				$sql = 'UPDATE ' . $this->notifications_table . '
-					SET ' . $this->db->sql_build_array('UPDATE', $update_responders) . '
-					WHERE notification_id = ' . $row['notification_id'];
-				$this->db->sql_query($sql);
-			}
+			$users[$user_id] = $this->notification_manager->get_default_methods();
 		}
-		$this->db->sql_freeresult($result);
-
-		return $notify_users;
+		return $users;
 	}
 
 	/**

@@ -3,6 +3,9 @@ services:
         class: pico\reputation\notification\type\rate_post_positive
         shared: false
         parent: notification.type.base
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+            - [set_user_loader, ['@user_loader']]
         arguments:
             - '@user_loader'
             - '@cache.driver'
@@ -15,7 +18,7 @@ services:
     pico.reputation.notification.type.rate_post_negative:
         class: pico\reputation\notification\type\rate_post_negative
         shared: false
-        parent: notification.type.base
+        parent: notification.type.bas
         arguments:
             - '@user_loader'
             - '@cache.driver'
@@ -29,13 +32,14 @@ services:
         class: pico\reputation\notification\type\rate_user
         shared: false
         parent: notification.type.base
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+            - [set_user_loader, ['@user_loader']]
         arguments:
             - '@user_loader'
             - '@cache.driver'
             - '@config'
             - '%tables.notification_types%'
             - '%tables.notifications%'
-        tags:
-            - { name: notification.type }
         tags:
             - { name: notification.type }

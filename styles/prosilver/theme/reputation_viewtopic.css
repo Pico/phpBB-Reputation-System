@@ -20,21 +20,9 @@
 }
 
 .post-reputation {
-	padding-bottom: 0;
-	height: 16px;
-	font-weight: bold;
-	cursor: auto !important;
 }
 
 .post-reputation:hover { text-shadow: 0 0 #fff; }
-
-.post-reputation.positive span, .post-reputation.negative span { color: #fff; }
-
-.post-reputation.positive { background: #6F8F52; }
-
-.post-reputation.negative { background: #B82929; }
-
-.post-reputation.neutral span { color: #666666; }
 
 .reputation-avatar img {
 	width: 40px;
