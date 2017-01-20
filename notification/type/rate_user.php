@@ -18,12 +18,15 @@ namespace pico\reputation\notification\type;
 */
 class rate_user extends \phpbb\notification\type\base
 {
-	/** @var \phpbb\controller\helper */
-	protected $helper;
-    /**
-     * @var \phpbb\user_loader
-     */
-    protected $user_loader;
+	/** 
+   * @var \phpbb\controller\helper
+   */
+	 protected $helper;
+
+  /**
+   * @var \phpbb\user_loader
+   */
+  protected $user_loader;
 
 	/**
 	 * Set the controller helper
@@ -40,6 +43,40 @@ class rate_user extends \phpbb\notification\type\base
 	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{
 		$this->user_loader = $user_loader;
+	}
+  
+/**
+	* Notification Type Boardrules Constructor
+	*
+	* @param \phpbb\db\driver\driver_interface $db
+	* @param \phpbb\language\language $language
+	* @param \phpbb\user $user
+	* @param \phpbb\auth\auth $auth
+	* @param string $phpbb_root_path
+	* @param string $php_ext
+	* @param string $user_notifications_table
+	* @param \phpbb\user_loader $user_loader
+	* @param \phpbb\cache\driver\driver_interface $cache
+	* @param \phpbb\config\config $config
+	* @param string $notification_types_table
+	* @param string $notifications_table
+	* @return \phpbb\boardrules\notification\boardrules
+	*/
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, $phpbb_root_path, $php_ext, $user_notifications_table, \phpbb\user_loader $user_loader, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, $notification_types_table, $notifications_table)
+	{
+		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
+		
+		$this->notifications_table = $notifications_table;
+		$this->notification_types_table = $notification_types_table;
+		$this->user_notifications_table = $user_notifications_table;		
+		$this->user_loader = $user_loader;
+		$this->db = $db;
+		$this->cache = $cache;
+		$this->user = $user;
+		$this->auth = $auth;
+		$this->config = $config;
+		$this->phpbb_root_path = $phpbb_root_path;
+		$this->php_ext = $php_ext;
 	}
 
 	/**

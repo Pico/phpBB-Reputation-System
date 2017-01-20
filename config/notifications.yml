@@ -6,13 +6,25 @@ services:
         calls:
             - [set_controller_helper, ['@controller.helper']]
             - [set_user_loader, ['@user_loader']]
+        arguments:
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
         tags:
             - { name: notification.type }
 
     pico.reputation.notification.type.rate_post_negative:
         class: pico\reputation\notification\type\rate_post_negative
         shared: false
-        parent: notification.type.base
+        parent: notification.type.bas
+        arguments:
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
         tags:
             - { name: notification.type }
 
@@ -23,5 +35,11 @@ services:
         calls:
             - [set_controller_helper, ['@controller.helper']]
             - [set_user_loader, ['@user_loader']]
+        arguments:
+            - '@user_loader'
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
         tags:
             - { name: notification.type }
