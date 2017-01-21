@@ -1,4 +1,18 @@
-.own { display: none; }
+.rate-good-icon:before { }
+
+.rate-bad-icon:before { }
+
+.rate-good-icon:hover:before { }
+
+.rate-bad-icon:hover:before  { }
+
+.rate-good-icon:before, .rate-bad-icon:before { }
+
+.own, .rate-good-icon.rated_bad, .rate-bad-icon.rated_good { display: none; }
+
+.rate-good-icon.rated_good:before { }
+
+.rate-bad-icon.rated_bad:before { }
 
 .user-reputation span {
 	color: #536482;

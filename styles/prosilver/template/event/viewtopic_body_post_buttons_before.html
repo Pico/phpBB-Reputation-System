@@ -1,14 +1,14 @@
 <!-- IF S_REPUTATION and S_FORUM_REPUTATION-->
 	<!-- IF postrow.S_RATE_POST -->
 		<li data-skip-responsive="true">
-			<a href="{postrow.U_RATE_POST_POSITIVE}" title="{postrow.RS_RATE_POST_POSITIVE}" class="button button-icon-only<!-- IF postrow.POST_VOTE_CLASS --> {postrow.POST_VOTE_CLASS}<!-- ENDIF -->" data-referer="_referer={U_REPUTATION_REFERER}">
+			<a href="{postrow.U_RATE_POST_POSITIVE}" title="{postrow.RS_RATE_POST_POSITIVE}" class="button button-icon-only rate-good-icon<!-- IF postrow.POST_VOTE_CLASS --> {postrow.POST_VOTE_CLASS}<!-- ENDIF -->" data-referer="_referer={U_REPUTATION_REFERER}">
 				<i class="icon fa-thumbs-up fa-fw" aria-hidden="true"></i>
 			</a>
 		</li>
 	<!-- ENDIF -->
 	<!-- IF postrow.S_RATE_POST and postrow.S_RATE_POST_NEGATIVE -->
 		<li data-skip-responsive="true">
-			<a href="{postrow.U_RATE_POST_NEGATIVE}" title="{postrow.RS_RATE_POST_NEGATIVE}" class="button button-icon-only<!-- IF postrow.POST_VOTE_CLASS --> {postrow.POST_VOTE_CLASS}<!-- ENDIF -->" data-referer="_referer={U_REPUTATION_REFERER}">
+			<a href="{postrow.U_RATE_POST_NEGATIVE}" title="{postrow.RS_RATE_POST_NEGATIVE}" class="button button-icon-only rate-bad-icon<!-- IF postrow.POST_VOTE_CLASS --> {postrow.POST_VOTE_CLASS}<!-- ENDIF -->" data-referer="_referer={U_REPUTATION_REFERER}">
 				<i class="icon fa-thumbs-down fa-fw" aria-hidden="true"></i>
 			</a>
 		</li>
