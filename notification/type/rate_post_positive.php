@@ -22,7 +22,7 @@ class rate_post_positive extends \phpbb\notification\type\base
   * @var \phpbb\controller\helper
   */
 	protected $helper;
-  
+
   /**
    * @var \phpbb\user_loader
    */
@@ -44,7 +44,7 @@ class rate_post_positive extends \phpbb\notification\type\base
 	{
 		$this->user_loader = $user_loader;
 	}
-  
+
   /**
 	* Notification Type Boardrules Constructor
 	*
@@ -62,14 +62,13 @@ class rate_post_positive extends \phpbb\notification\type\base
 	* @param string $notifications_table
 	* @return \phpbb\boardrules\notification\boardrules
 	*/
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, $phpbb_root_path, $php_ext, $user_notifications_table, \phpbb\user_loader $user_loader, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, $notification_types_table, $notifications_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, $phpbb_root_path, $php_ext, $user_notifications_table, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, $notification_types_table, $notifications_table)
 	{
 		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
-		
+
 		$this->notifications_table = $notifications_table;
 		$this->notification_types_table = $notification_types_table;
-		$this->user_notifications_table = $user_notifications_table;		
-		$this->user_loader = $user_loader;
+		$this->user_notifications_table = $user_notifications_table;
 		$this->db = $db;
 		$this->cache = $cache;
 		$this->user = $user;
@@ -77,9 +76,8 @@ class rate_post_positive extends \phpbb\notification\type\base
 		$this->config = $config;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-			
 	}
-	
+
 	/**
 	* Get notification type name
 	*
