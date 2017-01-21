@@ -15,9 +15,7 @@
 	<!-- ENDIF -->
 	<li data-skip-responsive="true">
 		<!-- IF postrow.S_VIEW_REPUTATION -->
-			<a href="{postrow.U_VIEW_POST_REPUTATION}" title="{postrow.RS_POST_REPUTATION}" class="button button-icon-only post-reputation {postrow.POST_REPUTATION_CLASS}" data-referer="_referer={U_REPUTATION_REFERER}">
-				<i class="icon fa-balance-scale fa-fw" aria-hidden="true"></i>
-			</a>
+			<a href="{postrow.U_VIEW_POST_REPUTATION}" title="{postrow.RS_RATE_POST_POSITIVE}" class="button post-reputation {postrow.POST_REPUTATION_CLASS}" data-referer="_referer={U_REPUTATION_REFERER}"><span>{postrow.POST_REPUTATION}</span></a>
 		<!-- ELSE -->
 			<div title="{postrow.RS_RATE_POST_POSITIVE}" class="button post-reputation {postrow.POST_REPUTATION_CLASS} guest" data-referer="_referer={U_REPUTATION_REFERER}"><span>{postrow.POST_REPUTATION}</span></div>
 		<!-- ENDIF -->
