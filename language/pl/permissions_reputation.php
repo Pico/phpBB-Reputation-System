@@ -38,22 +38,19 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'ACL_CAT_REPUTATION'	=> 'Reputacja',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
+	'ACL_A_REPUTATION'	=> 'Zarządza ustawieniami systemu reputacji',
 
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
+	'ACL_M_RS_MODERATE'	=> 'Moderuje punkty reputacji',
+	'ACL_M_RS_RATE'		=> 'Przyznaje dodatkowe punkty reputacji',
 
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
+	'ACL_U_RS_DELETE'			=> 'Usuwa przyznane punkty',
+	'ACL_U_RS_RATE'				=> 'Ocenia innych użytkowników',
+	'ACL_U_RS_RATE_NEGATIVE'	=> 'Negatywnie ocenia innych użytkowników<br /><em>Użytkownik musi móc oceniać innych użytkowników, zanim negatywnie oceni innych użytkowników.</em>',
+	'ACL_U_RS_RATE_POST'		=> 'Ocenia posty napisane przez innych użytkowników',
+	'ACL_U_RS_VIEW'				=> 'Wyświetla punkty reputacji',
 
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'ACL_F_RS_RATE'				=> 'Ocenia posty innych użytkowników',
+	'ACL_F_RS_RATE_NEGATIVE'	=> 'Negatywnie oceniać posty innych użytkowników<br /><em>Użytkownik musi móc oceniać posty innych użytkowników, zanim negatywnie oceni posty innych użytkowników.</em>',
 ));

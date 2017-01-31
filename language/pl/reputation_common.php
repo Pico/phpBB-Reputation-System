@@ -38,22 +38,22 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'REPUTATION'		=> 'Reputacja',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
+	'RS_DISABLED'		=> 'Administrator forum wyłączył tę funkcjonalność.',
 
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
+	'RS_COMMENT'		=> 'Komentarz',
+	'RS_POINTS'			=> 'Punkty',
 
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
+	'RS_POST_REPUTATION'	=> 'Reputacja posta',
+	'RS_POST_RATED'			=> 'Już oceniłeś ten post',
+	'RS_RATE_POST_POSITIVE'	=> 'Oceń pozytywnie',
+	'RS_RATE_POST_NEGATIVE'	=> 'Oceń negatywnie',
+	'RS_RATE_USER'			=> 'Oceń użytkownika',
+	'RS_VIEW_DETAILS'		=> 'Wyświetl detale',
 
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'NOTIFICATION_TYPE_REPUTATION'		=> 'Ktoś podarował Ci punkt reputacji',
+	'NOTIFICATION_RATE_POST_POSITIVE'	=> '%s <strong>ocenił(a) pozytywnie</strong> post',
+	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '%s <strong>ocenił(a) negatywnie</strong> post',
+	'NOTIFICATION_RATE_USER'			=> ' %s<strong>ocenił(a)</strong>',
 ));

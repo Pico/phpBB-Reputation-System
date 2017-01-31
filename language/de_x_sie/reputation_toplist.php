@@ -38,22 +38,10 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'RS_TOPLIST'			=> 'Reputations-Rangliste',
+	'RS_TOPLIST_EXPLAIN'	=> 'Die beliebtesten Mitglieder',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
+	'RS_NO_USERS'	=> 'es gibt keine Benutzer anzuzeigen',
 
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
-
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
-
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'RS_NEW_LINE'	=> '<br />',
 ));

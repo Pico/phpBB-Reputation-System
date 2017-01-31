@@ -174,28 +174,34 @@
 
 .reputation-rating.positive,
 .stats-positive {
-	color: #6F8F52;
+	color: #00ab00;
 }
 
 .reputation-rating.negative,
 .stats-negative {
-	color: #B82929;
+	color: #D31141;
 }
 
 .reputation {
 	display: inline-block;
-	padding: 2px 6px;
+	padding: 1px 4px 2px 4px;
 	text-align: center;
 	font-weight: bold;
 	border: 1px solid transparent;
 	border-radius: 4px;
 }
 
-.reputation.positive { background: #6F8F52; }
+.reputation.positive { background: #00ab00; }
 
-.reputation.negative { background: #B82929; }
+.reputation.negative {
+	background: #D31141;
+	padding: 1px 2px 2px 2px;
+}
 
-.reputation.neutral { background: #fff;}
+.reputation.neutral {
+	background: #fff;
+	padding: 0px 4px 2px 4px;
+}
 
 .reputation.positive, .reputation.negative { color: #fff; }
 

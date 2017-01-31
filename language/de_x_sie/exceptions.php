@@ -8,6 +8,7 @@
 *
 */
 
+
 /**
 * DO NOT CHANGE
 */
@@ -37,23 +38,19 @@ if (empty($lang) || !is_array($lang))
 // ’ » “ ” …
 //
 
+/*
+* These are errors which can be triggered by sending invalid data to the
+* reputation extension API.
+*
+* These errors will never show to a user unless they are either modifying
+* the core reputation extension code OR unless they are writing an extension
+* which makes calls to this extension.
+*
+* Translators: Feel free to not translate these language strings
+*/
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
-
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
-
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
-
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
-
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'EXCEPTION_FIELD_MISSING'		=> 'erforderliches Feld fehlt',
+	'EXCEPTION_INVALID_ARGUMENT'	=> 'Ungültiges Argument für `%1$s`. Grund: %2$s.',
+	'EXCEPTION_INVALID_TYPE'		=> 'Reputations-Typ existiert nicht',
+	'EXCEPTION_OUT_OF_BOUNDS'		=> 'Das Feld `%1$s` empfängt Daten außerhalb seiner Grenzen',
 ));

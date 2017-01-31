@@ -38,22 +38,12 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'REPUTATION'		=> 'Reputation',
+	'MCP_RS_ADD_WARNING'			=> 'Reputationspunke für Warnung',
+	'MCP_RS_ADD_WARNING_EXPLAIN'	=> 'Sie können diesen Benutzer für schlechtes Benehmen negativ. Dazu müssen Sie unten einen Haken setzen.',
+	'MCP_RS_ADD_REPUTATION'			=> 'Bewertung hinzufügen',
 
-	'RS_DISABLED'		=> 'Sorry, but the board administrator has disabled this feature.',
-
-	'RS_COMMENT'		=> 'Comment',
-	'RS_POINTS'			=> 'Points',
-
-	'RS_POST_REPUTATION'		=> 'Post reputation',
-	'RS_POST_RATED'			=> 'You have rated this post',
-	'RS_RATE_POST_POSITIVE'	=> 'Rate post positive',
-	'RS_RATE_POST_NEGATIVE'	=> 'Rate post negative',
-	'RS_RATE_USER'			=> 'Rate user',
-	'RS_VIEW_DETAILS'		=> 'View details',
-
-	'NOTIFICATION_TYPE_REPUTATION'		=> 'Someone gives you reputation point',
-	'NOTIFICATION_RATE_POST_POSITIVE'	=> '<strong>Rated positively</strong> by %s for post',
-	'NOTIFICATION_RATE_POST_NEGATIVE'	=> '<strong>Rated negatively</strong> by %s for post',
-	'NOTIFICATION_RATE_USER'			=> '<strong>Rated</strong> by %s',
+	'MCP_RS_POINTS'	=> array(
+		1	=> '-%d Punkt',
+		2	=> '-%d Punkte',
+	),
 ));

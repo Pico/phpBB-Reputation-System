@@ -1,55 +1,45 @@
 services:
     pico.reputation.notification.type.rate_post_positive:
         class: pico\reputation\notification\type\rate_post_positive
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+            - [set_user_loader, ['@user_loader']]
         tags:
             - { name: notification.type }
 
     pico.reputation.notification.type.rate_post_negative:
         class: pico\reputation\notification\type\rate_post_negative
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+            - [set_user_loader, ['@user_loader']]
         tags:
             - { name: notification.type }
 
     pico.reputation.notification.type.rate_user:
         class: pico\reputation\notification\type\rate_user
-        scope: prototype # scope MUST be prototype for this to work!
+        shared: false
+        parent: notification.type.base
         arguments:
-            - @user_loader
-            - @dbal.conn
-            - @cache.driver
-            - @user
-            - @auth
-            - @config
-            - @controller.helper
-            - %core.root_path%
-            - %core.php_ext%
-            - %tables.notification_types%
-            - %tables.notifications%
-            - %tables.user_notifications%
+            - '@cache.driver'
+            - '@config'
+            - '%tables.notification_types%'
+            - '%tables.notifications%'
+        calls:
+            - [set_controller_helper, ['@controller.helper']]
+            - [set_user_loader, ['@user_loader']]
         tags:
             - { name: notification.type }
