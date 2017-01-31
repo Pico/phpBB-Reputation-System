@@ -44,7 +44,7 @@ $lang = array_merge($lang, array(
 	'RS_ENABLE'						=> 'Enable Reputation System',
 
 	'RS_SYNC'						=> 'Synchronise Reputation System',
-	'RS_SYNC_EXPLAIN'				=> 'You can synchronise reputation points after a mass removal of posts/topics/users, changing reputation settings, changing post authors, conversions from others systems. This may take a while. You will be notified when the process is completed.<br /><strong>Warning!</strong> All reputation points that do not match the reputation settings will be deleted during synchronization . It is recommended to make backup of the reputation table (DB) before synchronisation.',
+	'RS_SYNC_EXPLAIN'				=> 'You can synchronise reputation points after a mass removal of posts/topics/users, changing reputation settings, changing post authors, conversions from others systems. This may take a while. You will be notified when the process is completed.<br /><strong>Warning!</strong> All reputation points that do not match the reputation settings will be deleted during synchronization. It is recommended to make backup of the reputation table (DB) before synchronisation.',
 	'RS_SYNC_REPUTATION_CONFIRM'	=> 'Are you sure you wish to synchronise reputations?',
 
 	'RS_TRUNCATE'				=> 'Clear Reputation System',
