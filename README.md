@@ -1,7 +1,7 @@
 phpBB-Reputation-System
 =======================
 
-A full reputation (karma) system for phpBB3.1, with adjustable reputation settings.
+A full reputation (karma) system for phpBB3.2, with adjustable reputation settings.
 
 ## Features
 * AJAX post rating
