@@ -55,4 +55,6 @@ $lang = array_merge($lang, array(
 	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Benutzerbewertung gelöscht</strong><br />Benutzer: %1$s',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputationssystem resynchronisiert</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Alle Bewertungen gelöscht</strong>',
+	
+	'REPUTATION_SETTINGS_CHANGED' => '<strong>Bewertungseinstellungen verändert</strong>',
 ));
