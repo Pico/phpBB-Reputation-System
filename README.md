@@ -1,7 +1,7 @@
 phpBB-Reputation-System
 =======================
 
-A full reputation (karma) system for phpBB3.2, with adjustable reputation settings.
+A full reputation (karma) system for phpBB3.3, with adjustable reputation settings.
 
 ## Features
 * AJAX post rating
@@ -12,7 +12,7 @@ A full reputation (karma) system for phpBB3.2, with adjustable reputation settin
 * and more
 
 ## Quick Install
-You can install this on the latest copy of phpBB ([phpBB 3.2](https://github.com/phpbb/phpbb3)) by following the steps below:
+You can install this on the latest copy of phpBB ([phpBB 3.3](https://github.com/phpbb/phpbb3)) by following the steps below:
 
 1. Download the latest repository.
 2. Unzip the downloaded release, and change the name of the folder to `reputation`.

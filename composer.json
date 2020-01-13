@@ -13,12 +13,12 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.3"
+		"php": ">=7.0"
 	},
 	"extra": {
 		"display-name": "Reputation System",
 		"soft-require": {
-			"phpbb/phpbb": ">=3.2.0"
+			"phpbb/phpbb": ">=3.3.0"
 		}
 	}
 }
