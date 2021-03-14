@@ -103,7 +103,7 @@ class rating_controller
 	/**
 	* Display the post rating page
 	*
-	* @param string $mode		Mode taken from the URL 
+	* @param string $mode		Mode taken from the URL
 	* @param int $post_id		Post ID taken from the URL
 	* @return Symfony\Component\HttpFoundation\Response A Symfony Response object
 	* @access public
@@ -434,7 +434,7 @@ class rating_controller
 		// Save vote
 		if ($submit)
 		{
-			// Prevent cheater to break the forum permissions to give negative points or give more points than they can 
+			// Prevent cheater to break the forum permissions to give negative points or give more points than they can
 			if (!$this->auth->acl_get('f_rs_rate_negative', $row['forum_id']) && $points < 0 || $points < 0 && $this->config['rs_min_rep_negative'] && ($this->user->data['user_reputation'] < $this->config['rs_min_rep_negative']) || $this->config['rs_enable_power'] && (($points > $max_voting_allowed) || ($points < -$max_voting_allowed)))
 			{
 				$submit = false;
@@ -483,6 +483,7 @@ class rating_controller
 				'user_id_from'		=> $this->user->data['user_id'],
 				'post_id'			=> $post_id,
 				'post_subject'		=> $row['post_subject'],
+				'comment' => $comment,
 			);
 
 			$notification_type = ($points > 0) ? 'pico.reputation.notification.type.rate_post_positive' : 'pico.reputation.notification.type.rate_post_negative';
@@ -825,7 +826,7 @@ class rating_controller
 
 		if ($submit)
 		{
-			//Prevent cheater to break the forum permissions to give negative points or give more points than they can 
+			//Prevent cheater to break the forum permissions to give negative points or give more points than they can
 			if (!$this->auth->acl_get('u_rs_rate_negative') && $points < 0 || $points < 0 && $this->config['rs_min_rep_negative'] && ($this->user->data['user_reputation'] < $this->config['rs_min_rep_negative']) || $this->config['rs_enable_power'] && (($points > $max_voting_allowed) || ($points < -$max_voting_allowed)))
 			{
 				$submit = false;
