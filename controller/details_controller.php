@@ -103,7 +103,7 @@ class details_controller
 	}
 
 	/**
-	* Main reputation details controller 
+	* Main reputation details controller
 	*
 	* @param int $uid			User ID taken from the URL
 	* @param string $sort_key	Sort key: id|username|time|point|action (default: id)
@@ -132,7 +132,7 @@ class details_controller
 				AND user_id = $uid";
 		$result = $this->db->sql_query($sql);
 		$user_row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);        
+		$this->db->sql_freeresult($result);
 
 		// Check if an user exists - if not, throw the error and return to the index page
 		if (empty($user_row))
@@ -200,7 +200,7 @@ class details_controller
 				'ACTION'		=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
 				'AVATAR'		=> phpbb_get_user_avatar($row),
 				'TIME'			=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'		=> $row['reputation_comment'],
+				'COMMENT'		=> censor_text($row['reputation_comment']),
 				'POINTS'		=> $row['reputation_points'],
 				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
@@ -490,7 +490,7 @@ class details_controller
 				'USERNAME'		=> get_username_string('full', $row['user_id_from'], $row['username'], $row['user_colour']),
 				'AVATAR'		=> phpbb_get_user_avatar($row),
 				'TIME'			=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'		=> $row['reputation_comment'],
+				'COMMENT'		=> censor_text($row['reputation_comment']),
 				'POINTS'		=> $row['reputation_points'],
 				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
@@ -632,7 +632,7 @@ class details_controller
 				'ACTION'		=> $this->user->lang('RS_' . strtoupper($row['reputation_type_name']) . '_RATING'),
 				'AVATAR'		=> phpbb_get_user_avatar($row),
 				'TIME'			=> $this->user->format_date($row['reputation_time']),
-				'COMMENT'		=> $row['reputation_comment'],
+				'COMMENT'		=> censor_text($row['reputation_comment']),
 				'POINTS'		=> $row['reputation_points'],
 				'POINTS_CLASS'	=> $this->reputation_helper->reputation_class($row['reputation_points']),
 				'POINTS_TITLE'	=> $this->user->lang('RS_POINTS_TITLE', $row['reputation_points']),
