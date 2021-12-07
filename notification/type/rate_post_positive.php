@@ -228,6 +228,7 @@ class rate_post_positive extends \phpbb\notification\type\base
 		return $this->user->lang(
 			$this->language_key,
 			phpbb_generate_string_list($usernames, $this->user),
+			censor_text($this->get_data('post_subject')),
 			$trimmed_voting_users_cnt
 		);
 	}
@@ -239,9 +240,12 @@ class rate_post_positive extends \phpbb\notification\type\base
 	*/
 	public function get_reference()
 	{
+		if (empty($this->get_data('comment'))) {
+			return null;
+		}
 		return $this->user->lang(
 			'NOTIFICATION_REFERENCE',
-			censor_text($this->get_data('post_subject'))
+			censor_text($this->get_data('comment'))
 		);
 	}
 
@@ -305,6 +309,7 @@ class rate_post_positive extends \phpbb\notification\type\base
 		$this->set_data('user_id_from', $data['user_id_from']);
 		$this->set_data('post_id', $data['post_id']);
 		$this->set_data('post_subject', $data['post_subject']);
+		$this->set_data('comment', $data['comment']);
 
 		parent::create_insert_array($data, $pre_create_data);
 	}
