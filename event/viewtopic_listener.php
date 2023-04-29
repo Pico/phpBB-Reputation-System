@@ -208,11 +208,12 @@ class viewtopic_listener implements EventSubscriberInterface
 
 				'RS_RATE_POST_NEGATIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_NEGATIVE'),
 				'RS_RATE_POST_POSITIVE'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_RATE_POST_POSITIVE'),
+				'RS_POST_REPUTATION'	=> $row['user_voted'] ? $this->user->lang('RS_POST_RATED') : $this->user->lang('RS_POST_REPUTATION'),
 
 				'U_RATE_POST_POSITIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'positive', 'post_id' => $post_id)),
 				'U_RATE_POST_NEGATIVE'		=> $this->helper->route('reputation_post_rating_controller', array('mode' => 'negative', 'post_id' => $post_id)),
 				'U_VIEW_POST_REPUTATION'	=> $this->helper->route('reputation_post_details_controller', array('post_id' => $post_id)),
-				'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_user_details_controller', array('uid' => $poster_id)),
+				'U_VIEW_USER_REPUTATION'	=> $this->helper->route('reputation_details_controller', array('uid' => $poster_id)),
 
 				'POST_REPUTATION'		=> $row['post_reputation'],
 				'POST_REPUTATION_CLASS'	=> $this->reputation_helper->reputation_class($row['post_reputation']),

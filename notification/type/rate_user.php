@@ -18,40 +18,64 @@ namespace pico\reputation\notification\type;
 */
 class rate_user extends \phpbb\notification\type\base
 {
-	/** @var \phpbb\controller\helper */
-	protected $helper;
+	/**
+   * @var \phpbb\controller\helper
+   */
+	 protected $helper;
+
+  /**
+   * @var \phpbb\user_loader
+   */
+  protected $user_loader;
+
+	/**
+	 * Set the controller helper
+	 *
+	 * @param \phpbb\controller\helper $helper
+	 *
+	 * @return void
+	 */
+	public function set_controller_helper(\phpbb\controller\helper $helper)
+	{
+		$this->helper = $helper;
+	}
+
+	public function set_user_loader(\phpbb\user_loader $user_loader)
+	{
+		$this->user_loader = $user_loader;
+	}
 
 /**
 	* Notification Type Boardrules Constructor
 	*
-	* @param \phpbb\user_loader $user_loader
 	* @param \phpbb\db\driver\driver_interface $db
-	* @param \phpbb\cache\driver\driver_interface $cache
+	* @param \phpbb\language\language $language
 	* @param \phpbb\user $user
 	* @param \phpbb\auth\auth $auth
-	* @param \phpbb\config\config $config
-	* @param \phpbb\controller\helper $helper
 	* @param string $phpbb_root_path
 	* @param string $php_ext
+	* @param string $user_notifications_table
+	* @param \phpbb\user_loader $user_loader
+	* @param \phpbb\cache\driver\driver_interface $cache
+	* @param \phpbb\config\config $config
 	* @param string $notification_types_table
 	* @param string $notifications_table
-	* @param string $user_notifications_table
 	* @return \phpbb\boardrules\notification\boardrules
 	*/
-	public function __construct(\phpbb\user_loader $user_loader, \phpbb\db\driver\driver_interface $db, \phpbb\cache\driver\driver_interface $cache, $user, \phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\controller\helper $helper, $phpbb_root_path, $php_ext, $notification_types_table, $notifications_table, $user_notifications_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, $phpbb_root_path, $php_ext, $user_notifications_table, \phpbb\cache\driver\driver_interface $cache, \phpbb\config\config $config, $notification_types_table, $notifications_table)
 	{
-		$this->user_loader = $user_loader;
+		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
+
+		$this->notifications_table = $notifications_table;
+		$this->notification_types_table = $notification_types_table;
+		$this->user_notifications_table = $user_notifications_table;
 		$this->db = $db;
 		$this->cache = $cache;
 		$this->user = $user;
 		$this->auth = $auth;
 		$this->config = $config;
-		$this->helper = $helper;
 		$this->phpbb_root_path = $phpbb_root_path;
 		$this->php_ext = $php_ext;
-		$this->notification_types_table = $notification_types_table;
-		$this->notifications_table = $notifications_table;
-		$this->user_notifications_table = $user_notifications_table;
 	}
 
 	/**
@@ -123,43 +147,13 @@ class rate_user extends \phpbb\notification\type\base
 	*/
 	public function find_users_for_notification($data, $options = array())
 	{
-		$options = array_merge(array(
-			'ignore_users'	=> array(),
-		), $options);
-		$users = array((int) $data['user_id_to']);
-
-		$notify_users = $this->check_user_notification_options($users, $options);
-
-		// Try to find the users who already have been notified about replies and have not read the topic since and just update their notifications
-		$sql = 'SELECT n.*
-			FROM ' . $this->notifications_table . ' n, ' . $this->notification_types_table . ' nt
-			WHERE n.notification_type_id = ' . (int) $this->notification_type_id . '
-				AND n.item_parent_id = ' . (int) self::get_item_parent_id($data) . '
-				AND n.notification_read = 0
-				AND n.user_id = ' . $data['user_id_to'] . '
-				AND nt.notification_type_id = n.notification_type_id
-				AND nt.notification_type_enabled = 1';
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		$users = array();
+		$data['user_id_to'] = (!is_array($data['user_id_to'])) ? array($data['user_id_to']) : $data['user_id_to'];
+		foreach ($data['user_id_to'] as $user_id)
 		{
-			$row_data = unserialize($row['notification_data']);
-
-			// Do not create a new notification
-			unset($notify_users[$row['user_id']]);
-
-			$notification = $this->notification_manager->get_item_type_class($this->get_type(), $row);
-			$update_responders = $notification->add_voting_users($data);
-			if (!empty($update_responders))
-			{
-				$sql = 'UPDATE ' . $this->notifications_table . '
-					SET ' . $this->db->sql_build_array('UPDATE', $update_responders) . '
-					WHERE notification_id = ' . $row['notification_id'];
-				$this->db->sql_query($sql);
-			}
+			$users[$user_id] = $this->notification_manager->get_default_methods();
 		}
-		$this->db->sql_freeresult($result);
-
-		return $notify_users;
+		return $users;
 	}
 
 	/**
@@ -191,7 +185,7 @@ class rate_user extends \phpbb\notification\type\base
 	*/
 	public function get_avatar()
 	{
-		return $this->user_loader->get_avatar($this->get_data('user_id_from'));
+		return '';//$this->user_loader->get_avatar($this->get_data('user_id_from'));
 	}
 
 	/**
@@ -219,7 +213,7 @@ class rate_user extends \phpbb\notification\type\base
 
 		foreach ($voting_users as $voting_user)
 		{
-			$usernames[] = $this->user_loader->get_username($voting_user['user_id_from'], 'no_profile');
+			$usernames[] = '';//$this->user_loader->get_username($voting_user['user_id_from'], 'no_profile');
 		}
 
 		if ($trimmed_voting_users_cnt > 20)
@@ -297,7 +291,7 @@ class rate_user extends \phpbb\notification\type\base
 	{
 		$this->set_data('user_id_from', $data['user_id_from']);
 
-		return parent::create_insert_array($data, $pre_create_data);
+		parent::create_insert_array($data, $pre_create_data);
 	}
 
 	/**

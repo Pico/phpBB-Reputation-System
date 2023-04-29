@@ -20,12 +20,16 @@
 			</div>
 		<!-- ENDIF -->
 		<div class="reputation-detail">
-			<!-- IF reputation.S_DELETE --><a href="{reputation.U_DELETE}" class="reputation-delete" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">{L_DELETE}</a><!-- ENDIF -->
+			<!-- IF reputation.S_DELETE -->
+				<a href="{reputation.U_DELETE}" class="rightside" title="{L_DELETE}" data-lang-confirm="{L_RS_REPUTATION_DELETE_CONFIRM}">
+					<i class="icon fa-trash-o fa-fw" aria-hidden="true"></i>
+				</a>
+			<!-- ENDIF -->
 			<div class="reputation-rating {reputation.POINTS_CLASS}<!-- IF S_RS_POINTS_IMG --> image<!-- ENDIF -->" title="{reputation.POINTS_TITLE}">{reputation.POINTS}</div>
 			<div><strong>{reputation.USERNAME}</strong> &raquo; {reputation.TIME}</div>
 			<!-- IF S_RS_COMMENT and reputation.S_COMMENT -->
 			<div class="comment_message">
-				<span>{L_RS_COMMENT}:</span>
+				<span>{L_RS_COMMENT}{L_COLON}</span>
 				<div>{reputation.COMMENT}</div>
 			</div>
 			<!-- ENDIF -->
@@ -41,9 +45,9 @@
 
 <!-- IF .reputation -->
 <div class="footer-popup"<!-- IF S_IS_AJAX --> data-referer="_referer={U_REPUTATION_REFERER}"<!-- ENDIF -->>
-	<label>{L_SORT_BY}:</label>
-	<a href="{U_SORT_USERNAME}" class="sort_order">{L_USERNAME}</a> &bull; 
-	<a href="{U_SORT_TIME}" class="sort_order">{L_TIME}</a> &bull; 
+	<label>{L_SORT_BY}{L_COLON}</label>
+	<a href="{U_SORT_USERNAME}" class="sort_order">{L_USERNAME}</a> &bull;
+	<a href="{U_SORT_TIME}" class="sort_order">{L_TIME}</a> &bull;
 	<a href="{U_SORT_POINT}" class="sort_order">{L_RS_POINTS}</a>
 	<!-- IF S_CLEAR --><a href="{U_CLEAR}" class="clear-reputation" data-lang-confirm="{L_RS_CLEAR_POST_CONFIRM}">{L_RS_CLEAR_POST}</a><!-- ENDIF -->
 </div>

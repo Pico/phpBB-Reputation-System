@@ -55,4 +55,5 @@ $lang = array_merge($lang, array(
 	'LOG_USER_REPUTATION_CLEARED'	=> '<strong>Cleared user reputation</strong><br />User: %1$s',
 	'LOG_REPUTATION_SYNC'			=> '<strong>Reputation System resynchronised</strong>',
 	'LOG_REPUTATION_TRUNCATE'		=> '<strong>Cleared reputations</strong>',
+	'REPUTATION_SETTINGS_CHANGED'	=> '<strong>Altered Reputation System settings</strong>',
 ));

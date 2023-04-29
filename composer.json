@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "An extension which adds reputations (karma) to your board.",
 	"homepage": "https://github.com/Pico88/phpBB-Reputation-System",
-	"version": "1.0.0-dev",
+	"version": "1.1.0-dev",
 	"license": "GPL-2.0",
 	"authors": [
 		{
@@ -13,12 +13,12 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.3"
+		"php": ">=7.0"
 	},
 	"extra": {
 		"display-name": "Reputation System",
 		"soft-require": {
-			"phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+			"phpbb/phpbb": ">=3.3.0"
 		}
 	}
 }
