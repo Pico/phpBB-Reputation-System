@@ -311,8 +311,8 @@ class acp_reputation
 								$sql = 'SELECT SUM(point) AS total_points, rep_to
 									FROM ' . REPUTATIONS_TABLE . '
 									WHERE action != 5
-										AND rep_to >= ' . ($start + 1) . '
-										AND rep_to <= ' . ($start + $this->step) . '
+										AND rep_id >= ' . ($start + 1) . '
+										AND rep_id <= ' . ($start + $this->step) . '
 									GROUP BY rep_to';
 								$result = $db->sql_query($sql);
 
